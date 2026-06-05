@@ -1,0 +1,20 @@
+# Thư mục build của Maven / Gradle
+target/
+build/
+out/
+bin/
+
+# Các file cấu hình của riêng IDE (Eclipse, IntelliJ, NetBeans)
+.idea/
+*.iml
+*.iws
+.settings/
+.classpath
+.project
+.metadata/
+
+# Log files và file tạm
+*.log
+*.class
+.DS_Store
+Thumbs.db
