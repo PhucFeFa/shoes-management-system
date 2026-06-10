@@ -1,8 +1,32 @@
--- Xóa dữ liệu cũ (nếu có) để tránh lỗi trùng lặp khi chạy lại nhiều lần
+-- Xóa dữ liệu cũ (tuân thủ thứ tự Foreign Key: Xóa con trước, cha sau)
+DELETE FROM "order_items";
+DELETE FROM "payments";
+DELETE FROM "orders";
+DELETE FROM "vouchers";
+DELETE FROM "cart_items";
+DELETE FROM "carts";
+DELETE FROM "reviews";
+DELETE FROM "addresses";
+DELETE FROM "users";
+DELETE FROM "roles";
 DELETE FROM "product_images";
+DELETE FROM "product_variants";
 DELETE FROM "products";
 DELETE FROM "categories";
 DELETE FROM "brands";
+
+-- Chèn Vai trò (Roles)
+INSERT INTO "roles" ("id", "name") VALUES 
+('11111111-1111-1111-1111-111111111111', 'Admin'),
+('22222222-2222-2222-2222-222222222222', 'Customer');
+
+-- Chèn Người dùng (Users)
+INSERT INTO "users" ("id", "email", "password_hash", "role_id", "full_name") VALUES 
+('99999999-9999-9999-9999-999999999999', 'test@solelab.com', '123456', '22222222-2222-2222-2222-222222222222', 'Test User');
+
+-- Chèn Vouchers
+INSERT INTO "vouchers" ("id", "code", "discount_percent", "max_discount_amount", "start_date", "end_date", "quantity") VALUES
+('77777777-7777-7777-7777-777777777777', 'WELCOME20', 20.00, 50.00, '2023-01-01', '2030-12-31', 1000);
 
 -- Chèn Danh mục (Categories)
 INSERT INTO "categories" ("id", "name") VALUES 
@@ -32,4 +56,4 @@ INSERT INTO "product_images" ("product_id", "image_url", "sort_order") VALUES
 ('10000000-0000-0000-0000-000000000003', 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_600,h_600/global/378288/01/sv01/fnd/PNA', 1),
 ('10000000-0000-0000-0000-000000000004', 'https://static.nike.com/a/images/t_default/b398642a-db3e-43f1-8fa1-71fb589255ec/air-force-1-07-mens-shoes-jBrhbr.png', 1);
 
-PRINT 'Thêm mock data thành công!';
+PRINT 'Thêm mock data và thiết lập bảng Roles & Vouchers thành công!';
