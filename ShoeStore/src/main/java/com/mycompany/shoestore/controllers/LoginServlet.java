@@ -1,0 +1,45 @@
+// Author: PhucLHCE191132
+package com.mycompany.shoestore.controllers;
+
+import com.mycompany.shoestore.dao.UserDAO;
+import com.mycompany.shoestore.models.User;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+public class LoginServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Render login page
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.login(email, password);
+        
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("currentUser", user);
+            // Redirect to homepage after successful login
+            response.sendRedirect(request.getContextPath() + "/home");
+        } else {
+            request.setAttribute("error", "Invalid email or password.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        }
+    }
+}
