@@ -1,3 +1,4 @@
+// Author: PhucLHCE191132
 package com.mycompany.shoestore.models;
 
 public class Brand {

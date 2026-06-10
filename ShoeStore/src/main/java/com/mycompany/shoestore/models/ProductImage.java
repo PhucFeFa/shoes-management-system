@@ -1,3 +1,4 @@
+// Author: PhucLHCE191132
 package com.mycompany.shoestore.models;
 
 import java.sql.Timestamp;
