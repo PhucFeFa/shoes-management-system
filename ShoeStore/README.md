@@ -1,6 +1,6 @@
-# 👟 Shoes Management System (SOLE_LAB)
+# 👟 Shoes Management System (Adidis)
 
-Chào mừng các thành viên đến với dự án **Shoes Management System** (tên thương hiệu UI: **SOLE_LAB** / **ADIDIS**). Đây là đồ án môn học SWP391, được xây dựng dựa trên mô hình MVC chuẩn, sử dụng Java Web (JSP/Servlet) kết hợp với giao diện hiện đại Tailwind CSS.
+Chào mừng các thành viên đến với dự án **Shoes Management System** (tên thương hiệu UI: **Adidis**). Đây là đồ án môn học SWP391, được xây dựng dựa trên mô hình MVC chuẩn, sử dụng Java Web (JSP/Servlet) kết hợp với giao diện hiện đại Tailwind CSS.
 
 Tài liệu này là "kim chỉ nam" cho tất cả các thành viên trong nhóm. Hãy đọc kỹ trước khi bắt đầu code!
 
