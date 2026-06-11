@@ -1,4 +1,4 @@
-# [TÊN DỰ ÁN CỦA BẠN - VÍ DỤ: HỆ THỐNG QUẢN LÝ THƯ VIỆN]
+Shoes Store
 
 Chào mừng các thành viên của nhóm đã tham gia vào dự án! Đây là tài liệu hướng dẫn giúp mọi người thiết lập môi trường chạy thử dự án và nắm vững quy trình làm việc với GitHub để tránh tối đa xung đột (conflict) mã nguồn.
 
