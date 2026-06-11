@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>SOLE_LAB - Quản lý Đơn hàng</title>
+    <title>SOLE_LAB - Order Management</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
@@ -136,42 +136,42 @@
             Dashboard
         </a>
         <!-- Orders (Active) -->
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
            href="${pageContext.request.contextPath}/staff/orders">
             <span class="material-symbols-outlined text-[20px]">shopping_cart</span>
-            Đơn hàng
+            Orders
         </a>
         <!-- Inventory -->
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
            href="#">
             <span class="material-symbols-outlined text-[20px]">inventory_2</span>
-            Kho hàng
+            Inventory
         </a>
         <!-- Customers -->
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
            href="#">
             <span class="material-symbols-outlined text-[20px]">group</span>
-            Khách hàng
+            Customers
         </a>
         <!-- Settings -->
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+        <a class="flex items-center gap-3 px-4 py-3 rounded-lg font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
            href="#">
             <span class="material-symbols-outlined text-[20px]">settings</span>
-            Cài đặt
+            Settings
         </a>
     </nav>
 
     <!-- CTA & Footer -->
     <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
         <div class="space-y-1 mt-2">
-            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors" href="#">
+            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-lg transition-colors" href="#">
                 <span class="material-symbols-outlined text-[18px]">help</span>
-                Trợ giúp
+                Help
             </a>
-            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-lg transition-colors"
                href="${pageContext.request.contextPath}/login">
                 <span class="material-symbols-outlined text-[18px]">logout</span>
-                Đăng xuất
+                Logout
             </a>
         </div>
         <!-- User Profile Snippet -->
@@ -181,7 +181,7 @@
             </div>
             <div class="flex flex-col">
                 <span class="font-label-md text-label-md text-primary">
-                    <c:out value="${sessionScope.currentUser.fullName}" default="Nhân viên"/>
+                    <c:out value="${sessionScope.currentUser.fullName}" default="Staff"/>
                 </span>
                 <span class="font-label-sm text-label-sm text-secondary capitalize">
                     <c:out value="${sessionScope.currentUser.roleName}" default="staff"/>
@@ -197,15 +197,15 @@
     <!-- Header Section -->
     <header class="px-margin-desktop pt-margin-desktop pb-8 flex justify-between items-end border-b border-outline-variant/30">
         <div>
-            <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Quản lý Đơn hàng</h2>
+            <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Order Management</h2>
             <p class="font-body-md text-body-md text-secondary mt-2 max-w-lg">
-                Theo dõi toàn bộ đơn hàng của hệ thống. Lọc theo trạng thái, tìm kiếm theo tên khách hàng và xử lý đơn nhanh chóng.
+                Track all system orders. Filter by status, search by customer name, and process orders quickly.
             </p>
         </div>
         <div class="flex gap-4">
-            <button class="px-6 py-3 border-[1.5px] border-primary font-label-md text-label-md uppercase text-primary hover:bg-primary hover:text-on-primary transition-colors rounded-none flex items-center gap-2">
+            <button class="px-6 py-3 border-[1.5px] border-primary font-label-md text-label-md uppercase text-primary hover:bg-primary hover:text-on-primary transition-colors rounded-lg flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">download</span>
-                Xuất CSV
+                Export CSV
             </button>
         </div>
     </header>
@@ -221,7 +221,7 @@
                        class="w-full bg-surface-container text-primary font-body-md text-body-md pl-12 pr-4 py-3 rounded-full border-none focus:ring-2 focus:ring-primary focus:outline-none transition-shadow placeholder:text-secondary"
                        type="text"
                        name="keyword"
-                       placeholder="Tìm theo tên khách hàng, email..."
+                       placeholder="Search by customer name, email..."
                        value="<c:out value='${keyword}'/>">
             </div>
             <!-- Status Filter -->
@@ -229,27 +229,27 @@
                 <select id="status-select"
                         name="status"
                         onchange="this.form.submit()"
-                        class="bg-surface border border-outline-variant text-primary font-label-md text-label-md uppercase py-3 pl-4 pr-10 rounded-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer hover:border-outline transition-colors">
-                    <option value="" <c:if test="${empty statusFilter}">selected</c:if>>Tất cả trạng thái</option>
-                    <option value="pending"   <c:if test="${statusFilter == 'pending'}">selected</c:if>>Chờ xác nhận</option>
-                    <option value="confirmed" <c:if test="${statusFilter == 'confirmed'}">selected</c:if>>Đã xác nhận</option>
-                    <option value="shipping"  <c:if test="${statusFilter == 'shipping'}">selected</c:if>>Đang giao</option>
-                    <option value="completed" <c:if test="${statusFilter == 'completed'}">selected</c:if>>Hoàn thành</option>
-                    <option value="cancelled" <c:if test="${statusFilter == 'cancelled'}">selected</c:if>>Đã huỷ</option>
+                        class="bg-surface border border-outline-variant text-primary font-label-md text-label-md uppercase py-3 pl-4 pr-10 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer hover:border-outline transition-colors">
+                    <option value="" <c:if test="${empty statusFilter}">selected</c:if>>All Statuses</option>
+                    <option value="pending"   <c:if test="${statusFilter == 'pending'}">selected</c:if>>Pending</option>
+                    <option value="confirmed" <c:if test="${statusFilter == 'confirmed'}">selected</c:if>>Confirmed</option>
+                    <option value="shipping"  <c:if test="${statusFilter == 'shipping'}">selected</c:if>>Shipping</option>
+                    <option value="completed" <c:if test="${statusFilter == 'completed'}">selected</c:if>>Completed</option>
+                    <option value="cancelled" <c:if test="${statusFilter == 'cancelled'}">selected</c:if>>Cancelled</option>
                 </select>
             </div>
             <!-- Submit button (hidden, triggered by enter or select change) -->
             <button type="submit"
-                    class="px-5 py-3 bg-primary text-on-primary font-label-md text-label-md uppercase rounded-none hover:opacity-90 transition-opacity">
-                Tìm kiếm
+                    class="px-5 py-3 bg-primary text-on-primary font-label-md text-label-md uppercase rounded-lg hover:opacity-90 transition-opacity">
+                Search
             </button>
         </form>
 
         <!-- Selected count (Bulk Actions placeholder) -->
         <div class="flex items-center gap-3 pl-6 border-l border-outline-variant/50 ml-6 opacity-50 pointer-events-none transition-opacity" id="bulk-actions">
-            <span class="font-label-sm text-label-sm text-secondary uppercase">0 Đã chọn</span>
-            <button class="px-4 py-2 bg-surface-container text-primary font-label-md text-label-md uppercase rounded-none border border-outline-variant hover:bg-surface-container-high transition-colors">
-                Xác nhận
+            <span class="font-label-sm text-label-sm text-secondary uppercase">0 Selected</span>
+            <button class="px-4 py-2 bg-surface-container text-primary font-label-md text-label-md uppercase rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
+                Confirm
             </button>
         </div>
     </section>
@@ -263,11 +263,11 @@
                         <th class="py-4 px-6 w-12">
                             <input id="select-all-checkbox" class="rounded-[2px] border-outline-variant text-primary focus:ring-primary cursor-pointer w-4 h-4" type="checkbox">
                         </th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Mã đơn hàng</th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Khách hàng</th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Ngày đặt</th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider text-right">Tổng tiền</th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Trạng thái</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Order ID</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Customer</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Order Date</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider text-right">Total Amount</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Status</th>
                         <th class="py-4 px-6 w-12"></th>
                     </tr>
                 </thead>
@@ -280,10 +280,10 @@
                                 <td colspan="7" class="py-20 text-center">
                                     <div class="flex flex-col items-center gap-3 text-secondary">
                                         <span class="material-symbols-outlined text-[48px] opacity-30">inbox</span>
-                                        <p class="font-label-md text-label-md uppercase tracking-wider">Không có đơn hàng nào</p>
+                                        <p class="font-label-md text-label-md uppercase tracking-wider">No orders found</p>
                                         <c:if test="${not empty statusFilter or not empty keyword}">
                                             <a href="${pageContext.request.contextPath}/staff/orders"
-                                               class="text-primary underline font-label-sm text-label-sm uppercase">Xoá bộ lọc</a>
+                                               class="text-primary underline font-label-sm text-label-sm uppercase">Clear filters</a>
                                         </c:if>
                                     </div>
                                 </td>
@@ -291,18 +291,15 @@
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="order" items="${orders}">
-                                <%-- Determine row opacity for cancelled orders --%>
                                 <c:set var="rowOpacity" value="${order.status == 'cancelled' ? 'opacity-60' : ''}"/>
 
                                 <tr class="hover:bg-surface-container-low transition-colors group">
                                     <td class="py-4 px-6">
                                         <input class="rounded-[2px] border-outline-variant text-primary focus:ring-primary cursor-pointer w-4 h-4 row-checkbox" type="checkbox">
                                     </td>
-                                    <!-- Order ID (short: last 8 chars of UUID) -->
                                     <td class="py-4 px-6 font-bold font-label-md tracking-wider ${rowOpacity}">
                                         #<c:out value="${order.id.length() > 8 ? order.id.substring(order.id.length() - 8).toUpperCase() : order.id}"/>
                                     </td>
-                                    <!-- Customer -->
                                     <td class="py-4 px-6 ${rowOpacity}">
                                         <div class="flex flex-col">
                                             <span class="font-label-md text-label-md text-primary">
@@ -313,56 +310,52 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <!-- Date -->
                                     <td class="py-4 px-6 text-secondary ${rowOpacity}">
                                         <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy"/>
                                         <span class="text-[12px] ml-1">
                                             <fmt:formatDate value="${order.createdAt}" pattern="HH:mm"/>
                                         </span>
                                     </td>
-                                    <!-- Total Amount -->
                                     <td class="py-4 px-6 text-right font-label-md ${rowOpacity}">
                                         <fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
                                     </td>
-                                    <!-- Status Badge -->
                                     <td class="py-4 px-6">
                                         <c:choose>
                                             <c:when test="${order.status == 'pending'}">
-                                                <span class="inline-flex items-center px-2 py-1 bg-surface-variant text-on-surface font-label-sm text-label-sm uppercase tracking-widest rounded-none">
-                                                    Chờ xác nhận
+                                                <span class="inline-flex items-center px-2 py-1 bg-surface-variant text-on-surface font-label-sm text-label-sm uppercase tracking-widest rounded-md">
+                                                    Pending
                                                 </span>
                                             </c:when>
                                             <c:when test="${order.status == 'confirmed'}">
-                                                <span class="inline-flex items-center px-2 py-1 border border-primary text-primary font-label-sm text-label-sm uppercase tracking-widest rounded-none">
-                                                    Đã xác nhận
+                                                <span class="inline-flex items-center px-2 py-1 border border-primary text-primary font-label-sm text-label-sm uppercase tracking-widest rounded-md">
+                                                    Confirmed
                                                 </span>
                                             </c:when>
                                             <c:when test="${order.status == 'shipping'}">
-                                                <span class="inline-flex items-center px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm uppercase tracking-widest rounded-none border border-tertiary-fixed-dim">
-                                                    Đang giao
+                                                <span class="inline-flex items-center px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm uppercase tracking-widest rounded-md border border-tertiary-fixed-dim">
+                                                    Shipping
                                                 </span>
                                             </c:when>
                                             <c:when test="${order.status == 'completed'}">
-                                                <span class="inline-flex items-center px-2 py-1 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest rounded-none">
-                                                    Hoàn thành
+                                                <span class="inline-flex items-center px-2 py-1 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest rounded-md">
+                                                    Completed
                                                 </span>
                                             </c:when>
                                             <c:when test="${order.status == 'cancelled'}">
-                                                <span class="inline-flex items-center px-2 py-1 bg-error-container text-on-error-container font-label-sm text-label-sm uppercase tracking-widest rounded-none">
-                                                    Đã huỷ
+                                                <span class="inline-flex items-center px-2 py-1 bg-error-container text-on-error-container font-label-sm text-label-sm uppercase tracking-widest rounded-md">
+                                                    Cancelled
                                                 </span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="inline-flex items-center px-2 py-1 bg-surface-container text-secondary font-label-sm text-label-sm uppercase tracking-widest rounded-none">
+                                                <span class="inline-flex items-center px-2 py-1 bg-surface-container text-secondary font-label-sm text-label-sm uppercase tracking-widest rounded-md">
                                                     <c:out value="${order.status}"/>
                                                 </span>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <!-- Action menu -->
                                     <td class="py-4 px-6 text-right">
                                         <button class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
-                                                title="Xem chi tiết đơn hàng">
+                                                title="View order details">
                                             <span class="material-symbols-outlined">more_vert</span>
                                         </button>
                                     </td>
@@ -377,19 +370,19 @@
             <!-- Pagination Footer -->
             <div class="px-6 py-4 border-t border-outline-variant flex items-center justify-between bg-surface-bright">
                 <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">
-                    Hiển thị ${rangeStart}–${rangeEnd} / ${totalOrders} đơn hàng
+                    Showing ${rangeStart}–${rangeEnd} of ${totalOrders} orders
                 </span>
                 <div class="flex items-center gap-2">
                     <!-- Prev button -->
                     <c:choose>
                         <c:when test="${currentPage <= 1}">
-                            <button disabled class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary disabled:opacity-30 rounded-none">
+                            <button disabled class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary disabled:opacity-30 rounded-lg">
                                 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                             </button>
                         </c:when>
                         <c:otherwise>
                             <a href="${pageContext.request.contextPath}/staff/orders?page=${currentPage - 1}&status=${statusFilter}&keyword=${keyword}"
-                               class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-none">
+                               class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-lg">
                                 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                             </a>
                         </c:otherwise>
@@ -399,13 +392,13 @@
                     <c:forEach begin="1" end="${totalPages}" var="p">
                         <c:choose>
                             <c:when test="${p == currentPage}">
-                                <button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-none">
+                                <button class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-lg">
                                     <c:out value="${p}"/>
                                 </button>
                             </c:when>
                             <c:otherwise>
                                 <a href="${pageContext.request.contextPath}/staff/orders?page=${p}&status=${statusFilter}&keyword=${keyword}"
-                                   class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-none transition-colors">
+                                   class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-lg transition-colors">
                                     <c:out value="${p}"/>
                                 </a>
                             </c:otherwise>
@@ -415,13 +408,13 @@
                     <!-- Next button -->
                     <c:choose>
                         <c:when test="${currentPage >= totalPages}">
-                            <button disabled class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary disabled:opacity-30 rounded-none">
+                            <button disabled class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary disabled:opacity-30 rounded-lg">
                                 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                             </button>
                         </c:when>
                         <c:otherwise>
                             <a href="${pageContext.request.contextPath}/staff/orders?page=${currentPage + 1}&status=${statusFilter}&keyword=${keyword}"
-                               class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-none">
+                               class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-lg">
                                 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                             </a>
                         </c:otherwise>
@@ -444,10 +437,10 @@
             const checked = Array.from(checkboxes).filter(c => c.checked);
             if (checked.length > 0) {
                 bulkActionsBar.classList.remove('opacity-50', 'pointer-events-none');
-                bulkActionsBar.querySelector('span').textContent = checked.length + ' ĐÃ CHỌN';
+                bulkActionsBar.querySelector('span').textContent = checked.length + ' SELECTED';
             } else {
                 bulkActionsBar.classList.add('opacity-50', 'pointer-events-none');
-                bulkActionsBar.querySelector('span').textContent = '0 Đã chọn';
+                bulkActionsBar.querySelector('span').textContent = '0 Selected';
             }
         }
 

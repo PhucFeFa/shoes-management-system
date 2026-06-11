@@ -10,18 +10,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * DAO for Order operations used by Staff Order List.
- * Joins orders with users to display customer name and email.
- */
 public class OrderDAO {
 
     private static final int PAGE_SIZE = 10;
 
-    /**
-     * Retrieve a paginated list of all orders, with optional status filter and keyword search.
-     * Keyword searches against customer full_name or email.
-     */
     public List<Order> getAllOrders(String statusFilter, String keyword, int page) {
         List<Order> orders = new ArrayList<>();
         int offset = (page - 1) * PAGE_SIZE;
@@ -81,9 +73,6 @@ public class OrderDAO {
         return orders;
     }
 
-    /**
-     * Count total orders matching the given filters, for pagination calculation.
-     */
     public int countAllOrders(String statusFilter, String keyword) {
         StringBuilder sql = new StringBuilder(
             "SELECT COUNT(*) "

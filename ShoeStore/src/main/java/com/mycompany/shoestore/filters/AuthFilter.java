@@ -16,14 +16,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-/**
- * AuthFilter guards all URLs under /staff/*.
- * - Unauthenticated users are redirected to /login.
- * - Authenticated users without staff or admin role are redirected to /home.
- *
- * NOTE: @WebFilter is disabled during development/testing.
- * Uncomment the annotation below to enable role-based access control.
- */
 // @WebFilter(urlPatterns = {"/staff/*"})
 public class AuthFilter implements Filter {
 
@@ -41,19 +33,16 @@ public class AuthFilter implements Filter {
         User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
 
         if (currentUser == null) {
-            // Not logged in → redirect to login page
             httpRes.sendRedirect(httpReq.getContextPath() + "/login");
             return;
         }
 
         String roleName = currentUser.getRoleName();
         if (!"staff".equalsIgnoreCase(roleName) && !"admin".equalsIgnoreCase(roleName)) {
-            // Logged in but not authorized → redirect to home
             httpRes.sendRedirect(httpReq.getContextPath() + "/home");
             return;
         }
 
-        // Authorized → continue
         chain.doFilter(request, response);
     }
 

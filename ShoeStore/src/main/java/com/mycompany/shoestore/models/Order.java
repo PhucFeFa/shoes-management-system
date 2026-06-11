@@ -3,10 +3,6 @@ package com.mycompany.shoestore.models;
 
 import java.sql.Timestamp;
 
-/**
- * DTO representing an order, joined with customer (user) information.
- * Used for Staff Order List display.
- */
 public class Order {
     private String id;
     private String userId;

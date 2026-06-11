@@ -13,11 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Servlet for Staff Order List.
- * URL: /staff/orders
- * Access: staff and admin roles only (enforced by AuthFilter).
- */
 @WebServlet(name = "StaffOrderServlet", urlPatterns = {"/staff/orders"})
 public class StaffOrderServlet extends HttpServlet {
 
@@ -25,7 +20,6 @@ public class StaffOrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Read filter & pagination params from query string
         String statusFilter = request.getParameter("status");
         String keyword      = request.getParameter("keyword");
         String pageParam    = request.getParameter("page");
@@ -49,11 +43,9 @@ public class StaffOrderServlet extends HttpServlet {
 
         List<Order> orders = orderDAO.getAllOrders(statusFilter, keyword, currentPage);
 
-        // Calculate display range (e.g., "Showing 1-10 of 42 Orders")
         int rangeStart = totalOrders == 0 ? 0 : (currentPage - 1) * pageSize + 1;
         int rangeEnd   = Math.min(currentPage * pageSize, totalOrders);
 
-        // Pass data to View
         request.setAttribute("orders",       orders);
         request.setAttribute("totalOrders",  totalOrders);
         request.setAttribute("totalPages",   totalPages);
