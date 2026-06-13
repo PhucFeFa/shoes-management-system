@@ -3,19 +3,19 @@ package com.mycompany.shoestore.dao;
 
 import com.mycompany.shoestore.db.DBContext;
 import com.mycompany.shoestore.models.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
-    
+
     public User login(String email, String password) {
         String sql = "SELECT * FROM users WHERE email = ? AND password_hash = ?";
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
-            ps.setString(2, password); // Note: Assuming plain text comparison for early dev stages
+            ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 User user = new User();
@@ -32,4 +32,7 @@ public class UserDAO {
         }
         return null;
     }
+
+    //Mange User
+// View
 }

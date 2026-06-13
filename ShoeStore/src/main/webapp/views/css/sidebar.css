@@ -1,0 +1,245 @@
+/* ADIDIS Admin — dashboard.css */
+/* Brand: industrial/lab, zero border-radius, black/white, uppercase mono aesthetic */
+
+/* ── Layout ── */
+#sidebar-container {
+    min-width: 250px;
+}
+
+/* ── Stat / Metric Cards ── */
+.menu-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e0e0e0;
+    border-radius: 0;
+    overflow: hidden;
+    background: #ffffff;
+    position: relative;
+}
+
+/* Top accent stripe on cards */
+.menu-card::before {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    background-color: #0a0a0a;
+    transition: width 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.menu-card:hover::before {
+    width: 100%;
+}
+
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    border-color: #0a0a0a;
+}
+
+/* ── Icon Block (replaces rounded icon-circle) ── */
+.icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin: 0 auto 16px;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    border: none;
+}
+
+/* If icon-circle has a colored variant via inline bg, override to keep brand */
+.icon-circle[style*="background"] {
+    background-color: #0a0a0a !important;
+    color: #ffffff !important;
+}
+
+/* ── Card Labels & Values ── */
+.menu-card .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 4px;
+}
+
+.menu-card .card-value {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0a0a0a;
+    line-height: 1;
+}
+
+.menu-card .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+}
+
+.menu-card .card-sub {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Product Image Header on Cards ── */
+.shoe-img-header {
+    height: 160px;
+    object-fit: cover;
+    width: 100%;
+    filter: grayscale(15%);
+    transition: filter 0.3s ease;
+}
+
+.menu-card:hover .shoe-img-header {
+    filter: grayscale(0%);
+}
+
+/* ── Dashboard Page Header ── */
+.dashboard-header {
+    padding: 32px 0 24px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 32px;
+}
+
+.dashboard-header h1,
+.dashboard-header .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    margin: 0;
+}
+
+.dashboard-header .page-sub {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+    margin-top: 4px;
+}
+
+/* ── Section Headers inside dashboard ── */
+.section-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* ── Tables ── */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+
+.admin-table th {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.admin-table td {
+    padding: 12px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #0a0a0a;
+    vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+    background-color: #f8f8f8;
+}
+
+/* ── Buttons ── */
+.btn-brand {
+    background-color: #0a0a0a;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    padding: 10px 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-brand:hover {
+    opacity: 0.85;
+    color: #ffffff;
+}
+
+.btn-brand-outline {
+    background-color: transparent;
+    color: #0a0a0a;
+    border: 1px solid #0a0a0a;
+    border-radius: 0;
+    padding: 9px 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-brand-outline:hover {
+    background-color: #0a0a0a;
+    color: #ffffff;
+}
+
+/* ── Badges / Status Tags ── */
+.badge-brand {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 0;
+}
+
+.badge-brand-active {
+    background-color: #0a0a0a;
+    color: #ffffff;
+}
+
+.badge-brand-inactive {
+    background-color: #f0f0f0;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.badge-brand-alert {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: 1px solid #0a0a0a;
+}
