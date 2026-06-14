@@ -2,6 +2,7 @@
 package com.mycompany.shoestore.dao;
 
 import com.mycompany.shoestore.db.DBContext;
+import com.mycompany.shoestore.dto.UserDTO;
 import com.mycompany.shoestore.models.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,5 +35,32 @@ public class UserDAO {
     }
 
     //Mange User
-// View
+   //View
+    public List<UserDTO> getAllCustomers() {
+        List<UserDTO> list = new ArrayList<>();
+        String sql = "SELECT u.id, u.email, u.full_name, u.created_at, r.name AS role_name "
+                   + "FROM [users] u "
+                   + "INNER JOIN [roles] r ON u.role_id = r.id "
+                   + "WHERE u.role_id != '11111111-1111-1111-1111-111111111111'";
+        
+        DBContext db = new DBContext();
+        try (Connection conn = db.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                UserDTO dto = new UserDTO();
+                dto.setId(rs.getString("id"));
+                dto.setEmail(rs.getString("email"));
+                dto.setFullName(rs.getString("full_name"));
+                dto.setRoleName(rs.getString("role_name"));
+                dto.setCreatedAt(rs.getTimestamp("created_at")); 
+                
+                list.add(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

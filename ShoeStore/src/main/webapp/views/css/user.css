@@ -1,0 +1,43 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jun 13, 2026, 6:17:34 PM
+    Author     : default
+*/
+
+/* Thiết lập chiều cao tối thiểu cho vùng chứa Sidebar */
+.sidebar-container {
+    min-height: 100vh;
+}
+
+/* Định dạng độ rộng cố định cho các cột trong bảng danh sách */
+.col-no {
+    width: 5%;
+}
+
+.col-id {
+    width: 25%;
+}
+
+.col-name {
+    width: 20%;
+}
+
+.col-email {
+    width: 20%;
+}
+
+.col-role {
+    width: 12%;
+}
+
+.col-created {
+    width: 18%;
+}
+
+/* Định dạng chữ phụ nhỏ cho mã UUID */
+.uuid-text {
+    font-size: 0.85rem;
+}
