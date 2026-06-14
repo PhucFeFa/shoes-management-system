@@ -1,4 +1,4 @@
-// Author: PhucLHCE191132
+// Author: baolgce191178
 package com.mycompany.shoestore.models;
 
 import java.sql.Timestamp;
@@ -10,6 +10,7 @@ public class User {
     private String roleId;
     private String fullName;
     private Timestamp createdAt;
+    private String roleName;
 
     public User() {
     }
@@ -31,4 +32,7 @@ public class User {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public String getRoleName() { return roleName; }
+    public void setRoleName(String roleName) { this.roleName = roleName; }
 }
