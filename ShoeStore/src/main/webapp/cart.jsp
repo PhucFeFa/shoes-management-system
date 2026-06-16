@@ -63,9 +63,22 @@
 
                     <c:forEach var="item" items="${cart}">
 
+
                         <div class="border rounded-xl p-5 hover:shadow-lg transition">
 
                             <div class="flex flex-col md:flex-row gap-5">
+
+                                <!-- Checkbox chọn sản phẩm -->
+                                <div class="flex items-center">
+                                    <input type="checkbox"
+                                           class="cart-checkbox w-5 h-5"
+                                           name="selectedItems"
+                                           value="${item.productVariantId}"
+                                           data-price="${item.price}"
+                                           data-qty="${item.quantity}"
+                                           checked>
+                                </div>
+
 
                                 <!-- Image -->
                                 <div class="w-full md:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden">
@@ -107,7 +120,7 @@
                                             <div class="flex items-center mt-2 border rounded-lg overflow-hidden w-fit">
 
                                                 <!-- Nút giảm -->
-                                                <form action="UpdateCartServlet" method="post">
+                                                <form action="UpdateCart" method="post">
                                                     <input type="hidden"
                                                            name="variantId"
                                                            value="${item.productVariantId}">
@@ -128,7 +141,7 @@
                                                             </div>
 
                                                             <!-- Nút tăng -->
-                                                            <form action="UpdateCartServlet" method="post">
+                                                            <form action="UpdateCart" method="post">
                                                                 <input type="hidden"
                                                                        name="variantId"
                                                                        value="${item.productVariantId}">
@@ -163,7 +176,7 @@
                                                                         <!-- Remove -->
                                                                         <div class="flex items-start">
 
-                                                                            <form action="RemoveCartServlet"
+                                                                            <form action="RemoveCart"
                                                                                   method="post">
 
                                                                                 <input type="hidden"
@@ -220,15 +233,23 @@
 
                                                                                     <div class="flex justify-between text-xl font-bold">
                                                                                         <span>Total</span>
-                                                                                        <span>$${total}</span>
+                                                                                        <span id="grandTotal">$${total}</span>
                                                                                     </div>
 
                                                                             </div>
 
-                                                                            <a href="${pageContext.request.contextPath}/checkout"
-                                                                               class="block w-full mt-8 text-center bg-black text-white py-4 uppercase tracking-wider hover:bg-gray-800 transition rounded-lg">
-                                                                                Proceed To Checkout
-                                                                            </a>
+                                                                            <form id="checkoutForm"
+                                                                                  action="${pageContext.request.contextPath}/checkout"
+                                                                                  method="post">
+
+                                                                                <div id="selectedProducts"></div>
+
+                                                                                <button type="submit"
+                                                                                        class="block w-full mt-8 text-center bg-black text-white py-4 uppercase tracking-wider hover:bg-gray-800 transition rounded-lg">
+                                                                                    Proceed To Checkout
+                                                                                </button>
+
+                                                                            </form>
 
                                                                             <a href="${pageContext.request.contextPath}/products"
                                                                                class="block w-full mt-3 text-center border py-4 uppercase tracking-wider hover:bg-gray-50 transition rounded-lg">
@@ -244,6 +265,43 @@
                                                                     </section>
 
                                                                 </c:if>
+                                                                <script>
+
+                                                                    document.addEventListener("DOMContentLoaded", function () {
+
+                                                                        const totalElement =
+                                                                                document.getElementById("grandTotal");
+
+                                                                        function calculateTotal() {
+
+                                                                            let total = 0;
+
+                                                                            document.querySelectorAll(".cart-checkbox")
+                                                                                    .forEach(cb => {
+
+                                                                                        if (cb.checked) {
+
+                                                                                            total +=
+                                                                                                    Number(cb.dataset.price)
+                                                                                                    * Number(cb.dataset.qty);
+                                                                                        }
+                                                                                    });
+
+                                                                            totalElement.innerHTML =
+                                                                                    "$" + total.toFixed(2);
+                                                                        }
+
+                                                                        document.querySelectorAll(".cart-checkbox")
+                                                                                .forEach(cb => {
+
+                                                                                    cb.addEventListener("change", calculateTotal);
+                                                                                });
+
+                                                                        calculateTotal();
+
+                                                                    });
+
+                                                                </script>
 
                                                                 </main>
 

@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author pts03
  */
-@WebServlet(name = "CartServlet", urlPatterns = {"/CartServlet"})
+@WebServlet(name = "Cart", urlPatterns = {"/Cart"})
 public class CartServlet extends HttpServlet {
 
     CartDAO dao = new CartDAO();
@@ -66,18 +66,41 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User currentUser = (User) session.getAttribute("currentUser");
-        String userId = currentUser.getId();
 
-        //String userId = (String) request.getSession().getAttribute("userId");
+    // Kiểm tra session
+    if (session == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 
-        try {
-            request.setAttribute("cart", dao.getCart(userId));
-        } catch (Exception e) {
-            e.printStackTrace();
+    User currentUser = (User) session.getAttribute("currentUser");
+
+    // Kiểm tra đăng nhập
+    if (currentUser == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
+    String userId = currentUser.getId();
+
+    try {
+        List<CartItem> cart = dao.getCart(userId);
+
+        // Tính tổng tiền
+        double totalAmount = 0;
+
+        for (CartItem item : cart) {
+            totalAmount += item.getPrice() * item.getQuantity();
         }
 
-        request.getRequestDispatcher("/cart.jsp").forward(request, response);
+        request.setAttribute("cart", cart);
+        request.setAttribute("totalAmount", totalAmount);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    request.getRequestDispatcher("/cart.jsp").forward(request, response);
     }
 
     /**

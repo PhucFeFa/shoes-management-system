@@ -15,7 +15,7 @@ import java.io.PrintWriter;
  *
  * @author pts03
  */
-@WebServlet(name = "DeleteAddressServlet", urlPatterns = {"/DeleteAddressServlet"})
+@WebServlet(name = "DeleteAddress", urlPatterns = {"/DeleteAddress"})
 public class DeleteAddressServlet extends HttpServlet {
 
     /**

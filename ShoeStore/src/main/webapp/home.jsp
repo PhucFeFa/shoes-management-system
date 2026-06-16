@@ -3,6 +3,45 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
 <jsp:include page="/WEB-INF/include/header.jsp" />
+<c:if test="${not empty sessionScope.cartMessage}">
+
+    <div id="cartModal"
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+        <div class="bg-white rounded-lg shadow-xl p-6 w-96 text-center">
+
+            <h2 class="text-xl font-bold text-black mb-4">
+                Notification
+            </h2>
+
+            <p class="text-black mb-6">
+                ${sessionScope.cartMessage}
+            </p>
+
+            <button onclick="closeModal()"
+                    class="bg-black text-white px-6 py-2 rounded hover:opacity-80 transition">
+                OK
+            </button>
+
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById("cartModal").style.display = "none";
+        }
+
+        setTimeout(function () {
+            const modal = document.getElementById("cartModal");
+            if (modal) {
+                modal.style.display = "none";
+            }
+        }, 3000);
+    </script>
+
+    <c:remove var="cartMessage" scope="session"/>
+
+</c:if>
 
 <main class="pt-16">
     <!-- Hero Section -->
@@ -67,12 +106,14 @@
                         </c:choose>
 
                         <!-- Add to cart form -->
-                        <form action="${pageContext.request.contextPath}/AddToCartServlet" method="post"
+                        <form action="${pageContext.request.contextPath}/AddToCart" method="post"
                               class="absolute bottom-0 left-0 w-full">
                             <input type="hidden" name="productId" value="${product.id}" />
                             <input type="hidden"
                                    name="variantId"
                                    value="${variant.id}">
+                            <input type="hidden" name="returnUrl"
+                                   value="${pageContext.request.requestURI}?id=${product.id}">
                             <button type="submit"
                                     class="add-to-cart-btn w-full bg-primary text-on-primary py-4 text-label-md font-label-md uppercase opacity-0 transform translate-y-4 transition-all duration-300">
                                 ADD TO CART

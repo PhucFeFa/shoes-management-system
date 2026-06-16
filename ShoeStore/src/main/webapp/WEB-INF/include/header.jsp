@@ -154,26 +154,28 @@
                         <input class="bg-transparent border-none focus:ring-0 text-label-sm w-full outline-none"
                                placeholder="Search sneakers..." type="text" />
                     </div>
-                    <button
-                        class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95">shopping_cart</button>
+                    <a href="${pageContext.request.contextPath}/Cart"
+                       class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95">
+                        shopping_cart
+                    </a>
 
                     <!-- TODO: Check if user is logged in to show avatar or login button -->
-                    
-                        <a href="profile"
-                        class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:opacity-90 cursor-pointer transition-opacity block">
+
+                    <a href="profile"
+                       class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:opacity-90 cursor-pointer transition-opacity block">
 
                         <img alt="User Profile"
                              class="w-full h-full object-cover"
                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuALOWqybA_K0QrooRZENjJPOsx-qKeoCj7ybcpG1rD0xsLXAfCm9PBx8jvE0jg_XPMjKHzX60rbDMJ7lpKOVVWCYAHsg3NEactDvM86ynfWofftF6aFyEsBaPBSPRRWAsrJblZu1qEFQTKCAk-Gg569F8gZde1763FK-o1PnvmxOEnPpStOtXbzWalsNHf1J4R49ZU2M_cLXrdVeI2GH4uD6JuYqMdles2_bQpT-I_imWamZFl95N_z3O1lnp6xd9nbDx1jGHifPdM" />
-                        </a>
-                    
-                    <form action="LogoutServlet">
-                    <button
-                        class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center justify-center"
-                        title="Logout">logout</button>
-                        </form>
+                    </a>
+
+                    <form action="Logout" method="get">
+                        <button
+                            class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center justify-center"
+                            title="Logout">logout</button>
+                    </form>
                     <button class="md:hidden material-symbols-outlined text-primary">menu</button>
-                    
+
                 </div>
             </nav>
         </header>

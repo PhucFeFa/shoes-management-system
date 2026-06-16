@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author pts03
  */
-@WebServlet(name = "AddToCartServlet", urlPatterns = {"/AddToCartServlet"})
+@WebServlet(name = "AddToCart", urlPatterns = {"/AddToCart"})
 public class AddToCartServlet extends HttpServlet {
 
     CartDAO dao = new CartDAO();
@@ -81,45 +81,47 @@ public class AddToCartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
-    if (session == null) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
-    }
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
-    User currentUser = (User) session.getAttribute("currentUser");
+        User currentUser = (User) session.getAttribute("currentUser");
 
-    if (currentUser == null) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
-    }
+        if (currentUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
-    String userId = currentUser.getId().toString();
+        String userId = currentUser.getId().toString();
 
-    String productId = request.getParameter("productId");
+        String productId = request.getParameter("productId");
 
-    if (productId == null || productId.trim().isEmpty()) {
-        response.sendRedirect(request.getContextPath() + "/home");
-        return;
-    }
-
-    try {
-
-        String variantId = dao.getDefaultVariantId(productId);
-
-        if (variantId == null || variantId.trim().isEmpty()) {
+        if (productId == null || productId.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
 
-        dao.addToCart(userId, variantId, 1);
+        try {
 
-        response.sendRedirect(request.getContextPath() + "/CartServlet");
+            String variantId = dao.getDefaultVariantId(productId);
 
-    } catch (Exception e) {
-        throw new ServletException(e);
-    }
+            if (variantId == null || variantId.trim().isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/home");
+                return;
+            }
+
+            dao.addToCart(userId, variantId, 1);
+
+            session.setAttribute("cartMessage", "Added to cart successfully!");
+
+            response.sendRedirect(request.getContextPath() + "/home");
+
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     /**

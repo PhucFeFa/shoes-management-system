@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "AddAddressServlet", urlPatterns = {"/AddAddressServlet"})
+@WebServlet(name = "AddAddress", urlPatterns = {"/AddAddress"})
 public class AddAddressServlet extends HttpServlet {
 
     @Override

@@ -19,7 +19,7 @@ import java.io.PrintWriter;
  *
  * @author pts03
  */
-@WebServlet(name = "UpdateCartServlet", urlPatterns = {"/UpdateCartServlet"})
+@WebServlet(name = "UpdateCart", urlPatterns = {"/UpdateCart"})
 public class UpdateCartServlet extends HttpServlet {
 
     private CartDAO dao = new CartDAO();
@@ -111,7 +111,7 @@ public class UpdateCartServlet extends HttpServlet {
             throw new ServletException(e);
         }
 
-        response.sendRedirect("CartServlet");
+        response.sendRedirect("Cart");
     }
 
     /**

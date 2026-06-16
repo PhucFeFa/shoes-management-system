@@ -26,7 +26,7 @@
 
     <!-- Add Address Button -->
     <div class="mb-6">
-        <a href="${pageContext.request.contextPath}/AddAddressServlet"
+        <a href="${pageContext.request.contextPath}/AddAddress"
            class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800">
             Add Address
         </a>
@@ -65,13 +65,13 @@
 
                     <div class="flex gap-4">
 
-                        <a href="${pageContext.request.contextPath}/EditAddressServlet?id=${address.id}"
+                        <a href="${pageContext.request.contextPath}/EditAddress?id=${address.id}"
                            class="text-blue-600 text-xl"
                            title="Edit">
                             ✏️
                         </a>
 
-                        <a href="${pageContext.request.contextPath}/DeleteAddressServlet?id=${address.id}"
+                        <a href="${pageContext.request.contextPath}/DeleteAddress?id=${address.id}"
                            onclick="return confirm('Delete this address?')"
                            class="text-red-600 text-xl"
                            title="Delete">

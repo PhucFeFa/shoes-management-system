@@ -2,46 +2,75 @@
 
 <jsp:include page="/WEB-INF/include/header.jsp"/>
 
-<div class="max-w-xl mx-auto mt-24 bg-white p-8 shadow rounded">
+<div class="max-w-xl mx-auto mt-24 mb-24 bg-white p-8 shadow-lg rounded-xl">
 
     <h2 class="text-2xl font-bold mb-6">
         Update Address
     </h2>
 
-    <form action="EditAddressServlet" method="post">
+    <form action="EditAddress" method="post">
 
         <input type="hidden"
                name="id"
                value="${address.id}"/>
 
-        <input type="text"
-               name="city"
-               value="${address.city}"
-               class="border p-2 w-full mb-4">
+        <div class="mb-4">
+            <label class="block mb-2 font-medium">
+                City
+            </label>
+            <input type="text"
+                   name="city"
+                   required
+                   value="${address.city}"
+                   class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-black">
+        </div>
 
-        <input type="text"
-               name="district"
-               value="${address.district}"
-               class="border p-2 w-full mb-4">
+        <div class="mb-4">
+            <label class="block mb-2 font-medium">
+                District
+            </label>
+            <input type="text"
+                   name="district"
+                   required
+                   value="${address.district}"
+                   class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-black">
+        </div>
 
-        <input type="text"
-               name="ward"
-               value="${address.ward}"
-               class="border p-2 w-full mb-4">
+        <div class="mb-4">
+            <label class="block mb-2 font-medium">
+                Ward
+            </label>
+            <input type="text"
+                   name="ward"
+                   required
+                   value="${address.ward}"
+                   class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-black">
+        </div>
 
-        <input type="text"
-               name="addressLine"
-               value="${address.addressLine}"
-               class="border p-2 w-full mb-4">
+        <div class="mb-6">
+            <label class="block mb-2 font-medium">
+                Address Line
+            </label>
+            <input type="text"
+                   name="addressLine"
+                   required
+                   value="${address.addressLine}"
+                   class="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-black">
+        </div>
 
-        <button type="submit"
-                class="bg-black text-white px-6 py-3 rounded">
-            Update Address
-        </button>
-        <a href="profile.jsp"
-           class="border border-gray-400 text-gray-700 px-6 py-3 rounded hover:bg-gray-100">
-            Back
-        </a>
+        <div class="flex gap-3">
+
+            <button type="submit"
+                    class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
+                Update Address
+            </button>
+
+            <a href="${pageContext.request.contextPath}/profile"
+               class="border border-gray-400 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+                Back
+            </a>
+
+        </div>
 
     </form>
 

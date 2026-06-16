@@ -18,7 +18,7 @@ import java.io.PrintWriter;
  *
  * @author pts03
  */
-@WebServlet(name = "EditAddressServlet", urlPatterns = {"/EditAddressServlet"})
+@WebServlet(name = "EditAddress", urlPatterns = {"/EditAddress"})
 public class EditAddressServlet extends HttpServlet {
 
     /**
