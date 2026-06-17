@@ -155,25 +155,34 @@
                                placeholder="Search sneakers..." type="text" />
                     </div>
                     <a href="${pageContext.request.contextPath}/Cart"
-                       class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95">
-                        shopping_cart
+                       class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <c:set var="cartCount" value="0"/>
+                        <c:if test="${not empty sessionScope.cart}">
+                            <c:set var="cartCount" value="${sessionScope.cart.size()}"/>
+                        </c:if>
+                        <c:if test="${cartCount > 0}">
+                            <span class="absolute -top-1.5 -right-2 bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cartCount}</span>
+                        </c:if>
                     </a>
 
-                    <!-- TODO: Check if user is logged in to show avatar or login button -->
+                    <c:if test="${empty sessionScope.currentUser}">
+                        <a href="${pageContext.request.contextPath}/login" class="text-label-md font-label-md uppercase text-primary hover:opacity-80">Login</a>
+                        <a href="${pageContext.request.contextPath}/register" class="bg-primary text-on-primary px-4 py-2 rounded-full text-label-md font-label-md uppercase hover:bg-primary/90 transition-colors">Signup</a>
+                    </c:if>
 
-                    <a href="profile"
-                       class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:opacity-90 cursor-pointer transition-opacity block">
+                    <c:if test="${not empty sessionScope.currentUser}">
+                        <a href="profile" class="relative group cursor-pointer block mt-1">
+                            <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                            <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-600 rounded-full border border-white"></span>
+                        </a>
 
-                        <img alt="User Profile"
-                             class="w-full h-full object-cover"
-                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuALOWqybA_K0QrooRZENjJPOsx-qKeoCj7ybcpG1rD0xsLXAfCm9PBx8jvE0jg_XPMjKHzX60rbDMJ7lpKOVVWCYAHsg3NEactDvM86ynfWofftF6aFyEsBaPBSPRRWAsrJblZu1qEFQTKCAk-Gg569F8gZde1763FK-o1PnvmxOEnPpStOtXbzWalsNHf1J4R49ZU2M_cLXrdVeI2GH4uD6JuYqMdles2_bQpT-I_imWamZFl95N_z3O1lnp6xd9nbDx1jGHifPdM" />
-                    </a>
-
-                    <form action="Logout" method="get">
-                        <button
-                            class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center justify-center"
-                            title="Logout">logout</button>
-                    </form>
+                        <form action="Logout" method="get">
+                            <button
+                                class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center justify-center"
+                                title="Logout">logout</button>
+                        </form>
+                    </c:if>
                     <button class="md:hidden material-symbols-outlined text-primary">menu</button>
 
                 </div>
