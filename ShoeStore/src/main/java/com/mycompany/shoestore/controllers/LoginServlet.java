@@ -29,6 +29,12 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         
+        if (email == null || password == null || email.trim().isEmpty() || password.trim().isEmpty()) {
+            request.setAttribute("error", "Email and Password cannot be empty or just spaces.");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+            return;
+        }
+
         UserDAO userDAO = new UserDAO();
         User user = userDAO.login(email, password);
         

@@ -41,7 +41,13 @@ public class ResetPasswordServlet extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        if (password == null || !password.equals(confirmPassword)) {
+        if (password == null || confirmPassword == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Password cannot be empty or just spaces.");
+            request.getRequestDispatcher("/reset-password.jsp").forward(request, response);
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
             request.setAttribute("error", "Passwords do not match.");
             request.getRequestDispatcher("/reset-password.jsp").forward(request, response);
             return;

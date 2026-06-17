@@ -31,6 +31,13 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
+        if (fullName == null || email == null || password == null || confirmPassword == null ||
+            fullName.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty()) {
+            request.setAttribute("error", "All fields are required and cannot be empty or just spaces.");
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            return;
+        }
+
         if (!password.equals(confirmPassword)) {
             request.setAttribute("error", "Passwords do not match.");
             request.getRequestDispatcher("/register.jsp").forward(request, response);
