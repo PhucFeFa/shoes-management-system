@@ -90,7 +90,62 @@ public class ProductDAO {
         return brands;
     }
 
-    public List<Product> searchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice, Double maxPrice) {
+    public int countSearchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice, Double maxPrice) {
+        StringBuilder sql = new StringBuilder(
+            "SELECT COUNT(*) "
+            + "FROM products p "
+            + "WHERE p.status = 'active'"
+        );
+
+        List<Object> parameters = new ArrayList<>();
+
+        if (query != null && !query.trim().isEmpty()) {
+            sql.append(" AND p.name LIKE ?");
+            parameters.add("%" + query.trim() + "%");
+        }
+
+        if (categoryIds != null && categoryIds.length > 0) {
+            sql.append(" AND p.category_id IN (");
+            sql.append(String.join(",", Collections.nCopies(categoryIds.length, "?")));
+            sql.append(")");
+            for (String id : categoryIds) { parameters.add(id); }
+        }
+
+        if (brandIds != null && brandIds.length > 0) {
+            sql.append(" AND p.brand_id IN (");
+            sql.append(String.join(",", Collections.nCopies(brandIds.length, "?")));
+            sql.append(")");
+            for (String id : brandIds) { parameters.add(id); }
+        }
+
+        if (minPrice != null) {
+            sql.append(" AND p.price >= ?");
+            parameters.add(minPrice);
+        }
+
+        if (maxPrice != null) {
+            sql.append(" AND p.price <= ?");
+            parameters.add(maxPrice);
+        }
+
+        int count = 0;
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                ps.setObject(i + 1, parameters.get(i));
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public List<Product> searchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice, Double maxPrice, int page, int pageSize) {
         List<Product> products = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
             "SELECT p.*, "
@@ -138,6 +193,11 @@ public class ProductDAO {
         }
 
         sql.append(" ORDER BY p.created_at DESC");
+        
+        // Pagination logic for MS SQL Server
+        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        parameters.add((page - 1) * pageSize);
+        parameters.add(pageSize);
 
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {

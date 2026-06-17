@@ -17,16 +17,17 @@
                             performance.</p>
                     </div>
                     <div class="text-label-md font-label-md text-secondary mt-4 md:mt-0">
-                        ${products.size()} PRODUCTS FOUND
+                        ${totalProducts} PRODUCTS FOUND
                     </div>
                 </div>
 
                 <div class="flex flex-col lg:flex-row gap-8">
 
                     <!-- Sidebar Filters -->
-                    <aside class="w-full lg:w-1/4 lg:max-w-[280px]">
+                    <aside class="w-full lg:w-1/5 lg:max-w-[220px]">
                         <form action="${pageContext.request.contextPath}/products" method="GET"
-                            class="sticky top-24 flex flex-col space-y-8" id="filterForm">
+                            class="sticky top-24 flex flex-col space-y-6" id="filterForm">
+                            <input type="hidden" name="page" id="pageInput" value="1">
 
                             <!-- Search -->
                             <div>
@@ -35,10 +36,10 @@
                                     SEARCH</h3>
                                 <div class="relative">
                                     <input type="text" name="search" value="${searchQuery}"
-                                        placeholder="Search products..."
-                                        class="w-full bg-surface-container text-body-md text-primary border-none p-3 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
+                                        placeholder="Search..."
+                                        class="w-full bg-surface-container text-label-sm text-primary border-none py-2 px-3 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
                                     <span
-                                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+                                        class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
                                 </div>
                             </div>
 
@@ -112,7 +113,7 @@
                     </aside>
 
                     <!-- Product Grid -->
-                    <main class="w-full lg:w-3/4">
+                    <main class="w-full lg:w-4/5">
                         <c:choose>
                             <c:when test="${empty products}">
                                 <div
@@ -130,7 +131,7 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
                                     <c:forEach var="p" items="${products}">
                                         <div
                                             class="group flex flex-col relative bg-surface hover:bg-surface-container transition-colors duration-300">
@@ -188,6 +189,29 @@
                                         </div>
                                     </c:forEach>
                                 </div>
+
+                                <!-- Pagination -->
+                                <c:if test="${totalPages > 1}">
+                                    <div class="mt-12 flex justify-center items-center space-x-2">
+                                        <c:if test="${currentPage > 1}">
+                                            <button onclick="goToPage(${currentPage - 1})" class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
+                                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                                            </button>
+                                        </c:if>
+
+                                        <c:forEach begin="1" end="${totalPages}" var="i">
+                                            <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
+                                                ${i}
+                                            </button>
+                                        </c:forEach>
+
+                                        <c:if test="${currentPage < totalPages}">
+                                            <button onclick="goToPage(${currentPage + 1})" class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
+                                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                                            </button>
+                                        </c:if>
+                                    </div>
+                                </c:if>
                             </c:otherwise>
                         </c:choose>
                     </main>
@@ -196,11 +220,17 @@
             </div>
 
             <script>
+                function goToPage(page) {
+                    document.getElementById('pageInput').value = page;
+                    document.getElementById('filterForm').submit();
+                }
+
                 // Optional: Auto-submit form on checkbox change (for real-time filtering without clicking apply)
                 // Uncomment if requested by client. Currently, it requires hitting 'APPLY FILTERS' for better UX on mobile.
                 /*
                 document.querySelectorAll('#filterForm input[type="checkbox"]').forEach(checkbox => {
                     checkbox.addEventListener('change', () => {
+                        document.getElementById('pageInput').value = 1; // reset page on filter change
                         document.getElementById('filterForm').submit();
                     });
                 });

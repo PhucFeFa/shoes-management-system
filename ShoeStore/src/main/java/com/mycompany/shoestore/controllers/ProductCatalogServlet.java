@@ -45,15 +45,36 @@ public class ProductCatalogServlet extends HttpServlet {
             // Log or ignore invalid numbers, keeping them null
         }
 
+        // Pagination parameters
+        int page = 1;
+        int pageSize = 12; // 12 items per page
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.trim().isEmpty()) {
+            try {
+                page = Integer.parseInt(pageParam);
+                if (page < 1) page = 1;
+            } catch (NumberFormatException e) {
+                // Ignore invalid page numbers
+            }
+        }
+
         // 2. Fetch data from DAO
         List<Category> categories = productDAO.getAllCategories();
         List<Brand> brands = productDAO.getAllBrands();
-        List<Product> products = productDAO.searchAndFilterProducts(searchQuery, categoryIds, brandIds, minPrice, maxPrice);
+        
+        int totalProducts = productDAO.countSearchAndFilterProducts(searchQuery, categoryIds, brandIds, minPrice, maxPrice);
+        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+        if (page > totalPages && totalPages > 0) page = totalPages;
+
+        List<Product> products = productDAO.searchAndFilterProducts(searchQuery, categoryIds, brandIds, minPrice, maxPrice, page, pageSize);
 
         // 3. Set attributes for the view
         request.setAttribute("categories", categories);
         request.setAttribute("brands", brands);
         request.setAttribute("products", products);
+        request.setAttribute("totalProducts", totalProducts);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
         
         // Retain states for the form
         request.setAttribute("searchQuery", searchQuery);
