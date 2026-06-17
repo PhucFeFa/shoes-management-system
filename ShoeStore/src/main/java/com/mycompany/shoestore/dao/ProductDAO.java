@@ -58,4 +58,64 @@ public class ProductDAO {
         }
         return products;
     }
+    public Product getProductById(String productId) {
+
+    String sql = "SELECT p.*, "
+            + "(SELECT TOP 1 image_url "
+            + " FROM product_images pi "
+            + " WHERE pi.product_id = p.id "
+            + " ORDER BY pi.sort_order) AS first_image, "
+            + "c.name AS category_name, "
+            + "b.name AS brand_name "
+            + "FROM products p "
+            + "LEFT JOIN categories c ON p.category_id = c.id "
+            + "LEFT JOIN brands b ON p.brand_id = b.id "
+            + "WHERE p.id = ?";
+
+    try (Connection conn = new DBContext().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, productId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+
+                Product p = new Product();
+
+                p.setId(rs.getString("id"));
+                p.setName(rs.getString("name"));
+                p.setDescription(rs.getString("description"));
+                p.setPrice(rs.getDouble("price"));
+                p.setCategoryId(rs.getString("category_id"));
+                p.setBrandId(rs.getString("brand_id"));
+                p.setStatus(rs.getString("status"));
+                p.setCreatedAt(rs.getTimestamp("created_at"));
+
+                p.setFirstImageUrl(rs.getString("first_image"));
+
+                Category c = new Category(
+                        rs.getString("category_id"),
+                        rs.getString("category_name")
+                );
+
+                Brand b = new Brand(
+                        rs.getString("brand_id"),
+                        rs.getString("brand_name")
+                );
+
+                p.setCategory(c);
+                p.setBrand(b);
+
+                return p;
+            }
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error getProductById: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return null;
+}
 }

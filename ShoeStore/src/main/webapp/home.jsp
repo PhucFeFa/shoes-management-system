@@ -94,9 +94,11 @@
                         <!-- Use the first image URL if available -->
                         <c:choose>
                             <c:when test="${not empty product.firstImageUrl}">
-                                <img alt="${product.name}"
-                                     class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
-                                     src="${product.firstImageUrl}" />
+                                <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}">
+                                    <img alt="${product.name}"
+                                         class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
+                                         src="${product.firstImageUrl}" />
+                                </a>
                             </c:when>
                             <c:otherwise>
                                 <img alt="${product.name}"
@@ -121,7 +123,12 @@
                         </form>
                     </div>
                     <div>
-                        <h3 class="text-label-md font-label-md font-bold uppercase mb-1">${product.name}</h3>
+                        <h3 class="text-label-md font-label-md font-bold uppercase mb-1">
+                            <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}"
+                               class="hover:text-blue-600">
+                                ${product.name}
+                            </a>
+                        </h3>
                         <p class="text-label-sm text-secondary mb-2">${product.category.name}</p>
                         <p class="text-label-md font-label-md text-primary">$${product.price}</p>
                     </div>
