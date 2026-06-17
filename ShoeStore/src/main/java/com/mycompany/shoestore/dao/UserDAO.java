@@ -95,4 +95,38 @@ public class UserDAO {
         }
         return false;
     }
+
+    public boolean registerUser(User user) {
+        // Find the Customer role ID dynamically, assuming role name is Customer or User
+        String getRoleSql = "SELECT TOP 1 id FROM roles WHERE name LIKE '%Customer%' OR name LIKE '%User%'";
+        String roleId = null;
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement psRole = conn.prepareStatement(getRoleSql);
+             ResultSet rs = psRole.executeQuery()) {
+            if (rs.next()) {
+                roleId = rs.getString("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (roleId == null) {
+            roleId = "R03"; // fallback
+        }
+
+        String sql = "INSERT INTO users (id, email, password_hash, full_name, role_id) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, java.util.UUID.randomUUID().toString());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPasswordHash());
+            ps.setString(4, user.getFullName());
+            ps.setString(5, roleId); 
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

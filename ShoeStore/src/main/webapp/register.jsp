@@ -175,89 +175,98 @@
                                     ${error}
                                 </div>
                             </c:if>
-                            <!-- Tab Toggles -->
-                            <!-- LOGIN FORM -->
-                            <form class="flex flex-col space-y-6 w-full opacity-100 transition-opacity duration-300"
-                                id="form-login" action="${pageContext.request.contextPath}/login" method="POST">
+
+                            <!-- REGISTER FORM -->
+                            <form
+                                class="flex flex-col space-y-6 w-full transition-opacity duration-300 <c:if test='${showOTP}'>hidden opacity-0</c:if>"
+                                id="form-register" action="${pageContext.request.contextPath}/register" method="POST">
                                 <div class="flex flex-col space-y-2">
                                     <label class="text-label-sm font-label-sm uppercase text-secondary"
-                                        for="login-email">Email Address</label>
+                                        for="register-fullname">Full Name</label>
                                     <input
                                         class="w-full bg-surface-container text-body-md font-body-md text-primary border-none p-4 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow"
-                                        id="login-email" name="email" placeholder="ENTER EMAIL" type="email" required />
+                                        id="register-fullname" name="fullName" placeholder="ENTER FULL NAME" type="text"
+                                        required />
                                 </div>
                                 <div class="flex flex-col space-y-2">
-                                    <div class="flex justify-between items-center">
-                                        <label class="text-label-sm font-label-sm uppercase text-secondary"
-                                            for="login-password">Password</label>
-                                        <a class="text-label-sm font-label-sm text-secondary hover:text-primary underline underline-offset-4 transition-colors"
-                                            href="#" onclick="showOTP()">FORGOT PASSWORD?</a>
-                                    </div>
-                                    <div class="relative">
-                                        <input
-                                            class="w-full bg-surface-container text-body-md font-body-md text-primary border-none p-4 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow"
-                                            id="login-password" name="password" placeholder="ENTER PASSWORD"
-                                            type="password" required />
-                                        <button
-                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors"
-                                            type="button">
-                                            <span class="material-symbols-outlined text-[20px]">visibility_off</span>
-                                        </button>
-                                    </div>
+                                    <label class="text-label-sm font-label-sm uppercase text-secondary"
+                                        for="register-email">Email Address</label>
+                                    <input
+                                        class="w-full bg-surface-container text-body-md font-body-md text-primary border-none p-4 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow"
+                                        id="register-email" name="email" placeholder="ENTER EMAIL" type="email"
+                                        required />
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <label class="text-label-sm font-label-sm uppercase text-secondary"
+                                        for="register-password">Password</label>
+                                    <input
+                                        class="w-full bg-surface-container text-body-md font-body-md text-primary border-none p-4 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow"
+                                        id="register-password" name="password" placeholder="••••••••" type="password"
+                                        required />
+                                </div>
+                                <div class="flex flex-col space-y-2">
+                                    <label class="text-label-sm font-label-sm uppercase text-secondary"
+                                        for="register-confirm">Confirm Password</label>
+                                    <input
+                                        class="w-full bg-surface-container text-body-md font-body-md text-primary border-none p-4 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow"
+                                        id="register-confirm" name="confirmPassword" placeholder="••••••••"
+                                        type="password" required />
                                 </div>
                                 <button
                                     class="w-full bg-primary text-on-primary py-5 mt-4 text-label-md font-label-md uppercase tracking-widest hover:bg-primary/90 transition-colors flex justify-center items-center group"
                                     type="submit">
-                                    LOGIN
+                                    CREATE ACCOUNT
                                     <span
                                         class="material-symbols-outlined ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[18px]">arrow_forward</span>
                                 </button>
                                 <div class="pt-4 text-center"><a
                                         class="text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest"
-                                        href="${pageContext.request.contextPath}/register">Don't have an account? Create
-                                        one</a></div>
+                                        href="${pageContext.request.contextPath}/login">Already have an account? Log
+                                        in</a></div>
                             </form>
-                            <!-- REGISTER FORM (Hidden by default) -->
-                            <!-- OTP VERIFICATION STATE (Hidden by default) -->
-                            <div class="flex-col space-y-8 w-full hidden opacity-0 transition-opacity duration-300"
+
+                            <!-- OTP VERIFICATION STATE -->
+                            <div class="flex-col space-y-8 w-full transition-opacity duration-300 <c:if test='${not showOTP}'>hidden opacity-0</c:if>"
                                 id="form-otp">
                                 <div class="text-center space-y-2">
                                     <h3 class="text-headline-md font-headline-md text-primary">VERIFY IDENTITY</h3>
                                     <p class="text-body-md font-body-md text-secondary">Enter the 6-digit code sent to
-                                        your device.</p>
+                                        your email.</p>
                                 </div>
                                 <div class="flex justify-center space-x-2 sm:space-x-4">
-                                    <input autofocus=""
-                                        class="w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
+                                    <input
+                                        class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
+                                        maxlength="1" type="text" autofocus />
+                                    <input
+                                        class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
                                         maxlength="1" type="text" />
                                     <input
-                                        class="w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
+                                        class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
                                         maxlength="1" type="text" />
                                     <input
-                                        class="w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
+                                        class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
                                         maxlength="1" type="text" />
                                     <input
-                                        class="w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
+                                        class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
                                         maxlength="1" type="text" />
                                     <input
-                                        class="w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
-                                        maxlength="1" type="text" />
-                                    <input
-                                        class="w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
+                                        class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border-none rounded-none focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-colors"
                                         maxlength="1" type="text" />
                                 </div>
-                                <div class="flex flex-col space-y-4 pt-4">
-                                    <button
-                                        class="w-full bg-primary text-on-primary py-5 text-label-md font-label-md uppercase tracking-widest hover:bg-primary/90 transition-colors"
-                                        type="button">
-                                        VERIFY CODE
-                                    </button>
-                                    <button
-                                        class="w-full bg-transparent text-secondary py-4 text-label-sm font-label-sm uppercase tracking-widest hover:text-primary transition-colors"
-                                        onclick="cancelOTP()" type="button">
-                                        CANCEL
-                                    </button>
-                                </div>
+                                <form action="${pageContext.request.contextPath}/verify-otp" method="POST"
+                                    id="verify-form">
+                                    <input type="hidden" name="otp" id="hidden-otp" value="" />
+                                    <div class="flex flex-col space-y-4 pt-4">
+                                        <button onclick="submitOTP()" type="button"
+                                            class="w-full bg-primary text-on-primary py-5 text-label-md font-label-md uppercase tracking-widest hover:bg-primary/90 transition-colors">
+                                            VERIFY CODE
+                                        </button>
+                                        <a href="${pageContext.request.contextPath}/register"
+                                            class="text-center w-full bg-transparent text-secondary py-4 text-label-sm font-label-sm uppercase tracking-widest hover:text-primary transition-colors">
+                                            CANCEL
+                                        </a>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -289,99 +298,31 @@
                     </div>
                 </footer>
                 <script>
-                    // Tab Switching Logic
-                    function switchTab(tab) {
-                        const loginForm = document.getElementById('form-login');
-                        const registerForm = document.getElementById('form-register');
-                        const otpForm = document.getElementById('form-otp');
-                        const loginTab = document.getElementById('tab-login');
-                        const registerTab = document.getElementById('tab-register');
-                        const tabContainer = document.getElementById('tab-container');
-
-                        // Reset UI states
-                        otpForm.classList.add('hidden');
-                        otpForm.classList.remove('opacity-100');
-                        if (tabContainer) tabContainer.classList.remove('hidden');
-
-                        if (tab === 'login') {
-                            // Update Tabs
-                            if (loginTab) {
-                                loginTab.classList.add('text-primary', 'border-primary');
-                                loginTab.classList.remove('text-secondary', 'border-transparent');
-                            }
-                            if (registerTab) {
-                                registerTab.classList.remove('text-primary', 'border-primary');
-                                registerTab.classList.add('text-secondary', 'border-transparent');
-                            }
-
-                            // Switch Forms
-                            if (registerForm) registerForm.classList.remove('opacity-100');
-                            setTimeout(() => {
-                                if (registerForm) registerForm.classList.add('hidden');
-                                loginForm.classList.remove('hidden');
-                                setTimeout(() => loginForm.classList.add('opacity-100'), 50);
-                            }, 300);
-
-                        } else {
-                            // Update Tabs
-                            if (registerTab) {
-                                registerTab.classList.add('text-primary', 'border-primary');
-                                registerTab.classList.remove('text-secondary', 'border-transparent');
-                            }
-                            if (loginTab) {
-                                loginTab.classList.remove('text-primary', 'border-primary');
-                                loginTab.classList.add('text-secondary', 'border-transparent');
-                            }
-
-                            // Switch Forms
-                            loginForm.classList.remove('opacity-100');
-                            setTimeout(() => {
-                                loginForm.classList.add('hidden');
-                                if (registerForm) registerForm.classList.remove('hidden');
-                                setTimeout(() => { if (registerForm) registerForm.classList.add('opacity-100'); }, 50);
-                            }, 300);
-                        }
-                    }
-
-                    // OTP Display Logic
-                    function showOTP() {
-                        const loginForm = document.getElementById('form-login');
-                        const tabContainer = document.getElementById('tab-container');
-                        const otpForm = document.getElementById('form-otp');
-
-                        loginForm.classList.remove('opacity-100');
-                        if (tabContainer) tabContainer.classList.add('hidden');
-
-                        setTimeout(() => {
-                            loginForm.classList.add('hidden');
-                            otpForm.classList.remove('hidden');
-                            otpForm.style.display = 'flex';
-                            setTimeout(() => otpForm.classList.add('opacity-100'), 50);
-                        }, 300);
-                    }
-
-                    function cancelOTP() {
-                        switchTab('login');
-                    }
-
-                    // OTP Input Auto-advance logic
-                    const otpInputs = document.querySelectorAll('#form-otp input');
-                    otpInputs.forEach((input, index) => {
-                        input.addEventListener('input', (e) => {
-                            if (e.target.value.length === 1) {
-                                if (index < otpInputs.length - 1) {
-                                    otpInputs[index + 1].focus();
-                                }
+                    // OTP Box Navigation Logic
+                    const otpBoxes = document.querySelectorAll('.otp-box');
+                    otpBoxes.forEach((box, index) => {
+                        box.addEventListener('input', (e) => {
+                            if (e.target.value.length === 1 && index < otpBoxes.length - 1) {
+                                otpBoxes[index + 1].focus();
                             }
                         });
-                        input.addEventListener('keydown', (e) => {
-                            if (e.key === 'Backspace' && e.target.value.length === 0) {
-                                if (index > 0) {
-                                    otpInputs[index - 1].focus();
-                                }
+                        box.addEventListener('keydown', (e) => {
+                            if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
+                                otpBoxes[index - 1].focus();
                             }
                         });
                     });
+
+                    function submitOTP() {
+                        let otpCode = '';
+                        otpBoxes.forEach(box => { otpCode += box.value; });
+                        if (otpCode.length === 6) {
+                            document.getElementById('hidden-otp').value = otpCode;
+                            document.getElementById('verify-form').submit();
+                        } else {
+                            alert('Please enter a 6-digit OTP code.');
+                        }
+                    }
                 </script>
             </body>
 
