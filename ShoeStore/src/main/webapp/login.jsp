@@ -175,6 +175,12 @@
                                     ${error}
                                 </div>
                             </c:if>
+                            <c:if test="${not empty param.message}">
+                                <div
+                                    class="bg-surface-container-high text-primary border border-primary p-4 mb-6 rounded-sm text-label-md font-label-md">
+                                    ${param.message}
+                                </div>
+                            </c:if>
                             <!-- Tab Toggles -->
                             <!-- LOGIN FORM -->
                             <form class="flex flex-col space-y-6 w-full opacity-100 transition-opacity duration-300"
@@ -191,7 +197,7 @@
                                         <label class="text-label-sm font-label-sm uppercase text-secondary"
                                             for="login-password">Password</label>
                                         <a class="text-label-sm font-label-sm text-secondary hover:text-primary underline underline-offset-4 transition-colors"
-                                            href="#" onclick="showOTP()">FORGOT PASSWORD?</a>
+                                            href="${pageContext.request.contextPath}/forgot-password">FORGOT PASSWORD?</a>
                                     </div>
                                     <div class="relative">
                                         <input
