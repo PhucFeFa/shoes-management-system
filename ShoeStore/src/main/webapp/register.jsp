@@ -320,7 +320,14 @@
                             document.getElementById('hidden-otp').value = otpCode;
                             document.getElementById('verify-form').submit();
                         } else {
-                            alert('Please enter a 6-digit OTP code.');
+                            let errorDiv = document.getElementById('otp-error-msg');
+                            if (!errorDiv) {
+                                errorDiv = document.createElement('div');
+                                errorDiv.id = 'otp-error-msg';
+                                errorDiv.className = 'bg-error-container text-on-error-container border border-error p-4 mt-4 rounded-sm text-label-md font-label-md text-center';
+                                document.getElementById('verify-form').insertBefore(errorDiv, document.getElementById('verify-form').firstChild);
+                            }
+                            errorDiv.innerText = 'Please enter a full 6-digit OTP code.';
                         }
                     }
                 </script>

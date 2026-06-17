@@ -42,7 +42,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         session.setAttribute("forgotOtpTime", System.currentTimeMillis());
 
         // Send Email
-        boolean sent = EmailUtil.sendOTPEmail(email, otpCode);
+        boolean sent = EmailUtil.sendOTPEmail(email, otpCode, "forgot");
         if (sent) {
             request.setAttribute("showOTP", true);
             request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);

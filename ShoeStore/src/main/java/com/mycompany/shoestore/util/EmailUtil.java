@@ -17,7 +17,7 @@ public class EmailUtil {
         return String.format("%06d", number);
     }
 
-    public static boolean sendOTPEmail(String recipientEmail, String otpCode) {
+    public static boolean sendOTPEmail(String recipientEmail, String otpCode, String purpose) {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -36,11 +36,15 @@ public class EmailUtil {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SENDER_EMAIL));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-            message.setSubject("SOLE_LAB - Your Registration OTP");
+            
+            String subject = purpose.equalsIgnoreCase("register") ? "Adidis - Your Registration OTP" : "Adidis - Your Password Recovery OTP";
+            message.setSubject(subject);
+            
+            String title = purpose.equalsIgnoreCase("register") ? "Adidis Account Registration" : "Adidis Password Recovery";
             
             String htmlContent = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>"
-                    + "<h2 style='color: #000;'>SOLE_LAB Account Registration</h2>"
-                    + "<p>Please use the following 6-digit OTP code to verify your email address:</p>"
+                    + "<h2 style='color: #000;'>" + title + "</h2>"
+                    + "<p>Please use the following 6-digit OTP code:</p>"
                     + "<h1 style='background: #f4f4f4; padding: 10px; text-align: center; letter-spacing: 5px; color: #000;'>" + otpCode + "</h1>"
                     + "<p>This code will expire in 5 minutes.</p>"
                     + "<p>If you did not request this code, please ignore this email.</p>"

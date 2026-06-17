@@ -53,7 +53,7 @@ public class RegisterServlet extends HttpServlet {
 
         // Generate OTP
         String otpCode = EmailUtil.generateOTP();
-        boolean emailSent = EmailUtil.sendOTPEmail(email, otpCode);
+        boolean emailSent = EmailUtil.sendOTPEmail(email, otpCode, "register");
 
         if (emailSent) {
             User pendingUser = new User();
