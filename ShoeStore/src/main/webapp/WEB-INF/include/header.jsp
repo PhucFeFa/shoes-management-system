@@ -148,12 +148,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div
-                        class="hidden lg:flex items-center bg-surface-container rounded-full px-4 py-2 gap-2 w-64 group focus-within:ring-1 ring-outline">
-                        <span class="material-symbols-outlined text-on-surface-variant">search</span>
-                        <input class="bg-transparent border-none focus:ring-0 text-label-sm w-full outline-none"
-                               placeholder="Search sneakers..." type="text" />
-                    </div>
+
                     <a href="${pageContext.request.contextPath}/Cart"
                        class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
                         <span class="material-symbols-outlined">shopping_cart</span>
