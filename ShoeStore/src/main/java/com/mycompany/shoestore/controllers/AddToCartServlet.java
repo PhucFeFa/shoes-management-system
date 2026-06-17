@@ -117,7 +117,12 @@ public class AddToCartServlet extends HttpServlet {
 
             session.setAttribute("cartMessage", "Added to cart successfully!");
 
-            response.sendRedirect(request.getContextPath() + "/home");
+            String referer = request.getHeader("Referer");
+            if (referer != null && !referer.isEmpty()) {
+                response.sendRedirect(referer);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/home");
+            }
 
         } catch (Exception e) {
             throw new ServletException(e);
