@@ -174,7 +174,7 @@
                         LOGIN
                         <span class="material-symbols-outlined ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[18px]">arrow_forward</span>
 </button>
-<div class="pt-4 text-center"><a class="text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest" href="#">Don't have an account? Create one</a></div></form>
+<div class="pt-4 text-center"><a class="text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest" href="${pageContext.request.contextPath}/register">Don't have an account? Create one</a></div></form>
 <!-- REGISTER FORM (Hidden by default) -->
 <!-- OTP VERIFICATION STATE (Hidden by default) -->
 <div class="flex-col space-y-8 w-full hidden opacity-0 transition-opacity duration-300" id="form-otp">
