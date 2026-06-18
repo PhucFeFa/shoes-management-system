@@ -137,7 +137,7 @@
                                             class="group flex flex-col relative bg-surface hover:bg-surface-container transition-colors duration-300">
 
                                             <!-- Product Image -->
-                                            <a href="${pageContext.request.contextPath}/product?id=${p.id}"
+                                            <a href="${pageContext.request.contextPath}/ProductDetail?id=${p.id}"
                                                 class="relative aspect-square overflow-hidden bg-surface-container-high block">
                                                 <c:choose>
                                                     <c:when test="${not empty p.firstImageUrl}">
@@ -164,7 +164,7 @@
                                                         <fmt:formatNumber value="${p.price}" pattern="#,##0.00" />
                                                     </span>
                                                 </div>
-                                                <a href="${pageContext.request.contextPath}/product?id=${p.id}"
+                                                <a href="${pageContext.request.contextPath}/ProductDetail?id=${p.id}"
                                                     class="text-body-lg font-bold text-primary group-hover:underline underline-offset-4 decoration-2">
                                                     ${p.name}
                                                 </a>
