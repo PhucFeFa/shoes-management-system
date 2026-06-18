@@ -38,12 +38,21 @@ public class CancelOrderServlet extends HttpServlet {
             if (orderSummary != null && orderSummary.getUserId().equals(currentUser.getId())) {
                 // Ensure order is actually pending and can be cancelled
                 if ("pending".equalsIgnoreCase(orderSummary.getStatus())) {
-                    boolean success = dao.updateOrderStatus(orderId, "cancelled");
-                    if (success) {
-                        System.out.println("Order " + orderId + " cancelled by user " + currentUser.getId() + ". Reason: " + reason);
-                        session.setAttribute("successMessage", "Order cancelled successfully.");
+                    int cancelCount = dao.getCustomerCancellationCountLast30Days(currentUser.getId());
+                    if (cancelCount >= 5) {
+                        session.setAttribute("errorMessage", "You have exceeded the cancellation limit (max 5 times/30 days).");
                     } else {
-                        session.setAttribute("errorMessage", "Failed to cancel order.");
+                        boolean success = dao.cancelOrderWithTracking(orderId, currentUser.getId(), reason);
+                        if (success) {
+                            System.out.println("Order " + orderId + " cancelled by user " + currentUser.getId() + ". Reason: " + reason);
+                            if (cancelCount == 4) {
+                                session.setAttribute("successMessage", "Order cancelled successfully. You have reached your cancellation limit.");
+                            } else {
+                                session.setAttribute("successMessage", "Order cancelled successfully.");
+                            }
+                        } else {
+                            session.setAttribute("errorMessage", "Failed to cancel order.");
+                        }
                     }
                 } else {
                     session.setAttribute("errorMessage", "Only pending orders can be cancelled.");

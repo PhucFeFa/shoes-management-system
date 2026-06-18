@@ -46,9 +46,11 @@ public class CustomerOrderDetailServlet extends HttpServlet {
         }
 
         List<OrderDetailDTO> orderItems = dao.getOrderItemsByOrderId(orderId);
+        int cancellationCount = dao.getCustomerCancellationCountLast30Days(currentUser.getId());
 
         request.setAttribute("orderSummary", orderSummary);
         request.setAttribute("orderItems", orderItems);
+        request.setAttribute("cancellationCount", cancellationCount);
 
         request.getRequestDispatcher("/views/customer/customer-order-details.jsp").forward(request, response);
     }
