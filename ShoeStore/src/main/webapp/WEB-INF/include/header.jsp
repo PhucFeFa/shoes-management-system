@@ -152,21 +152,7 @@
                     <a href="${pageContext.request.contextPath}/Cart"
                        class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
                         <span class="material-symbols-outlined">shopping_cart</span>
-                        <c:set var="cartCount" value="0"/>
-                        <c:if test="${not empty sessionScope.currentUser}">
-                            <%
-                                try {
-                                    com.mycompany.shoestore.models.User u = (com.mycompany.shoestore.models.User) session.getAttribute("currentUser");
-                                    com.mycompany.shoestore.dao.CartDAO headerCartDao = new com.mycompany.shoestore.dao.CartDAO();
-                                    java.util.List<com.mycompany.shoestore.models.CartItem> hc = headerCartDao.getCart(u.getId());
-                                    int totalItems = 0;
-                                    for(com.mycompany.shoestore.models.CartItem ci : hc) {
-                                        totalItems += ci.getQuantity();
-                                    }
-                                    pageContext.setAttribute("cartCount", totalItems);
-                                } catch(Exception e) {}
-                            %>
-                        </c:if>
+                        <c:set var="cartCount" value="${sessionScope.cartCount != null ? sessionScope.cartCount : 0}"/>
                         <c:if test="${cartCount > 0}">
                             <span class="absolute -top-1.5 -right-2 bg-error text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cartCount}</span>
                         </c:if>

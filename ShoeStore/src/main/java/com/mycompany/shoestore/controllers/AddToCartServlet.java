@@ -115,6 +115,11 @@ public class AddToCartServlet extends HttpServlet {
 
             dao.addToCart(userId, variantId, 1);
 
+            // Update session cart count
+            Integer currentCount = (Integer) session.getAttribute("cartCount");
+            if (currentCount == null) currentCount = 0;
+            session.setAttribute("cartCount", currentCount + 1);
+
             session.setAttribute("cartMessage", "Added to cart successfully!");
 
             String referer = request.getHeader("Referer");
