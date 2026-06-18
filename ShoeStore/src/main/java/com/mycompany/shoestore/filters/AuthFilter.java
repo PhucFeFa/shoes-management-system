@@ -21,7 +21,7 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
     private static final List<String> PUBLIC_URLS = Arrays.asList(
-        "/home", "/login", "/Logout", "/products", "/product-detail"
+        "/home", "/login", "/Logout", "/products","/ProductDetail"
     );
 
     @Override
