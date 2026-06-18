@@ -3,34 +3,28 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
 <jsp:include page="/WEB-INF/include/header.jsp" />
-<c:if test="${not empty sessionScope.cartMessage}">
 
+<%-- Cart Notification Modal --%>
+<c:if test="${not empty sessionScope.cartMessage}">
     <div id="cartModal"
          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-
         <div class="bg-white rounded-lg shadow-xl p-6 w-96 text-center">
-
             <h2 class="text-xl font-bold text-black mb-4">
                 Notification
             </h2>
-
             <p class="text-black mb-6">
                 ${sessionScope.cartMessage}
             </p>
-
             <button onclick="closeModal()"
                     class="bg-black text-white px-6 py-2 rounded hover:opacity-80 transition">
                 OK
             </button>
-
         </div>
     </div>
-
     <script>
         function closeModal() {
             document.getElementById("cartModal").style.display = "none";
         }
-
         setTimeout(function () {
             const modal = document.getElementById("cartModal");
             if (modal) {
@@ -38,15 +32,12 @@
             }
         }, 3000);
     </script>
-
     <c:remove var="cartMessage" scope="session"/>
-
 </c:if>
 
 <main class="pt-16">
     <!-- Hero Section -->
-    <section
-        class="relative w-full overflow-hidden bg-surface-container-highest flex items-center min-h-[819px]">
+    <section class="relative w-full overflow-hidden bg-surface-container-highest flex items-center min-h-[819px]">
         <div class="absolute inset-0 z-0 overflow-hidden">
             <img alt="Featured Sneaker"
                  class="w-full h-full object-cover object-center scale-105 transform hover:scale-100 transition-transform duration-1000"
@@ -54,12 +45,11 @@
         </div>
         <div class="relative z-10 px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto">
             <div class="max-w-xl">
-                <p class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4">SOLE_LAB // INITIATIVE 01</p>
-                <h1
-                    class="text-display-lg-mobile md:text-display-lg font-display-lg text-primary mb-8 leading-[1.05]">
-                    PHANTOM<br />IGNITE_V2</h1>
-                <button
-                    class="bg-primary text-on-primary px-10 py-5 text-label-md font-label-md uppercase tracking-wider hover:opacity-90 transition-all active:scale-95">
+                <p class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4">ADIDIS // INITIATIVE 01</p>
+                <h1 class="text-display-lg-mobile md:text-display-lg font-display-lg text-primary mb-8 leading-[1.05]">
+                    PHANTOM<br />IGNITE_V2
+                </h1>
+                <button class="bg-primary text-on-primary px-10 py-5 text-label-md font-label-md uppercase tracking-wider hover:opacity-90 transition-all active:scale-95">
                     SHOP NOW
                 </button>
             </div>
@@ -85,13 +75,10 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
-
             <c:forEach var="product" items="${latestProducts}">
-                <div
-                    class="product-card group relative cursor-pointer transition-transform duration-500 hover:-translate-y-2">
-                    <div
-                        class="bg-surface-container aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 relative">
-                        <!-- Use the first image URL if available -->
+                <div class="product-card group relative cursor-pointer transition-transform duration-500 hover:-translate-y-2">
+                    <div class="bg-surface-container aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 relative">
+                        <!-- Product Image -->
                         <c:choose>
                             <c:when test="${not empty product.firstImageUrl}">
                                 <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}">
@@ -107,13 +94,11 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <!-- Add to cart form -->
+                        <!-- Add to Cart Form -->
                         <form action="${pageContext.request.contextPath}/AddToCart" method="post"
                               class="absolute bottom-0 left-0 w-full">
                             <input type="hidden" name="productId" value="${product.id}" />
-                            <input type="hidden"
-                                   name="variantId"
-                                   value="${variant.id}">
+                            <input type="hidden" name="variantId" value="${variant.id}">
                             <input type="hidden" name="returnUrl"
                                    value="${pageContext.request.requestURI}?id=${product.id}">
                             <button type="submit"
@@ -122,6 +107,7 @@
                             </button>
                         </form>
                     </div>
+
                     <div>
                         <h3 class="text-label-md font-label-md font-bold uppercase mb-1">
                             <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}"
@@ -134,7 +120,6 @@
                     </div>
                 </div>
             </c:forEach>
-
         </div>
     </section>
 
@@ -143,27 +128,26 @@
         <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
             <div>
                 <h2 class="text-headline-lg font-headline-lg text-primary mb-6">THE RESEARCH LAB</h2>
-                <p class="text-body-lg text-on-surface-variant mb-8 max-w-md">Join the ADIDIS community to get
-                    early access to clinical trials, limited drop notifications, and technical specs of our
-                    upcoming performance silhouettes.</p>
+                <p class="text-body-lg text-on-surface-variant mb-8 max-w-md">
+                    Join the ADIDIS community to get early access to clinical trials, limited drop notifications, 
+                    and technical specs of our upcoming performance silhouettes.
+                </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <input
-                        class="bg-surface px-6 py-4 border-none focus:ring-1 ring-primary w-full outline-none uppercase text-label-sm font-label-sm"
-                        placeholder="Email Address" type="email" />
-                    <button
-                        class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap hover:opacity-90 transition-all">SIGN
-                        UP</button>
+                    <input class="bg-surface px-6 py-4 border-none focus:ring-1 ring-primary w-full outline-none uppercase text-label-sm font-label-sm"
+                           placeholder="Email Address" type="email" />
+                    <button class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap hover:opacity-90 transition-all">
+                        SIGN UP
+                    </button>
                 </div>
             </div>
             <div class="relative aspect-video overflow-hidden group">
                 <img alt="Lab Atmosphere"
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuALitHG2_5Oy2ISbcyRbhrScu1yZd1SzUfmU7U8K4Ck83N3-PsFjGgDX0Cj5n5fdKnMJ98l6RQY44tljNSx3FXVOcC_rZg0qsN00T63dqkcQQdi3cRC5G4NWh4rbM16wwnnHtYUtcrwNlSXiSBF1UMOmGjCXiAPSM_l0TLXWsu6f4zu7-EM1X0eYegrRtFTLHTrCswQmRQSGWtNblv4sa2ZJzNMd77QzKkTXfOGiVl2prw7Zh0PpYI3HoV1_CzCDFA431R2gI2pd-I" />
-                <div
-                    class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <span
-                        class="text-on-primary text-label-md font-label-md uppercase tracking-widest border border-on-primary px-6 py-3">ENTER
-                        LAB_ACCESS</span>
+                <div class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <span class="text-on-primary text-label-md font-label-md uppercase tracking-widest border border-on-primary px-6 py-3">
+                        ENTER LAB_ACCESS
+                    </span>
                 </div>
             </div>
         </div>

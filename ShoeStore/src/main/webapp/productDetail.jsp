@@ -117,8 +117,6 @@
                 </div>
 
             </div>
-
-
 </main>
 
 <jsp:include page="/WEB-INF/include/footer.jsp"/>
