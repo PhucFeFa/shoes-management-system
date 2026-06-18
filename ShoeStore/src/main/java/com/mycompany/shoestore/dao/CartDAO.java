@@ -144,6 +144,21 @@ public class CartDAO {
         return list;
     }
 
+    // GET CART TOTAL QUANTITY
+    public int getCartTotalQuantity(String userId) throws Exception {
+        String sql = "SELECT SUM(quantity) as total FROM carts c " +
+                     "JOIN cart_items ci ON c.id = ci.cart_id " +
+                     "WHERE c.user_id = ?";
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        }
+        return 0;
+    }
+
     // REMOVE ITEM
     public void removeItem(String userId, String variantId) throws Exception {
 

@@ -1,34 +1,9 @@
--- Lưu ý: Trong SQL Server dùng UNIQUEIDENTIFIER thay cho UUID
--- DEFAULT NEWID() thay cho DEFAULT UUID()
-
+-- 1. Các bảng độc lập (không có khóa ngoại hoặc chỉ tham chiếu bảng đã tạo)
 CREATE TABLE "roles"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     "name" NVARCHAR(50) NOT NULL,
     PRIMARY KEY("id"),
     CONSTRAINT "roles_name_unique" UNIQUE("name")
-);
-
-CREATE TABLE "users"(
-    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
-    "email" NVARCHAR(255) NOT NULL, 
-    "password_hash" NVARCHAR(MAX) NOT NULL, 
-    "role_id" UNIQUEIDENTIFIER NOT NULL,
-    "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    "full_name" NVARCHAR(255) NULL,
-    PRIMARY KEY("id"),
-    CONSTRAINT "users_email_unique" UNIQUE("email"),
-    CONSTRAINT "users_role_id_foreign" FOREIGN KEY("role_id") REFERENCES "roles"("id")
-);
-
-CREATE TABLE "addresses"(
-    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
-    "user_id" UNIQUEIDENTIFIER NOT NULL, 
-    "city" NVARCHAR(255) NOT NULL, 
-    "district" NVARCHAR(255) NOT NULL, 
-    "ward" NVARCHAR(255) NOT NULL, 
-    "address_line" NVARCHAR(MAX) NOT NULL,
-    PRIMARY KEY("id"),
-    CONSTRAINT "addresses_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id")
 );
 
 CREATE TABLE "categories"(
@@ -45,6 +20,45 @@ CREATE TABLE "brands"(
     CONSTRAINT "brands_name_unique" UNIQUE("name")
 );
 
+CREATE TABLE "vouchers"(
+    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    "code" NVARCHAR(50) NOT NULL,
+    "discount_percent" DECIMAL(5, 2) NOT NULL,
+    "max_discount_amount" DECIMAL(18, 2) NULL,
+    "start_date" DATETIMEOFFSET NOT NULL,
+    "end_date" DATETIMEOFFSET NOT NULL,
+    "quantity" INT NOT NULL,
+    "used_quantity" INT NOT NULL DEFAULT 0,
+    PRIMARY KEY("id"),
+    CONSTRAINT "vouchers_code_unique" UNIQUE("code")
+);
+
+-- 2. Bảng users (phụ thuộc roles)
+CREATE TABLE "users"(
+    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
+    "email" NVARCHAR(255) NOT NULL, 
+    "password_hash" NVARCHAR(MAX) NOT NULL, 
+    "role_id" UNIQUEIDENTIFIER NOT NULL,
+    "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    "full_name" NVARCHAR(255) NULL,
+    PRIMARY KEY("id"),
+    CONSTRAINT "users_email_unique" UNIQUE("email"),
+    CONSTRAINT "users_role_id_foreign" FOREIGN KEY("role_id") REFERENCES "roles"("id")
+);
+
+-- 3. Bảng addresses (phụ thuộc users)
+CREATE TABLE "addresses"(
+    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
+    "user_id" UNIQUEIDENTIFIER NOT NULL, 
+    "city" NVARCHAR(255) NOT NULL, 
+    "district" NVARCHAR(255) NOT NULL, 
+    "ward" NVARCHAR(255) NOT NULL, 
+    "address_line" NVARCHAR(MAX) NOT NULL,
+    PRIMARY KEY("id"),
+    CONSTRAINT "addresses_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id")
+);
+
+-- 4. Bảng products (phụ thuộc categories, brands)
 CREATE TABLE "products"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "name" NVARCHAR(255) NOT NULL, 
@@ -80,6 +94,33 @@ CREATE TABLE "product_images"(
     CONSTRAINT "product_images_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "products"("id")
 );
 
+-- 5. Bảng imports (phụ thuộc users)
+CREATE TABLE "imports"(
+    "ImportID" INT IDENTITY(1,1) NOT NULL,
+    "Supplier" NVARCHAR(255) NOT NULL,
+    "UserID" UNIQUEIDENTIFIER NOT NULL,
+    "OrderDate" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    "TotalAmount" DECIMAL(18, 2) NOT NULL DEFAULT 0.00,
+    "Status" NVARCHAR(50) NOT NULL DEFAULT 'pending', 
+    "Note" NVARCHAR(MAX) NULL,
+    PRIMARY KEY("ImportID"),
+    CONSTRAINT "imports_user_id_foreign" FOREIGN KEY("UserID") REFERENCES "users"("id")
+);
+
+CREATE TABLE "import_details"(
+    "ImportDetailID" INT IDENTITY(1,1) NOT NULL,
+    "ImportID" INT NOT NULL,
+    "ProductID" UNIQUEIDENTIFIER NOT NULL,
+    "ImportQuantity" INT NOT NULL CHECK ("ImportQuantity" > 0),
+    "ReceivedQuantity" INT NOT NULL DEFAULT 0 CHECK ("ReceivedQuantity" >= 0),
+    "UnitPrice" DECIMAL(18, 2) NOT NULL CHECK ("UnitPrice" >= 0),
+    PRIMARY KEY("ImportDetailID"),
+    CONSTRAINT "chk_received_quantity_logic" CHECK ("ReceivedQuantity" <= "ImportQuantity"),
+    CONSTRAINT "import_details_import_id_foreign" FOREIGN KEY("ImportID") REFERENCES "imports"("ImportID"),
+    CONSTRAINT "import_details_product_id_foreign" FOREIGN KEY("ProductID") REFERENCES "products"("id")
+);
+
+-- 6. Bảng giao dịch (carts, orders, reviews, payments)
 CREATE TABLE "carts"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "user_id" UNIQUEIDENTIFIER NOT NULL, 
@@ -98,19 +139,6 @@ CREATE TABLE "cart_items"(
     PRIMARY KEY("id"),
     CONSTRAINT "cart_items_cart_id_foreign" FOREIGN KEY("cart_id") REFERENCES "carts"("id"),
     CONSTRAINT "cart_items_product_variant_id_foreign" FOREIGN KEY("product_variant_id") REFERENCES "product_variants"("id")
-);
-
-CREATE TABLE "vouchers"(
-    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    "code" NVARCHAR(50) NOT NULL,
-    "discount_percent" DECIMAL(5, 2) NOT NULL,
-    "max_discount_amount" DECIMAL(18, 2) NULL,
-    "start_date" DATETIMEOFFSET NOT NULL,
-    "end_date" DATETIMEOFFSET NOT NULL,
-    "quantity" INT NOT NULL,
-    "used_quantity" INT NOT NULL DEFAULT 0,
-    PRIMARY KEY("id"),
-    CONSTRAINT "vouchers_code_unique" UNIQUE("code")
 );
 
 CREATE TABLE "orders"(

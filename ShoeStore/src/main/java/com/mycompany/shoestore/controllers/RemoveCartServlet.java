@@ -100,6 +100,13 @@ private CartDAO dao = new CartDAO();
         } catch (Exception e) {
             throw new ServletException(e);
         }
+        
+        try {
+            int totalItems = dao.getCartTotalQuantity(user.getId().toString());
+            session.setAttribute("cartCount", totalItems);
+        } catch (Exception e) {
+            session.setAttribute("cartCount", 0);
+        }
 
         response.sendRedirect("Cart");
     }
