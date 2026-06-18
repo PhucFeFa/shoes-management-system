@@ -3,6 +3,8 @@ package com.mycompany.shoestore.dao;
 
 import com.mycompany.shoestore.db.DBContext;
 import com.mycompany.shoestore.models.Order;
+import com.mycompany.shoestore.dto.OrderDetailDTO;
+import com.mycompany.shoestore.dto.OrderSummaryDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -200,5 +202,103 @@ public class OrderDAO {
 
     public int getPageSize() {
         return PAGE_SIZE;
+    }
+
+    public OrderSummaryDTO getOrderSummaryById(String orderId) {
+        String sql = "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
+                   + "u.full_name AS customer_full_name, u.email AS customer_email, "
+                   + "a.address_line, a.ward, a.district, a.city, "
+                   + "p.method AS payment_method, p.status AS payment_status "
+                   + "FROM orders o "
+                   + "JOIN users u ON o.user_id = u.id "
+                   + "LEFT JOIN addresses a ON o.address_id = a.id "
+                   + "LEFT JOIN payments p ON o.id = p.order_id "
+                   + "WHERE o.id = ?";
+
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setString(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    OrderSummaryDTO summary = new OrderSummaryDTO();
+                    summary.setId(rs.getString("id"));
+                    summary.setUserId(rs.getString("user_id"));
+                    summary.setAddressId(rs.getString("address_id"));
+                    summary.setTotalAmount(rs.getBigDecimal("total_amount"));
+                    summary.setStatus(rs.getString("status"));
+                    summary.setVoucherId(rs.getString("voucher_id"));
+                    summary.setCreatedAt(rs.getTimestamp("created_at"));
+                    summary.setCustomerFullName(rs.getString("customer_full_name"));
+                    summary.setCustomerEmail(rs.getString("customer_email"));
+                    
+                    summary.setAddressLine(rs.getString("address_line"));
+                    summary.setWard(rs.getString("ward"));
+                    summary.setDistrict(rs.getString("district"));
+                    summary.setCity(rs.getString("city"));
+                    summary.setPaymentMethod(rs.getString("payment_method"));
+                    summary.setPaymentStatus(rs.getString("payment_status"));
+                    return summary;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error getOrderSummaryById: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<OrderDetailDTO> getOrderItemsByOrderId(String orderId) {
+        List<OrderDetailDTO> items = new ArrayList<>();
+        String sql = "SELECT oi.quantity, oi.price_at_purchase, "
+                   + "pv.size, pv.color, "
+                   + "p.name AS product_name, "
+                   + "b.name AS brand_name, "
+                   + "c.name AS category_name, "
+                   + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) AS image_url "
+                   + "FROM order_items oi "
+                   + "JOIN product_variants pv ON oi.product_variant_id = pv.id "
+                   + "JOIN products p ON pv.product_id = p.id "
+                   + "LEFT JOIN brands b ON p.brand_id = b.id "
+                   + "LEFT JOIN categories c ON p.category_id = c.id "
+                   + "WHERE oi.order_id = ?";
+
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            ps.setString(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderDetailDTO item = new OrderDetailDTO();
+                    item.setQuantity(rs.getInt("quantity"));
+                    item.setPriceAtPurchase(rs.getBigDecimal("price_at_purchase"));
+                    item.setSize(rs.getString("size"));
+                    item.setColor(rs.getString("color"));
+                    item.setProductName(rs.getString("product_name"));
+                    item.setBrandName(rs.getString("brand_name"));
+                    item.setCategoryName(rs.getString("category_name"));
+                    item.setImageUrl(rs.getString("image_url"));
+                    items.add(item);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error getOrderItemsByOrderId: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public boolean updateOrderStatus(String orderId, String status) {
+        String sql = "UPDATE orders SET status = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setString(2, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("Error updateOrderStatus: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }
