@@ -41,6 +41,15 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("currentUser", user);
+            
+            try {
+                com.mycompany.shoestore.dao.CartDAO cartDao = new com.mycompany.shoestore.dao.CartDAO();
+                int totalItems = cartDao.getCartTotalQuantity(user.getId().toString());
+                session.setAttribute("cartCount", totalItems);
+            } catch (Exception e) {
+                session.setAttribute("cartCount", 0);
+            }
+            
             // Redirect to homepage after successful login
             response.sendRedirect(request.getContextPath() + "/home");
         } else {

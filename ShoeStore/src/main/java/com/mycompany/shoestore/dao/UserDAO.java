@@ -16,22 +16,35 @@ public class UserDAO {
         String sql = "SELECT u.*, r.name AS role_name "
                    + "FROM users u "
                    + "JOIN roles r ON u.role_id = r.id "
-                   + "WHERE u.email = ? AND u.password_hash = ?";
+                   + "WHERE u.email = ?";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
-            ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                User user = new User();
-                user.setId(rs.getString("id"));
-                user.setEmail(rs.getString("email"));
-                user.setPasswordHash(rs.getString("password_hash"));
-                user.setRoleId(rs.getString("role_id"));
-                user.setFullName(rs.getString("full_name"));
-                user.setCreatedAt(rs.getTimestamp("created_at"));
-                user.setRoleName(rs.getString("role_name"));
-                return user;
+                String storedHash = rs.getString("password_hash");
+                boolean isMatch = false;
+                if (storedHash != null) {
+                    if (storedHash.equals(password)) {
+                        isMatch = true; // Match plain text (legacy)
+                    } else if (storedHash.startsWith("$2a$")) {
+                        try {
+                            isMatch = org.mindrot.jbcrypt.BCrypt.checkpw(password, storedHash);
+                        } catch (Exception ignore) {}
+                    }
+                }
+                
+                if (isMatch) {
+                    User user = new User();
+                    user.setId(rs.getString("id"));
+                    user.setEmail(rs.getString("email"));
+                    user.setPasswordHash(storedHash);
+                    user.setRoleId(rs.getString("role_id"));
+                    user.setFullName(rs.getString("full_name"));
+                    user.setCreatedAt(rs.getTimestamp("created_at"));
+                    user.setRoleName(rs.getString("role_name"));
+                    return user;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,10 +96,11 @@ public class UserDAO {
     }
 
     public boolean updatePassword(String email, String newPassword) {
+        String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(newPassword, org.mindrot.jbcrypt.BCrypt.gensalt());
         String sql = "UPDATE users SET password_hash = ? WHERE email = ?";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, newPassword);
+            ps.setString(1, hashedPassword);
             ps.setString(2, email);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -117,9 +131,10 @@ public class UserDAO {
         String sql = "INSERT INTO users (id, email, password_hash, full_name, role_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+            String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(user.getPasswordHash(), org.mindrot.jbcrypt.BCrypt.gensalt());
             ps.setString(1, java.util.UUID.randomUUID().toString());
             ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPasswordHash());
+            ps.setString(3, hashedPassword);
             ps.setString(4, user.getFullName());
             ps.setString(5, roleId); 
             int rowsAffected = ps.executeUpdate();
