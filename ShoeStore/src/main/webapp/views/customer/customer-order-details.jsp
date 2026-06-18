@@ -131,6 +131,11 @@
     </div>
 
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+           href="${pageContext.request.contextPath}/customer/profile">
+            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+            Profile
+        </a>
         <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low hover:bg-surface-container transition-colors active:scale-95 transition-transform"
            href="${pageContext.request.contextPath}/home">
             <span class="material-symbols-outlined text-[20px]">store</span>
@@ -141,48 +146,8 @@
             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
             Orders
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-           href="#">
-            <span class="material-symbols-outlined text-[20px]">location_on</span>
-            Addresses
-        </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-           href="#">
-            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
-            Profile
-        </a>
     </nav>
 
-    <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
-        <div class="space-y-1">
-            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
-               href="${pageContext.request.contextPath}/home">
-                <span class="material-symbols-outlined text-[18px]">help</span>
-                Help Center
-            </a>
-            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
-               href="${pageContext.request.contextPath}/logout">
-                <span class="material-symbols-outlined text-[18px]">logout</span>
-                Logout
-            </a>
-        </div>
-        <div class="flex items-center gap-3 px-2 mt-2">
-            <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant flex items-center justify-center">
-                <span class="material-symbols-outlined text-secondary text-[24px]">person</span>
-            </div>
-            <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-primary">
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.currentUser}">
-                            ${sessionScope.currentUser.fullName}
-                        </c:when>
-                        <c:otherwise>Guest</c:otherwise>
-                    </c:choose>
-                </span>
-                <span class="font-label-sm text-label-sm text-secondary">Customer</span>
-            </div>
-        </div>
-    </div>
 </aside>
 
 <main class="ml-64 flex-1 flex flex-col min-h-screen px-margin-desktop py-12">
@@ -196,6 +161,20 @@
                 </a>
                 <span class="text-label-md font-label-md text-secondary tracking-widest uppercase mb-2 block">Order Confirmed</span>
                 <h1 class="text-display-lg-mobile md:text-headline-lg font-headline-lg uppercase mb-4">Order #SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}</h1>
+                
+                <c:if test="${not empty sessionScope.successMessage}">
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <span class="block sm:inline">${sessionScope.successMessage}</span>
+                    </div>
+                    <c:remove var="successMessage" scope="session"/>
+                </c:if>
+                <c:if test="${not empty sessionScope.errorMessage}">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <span class="block sm:inline">${sessionScope.errorMessage}</span>
+                    </div>
+                    <c:remove var="errorMessage" scope="session"/>
+                </c:if>
+
                 <div class="flex flex-wrap gap-x-8 gap-y-4">
                     <div>
                         <p class="text-label-sm font-label-sm text-secondary uppercase mb-1">Order Date</p>
@@ -218,9 +197,16 @@
             </div>
             <div>
                 <c:if test="${orderSummary.status == 'pending'}">
-                    <button type="button" onclick="document.getElementById('cancel-modal').classList.remove('hidden')" class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all w-full md:w-auto">
-                        Cancel Order
-                    </button>
+                    <c:choose>
+                        <c:when test="${cancellationCount >= 5}">
+                            <p class="text-error font-bold text-sm mt-2 text-right">You have exceeded the cancellation limit<br>(max 5 times/30 days).</p>
+                        </c:when>
+                        <c:otherwise>
+                            <button type="button" onclick="document.getElementById('cancel-modal').classList.remove('hidden')" class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all w-full md:w-auto">
+                                Cancel Order
+                            </button>
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
             </div>
         </div>
@@ -361,7 +347,7 @@
             <!-- Header -->
             <div class="flex justify-between items-center p-6 border-b border-outline-variant">
                 <h3 class="font-headline-md text-headline-md font-bold uppercase flex items-center gap-2">
-                    <span class="bg-yellow-300 text-black px-1 leading-none">CANCEL</span> ORDER #SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
+                    CANCEL ORDER #SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
                 </h3>
                 <button type="button" onclick="document.getElementById('cancel-modal').classList.add('hidden')" class="text-secondary hover:text-primary transition-colors">
                     <span class="material-symbols-outlined">close</span>
@@ -373,21 +359,21 @@
                 <input type="hidden" name="orderId" value="${orderSummary.id}">
                 
                 <p class="font-body-md text-body-md text-secondary mb-6">
-                    Are you sure you want to <span class="bg-yellow-300 text-black px-1">cancel</span> this order upon customer request? 
-                    This action will halt fulfillment and notify the customer. <strong class="text-primary">This action cannot be undone.</strong>
+                    Are you sure you want to cancel this order? 
+                    This action will halt fulfillment and prevent the order from being shipped. <strong class="text-primary">This action cannot be undone.</strong>
                 </p>
                 
                 <div class="mb-8">
                     <label class="block font-label-sm text-label-sm font-bold uppercase tracking-widest mb-2">
-                        REASON FOR <span class="bg-yellow-300 text-black px-1">CANCELL</span>ATION
+                        REASON FOR CANCELLATION
                     </label>
-                    <textarea name="reason" rows="4" class="w-full border border-outline-variant bg-surface p-3 font-body-md text-body-md text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none" placeholder="Staff notes regarding the cancellation request..."></textarea>
+                    <textarea name="reason" rows="4" class="w-full border border-outline-variant bg-surface p-3 font-body-md text-body-md text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none" placeholder="Please provide a reason for cancelling your order..."></textarea>
                 </div>
                 
                 <!-- Footer -->
                 <div class="flex gap-4">
-                    <button type="submit" class="flex-1 bg-[#ba1a1a] text-white py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-[#93000a] transition-colors">
-                        YES, <span class="text-yellow-300">CANCEL</span> ORDER
+                    <button type="submit" class="flex-1 bg-error text-on-error py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:opacity-90 transition-opacity">
+                        YES, CANCEL ORDER
                     </button>
                     <button type="button" onclick="document.getElementById('cancel-modal').classList.add('hidden')" class="flex-1 border border-primary text-primary py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-surface-container-low transition-colors">
                         GO BACK

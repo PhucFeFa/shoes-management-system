@@ -164,7 +164,7 @@
                     </c:if>
 
                     <c:if test="${not empty sessionScope.currentUser}">
-                        <a href="profile" class="relative group cursor-pointer block mt-1">
+                        <a href="${pageContext.request.contextPath}/customer/profile" class="relative group cursor-pointer block mt-1">
                             <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
                         </a>
 

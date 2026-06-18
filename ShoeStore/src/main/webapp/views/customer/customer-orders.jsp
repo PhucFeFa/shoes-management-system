@@ -136,6 +136,11 @@
     </div>
 
     <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+           href="${pageContext.request.contextPath}/customer/profile">
+            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+            Profile
+        </a>
         <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low hover:bg-surface-container transition-colors active:scale-95 transition-transform"
            href="${pageContext.request.contextPath}/home">
             <span class="material-symbols-outlined text-[20px]">store</span>
@@ -146,48 +151,8 @@
             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
             Orders
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-           href="#">
-            <span class="material-symbols-outlined text-[20px]">location_on</span>
-            Addresses
-        </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-           href="#">
-            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
-            Profile
-        </a>
     </nav>
 
-    <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
-        <div class="space-y-1">
-            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
-               href="${pageContext.request.contextPath}/home">
-                <span class="material-symbols-outlined text-[18px]">help</span>
-                Help Center
-            </a>
-            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
-               href="${pageContext.request.contextPath}/logout">
-                <span class="material-symbols-outlined text-[18px]">logout</span>
-                Logout
-            </a>
-        </div>
-        <div class="flex items-center gap-3 px-2 mt-2">
-            <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant flex items-center justify-center">
-                <span class="material-symbols-outlined text-secondary text-[24px]">person</span>
-            </div>
-            <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-primary">
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.currentUser}">
-                            ${sessionScope.currentUser.fullName}
-                        </c:when>
-                        <c:otherwise>Guest</c:otherwise>
-                    </c:choose>
-                </span>
-                <span class="font-label-sm text-label-sm text-secondary">Customer</span>
-            </div>
-        </div>
-    </div>
 </aside>
 
 <main class="ml-64 flex-1 flex flex-col min-h-screen">
