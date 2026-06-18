@@ -131,6 +131,7 @@
         .status-shipping { background-color: #000000; color: #ffffff; }
         .status-completed { background-color: #d1fae5; color: #065f46; border-color: #065f46; }
         .status-cancelled { background-color: #ffdad6; color: #93000a; border-color: #93000a; }
+        .status-returned { background-color: #fef08a; color: #854d0e; border-color: #854d0e; }
     </style>
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex h-screen">
@@ -228,24 +229,34 @@
             </div>
             <div class="flex items-center gap-3">
                 <c:if test="${orderSummary.status != 'cancelled'}">
-                    <c:if test="${orderSummary.status == 'pending' || orderSummary.status == 'processing'}">
+                    <c:if test="${orderSummary.status == 'pending' || orderSummary.status == 'confirmed'}">
                         <button type="button" onclick="document.getElementById('cancel-modal').classList.remove('hidden')" class="border-[1.5px] border-primary text-primary bg-transparent hover:bg-primary hover:text-on-primary transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
                             Cancel Order
                         </button>
                     </c:if>
                     
-                    <form action="${pageContext.request.contextPath}/staff/order/update-status" method="POST" class="flex items-center gap-2">
-                        <input type="hidden" name="orderId" value="${orderSummary.id}">
-                        <select name="status" class="border-[1.5px] border-primary bg-surface-container-lowest text-primary font-label-md text-label-md uppercase px-4 py-3 outline-none focus:ring-0 cursor-pointer">
-                            <option value="pending" ${orderSummary.status == 'pending' ? 'selected' : ''}>Pending</option>
-                            <option value="processing" ${orderSummary.status == 'processing' ? 'selected' : ''}>Processing</option>
-                            <option value="shipping" ${orderSummary.status == 'shipping' ? 'selected' : ''}>Shipped</option>
-                            <option value="completed" ${orderSummary.status == 'completed' ? 'selected' : ''}>Delivered / Completed</option>
-                        </select>
-                        <button type="submit" class="border-[1.5px] border-primary text-on-primary bg-primary hover:bg-opacity-90 transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
-                            Save
-                        </button>
-                    </form>
+                    <c:choose>
+                        <c:when test="${orderSummary.status == 'completed' || orderSummary.status == 'delivered' || orderSummary.status == 'returned'}">
+                            <span class="px-6 py-3 font-label-md text-label-md uppercase text-065f46 bg-d1fae5 border border-065f46 cursor-not-allowed">
+                                Order ${orderSummary.status == 'returned' ? 'Returned' : 'Completed'}
+                            </span>
+                        </c:when>
+                        <c:otherwise>
+                            <form id="update-status-form" action="${pageContext.request.contextPath}/staff/order/update-status" method="POST" class="flex items-center gap-2" onsubmit="return handleStatusUpdate(event)">
+                                <input type="hidden" name="orderId" value="${orderSummary.id}">
+                                <select name="status" class="border-[1.5px] border-primary bg-surface-container-lowest text-primary font-label-md text-label-md uppercase pl-4 pr-10 py-3 outline-none focus:ring-0 cursor-pointer">
+                                    <option value="pending" ${orderSummary.status == 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="confirmed" ${orderSummary.status == 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                    <option value="shipping" ${orderSummary.status == 'shipping' ? 'selected' : ''}>Shipped</option>
+                                    <option value="completed" ${orderSummary.status == 'completed' ? 'selected' : ''}>Delivered / Completed</option>
+                                    <option value="returned" ${orderSummary.status == 'returned' ? 'selected' : ''}>Returned</option>
+                                </select>
+                                <button type="submit" class="border-[1.5px] border-primary text-on-primary bg-primary hover:bg-opacity-90 transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
+                                    Save
+                                </button>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
             </div>
         </div>
@@ -413,15 +424,53 @@
             </form>
         </div>
     </div>
+    <!-- Complete Order Modal -->
+    <div id="complete-modal" class="fixed inset-0 z-[100] hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-surface-container-lowest w-full max-w-lg shadow-2xl relative border border-primary">
+            <div class="flex justify-between items-center p-6 border-b border-outline-variant bg-surface-bright">
+                <h3 class="font-headline-md text-headline-md font-bold uppercase flex items-center gap-2 tracking-tighter text-065f46">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    CONFIRM COMPLETION
+                </h3>
+                <button type="button" onclick="document.getElementById('complete-modal').classList.add('hidden')" class="text-secondary hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <p class="font-body-md text-body-md text-secondary mb-6 leading-relaxed">
+                    Are you sure you want to mark this order as <strong class="text-primary">Delivered / Completed</strong>? 
+                    <br><br>
+                    <strong class="text-error uppercase">Important:</strong> Once marked as completed, the status of this order <strong>cannot be changed again</strong>.
+                </p>
+                
+                <div class="flex gap-4">
+                    <button type="button" onclick="confirmComplete()" class="flex-1 bg-[#065f46] text-white py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-opacity-90 transition-colors rounded-none border border-[#065f46]">
+                        YES, MARK COMPLETED
+                    </button>
+                    <button type="button" onclick="document.getElementById('complete-modal').classList.add('hidden')" class="flex-1 border-[1.5px] border-primary text-primary py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-surface-container-low transition-colors rounded-none">
+                        GO BACK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script>
-    // Ensure dropdown works nicely
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.group')) {
-            // Dropdown is managed via CSS hover mostly, but for click outside logic if we used JS
+    function handleStatusUpdate(event) {
+        const select = document.querySelector('select[name="status"]');
+        if (select.value === 'completed') {
+            event.preventDefault();
+            document.getElementById('complete-modal').classList.remove('hidden');
+            return false;
         }
-    });
+        return true;
+    }
+
+    function confirmComplete() {
+        document.getElementById('update-status-form').submit();
+    }
 </script>
 </body>
 </html>

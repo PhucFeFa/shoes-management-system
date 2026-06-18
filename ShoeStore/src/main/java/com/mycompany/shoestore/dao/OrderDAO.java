@@ -1,4 +1,3 @@
-// Author: baolgce191178
 package com.mycompany.shoestore.dao;
 
 import com.mycompany.shoestore.db.DBContext;
@@ -298,6 +297,41 @@ public class OrderDAO {
         } catch (Exception e) {
             System.err.println("Error updateOrderStatus: " + e.getMessage());
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean restoreStockForOrder(String orderId) {
+        String sql = "UPDATE pv "
+                   + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
+                   + "FROM product_variants pv "
+                   + "JOIN order_items oi ON pv.id = oi.product_variant_id "
+                   + "WHERE oi.order_id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("Error restoreStockForOrder: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean cancelOrderWithStockRestore(String orderId) {
+        OrderSummaryDTO summary = getOrderSummaryById(orderId);
+        if (summary == null) {
+            return false;
+        }
+        String status = summary.getStatus().toLowerCase();
+        if (status.equals("cancelled") || status.equals("completed") || status.equals("shipped") || status.equals("shipping") || status.equals("delivered")) {
+            return false;
+        }
+
+        boolean statusUpdated = updateOrderStatus(orderId, "cancelled");
+        if (statusUpdated) {
+            restoreStockForOrder(orderId);
+            return true;
         }
         return false;
     }
