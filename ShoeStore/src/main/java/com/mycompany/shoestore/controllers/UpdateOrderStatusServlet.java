@@ -51,6 +51,6 @@ public class UpdateOrderStatusServlet extends HttpServlet {
             }
         }
         
-        response.sendRedirect(request.getContextPath() + "/staff/order-details?id=" + orderId);
+        response.sendRedirect(request.getContextPath() + "/staff/order/details?id=" + orderId);
     }
 }

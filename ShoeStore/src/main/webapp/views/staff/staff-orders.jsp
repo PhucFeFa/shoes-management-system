@@ -354,7 +354,7 @@
                                         </c:choose>
                                     </td>
                                     <td class="py-4 px-6 text-right">
-                                        <a href="${pageContext.request.contextPath}/staff/order-details?id=${order.id}" class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
+                                        <a href="${pageContext.request.contextPath}/staff/order/details?id=${order.id}" class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
                                                 title="View order details">
                                             <span class="material-symbols-outlined">more_vert</span>
                                         </a>

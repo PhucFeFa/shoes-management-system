@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/staff/order-details")
+@WebServlet("/staff/order/details")
 public class StaffOrderDetailServlet extends HttpServlet {
 
     @Override
