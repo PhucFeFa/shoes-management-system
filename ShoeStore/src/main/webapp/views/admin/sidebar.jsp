@@ -130,10 +130,12 @@
     </ul>
 
     <div class="sole-footer">
-        <a href="${pageContext.request.contextPath}/home.jsp">
-            <i class="bi bi-box-arrow-left"></i>
-            <span>Back to Website</span>
-        </a>
+        <form action="${pageContext.request.contextPath}/Logout" method="GET" style="margin: 0; width: 100%;">
+            <button type="submit" style="background: none; border: none; width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer; color: inherit; font: inherit; padding: 0;">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Logout</span>
+            </button>
+        </form>
     </div>
 
 </div>

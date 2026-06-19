@@ -49,9 +49,16 @@ public class LoginServlet extends HttpServlet {
             } catch (Exception e) {
                 session.setAttribute("cartCount", 0);
             }
-            
-            // Redirect to homepage after successful login
-            response.sendRedirect(request.getContextPath() + "/home");
+
+            // Phân quyền điều hướng 
+            String roleName = user.getRoleName();
+            if ("Admin".equalsIgnoreCase(roleName)) {
+                response.sendRedirect(request.getContextPath() + "/dashboard");
+            } else if ("Staff".equalsIgnoreCase(roleName)) {
+                response.sendRedirect(request.getContextPath() + "/import");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/home");
+            }
         } else {
             request.setAttribute("error", "Invalid email or password.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);

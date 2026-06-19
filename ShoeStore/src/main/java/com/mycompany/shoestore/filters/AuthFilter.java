@@ -21,11 +21,12 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
     private static final List<String> PUBLIC_URLS = Arrays.asList(
-        "/home", "/login", "/Logout", "/products", "/product-detail"
+            "/home", "/login", "/Logout", "/products", "/product-detail"
     );
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -63,7 +64,7 @@ public class AuthFilter implements Filter {
 
         String roleName = currentUser.getRoleName();
 
-        if (path.startsWith("/admin") || path.equals("/manage-account") || path.equals("/import")) {
+        if (path.startsWith("/admin") || path.equals("/dashboard") || path.equals("/manage-account") || path.equals("/import")) {
             if (!"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
@@ -91,5 +92,6 @@ public class AuthFilter implements Filter {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }
