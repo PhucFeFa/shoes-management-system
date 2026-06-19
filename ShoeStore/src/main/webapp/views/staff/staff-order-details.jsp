@@ -371,7 +371,7 @@
             <!-- Header -->
             <div class="flex justify-between items-center p-6 border-b border-outline-variant bg-surface-bright">
                 <h3 class="font-headline-md text-headline-md font-bold uppercase flex items-center gap-2 tracking-tighter">
-                    <span class="bg-yellow-300 text-black px-1 leading-none">CANCEL</span> ORDER #SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
+                    CANCEL ORDER #SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
                 </h3>
                 <button type="button" onclick="document.getElementById('cancel-modal').classList.add('hidden')" class="text-secondary hover:text-primary transition-colors">
                     <span class="material-symbols-outlined">close</span>
@@ -384,13 +384,13 @@
                 <input type="hidden" name="status" value="cancelled">
                 
                 <p class="font-body-md text-body-md text-secondary mb-6 leading-relaxed">
-                    Are you sure you want to <span class="bg-yellow-300 text-black px-1 font-bold">cancel</span> this order upon customer request? 
+                    Are you sure you want to cancel this order upon customer request? 
                     This action will halt fulfillment and notify the customer. <strong class="text-primary underline decoration-error underline-offset-2">This action cannot be undone.</strong>
                 </p>
                 
                 <div class="mb-8">
                     <label class="block font-label-sm text-label-sm font-bold uppercase tracking-widest mb-2 text-primary">
-                        REASON FOR <span class="bg-yellow-300 text-black px-1">CANCELL</span>ATION
+                        REASON FOR CANCELLATION
                     </label>
                     <textarea name="reason" rows="4" class="w-full border-2 border-outline-variant bg-surface-container-lowest p-3 font-body-md text-body-md text-primary focus:border-primary focus:ring-0 outline-none transition-all resize-none" placeholder="Staff notes regarding the cancellation request..."></textarea>
                 </div>
@@ -398,7 +398,7 @@
                 <!-- Footer -->
                 <div class="flex gap-4">
                     <button type="submit" class="flex-1 bg-[#ba1a1a] text-white py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-[#93000a] transition-colors rounded-none border border-[#ba1a1a]">
-                        YES, <span class="text-yellow-300">CANCEL</span> ORDER
+                        YES, CANCEL ORDER
                     </button>
                     <button type="button" onclick="document.getElementById('cancel-modal').classList.add('hidden')" class="flex-1 border-[1.5px] border-primary text-primary py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-surface-container-low transition-colors rounded-none">
                         GO BACK
