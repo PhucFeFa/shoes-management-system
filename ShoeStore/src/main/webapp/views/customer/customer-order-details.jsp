@@ -162,7 +162,7 @@
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
                                 <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-                                    href="${pageContext.request.contextPath}/customer/profile">
+                                    href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
@@ -172,7 +172,7 @@
                                     Shop
                                 </a>
                                 <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
-                                    href="${pageContext.request.contextPath}/customer/orders">
+                                    href="${pageContext.request.contextPath}/profile/orders">
                                     <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                     Orders
                                 </a>
@@ -185,7 +185,7 @@
                             <header class="mb-12 border-b border-outline-variant pb-8">
                                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                     <div>
-                                        <a href="${pageContext.request.contextPath}/customer/orders"
+                                        <a href="${pageContext.request.contextPath}/profile/orders"
                                             class="text-label-sm font-label-sm text-secondary uppercase hover:text-primary mb-6 inline-flex items-center gap-1 transition-colors">
                                             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                                             Back to Orders
@@ -469,7 +469,7 @@
                                     </div>
 
                                     <!-- Body -->
-                                    <form action="${pageContext.request.contextPath}/customer/order/cancel"
+                                    <form action="${pageContext.request.contextPath}/profile/order/cancel"
                                         method="POST" class="p-6">
                                         <input type="hidden" name="orderId" value="${orderSummary.id}">
 

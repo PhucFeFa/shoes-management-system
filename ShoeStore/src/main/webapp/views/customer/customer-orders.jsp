@@ -179,7 +179,7 @@
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
                                 <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-                                    href="${pageContext.request.contextPath}/customer/profile">
+                                    href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
@@ -189,7 +189,7 @@
                                     Shop
                                 </a>
                                 <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
-                                    href="${pageContext.request.contextPath}/customer/orders">
+                                    href="${pageContext.request.contextPath}/profile/orders">
                                     <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                     Orders
                                 </a>
@@ -218,7 +218,7 @@
 
                             <section
                                 class="px-margin-desktop py-6 flex justify-between items-center bg-surface-bright sticky top-0 z-30 shadow-[0_1px_0_rgba(0,0,0,0.05)]">
-                                <form method="get" action="${pageContext.request.contextPath}/customer/orders"
+                                <form method="get" action="${pageContext.request.contextPath}/profile/orders"
                                     class="flex items-center gap-4 flex-1">
                                     <div class="flex gap-3">
                                         <select id="status-filter" name="status" onchange="this.form.submit()"
@@ -331,7 +331,7 @@
                                                                 </span>
                                                             </td>
                                                             <td class="py-4 px-6 text-right">
-                                                                <a href="${pageContext.request.contextPath}/customer/order-details?id=${order.id}"
+                                                                <a href="${pageContext.request.contextPath}/profile/order/details?id=${order.id}"
                                                                     class="inline-block px-4 py-2 border border-outline-variant text-secondary hover:bg-surface-container-low transition-colors font-label-sm text-label-sm uppercase tracking-widest">
                                                                     Details
                                                                 </a>

@@ -135,7 +135,7 @@
 
                         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
                             <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
-                                href="${pageContext.request.contextPath}/customer/profile">
+                                href="${pageContext.request.contextPath}/profile">
                                 <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                 Profile
                             </a>
@@ -145,7 +145,7 @@
                                 Shop
                             </a>
                             <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-                                href="${pageContext.request.contextPath}/customer/orders">
+                                href="${pageContext.request.contextPath}/profile/orders">
                                 <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                 Orders
                             </a>

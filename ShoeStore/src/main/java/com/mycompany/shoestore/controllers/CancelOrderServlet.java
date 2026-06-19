@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/customer/order/cancel")
+@WebServlet("/profile/order/cancel")
 public class CancelOrderServlet extends HttpServlet {
 
     @Override
@@ -62,6 +62,6 @@ public class CancelOrderServlet extends HttpServlet {
             }
         }
         
-        response.sendRedirect(request.getContextPath() + "/customer/order-details?id=" + orderId);
+        response.sendRedirect(request.getContextPath() + "/profile/order/details?id=" + orderId);
     }
 }
