@@ -292,24 +292,7 @@
                         </c:forEach>
                     </div>
                 </div>
-                
-                <!-- Timeline Card -->
-                <div class="bg-surface-container-lowest border border-outline-variant p-8 rounded-none">
-                    <h3 class="font-label-md text-label-md uppercase text-primary border-b border-outline-variant pb-4 mb-6 tracking-widest">Fulfillment Timeline</h3>
-                    <div class="relative border-l-2 border-outline-variant/30 ml-3 space-y-8">
-                        <div class="relative pl-8">
-                            <span class="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-primary ring-4 ring-surface-container-lowest"></span>
-                            <h4 class="font-label-md text-label-md text-primary uppercase">Order Created</h4>
-                            <p class="font-body-md text-body-md text-secondary mt-1">Customer completed checkout.</p>
-                            <p class="font-label-sm text-secondary mt-2"><fmt:formatDate value="${orderSummary.createdAt}" pattern="MMM dd, yyyy HH:mm" /></p>
-                        </div>
-                        <div class="relative pl-8 opacity-50">
-                            <span class="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-surface border-2 border-outline-variant"></span>
-                            <h4 class="font-label-md text-label-md text-primary uppercase">Current Status: ${orderSummary.status}</h4>
-                            <p class="font-body-md text-body-md text-secondary mt-1">Waiting for further updates.</p>
-                        </div>
-                    </div>
-                </div>
+
             </div>
 
             <!-- Right Column: Info Cards (Spans 4 cols) -->
