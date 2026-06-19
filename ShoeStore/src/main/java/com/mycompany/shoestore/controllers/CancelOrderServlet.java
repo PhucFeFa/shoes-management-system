@@ -40,13 +40,13 @@ public class CancelOrderServlet extends HttpServlet {
                 if ("pending".equalsIgnoreCase(orderSummary.getStatus())) {
                     int cancelCount = dao.getCustomerCancellationCountLast30Days(currentUser.getId());
                     if (cancelCount >= 5) {
-                        session.setAttribute("errorMessage", "You have exceeded the cancellation limit (max 5 times/30 days).");
+                        session.setAttribute("errorMessage", "You have reached the cancellation limit.");
                     } else {
                         boolean success = dao.cancelOrderWithTracking(orderId, currentUser.getId(), reason);
                         if (success) {
                             System.out.println("Order " + orderId + " cancelled by user " + currentUser.getId() + ". Reason: " + reason);
                             if (cancelCount == 4) {
-                                session.setAttribute("successMessage", "Order cancelled successfully. You have reached your cancellation limit.");
+                                session.setAttribute("warningMessage", "You have reached the cancellation limit.");
                             } else {
                                 session.setAttribute("successMessage", "Order cancelled successfully.");
                             }

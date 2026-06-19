@@ -183,18 +183,33 @@
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low hover:bg-surface-container transition-colors active:scale-95 transition-transform"
-                                    href="${pageContext.request.contextPath}/home">
-                                    <span class="material-symbols-outlined text-[20px]">store</span>
-                                    Shop
-                                </a>
                                 <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile/orders">
                                     <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                     Orders
                                 </a>
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                    href="#">
+                                    <span class="material-symbols-outlined text-[20px]">location_on</span>
+                                    Addresses
+                                </a>
                             </nav>
 
+                            <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
+
+                                <div class="space-y-1">
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                        href="${pageContext.request.contextPath}/home">
+                                        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                                        Back to Shop
+                                    </a>
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                        href="${pageContext.request.contextPath}/Logout">
+                                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
                         </aside>
 
                         <main class="ml-64 flex-1 flex flex-col min-h-screen">
@@ -297,7 +312,7 @@
                                                             style="animation-delay: ${loop.index * 40}ms">
                                                             <td
                                                                 class="py-4 px-6 font-bold font-label-md tracking-wider">
-                                                                #SL-${fn:toUpperCase(fn:substring(order.id, 0, 8))}
+                                                                SL-${fn:toUpperCase(fn:substring(order.id, 0, 8))}
                                                             </td>
                                                             <td class="py-4 px-6 text-secondary">
                                                                 <fmt:formatDate value="${order.createdAt}"
