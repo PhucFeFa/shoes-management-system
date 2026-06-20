@@ -4,23 +4,28 @@
  */
 package com.mycompany.shoestore.controllers;
 
-import com.mycompany.shoestore.dao.AddressDAO;
-import com.mycompany.shoestore.models.Address;
-import com.mycompany.shoestore.models.User;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.mycompany.shoestore.dao.ProductDAO;
+import com.mycompany.shoestore.models.Product;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 
 /**
  *
  * @author pts03
  */
-@WebServlet(name = "CustomerProfileServlet", urlPatterns = {"/profile"})
-public class ProfileServlet extends HttpServlet {
+
+@WebServlet(name = "ProductDetail", urlPatterns = {"/ProductDetail"})
+public class ProductDetailServlet extends HttpServlet {
+
+    ProductDAO dao = new ProductDAO();
+
+
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +44,10 @@ public class ProfileServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileServlet</title>");            
+
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,29 +65,24 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         
-    HttpSession session = request.getSession(false);
 
-    if (session == null) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
-    }
+        String productId = request.getParameter("id");
 
-    User currentUser = (User) session.getAttribute("currentUser");
 
-    if (currentUser == null) {
-        response.sendRedirect(request.getContextPath() + "/login");
-        return;
-    }
+        try {
 
-    AddressDAO dao = new AddressDAO();
-    List<Address> addresses =
-            dao.getAddressesByUserId(currentUser.getId());
+            Product product = dao.getProductById(productId);
 
-    request.setAttribute("addresses", addresses);
+            request.setAttribute("product", product);
 
-    request.getRequestDispatcher("/views/customer/customer-profile.jsp")
-           .forward(request, response);
+
+            request.getRequestDispatcher("/productDetail.jsp")
+
+                    .forward(request, response);
+
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     /**
@@ -107,6 +107,9 @@ public class ProfileServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }
+
+
+
+

@@ -1,4 +1,4 @@
-// Author: baolgce191178
+
 package com.mycompany.shoestore.dao;
 
 import com.mycompany.shoestore.db.DBContext;
