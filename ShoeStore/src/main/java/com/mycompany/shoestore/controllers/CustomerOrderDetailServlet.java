@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/customer/order-details")
+@WebServlet("/profile/order/details")
 public class CustomerOrderDetailServlet extends HttpServlet {
 
     @Override
@@ -32,7 +32,7 @@ public class CustomerOrderDetailServlet extends HttpServlet {
 
         String orderId = request.getParameter("id");
         if (orderId == null || orderId.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/customer/orders");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
             return;
         }
 
@@ -41,14 +41,16 @@ public class CustomerOrderDetailServlet extends HttpServlet {
 
         // Security check: ensure the order belongs to the current user
         if (orderSummary == null || !orderSummary.getUserId().equals(currentUser.getId())) {
-            response.sendRedirect(request.getContextPath() + "/customer/orders");
+            response.sendRedirect(request.getContextPath() + "/profile/orders");
             return;
         }
 
         List<OrderDetailDTO> orderItems = dao.getOrderItemsByOrderId(orderId);
+        int cancellationCount = dao.getCustomerCancellationCountLast30Days(currentUser.getId());
 
         request.setAttribute("orderSummary", orderSummary);
         request.setAttribute("orderItems", orderItems);
+        request.setAttribute("cancellationCount", cancellationCount);
 
         request.getRequestDispatcher("/views/customer/customer-order-details.jsp").forward(request, response);
     }

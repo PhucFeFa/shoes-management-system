@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author pts03
  */
-@WebServlet(name = "profile", urlPatterns = {"/profile"})
+@WebServlet(name = "CustomerProfileServlet", urlPatterns = {"/profile"})
 public class ProfileServlet extends HttpServlet {
 
     /**
@@ -81,7 +81,7 @@ public class ProfileServlet extends HttpServlet {
 
     request.setAttribute("addresses", addresses);
 
-    request.getRequestDispatcher("/profile.jsp")
+    request.getRequestDispatcher("/views/customer/customer-profile.jsp")
            .forward(request, response);
     }
 

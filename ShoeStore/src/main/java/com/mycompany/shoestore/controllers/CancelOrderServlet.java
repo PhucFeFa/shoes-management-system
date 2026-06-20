@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/customer/order/cancel")
+@WebServlet("/profile/order/cancel")
 public class CancelOrderServlet extends HttpServlet {
 
     @Override
@@ -38,12 +38,21 @@ public class CancelOrderServlet extends HttpServlet {
             if (orderSummary != null && orderSummary.getUserId().equals(currentUser.getId())) {
                 // Ensure order is actually pending and can be cancelled
                 if ("pending".equalsIgnoreCase(orderSummary.getStatus())) {
-                    boolean success = dao.updateOrderStatus(orderId, "cancelled");
-                    if (success) {
-                        System.out.println("Order " + orderId + " cancelled by user " + currentUser.getId() + ". Reason: " + reason);
-                        session.setAttribute("successMessage", "Order cancelled successfully.");
+                    int cancelCount = dao.getCustomerCancellationCountLast30Days(currentUser.getId());
+                    if (cancelCount >= 5) {
+                        session.setAttribute("errorMessage", "You have reached the cancellation limit.");
                     } else {
-                        session.setAttribute("errorMessage", "Failed to cancel order.");
+                        boolean success = dao.cancelOrderWithTracking(orderId, currentUser.getId(), reason);
+                        if (success) {
+                            System.out.println("Order " + orderId + " cancelled by user " + currentUser.getId() + ". Reason: " + reason);
+                            if (cancelCount == 4) {
+                                session.setAttribute("warningMessage", "You have reached the cancellation limit.");
+                            } else {
+                                session.setAttribute("successMessage", "Order cancelled successfully.");
+                            }
+                        } else {
+                            session.setAttribute("errorMessage", "Failed to cancel order.");
+                        }
                     }
                 } else {
                     session.setAttribute("errorMessage", "Only pending orders can be cancelled.");
@@ -53,6 +62,6 @@ public class CancelOrderServlet extends HttpServlet {
             }
         }
         
-        response.sendRedirect(request.getContextPath() + "/customer/order-details?id=" + orderId);
+        response.sendRedirect(request.getContextPath() + "/profile/order/details?id=" + orderId);
     }
 }

@@ -208,48 +208,74 @@
                                         <span
                                             class="text-label-md font-label-md text-secondary tracking-widest uppercase mb-2 block">Order
                                             Confirmed</span>
-                                        <h1 Order SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}</h1>
-                                            <div class="flex flex-wrap gap-x-8 gap-y-4">
-                                                <div>
-                                                    <p
-                                                        class="text-label-sm font-label-sm text-secondary uppercase mb-1">
-                                                        Order Date</p>
-                                                    <p class="text-body-md font-body-md font-semibold">
-                                                        <fmt:formatDate value="${orderSummary.createdAt}"
-                                                            pattern="MMMM dd, yyyy" />
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p
-                                                        class="text-label-sm font-label-sm text-secondary uppercase mb-1">
-                                                        Status</p>
-                                                    <span
-                                                        class="inline-flex items-center px-3 py-1 text-label-sm font-label-sm font-bold border border-outline-variant/30 status-${orderSummary.status}">
-                                                        <c:if test="${orderSummary.status == 'pending'}">
-                                                            <span
-                                                                class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
-                                                        </c:if>
-                                                        ${fn:toUpperCase(orderSummary.status)}
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <p
-                                                        class="text-label-sm font-label-sm text-secondary uppercase mb-1">
-                                                        Total Amount</p>
-                                                    <p class="text-body-md font-body-md font-semibold">
-                                                        <fmt:formatNumber value="${orderSummary.totalAmount}"
-                                                            type="currency" currencySymbol="₫" maxFractionDigits="0" />
-                                                    </p>
-                                                </div>
+                                        <c:if test="${not empty sessionScope.errorMessage}">
+                                            <div class="mb-4 p-4 bg-[#ba1a1a]/10 border-l-4 border-[#ba1a1a] text-[#ba1a1a] font-label-md">
+                                                ${sessionScope.errorMessage}
                                             </div>
+                                            <c:remove var="errorMessage" scope="session"/>
+                                        </c:if>
+                                        <c:if test="${not empty sessionScope.warningMessage}">
+                                            <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-label-md">
+                                                ${sessionScope.warningMessage}
+                                            </div>
+                                            <c:remove var="warningMessage" scope="session"/>
+                                        </c:if>
+                                        <c:if test="${not empty sessionScope.successMessage}">
+                                            <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-600 text-green-800 font-label-md">
+                                                ${sessionScope.successMessage}
+                                            </div>
+                                            <c:remove var="successMessage" scope="session"/>
+                                        </c:if>
+                                        <h1 class="text-display-lg-mobile md:text-headline-lg font-headline-lg uppercase mb-4">
+                                            Order SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
+                                        </h1>
+                                        <div class="flex flex-wrap gap-x-8 gap-y-4">
+                                            <div>
+                                                <p class="text-label-sm font-label-sm text-secondary uppercase mb-1">
+                                                    Order Date</p>
+                                                <p class="text-body-md font-body-md font-semibold">
+                                                    <fmt:formatDate value="${orderSummary.createdAt}"
+                                                        pattern="MMMM dd, yyyy" />
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="text-label-sm font-label-sm text-secondary uppercase mb-1">
+                                                    Status</p>
+                                                <span
+                                                    class="inline-flex items-center px-3 py-1 text-label-sm font-label-sm font-bold border border-outline-variant/30 status-${orderSummary.status}">
+                                                    <c:if test="${orderSummary.status == 'pending'}">
+                                                        <span
+                                                            class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+                                                    </c:if>
+                                                    ${fn:toUpperCase(orderSummary.status)}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <p class="text-label-sm font-label-sm text-secondary uppercase mb-1">
+                                                    Total Amount</p>
+                                                <p class="text-body-md font-body-md font-semibold">
+                                                    <fmt:formatNumber value="${orderSummary.totalAmount}"
+                                                        type="currency" currencySymbol="₫" maxFractionDigits="0" />
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
                                         <c:if test="${orderSummary.status == 'pending'}">
-                                            <button type="button"
-                                                onclick="document.getElementById('cancel-modal').classList.remove('hidden')"
-                                                class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all w-full md:w-auto">
-                                                Cancel Order
-                                            </button>
+                                            <c:choose>
+                                                <c:when test="${cancellationCount >= 5}">
+                                                    <p class="text-[#ba1a1a] font-label-md uppercase tracking-widest border border-[#ba1a1a] px-6 py-3 bg-[#ba1a1a]/10 inline-block text-center w-full md:w-auto">
+                                                        Cancellation Limit Reached
+                                                    </p>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <button type="button"
+                                                        onclick="document.getElementById('cancel-modal').classList.remove('hidden')"
+                                                        class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all w-full md:w-auto">
+                                                        Cancel Order
+                                                    </button>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:if>
                                     </div>
                                 </div>
@@ -330,32 +356,7 @@
                                         </div>
                                     </section>
 
-                                    <section class="p-8 bg-primary text-on-primary">
-                                        <div class="flex items-center justify-between">
-                                            <div>
-                                                <h4 class="text-headline-md font-headline-md uppercase mb-2">Tracking
-                                                    Status</h4>
-                                                <p class="text-body-md text-on-primary/70">
-                                                    <c:choose>
-                                                        <c:when test="${orderSummary.status == 'pending'}">Your order is
-                                                            currently being processed. We will notify you once it's
-                                                            confirmed.</c:when>
-                                                        <c:when test="${orderSummary.status == 'confirmed'}">Your order
-                                                            has been confirmed and is being prepared for shipping.
-                                                        </c:when>
-                                                        <c:when test="${orderSummary.status == 'shipping'}">Your order
-                                                            is on its way to your delivery address.</c:when>
-                                                        <c:when test="${orderSummary.status == 'completed'}">This order
-                                                            has been delivered successfully.</c:when>
-                                                        <c:when test="${orderSummary.status == 'cancelled'}">This order
-                                                            was cancelled.</c:when>
-                                                    </c:choose>
-                                                </p>
-                                            </div>
-                                            <span
-                                                class="material-symbols-outlined text-[48px] opacity-20">local_shipping</span>
-                                        </div>
-                                    </section>
+
                                 </div>
 
                                 <!-- Right Column: Shipping & Payment -->
@@ -461,8 +462,8 @@
                                     </div>
 
                                     <!-- Body -->
-                                    <form action="${pageContext.request.contextPath}/profile/order/cancel" method="POST"
-                                        class="p-6">
+                                    <form action="${pageContext.request.contextPath}/profile/order/cancel"
+                                        method="POST" class="p-6">
                                         <input type="hidden" name="orderId" value="${orderSummary.id}">
 
                                         <p class="font-body-md text-body-md text-secondary mb-6">

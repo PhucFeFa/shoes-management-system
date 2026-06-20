@@ -316,6 +316,73 @@ public class OrderDAO {
         return false;
     }
 
+    public int getCustomerCancellationCountLast30Days(String userId) {
+        String sql = "SELECT COUNT(*) FROM order_cancellations WHERE user_id = ? AND created_at >= DATEADD(day, -30, SYSDATETIMEOFFSET())";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error getCustomerCancellationCountLast30Days: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public boolean cancelOrderWithTracking(String orderId, String userId, String reason) {
+        String updateStatusSql = "UPDATE orders SET status = 'cancelled' WHERE id = ?";
+        String insertTrackingSql = "INSERT INTO order_cancellations (order_id, user_id, reason) VALUES (?, ?, ?)";
+        
+        Connection conn = null;
+        try {
+            conn = new DBContext().getConnection();
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement psUpdate = conn.prepareStatement(updateStatusSql)) {
+                psUpdate.setString(1, orderId);
+                int updated = psUpdate.executeUpdate();
+                if (updated == 0) {
+                    conn.rollback();
+                    return false;
+                }
+            }
+
+            try (PreparedStatement psInsert = conn.prepareStatement(insertTrackingSql)) {
+                psInsert.setString(1, orderId);
+                psInsert.setString(2, userId);
+                psInsert.setString(3, reason);
+                psInsert.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (Exception re) {
+                    re.printStackTrace();
+                }
+            }
+            System.err.println("Error cancelOrderWithTracking: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (Exception ce) {
+                    ce.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean restoreStockForOrder(String orderId) {
         String sql = "UPDATE pv "
                    + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "

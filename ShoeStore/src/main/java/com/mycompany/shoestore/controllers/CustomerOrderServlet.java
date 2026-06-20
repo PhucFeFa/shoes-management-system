@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/customer/orders")
+@WebServlet("/profile/orders")
 public class CustomerOrderServlet extends HttpServlet {
 
     private static final int PAGE_SIZE = 10;
