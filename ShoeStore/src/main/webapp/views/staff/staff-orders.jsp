@@ -244,14 +244,6 @@
                 Search
             </button>
         </form>
-
-        <!-- Selected count (Bulk Actions placeholder) -->
-        <div class="flex items-center gap-3 pl-6 border-l border-outline-variant/50 ml-6 opacity-50 pointer-events-none transition-opacity" id="bulk-actions">
-            <span class="font-label-sm text-label-sm text-secondary uppercase">0 Selected</span>
-            <button class="px-4 py-2 bg-surface-container text-primary font-label-md text-label-md uppercase rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors">
-                Confirm
-            </button>
-        </div>
     </section>
 
     <!-- Data Table -->
@@ -260,13 +252,28 @@
             <table class="w-full text-left border-collapse">
                 <thead class="bg-surface-container-low border-b border-outline-variant">
                     <tr>
-                        <th class="py-4 px-6 w-12">
-                            <input id="select-all-checkbox" class="rounded-[2px] border-outline-variant text-primary focus:ring-primary cursor-pointer w-4 h-4" type="checkbox">
-                        </th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Order ID</th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Customer</th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Order Date</th>
-                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider text-right">Total Amount</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">
+                            <a href="${pageContext.request.contextPath}/staff/orders?status=${statusFilter}&keyword=${keyword}&sortBy=date&sortOrder=${(sortBy == 'date' && sortOrder == 'asc') ? 'desc' : 'asc'}"
+                               class="flex items-center gap-1 hover:text-primary transition-colors inline-flex"
+                               title="Nhấn để sắp xếp theo Ngày đặt hàng">
+                                Order Date
+                                <span class="material-symbols-outlined text-[16px] ${sortBy == 'date' || empty sortBy ? 'opacity-100 text-primary' : 'opacity-50'}">
+                                    ${(sortBy == 'date' || empty sortBy) ? (sortOrder == 'asc' ? 'expand_less' : 'expand_more') : 'swap_vert'}
+                                </span>
+                            </a>
+                        </th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">
+                            <a href="${pageContext.request.contextPath}/staff/orders?status=${statusFilter}&keyword=${keyword}&sortBy=amount&sortOrder=${(sortBy == 'amount' && sortOrder == 'desc') ? 'asc' : 'desc'}"
+                               class="flex items-center justify-end gap-1 hover:text-primary transition-colors inline-flex w-full"
+                               title="Nhấn để sắp xếp theo Tổng tiền">
+                                Total Amount
+                                <span class="material-symbols-outlined text-[16px] ${sortBy == 'amount' ? 'opacity-100 text-primary' : 'opacity-50'}">
+                                    ${sortBy == 'amount' ? (sortOrder == 'asc' ? 'expand_less' : 'expand_more') : 'swap_vert'}
+                                </span>
+                            </a>
+                        </th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Status</th>
                         <th class="py-4 px-6 w-12"></th>
                     </tr>
@@ -277,7 +284,7 @@
                         <c:when test="${empty orders}">
                             <!-- Empty state -->
                             <tr>
-                                <td colspan="7" class="py-20 text-center">
+                                <td colspan="6" class="py-20 text-center">
                                     <div class="flex flex-col items-center gap-3 text-secondary">
                                         <span class="material-symbols-outlined text-[48px] opacity-30">inbox</span>
                                         <p class="font-label-md text-label-md uppercase tracking-wider">No orders found</p>
@@ -294,11 +301,8 @@
                                 <c:set var="rowOpacity" value="${order.status == 'cancelled' ? 'opacity-60' : ''}"/>
 
                                 <tr class="hover:bg-surface-container-low transition-colors group">
-                                    <td class="py-4 px-6">
-                                        <input class="rounded-[2px] border-outline-variant text-primary focus:ring-primary cursor-pointer w-4 h-4 row-checkbox" type="checkbox">
-                                    </td>
                                     <td class="py-4 px-6 font-bold font-label-md tracking-wider ${rowOpacity}">
-                                        #<c:out value="${order.id.length() > 8 ? order.id.substring(order.id.length() - 8).toUpperCase() : order.id}"/>
+                                        <c:out value="${order.id.length() > 8 ? order.id.substring(order.id.length() - 8).toUpperCase() : order.id}"/>
                                     </td>
                                     <td class="py-4 px-6 ${rowOpacity}">
                                         <div class="flex flex-col">
@@ -354,10 +358,10 @@
                                         </c:choose>
                                     </td>
                                     <td class="py-4 px-6 text-right">
-                                        <button class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
+                                        <a href="${pageContext.request.contextPath}/staff/order/details?id=${order.id}" class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"
                                                 title="View order details">
                                             <span class="material-symbols-outlined">more_vert</span>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -426,40 +430,6 @@
     </section>
 </main>
 
-<!-- JS: Checkbox bulk-actions toggle -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const selectAll    = document.getElementById('select-all-checkbox');
-        const checkboxes   = document.querySelectorAll('.row-checkbox');
-        const bulkActionsBar = document.getElementById('bulk-actions');
 
-        function updateBulkBar() {
-            const checked = Array.from(checkboxes).filter(c => c.checked);
-            if (checked.length > 0) {
-                bulkActionsBar.classList.remove('opacity-50', 'pointer-events-none');
-                bulkActionsBar.querySelector('span').textContent = checked.length + ' SELECTED';
-            } else {
-                bulkActionsBar.classList.add('opacity-50', 'pointer-events-none');
-                bulkActionsBar.querySelector('span').textContent = '0 Selected';
-            }
-        }
-
-        if (selectAll) {
-            selectAll.addEventListener('change', () => {
-                checkboxes.forEach(cb => { cb.checked = selectAll.checked; });
-                updateBulkBar();
-            });
-        }
-
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                updateBulkBar();
-                if (selectAll) {
-                    selectAll.checked = Array.from(checkboxes).every(c => c.checked);
-                }
-            });
-        });
-    });
-</script>
 </body>
 </html>

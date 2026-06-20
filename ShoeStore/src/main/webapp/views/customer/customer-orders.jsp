@@ -241,6 +241,7 @@
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Order Date</th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider text-right">Total Amount</th>
                         <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider">Status</th>
+                        <th class="py-4 px-6 font-label-sm text-label-sm uppercase text-secondary tracking-wider text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-outline-variant/50 font-body-md text-body-md text-primary">
@@ -286,6 +287,11 @@
                                                 <c:otherwise>${order.status}</c:otherwise>
                                             </c:choose>
                                         </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <a href="${pageContext.request.contextPath}/customer/order-details?id=${order.id}" class="inline-block px-4 py-2 border border-outline-variant text-secondary hover:bg-surface-container-low transition-colors font-label-sm text-label-sm uppercase tracking-widest">
+                                            Details
+                                        </a>
                                     </td>
                                 </tr>
                             </c:forEach>
