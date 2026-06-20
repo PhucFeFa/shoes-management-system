@@ -23,6 +23,11 @@ public class StaffOrderServlet extends HttpServlet {
         String statusFilter = request.getParameter("status");
         String keyword      = request.getParameter("keyword");
         String pageParam    = request.getParameter("page");
+        String sortBy       = request.getParameter("sortBy");
+        String sortOrder    = request.getParameter("sortOrder");
+
+        if (sortBy == null || sortBy.isEmpty()) sortBy = "date";
+        if (sortOrder == null || sortOrder.isEmpty()) sortOrder = "desc";
 
         int currentPage = 1;
         if (pageParam != null && !pageParam.isEmpty()) {
@@ -41,7 +46,7 @@ public class StaffOrderServlet extends HttpServlet {
         if (totalPages < 1) totalPages = 1;
         if (currentPage > totalPages) currentPage = totalPages;
 
-        List<Order> orders = orderDAO.getAllOrders(statusFilter, keyword, currentPage);
+        List<Order> orders = orderDAO.getAllOrders(statusFilter, keyword, currentPage, sortBy, sortOrder);
 
         int rangeStart = totalOrders == 0 ? 0 : (currentPage - 1) * pageSize + 1;
         int rangeEnd   = Math.min(currentPage * pageSize, totalOrders);
@@ -54,6 +59,8 @@ public class StaffOrderServlet extends HttpServlet {
         request.setAttribute("rangeEnd",     rangeEnd);
         request.setAttribute("statusFilter", statusFilter != null ? statusFilter : "");
         request.setAttribute("keyword",      keyword      != null ? keyword      : "");
+        request.setAttribute("sortBy",       sortBy);
+        request.setAttribute("sortOrder",    sortOrder);
 
         request.getRequestDispatcher("/views/staff/staff-orders.jsp").forward(request, response);
     }

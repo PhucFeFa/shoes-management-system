@@ -1,4 +1,3 @@
-// Author: baolgce191178
 package com.mycompany.shoestore.dao;
 
 import com.mycompany.shoestore.db.DBContext;
@@ -101,7 +100,7 @@ public class OrderDAO {
         return 0;
     }
 
-    public List<Order> getAllOrders(String statusFilter, String keyword, int page) {
+    public List<Order> getAllOrders(String statusFilter, String keyword, int page, String sortBy, String sortOrder) {
         List<Order> orders = new ArrayList<>();
         int offset = (page - 1) * PAGE_SIZE;
 
@@ -117,10 +116,21 @@ public class OrderDAO {
             sql.append("AND o.status = ? ");
         }
         if (keyword != null && !keyword.trim().isEmpty()) {
-            sql.append("AND (u.full_name LIKE ? OR u.email LIKE ?) ");
+            sql.append("AND (u.full_name LIKE ? OR u.email LIKE ? OR o.id LIKE ?) ");
         }
 
-        sql.append("ORDER BY o.created_at DESC ");
+        if ("amount".equals(sortBy)) {
+            sql.append("ORDER BY o.total_amount ");
+        } else {
+            sql.append("ORDER BY o.created_at ");
+        }
+        
+        if ("asc".equalsIgnoreCase(sortOrder)) {
+            sql.append("ASC ");
+        } else {
+            sql.append("DESC ");
+        }
+        
         sql.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
         try (Connection conn = new DBContext().getConnection();
@@ -132,8 +142,10 @@ public class OrderDAO {
             }
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String like = "%" + keyword.trim() + "%";
+                String idLike = "%" + keyword.trim().replace("#", "") + "%";
                 ps.setString(paramIndex++, like);
                 ps.setString(paramIndex++, like);
+                ps.setString(paramIndex++, idLike);
             }
             ps.setInt(paramIndex++, offset);
             ps.setInt(paramIndex, PAGE_SIZE);
@@ -172,7 +184,7 @@ public class OrderDAO {
             sql.append("AND o.status = ? ");
         }
         if (keyword != null && !keyword.trim().isEmpty()) {
-            sql.append("AND (u.full_name LIKE ? OR u.email LIKE ?) ");
+            sql.append("AND (u.full_name LIKE ? OR u.email LIKE ? OR o.id LIKE ?) ");
         }
 
         try (Connection conn = new DBContext().getConnection();
@@ -184,8 +196,10 @@ public class OrderDAO {
             }
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String like = "%" + keyword.trim() + "%";
+                String idLike = "%" + keyword.trim().replace("#", "") + "%";
                 ps.setString(paramIndex++, like);
-                ps.setString(paramIndex, like);
+                ps.setString(paramIndex++, like);
+                ps.setString(paramIndex++, idLike);
             }
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -365,6 +379,41 @@ public class OrderDAO {
                     ce.printStackTrace();
                 }
             }
+        }
+        return false;
+    }
+
+    public boolean restoreStockForOrder(String orderId) {
+        String sql = "UPDATE pv "
+                   + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
+                   + "FROM product_variants pv "
+                   + "JOIN order_items oi ON pv.id = oi.product_variant_id "
+                   + "WHERE oi.order_id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("Error restoreStockForOrder: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean cancelOrderWithStockRestore(String orderId) {
+        OrderSummaryDTO summary = getOrderSummaryById(orderId);
+        if (summary == null) {
+            return false;
+        }
+        String status = summary.getStatus().toLowerCase();
+        if (status.equals("cancelled") || status.equals("completed") || status.equals("shipped") || status.equals("shipping") || status.equals("delivered")) {
+            return false;
+        }
+
+        boolean statusUpdated = updateOrderStatus(orderId, "cancelled");
+        if (statusUpdated) {
+            restoreStockForOrder(orderId);
+            return true;
         }
         return false;
     }
