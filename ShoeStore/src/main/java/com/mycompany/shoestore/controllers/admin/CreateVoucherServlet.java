@@ -1,83 +1,105 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package com.mycompany.shoestore.controllers.admin;
 
+import com.mycompany.shoestore.dao.VoucherDAO;
+import com.mycompany.shoestore.dto.VoucherDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author default
- */
-@WebServlet(name="CreateVoucherServlet", urlPatterns={"/create-voucher"})
+@WebServlet(name = "CreateVoucherServlet", urlPatterns = {"/create-voucher"})
 public class CreateVoucherServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateVoucherServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateVoucherServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
+    private static final String VOUCHER_FORM_JSP = "/views/admin/voucher-form.jsp";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    } 
-
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException {
+        request.getRequestDispatcher(VOUCHER_FORM_JSP).forward(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String code = request.getParameter("code");
+        String discountPercentStr = request.getParameter("discountPercent");
+        String maxDiscountAmountStr = request.getParameter("maxDiscountAmount");
+        String startDateStr = request.getParameter("startDate");
+        String endDateStr = request.getParameter("endDate");
+        String quantityStr = request.getParameter("quantity");
 
+        String error = "";
+        VoucherDAO voucherDAO = new VoucherDAO();
+
+        if (code == null || code.trim().isEmpty()
+                || discountPercentStr == null || discountPercentStr.trim().isEmpty()
+                || maxDiscountAmountStr == null || maxDiscountAmountStr.trim().isEmpty()
+                || startDateStr == null || startDateStr.trim().isEmpty()
+                || endDateStr == null || endDateStr.trim().isEmpty()
+                || quantityStr == null || quantityStr.trim().isEmpty()) {
+
+            error = "All fields are required!";
+        } else {
+            try {
+                code = code.trim().toUpperCase();
+                double discountPercent = Double.parseDouble(discountPercentStr);
+                
+             
+                double maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
+                int quantity = Integer.parseInt(quantityStr);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                Timestamp startDate = new Timestamp(dateFormat.parse(startDateStr).getTime());
+                Timestamp endDate = new Timestamp(dateFormat.parse(endDateStr).getTime());
+
+                if (voucherDAO.isCodeExist(code)) {
+                    error = "Voucher code already exists!";
+                } else if (discountPercent <= 0 || discountPercent > 100) {
+                    error = "Discount percent must be between 0.1% and 100%!";
+                } else if (maxDiscountAmount < 0) {
+                    error = "Max discount amount cannot be negative!";
+                } else if (quantity <= 0) {
+                    error = "Quantity must be greater than 0!";
+                } else if (!endDate.after(startDate)) {
+                    error = "End date must be after start date!";
+                }
+
+                if (error.isEmpty()) {
+                    VoucherDTO newVoucher = new VoucherDTO();
+                    newVoucher.setCode(code);
+                    newVoucher.setDiscountPercent(discountPercent);
+                    newVoucher.setMaxDiscountAmount(maxDiscountAmount);
+                    newVoucher.setStartDate(startDate);
+                    newVoucher.setEndDate(endDate);
+                    newVoucher.setQuantity(quantity);
+
+                    boolean success = voucherDAO.createVoucher(newVoucher);
+                    if (success) {
+                        response.sendRedirect(request.getContextPath() + "/manage-voucher");
+                        return;
+                    } else {
+                        error = "System error. Failed to save voucher!";
+                    }
+                }
+
+            } catch (Exception e) {
+                error = "Invalid format data entry! Please re-check numbers and dates.";
+            }
+        }
+
+        request.setAttribute("ERROR", error);
+        request.setAttribute("oldCode", code);
+        request.setAttribute("oldPercent", discountPercentStr);
+        request.setAttribute("oldMax", maxDiscountAmountStr);
+        request.setAttribute("oldStart", startDateStr);
+        request.setAttribute("oldEnd", endDateStr);
+        request.setAttribute("oldQty", quantityStr);
+
+        request.getRequestDispatcher(VOUCHER_FORM_JSP).forward(request, response);
+    }
 }

@@ -124,9 +124,15 @@
             <jsp:include page="sidebar.jsp" />
 
             <div class="main-content">
-                <div class="page-header">
-                    <i class="bi bi-ticket-perforated" style="font-size:16px; color:#1a1a1a;"></i>
-                    <h3 class="page-title">Voucher Management</h3>
+                <div class="page-header d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-ticket-perforated" style="font-size:16px; color:#1a1a1a;"></i>
+                        <h3 class="page-title">Voucher Management</h3>
+                    </div>
+                    
+                    <a href="${pageContext.request.contextPath}/create-voucher" class="btn" style="background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 8px 16px; border-radius: 4px;">
+                        <i class="bi bi-plus-lg me-1"></i> Create Voucher
+                    </a>
                 </div>
 
                 <div class="table-card">
