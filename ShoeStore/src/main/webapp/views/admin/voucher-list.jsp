@@ -1,110 +1,194 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="jakarta.tags.core" prefix="c"%>
-<%@taglib uri="jakarta.tags.fmt" prefix="fmt"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Voucher Management - ShoesStore</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/admin.css"> 
+        <meta charset="UTF-8">
+        <title>Voucher Management - Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <style>
+            * { box-sizing: border-box; }
+            body {
+                background: #f5f5f3;
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                margin: 0;
+            }
+            /* Main content chuẩn margin 220px theo sidebar */
+            .main-content {
+                margin-left: 220px;
+                padding: 32px 36px;
+                min-height: 100vh;
+            }
+            .page-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 24px;
+                gap: 10px;
+            }
+            .page-title {
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+                color: #1a1a1a;
+                margin: 0;
+            }
+            .table-card {
+                background: #fff;
+                border: 1px solid #e8e8e8;
+                border-radius: 4px;
+            }
+            .user-table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+            .user-table thead tr {
+                border-bottom: 2px solid #e8e8e8;
+            }
+            .user-table thead th {
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: .14em;
+                text-transform: uppercase;
+                color: #999;
+                padding: 14px 16px;
+            }
+            .user-table tbody tr {
+                border-bottom: 1px solid #f0f0f0;
+                transition: background .12s;
+            }
+            .user-table tbody tr:hover { background: #fafafa; }
+            .user-table tbody td {
+                padding: 16px;
+                font-size: 13px;
+                color: #1a1a1a;
+                vertical-align: middle;
+            }
+            /* Cấu hình độ rộng các cột */
+            .col-no { width: 6%; }
+            .col-code { width: 22%; }
+            .col-date { width: 22%; }
+            .col-qty { width: 15%; }
+            .col-action { width: 13%; }
+
+            .cell-no { font-size: 12px; color: #bbb; font-weight: 600; }
+            .cell-code { font-weight: 600; color: #1a1a1a; }
+            .cell-date { font-size: 12px; color: #888; }
+            
+            .qty-badge {
+                font-size: 10px;
+                font-weight: 700;
+                background: #f1f3f5;
+                color: #495057;
+                padding: 4px 10px;
+                border-radius: 4px;
+                text-transform: uppercase;
+            }
+
             .action-wrap {
                 display: flex;
-                gap: 8px;
+                gap: 6px;
+                justify-content: center;
             }
             .btn-action {
-                padding: 6px 14px;
-                font-size: 11px;
+                font-size: 10px;
                 font-weight: 600;
+                letter-spacing: .05em;
+                text-transform: uppercase;
+                padding: 6px 12px;
                 text-decoration: none;
                 border-radius: 4px;
                 transition: all 0.2s ease;
+            }
+            .btn-view { background: #f1f1f1; color: #333; }
+            .btn-view:hover { background: #e2e2e2; }
+            .btn-edit { background: #e8f4fd; color: #1a6fa8; }
+            .btn-edit:hover { background: #d2e9fc; }
+            
+            .empty-row td {
+                text-align: center;
+                padding: 48px;
+                font-size: 12px;
+                color: #aaa;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            .btn-view {
-                background: #f1f3f5;
-                color: #495057;
-            }
-            .btn-view:hover {
-                background: #e9ecef;
-            }
-            .btn-edit {
-                background: #e3f2fd;
-                color: #0d6efd;
-            }
-            .btn-edit:hover {
-                background: #cfe2ff;
             }
         </style>
     </head>
-    <body style="margin: 0; font-family: system-ui, -apple-system, sans-serif;">
-        <div style="display: flex; min-height: 100vh;">
+    <body>
+        <div class="d-flex">
+            <%-- Thiết lập Active Page để sidebar tô màu đúng mục Voucher --%>
+            <c:set var="activePage" value="voucher" scope="request" />
+            <jsp:include page="sidebar.jsp" />
 
-            <jsp:include page="/views/admin/sidebar.jsp" />
-
-            <div style="flex: 1; padding: 40px 40px 40px 260px; background-color: #fdfdfd; min-width: 0;">
-
-                <div style="margin-bottom: 30px; display: flex; align-items: center; gap: 10px;">
-                    <i class="bi bi-ticket-perforated" style="font-size: 18px; color: #000;"></i>
-                    <h2 style="text-transform: uppercase; letter-spacing: 1.5px; font-size: 14px; font-weight: 700; margin: 0; color: #000;">
-                        Voucher List
-                    </h2>
+            <div class="main-content">
+                <div class="page-header">
+                    <i class="bi bi-ticket-perforated" style="font-size:16px; color:#1a1a1a;"></i>
+                    <h3 class="page-title">Voucher Management</h3>
                 </div>
 
-                <div style="background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); border: 1px solid #f1f3f5; overflow: hidden; padding: 10px 20px;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <div class="table-card">
+                    <table class="user-table">
+                        <colgroup>
+                            <col class="col-no">
+                            <col class="col-code">
+                            <col class="col-date">
+                            <col class="col-date">
+                            <col class="col-qty">
+                            <col class="col-action">
+                        </colgroup>
                         <thead>
-                            <tr style="border-bottom: 1px solid #f1f3f5; font-size: 11px; color: #adb5bd; text-transform: uppercase; letter-spacing: 1px;">
-                                <th style="padding: 16px 12px; width: 8%; font-weight: 600;">No.</th>
-                                <th style="padding: 16px 12px; width: 25%; font-weight: 600;">Code</th>
-                                <th style="padding: 16px 12px; width: 22%; font-weight: 600;">Start Date</th>
-                                <th style="padding: 16px 12px; width: 22%; font-weight: 600;">End Date</th>
-                                <th style="padding: 16px 12px; width: 10%; font-weight: 600;">Quantity</th>
-                                <th style="padding: 16px 12px; text-align: center; width: 13%; font-weight: 600;">Action</th>
+                            <tr>
+                                <th>No.</th>
+                                <th>Voucher Code</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Quantity</th>
+                                <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:choose>
                                 <c:when test="${not empty VOUCHER_LIST}">
-                                    <c:forEach items="${VOUCHER_LIST}" var="v" varStatus="counter">
-                                        <tr style="border-bottom: 1px solid #f8f9fa; font-size: 13px; color: #495057;">
-                                            <td style="padding: 18px 12px; color: #adb5bd;">${counter.count}</td>
-                                            <td style="padding: 18px 12px; font-weight: 700; color: #000;">${v.code}</td>
-                                            <td style="padding: 18px 12px; color: #6c757d;">
-                                                <fmt:formatDate value="${v.startDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                                            </td>
-                                            <td style="padding: 18px 12px; color: #6c757d;">
-                                                <fmt:formatDate value="${v.endDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                                            </td>
-                                            <td style="padding: 18px 12px;">
-                                                <span style="background: #e9ecef; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #495057;">
-                                                    ${v.quantity}
+                                    <c:forEach items="${VOUCHER_LIST}" var="v" varStatus="status">
+                                        <tr>
+                                            <td><span class="cell-no">${status.count}</span></td>
+                                            <td><span class="cell-code">${v.code}</span></td>
+                                            <td>
+                                                <span class="cell-date">
+                                                    <fmt:formatDate value="${v.startDate}" pattern="yyyy-MM-dd HH:mm"/>
                                                 </span>
                                             </td>
-                                            <td style="padding: 18px 12px;">
-                                                <div class="action-wrap" style="justify-content: center;">
-                                                    <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">VIEW</a>
-                                                    <a href="${pageContext.request.contextPath}/manage-voucher/edit?id=${v.id}" class="btn-action btn-edit">EDIT</a>
+                                            <td>
+                                                <span class="cell-date">
+                                                    <fmt:formatDate value="${v.endDate}" pattern="yyyy-MM-dd HH:mm"/>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="qty-badge">${v.quantity}</span>
+                                            </td>
+                                            <td>
+                                                <div class="action-wrap">
+                                                    <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">View</a>
+                                                    <a href="${pageContext.request.contextPath}/manage-voucher/edit?id=${v.id}" class="btn-action btn-edit">Edit</a>
                                                 </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
-                                    <tr>
-                                        <td colspan="6" style="padding: 40px; text-align: center; color: #adb5bd; font-size: 13px;">
-                                            No vouchers available.
-                                        </td>
+                                    <tr class="empty-row">
+                                        <td colspan="6">No vouchers found in the system.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
