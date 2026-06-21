@@ -22,18 +22,17 @@ public class AddAddressServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        
-    HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
-    User currentUser = (User) session.getAttribute("currentUser");
+        User currentUser = (User) session.getAttribute("currentUser");
 
-    AddressDAO dao = new AddressDAO();
-    List<Address> addresses =
-            dao.getAddressesByUserId(currentUser.getId());
+        AddressDAO dao = new AddressDAO();
+        List<Address> addresses
+                = dao.getAddressesByUserId(currentUser.getId());
 
-    request.setAttribute("addresses", addresses);
-    request.getRequestDispatcher("/addAddress.jsp")
-            .forward(request, response);
+        request.setAttribute("addresses", addresses);
+        request.getRequestDispatcher("/addAddress.jsp")
+                .forward(request, response);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class AddAddressServlet extends HttpServlet {
             request.setAttribute("error",
                     "Address information is invalid");
 
-            request.getRequestDispatcher("/addAddress.jsp")
+            request.getRequestDispatcher("/views/customer/address.jsp")
                     .forward(request, response);
             return;
         }
@@ -98,8 +97,8 @@ public class AddAddressServlet extends HttpServlet {
                     "Failed to add address");
         }
 
-        request.getRequestDispatcher("/addAddress.jsp")
-                .forward(request, response);
+        response.sendRedirect(
+                request.getContextPath() + "/Address");
     }
 
     @Override

@@ -7,20 +7,22 @@ package com.mycompany.shoestore.controllers;
 import com.mycompany.shoestore.dao.AddressDAO;
 import com.mycompany.shoestore.models.Address;
 import com.mycompany.shoestore.models.User;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
  *
  * @author pts03
  */
-@WebServlet(name = "CustomerProfileServlet", urlPatterns = {"/profile"})
-public class ProfileServlet extends HttpServlet {
+@WebServlet(name = "AddressServlet", urlPatterns = {"/Address"})
+public class AddressServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +41,10 @@ public class ProfileServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileServlet</title>");            
+            out.println("<title>Servlet AddressServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddressServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,7 +62,26 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    request.getRequestDispatcher("/views/customer/customer-profile.jsp")
+        HttpSession session = request.getSession(false);
+
+    if (session == null) {
+        response.sendRedirect(request.getContextPath() + "/login");
+        return;
+    }
+
+    User currentUser = (User) session.getAttribute("currentUser");
+
+    if (currentUser == null) {
+        response.sendRedirect(request.getContextPath() + "/login");
+        return;
+    }
+
+    AddressDAO dao = new AddressDAO();
+    List<Address> addresses =
+            dao.getAddressesByUserId(currentUser.getId());
+
+    request.setAttribute("addresses", addresses);
+    request.getRequestDispatcher("/views/customer/address.jsp")
            .forward(request, response);
     }
 
