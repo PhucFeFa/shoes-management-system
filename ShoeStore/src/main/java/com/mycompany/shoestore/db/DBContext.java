@@ -12,6 +12,7 @@ public class DBContext {
     //private final String serverName = "SANG111203\\SQLEXPRESS";
     private final String dbName = "ShoesStore";
     //private final String dbName = "Shoes_Shop1";
+    //private final String dbName = "ShoesStore";
     private final String portNumber = "1433";
     private final String instance = ""; // Leave blank if not using named instance
     private final String userID = "sa";
