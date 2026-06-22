@@ -127,6 +127,13 @@
                 <span>Confirm Import</span>
             </a>
         </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/manage-voucher"
+               class="${activePage eq 'voucher' ? 'active' : ''}">
+                <i class="bi bi-ticket-perforated"></i>
+                <span>Voucher</span>
+            </a>
+        </li>
     </ul>
 
     <div class="sole-footer">
