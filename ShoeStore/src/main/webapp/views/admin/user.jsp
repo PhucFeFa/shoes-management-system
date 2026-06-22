@@ -303,7 +303,7 @@
                                             <td><span class="cell-date">${u.createdAt}</span></td>
                                             <td style="text-align:center">
                                                 <div class="action-wrap">
-                                                    <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">VIEW</a>
+                                                    <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">View</a>
                                                     <a href="${pageContext.request.contextPath}/manage-account/edit?id=${u.id}" class="btn-action btn-edit">Edit</a>
                                                     <c:choose>
                                                         <c:when test="${u.status eq 'Active'}">
