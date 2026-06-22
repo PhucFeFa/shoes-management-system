@@ -21,7 +21,7 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
     private static final List<String> PUBLIC_URLS = Arrays.asList(
-            "/home", "/login", "/Logout", "/products", "/product-detail"
+        "/home", "/login", "/Logout", "/products","/ProductDetail"
     );
 
     @Override
@@ -78,9 +78,8 @@ public class AuthFilter implements Filter {
             }
         }
 
-        if (path.startsWith("/customer") || path.equals("/Cart")
+        if (path.startsWith("/profile") || path.equals("/Cart")
                 || path.equals("/AddToCart") || path.equals("/UpdateCart") || path.equals("/RemoveCart")
-                || path.equals("/profile")
                 || path.equals("/AddAddress") || path.equals("/EditAddress") || path.equals("/DeleteAddress")) {
             if (!"Customer".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
