@@ -16,6 +16,7 @@ public class DBContext {
     private final String instance = ""; // Leave blank if not using named instance
     private final String userID = "sa";
     private final String password = "123456"; // Your SA password
+    //private final String password = "19092004"; // Your SA password
 
     public Connection getConnection() throws Exception {
         String url = "jdbc:sqlserver://" + serverName + ":" + portNumber + "\\" + instance + ";databaseName=" + dbName

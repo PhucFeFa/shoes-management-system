@@ -110,6 +110,44 @@ public class CartDAO {
         }
     }
 
+    public CartItem getCartItemByVariant(String userId,
+            String variantId)
+            throws Exception {
+
+        String sql
+                = "SELECT p.name, p.price, pv.id AS variant_id, "
+                + "pi.image_url, ci.quantity "
+                + "FROM carts c "
+                + "JOIN cart_items ci ON c.id = ci.cart_id "
+                + "JOIN product_variants pv ON ci.product_variant_id = pv.id "
+                + "JOIN products p ON pv.product_id = p.id "
+                + "LEFT JOIN product_images pi "
+                + "ON p.id = pi.product_id AND pi.sort_order = 1 "
+                + "WHERE c.user_id = ? "
+                + "AND pv.id = ?";
+
+        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            ps.setString(2, variantId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return new CartItem(
+                        rs.getString("name"),
+                        rs.getString("image_url"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        rs.getString("variant_id")
+                );
+            }
+        }
+
+        return null;
+    }
+
     // GET CART ITEMS
     public List<CartItem> getCart(String userId) throws Exception {
 
@@ -146,10 +184,10 @@ public class CartDAO {
 
     // GET CART TOTAL QUANTITY
     public int getCartTotalQuantity(String userId) throws Exception {
-        String sql = "SELECT SUM(quantity) as total FROM carts c " +
-                     "JOIN cart_items ci ON c.id = ci.cart_id " +
-                     "WHERE c.user_id = ?";
-        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "SELECT SUM(quantity) as total FROM carts c "
+                + "JOIN cart_items ci ON c.id = ci.cart_id "
+                + "WHERE c.user_id = ?";
+        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -233,23 +271,23 @@ public class CartDAO {
             }
         }
     }
+
     public void removeCartItem(String userId,
-                           String variantId) throws Exception {
+            String variantId) throws Exception {
 
-    String sql =
-        "DELETE ci " +
-        "FROM cart_items ci " +
-        "JOIN carts c ON ci.cart_id = c.id " +
-        "WHERE c.user_id = ? " +
-        "AND ci.product_variant_id = ?";
+        String sql
+                = "DELETE ci "
+                + "FROM cart_items ci "
+                + "JOIN carts c ON ci.cart_id = c.id "
+                + "WHERE c.user_id = ? "
+                + "AND ci.product_variant_id = ?";
 
-    try (Connection conn = db.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setString(1, userId);
-        ps.setString(2, variantId);
+            ps.setString(1, userId);
+            ps.setString(2, variantId);
 
-        ps.executeUpdate();
+            ps.executeUpdate();
+        }
     }
-}
 }

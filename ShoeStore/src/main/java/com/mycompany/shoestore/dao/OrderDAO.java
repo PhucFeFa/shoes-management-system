@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class OrderDAO {
 
@@ -20,11 +21,11 @@ public class OrderDAO {
         int offset = (page - 1) * PAGE_SIZE;
 
         StringBuilder sql = new StringBuilder(
-            "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
-          + "u.full_name AS customer_full_name, u.email AS customer_email "
-          + "FROM orders o "
-          + "JOIN users u ON o.user_id = u.id "
-          + "WHERE o.user_id = ? "
+                "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
+                + "u.full_name AS customer_full_name, u.email AS customer_email "
+                + "FROM orders o "
+                + "JOIN users u ON o.user_id = u.id "
+                + "WHERE o.user_id = ? "
         );
 
         if (statusFilter != null && !statusFilter.trim().isEmpty()) {
@@ -34,8 +35,7 @@ public class OrderDAO {
         sql.append("ORDER BY o.created_at DESC ");
         sql.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int idx = 1;
             ps.setString(idx++, userId);
@@ -71,15 +71,14 @@ public class OrderDAO {
 
     public int countOrdersByUser(String userId, String statusFilter) {
         StringBuilder sql = new StringBuilder(
-            "SELECT COUNT(*) FROM orders o WHERE o.user_id = ? "
+                "SELECT COUNT(*) FROM orders o WHERE o.user_id = ? "
         );
 
         if (statusFilter != null && !statusFilter.trim().isEmpty()) {
             sql.append("AND o.status = ? ");
         }
 
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int idx = 1;
             ps.setString(idx++, userId);
@@ -105,11 +104,11 @@ public class OrderDAO {
         int offset = (page - 1) * PAGE_SIZE;
 
         StringBuilder sql = new StringBuilder(
-            "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
-          + "u.full_name AS customer_full_name, u.email AS customer_email "
-          + "FROM orders o "
-          + "JOIN users u ON o.user_id = u.id "
-          + "WHERE 1=1 "
+                "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
+                + "u.full_name AS customer_full_name, u.email AS customer_email "
+                + "FROM orders o "
+                + "JOIN users u ON o.user_id = u.id "
+                + "WHERE 1=1 "
         );
 
         if (statusFilter != null && !statusFilter.trim().isEmpty()) {
@@ -124,17 +123,16 @@ public class OrderDAO {
         } else {
             sql.append("ORDER BY o.created_at ");
         }
-        
+
         if ("asc".equalsIgnoreCase(sortOrder)) {
             sql.append("ASC ");
         } else {
             sql.append("DESC ");
         }
-        
+
         sql.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
             if (statusFilter != null && !statusFilter.trim().isEmpty()) {
@@ -150,7 +148,7 @@ public class OrderDAO {
             ps.setInt(paramIndex++, offset);
             ps.setInt(paramIndex, PAGE_SIZE);
 
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Order o = new Order();
                     o.setId(rs.getString("id"));
@@ -174,10 +172,10 @@ public class OrderDAO {
 
     public int countAllOrders(String statusFilter, String keyword) {
         StringBuilder sql = new StringBuilder(
-            "SELECT COUNT(*) "
-          + "FROM orders o "
-          + "JOIN users u ON o.user_id = u.id "
-          + "WHERE 1=1 "
+                "SELECT COUNT(*) "
+                + "FROM orders o "
+                + "JOIN users u ON o.user_id = u.id "
+                + "WHERE 1=1 "
         );
 
         if (statusFilter != null && !statusFilter.trim().isEmpty()) {
@@ -187,8 +185,7 @@ public class OrderDAO {
             sql.append("AND (u.full_name LIKE ? OR u.email LIKE ? OR o.id LIKE ?) ");
         }
 
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
             if (statusFilter != null && !statusFilter.trim().isEmpty()) {
@@ -202,7 +199,7 @@ public class OrderDAO {
                 ps.setString(paramIndex++, idLike);
             }
 
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
@@ -220,20 +217,19 @@ public class OrderDAO {
 
     public OrderSummaryDTO getOrderSummaryById(String orderId) {
         String sql = "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
-                   + "u.full_name AS customer_full_name, u.email AS customer_email, "
-                   + "a.address_line, a.ward, a.district, a.city, "
-                   + "p.method AS payment_method, p.status AS payment_status "
-                   + "FROM orders o "
-                   + "JOIN users u ON o.user_id = u.id "
-                   + "LEFT JOIN addresses a ON o.address_id = a.id "
-                   + "LEFT JOIN payments p ON o.id = p.order_id "
-                   + "WHERE o.id = ?";
+                + "u.full_name AS customer_full_name, u.email AS customer_email, "
+                + "a.address_line, a.ward, a.district, a.city, "
+                + "p.method AS payment_method, p.status AS payment_status "
+                + "FROM orders o "
+                + "JOIN users u ON o.user_id = u.id "
+                + "LEFT JOIN addresses a ON o.address_id = a.id "
+                + "LEFT JOIN payments p ON o.id = p.order_id "
+                + "WHERE o.id = ?";
 
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, orderId);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     OrderSummaryDTO summary = new OrderSummaryDTO();
                     summary.setId(rs.getString("id"));
@@ -245,7 +241,7 @@ public class OrderDAO {
                     summary.setCreatedAt(rs.getTimestamp("created_at"));
                     summary.setCustomerFullName(rs.getString("customer_full_name"));
                     summary.setCustomerEmail(rs.getString("customer_email"));
-                    
+
                     summary.setAddressLine(rs.getString("address_line"));
                     summary.setWard(rs.getString("ward"));
                     summary.setDistrict(rs.getString("district"));
@@ -265,23 +261,22 @@ public class OrderDAO {
     public List<OrderDetailDTO> getOrderItemsByOrderId(String orderId) {
         List<OrderDetailDTO> items = new ArrayList<>();
         String sql = "SELECT oi.quantity, oi.price_at_purchase, "
-                   + "pv.size, pv.color, "
-                   + "p.name AS product_name, "
-                   + "b.name AS brand_name, "
-                   + "c.name AS category_name, "
-                   + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) AS image_url "
-                   + "FROM order_items oi "
-                   + "JOIN product_variants pv ON oi.product_variant_id = pv.id "
-                   + "JOIN products p ON pv.product_id = p.id "
-                   + "LEFT JOIN brands b ON p.brand_id = b.id "
-                   + "LEFT JOIN categories c ON p.category_id = c.id "
-                   + "WHERE oi.order_id = ?";
+                + "pv.size, pv.color, "
+                + "p.name AS product_name, "
+                + "b.name AS brand_name, "
+                + "c.name AS category_name, "
+                + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) AS image_url "
+                + "FROM order_items oi "
+                + "JOIN product_variants pv ON oi.product_variant_id = pv.id "
+                + "JOIN products p ON pv.product_id = p.id "
+                + "LEFT JOIN brands b ON p.brand_id = b.id "
+                + "LEFT JOIN categories c ON p.category_id = c.id "
+                + "WHERE oi.order_id = ?";
 
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, orderId);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     OrderDetailDTO item = new OrderDetailDTO();
                     item.setQuantity(rs.getInt("quantity"));
@@ -304,8 +299,7 @@ public class OrderDAO {
 
     public boolean updateOrderStatus(String orderId, String status) {
         String sql = "UPDATE orders SET status = ? WHERE id = ?";
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setString(2, orderId);
             return ps.executeUpdate() > 0;
@@ -318,10 +312,9 @@ public class OrderDAO {
 
     public int getCustomerCancellationCountLast30Days(String userId) {
         String sql = "SELECT COUNT(*) FROM order_cancellations WHERE user_id = ? AND created_at >= DATEADD(day, -30, SYSDATETIMEOFFSET())";
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
@@ -336,13 +329,13 @@ public class OrderDAO {
     public boolean cancelOrderWithTracking(String orderId, String userId, String reason) {
         String updateStatusSql = "UPDATE orders SET status = 'cancelled' WHERE id = ?";
         String insertTrackingSql = "INSERT INTO order_cancellations (order_id, user_id, reason) VALUES (?, ?, ?)";
-        
+
         Connection conn = null;
         try {
             conn = new DBContext().getConnection();
             conn.setAutoCommit(false);
 
-            try (PreparedStatement psUpdate = conn.prepareStatement(updateStatusSql)) {
+            try ( PreparedStatement psUpdate = conn.prepareStatement(updateStatusSql)) {
                 psUpdate.setString(1, orderId);
                 int updated = psUpdate.executeUpdate();
                 if (updated == 0) {
@@ -351,7 +344,7 @@ public class OrderDAO {
                 }
             }
 
-            try (PreparedStatement psInsert = conn.prepareStatement(insertTrackingSql)) {
+            try ( PreparedStatement psInsert = conn.prepareStatement(insertTrackingSql)) {
                 psInsert.setString(1, orderId);
                 psInsert.setString(2, userId);
                 psInsert.setString(3, reason);
@@ -385,12 +378,11 @@ public class OrderDAO {
 
     public boolean restoreStockForOrder(String orderId) {
         String sql = "UPDATE pv "
-                   + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
-                   + "FROM product_variants pv "
-                   + "JOIN order_items oi ON pv.id = oi.product_variant_id "
-                   + "WHERE oi.order_id = ?";
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
+                + "FROM product_variants pv "
+                + "JOIN order_items oi ON pv.id = oi.product_variant_id "
+                + "WHERE oi.order_id = ?";
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, orderId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -417,4 +409,104 @@ public class OrderDAO {
         }
         return false;
     }
+
+    public String createOrder(String userId, String addressId, double totalAmount) {
+        String orderId = UUID.randomUUID().toString();
+        String sql = "INSERT INTO orders (id, user_id, address_id, total_amount, status) "
+                + "VALUES (?, ?, ?, ?, 'pending')";
+
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, orderId);
+            ps.setString(2, userId);
+            ps.setString(3, addressId);
+            ps.setDouble(4, totalAmount);
+
+            ps.executeUpdate();
+            return orderId;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void addOrderItem(String orderId, String variantId, int quantity, double price) throws Exception {
+        String sql = "INSERT INTO order_items (id, order_id, product_variant_id, quantity, price_at_purchase) "
+                + "VALUES (NEWID(), ?, ?, ?, ?)";
+
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, orderId);
+            ps.setString(2, variantId);
+            ps.setInt(3, quantity);
+            ps.setDouble(4, price);
+
+            ps.executeUpdate();
+        }
+    }
+
+    public void clearCartAfterOrder(String userId, String variantId) {
+        String sql = "DELETE FROM cart_items "
+                + "WHERE cart_id = (SELECT id FROM carts WHERE user_id = ?) "
+                + "AND product_variant_id = ?";
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            ps.setString(2, variantId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String createOrder(String userId, String addressId, double totalAmount, String voucherId) {
+        String orderId = java.util.UUID.randomUUID().toString();
+
+        // Giữ nguyên GETDATE() của bạn và thêm cột voucher_id
+        String sql = "INSERT INTO orders (id, user_id, address_id, total_amount, voucher_id, status, created_at) "
+                + "VALUES (?, ?, ?, ?, ?, 'pending', GETDATE())";
+
+        // Khởi tạo kết nối bằng new DBContext().getConnection() giống hàm mẫu
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, orderId);
+            ps.setString(2, userId);
+            ps.setString(3, addressId);
+            ps.setDouble(4, totalAmount);
+
+            // Xử lý voucherId nếu bị null hoặc rỗng
+            if (voucherId == null || voucherId.isEmpty()) {
+                ps.setNull(5, java.sql.Types.VARCHAR);
+            } else {
+                ps.setString(5, voucherId);
+            }
+
+            ps.executeUpdate();
+            return orderId; // Trả về orderId khi thành công
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Trả về null nếu xảy ra lỗi giống hàm mẫu
+        }
+    }
+    public boolean updateProductStock(
+        String variantId,
+        int quantity) throws Exception {
+
+    String sql =
+            "UPDATE product_variants "
+            + "SET stock_quantity = stock_quantity - ? "
+            + "WHERE id = ? "
+            + "AND stock_quantity >= ?";
+
+    try (Connection conn = new DBContext().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, quantity);
+        ps.setString(2, variantId);
+        ps.setInt(3, quantity);
+
+        return ps.executeUpdate() > 0;
+    }
+}
 }

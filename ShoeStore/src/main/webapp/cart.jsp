@@ -216,10 +216,7 @@
                                                                                     <span>${cart.size()}</span>
                                                                                 </div>
 
-                                                                                <div class="flex justify-between">
-                                                                                    <span>Shipping</span>
-                                                                                    <span>Free</span>
-                                                                                </div>
+                                                                             
 
                                                                                 <hr>
 
@@ -240,10 +237,8 @@
 
                                                                             <form id="checkoutForm"
                                                                                   action="${pageContext.request.contextPath}/checkout"
-                                                                                  method="post">
-
+                                                                                  method ="POST">
                                                                                 <div id="selectedProducts"></div>
-
                                                                                 <button type="submit"
                                                                                         class="block w-full mt-8 text-center bg-black text-white py-4 uppercase tracking-wider hover:bg-gray-800 transition rounded-lg">
                                                                                     Proceed To Checkout
@@ -300,7 +295,63 @@
                                                                         calculateTotal();
 
                                                                     });
+                                                                    document.getElementById("checkoutForm")
+                                                                            .addEventListener("submit", function (e) {
 
+                                                                                const container =
+                                                                                        document.getElementById("selectedProducts");
+
+                                                                                container.innerHTML = "";
+
+                                                                                let checkedCount = 0;
+
+                                                                                document.querySelectorAll(".cart-checkbox")
+                                                                                        .forEach(cb => {
+
+                                                                                            if (cb.checked) {
+
+                                                                                                checkedCount++;
+
+                                                                                                const input =
+                                                                                                        document.createElement("input");
+
+                                                                                                input.type = "hidden";
+                                                                                                input.name = "selectedItems";
+                                                                                                input.value = cb.value;
+
+                                                                                                container.appendChild(input);
+                                                                                            }
+                                                                                        });
+
+                                                                                if (checkedCount === 0) {
+
+                                                                                    e.preventDefault();
+
+                                                                                    alert("Please select at least one product.");
+                                                                                }
+                                                                            });
+                                                                    function calculateTotal() {
+
+                                                                        let total = 0;
+                                                                        let count = 0;
+
+                                                                        document.querySelectorAll(".cart-checkbox").forEach(cb => {
+
+                                                                            if (cb.checked) {
+
+                                                                                total += Number(cb.dataset.price)
+                                                                                        * Number(cb.dataset.qty);
+
+                                                                                count++;
+                                                                            }
+                                                                        });
+
+                                                                        document.getElementById("grandTotal").innerHTML =
+                                                                                "$" + total.toFixed(2);
+
+                                                                        document.getElementById("selectedCount").innerHTML =
+                                                                                count;
+                                                                    }
                                                                 </script>
 
                                                                 </main>

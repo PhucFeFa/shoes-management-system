@@ -75,6 +75,36 @@ public class AddressDAO {
         return list;
     }
 
+    public List<Address> getAddressesByUser(String userId) {
+        List<Address> addresses = new ArrayList<>();
+        String sql = "SELECT * FROM addresses WHERE user_id = ?";
+
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Address addr = new Address();
+                addr.setId(rs.getString("id"));
+                addr.setUserId(rs.getString("user_id"));
+                addr.setCity(rs.getString("city"));
+                addr.setDistrict(rs.getString("district"));
+                addr.setWard(rs.getString("ward"));
+                addr.setAddressLine(rs.getString("address_line"));
+                addresses.add(addr);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return addresses;
+    }
+
+    public Address getDefaultAddress(String userId) {
+        List<Address> list = getAddressesByUser(userId);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
     public boolean deleteAddress(String id) {
 
         String sql
