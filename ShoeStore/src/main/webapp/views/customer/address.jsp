@@ -1,6 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html class="light" lang="en">
@@ -8,8 +6,8 @@
     <head>
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>ADIDIS | Profile</title>
-        <meta name="description" content="Manage your ADIDIS profile." />
+        <title>ADIDIS | My Addresses</title>
+        <meta name="description" content="Manage your ADIDIS shipping addresses." />
 
         <link href="https://fonts.googleapis.com" rel="preconnect" />
         <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -119,22 +117,20 @@
         </style>
     </head>
 
-    <body
-        class="bg-background text-on-background font-body-md text-body-md antialiased flex selection:bg-primary selection:text-on-primary min-h-screen">
+    <body class="bg-background text-on-background font-body-md text-body-md antialiased flex selection:bg-primary selection:text-on-primary min-h-screen">
 
-        <aside
-            class="fixed left-0 top-0 h-full w-64 border-r border-outline-variant bg-surface flex flex-col py-base z-40">
+        <aside class="fixed left-0 top-0 h-full w-64 border-r border-outline-variant bg-surface flex flex-col py-base z-40">
             <div class="px-6 py-8 border-b border-outline-variant/50">
                 <a href="${pageContext.request.contextPath}/home">
-                    <h1
-                        class="font-headline-md text-headline-md font-bold text-primary tracking-tighter uppercase">
-                        ADIDIS</h1>
+                    <h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tighter uppercase">
+                        ADIDIS
+                    </h1>
                 </a>
                 <p class="font-label-sm text-label-sm text-secondary mt-1">My Account</p>
             </div>
 
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                    href="${pageContext.request.contextPath}/profile">
                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                     Profile
@@ -144,7 +140,7 @@
                     <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                     Orders
                 </a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                    href="${pageContext.request.contextPath}/Address">
                     <span class="material-symbols-outlined text-[20px]">location_on</span>
                     Addresses
@@ -152,7 +148,6 @@
             </nav>
 
             <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
-
                 <div class="space-y-1">
                     <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
                        href="${pageContext.request.contextPath}/home">
@@ -170,42 +165,82 @@
 
         <main class="ml-64 flex-1 flex flex-col min-h-screen">
 
-            <header
-                class="px-margin-desktop pt-margin-desktop pb-8 flex justify-between items-end border-b border-outline-variant/30">
+            <header class="px-margin-desktop pt-margin-desktop pb-8 flex justify-between items-end border-b border-outline-variant/30">
                 <div>
-                    <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Profile</h2>
+                    <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight uppercase">My Addresses</h2>
                     <p class="font-body-md text-body-md text-secondary mt-2 max-w-lg">
-                        Manage your account details and addresses.
+                        Manage your shipping addresses.
                     </p>
                 </div>
-                <div class="flex gap-4">
+                <div>
+                    <a href="${pageContext.request.contextPath}/AddAddress"
+                       class="inline-flex items-center justify-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-DEFAULT uppercase font-label-md text-label-md font-semibold hover:opacity-90 transition-all active:scale-95">
+                        <span class="material-symbols-outlined text-[18px]">add</span>
+                        Add Address
+                    </a>
                 </div>
             </header>
 
             <section class="px-margin-desktop py-12 flex-1 max-w-5xl">
-                <!-- User Information -->
-                <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm">
-                    <h3
-                        class="font-headline-md text-headline-md uppercase tracking-tight mb-6 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[24px]">person</span>
-                        Account Info
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Full Name
-                            </p>
-                            <p class="font-body-lg text-body-lg font-bold">
-                                ${sessionScope.currentUser.fullName}</p>
-                        </div>
-                        <div>
-                            <p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Email
-                                Address</p>
-                            <p class="font-body-lg text-body-lg font-bold">${sessionScope.currentUser.email}
+                
+                <c:choose>
+                    <c:when test="${empty addresses}">
+                        <div class="border border-dashed border-outline-variant bg-surface rounded-xl py-16 flex flex-col items-center justify-center">
+                            <span class="material-symbols-outlined text-[64px] text-secondary/50 mb-4">
+                                location_off
+                            </span>
+                            <h3 class="text-xl font-semibold text-primary mb-2">
+                                No Address Found
+                            </h3>
+                            <p class="text-secondary">
+                                You haven't added any shipping address yet.
                             </p>
                         </div>
-                    </div>
-                </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <c:forEach var="address" items="${addresses}">
+                                <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+                                    
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-4">
+                                            <span class="material-symbols-outlined text-primary">
+                                                home_pin
+                                            </span>
+                                            <h3 class="font-bold text-lg uppercase tracking-wider text-primary">
+                                                Delivery Address
+                                            </h3>
+                                        </div>
+                                        <p class="font-bold text-primary mb-2">
+                                            ${address.addressLine}
+                                        </p>
+                                        <p class="text-secondary">
+                                            ${address.ward}, ${address.district}
+                                        </p>
+                                        <p class="text-secondary">
+                                            ${address.city}
+                                        </p>
+                                    </div>
 
+                                    <div class="flex items-center gap-6 mt-6 pt-4 border-t border-outline-variant/50">
+                                        <a href="${pageContext.request.contextPath}/EditAddress?id=${address.id}"
+                                           class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold uppercase text-sm transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                                            Edit
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/DeleteAddress?id=${address.id}"
+                                           onclick="return confirm('Delete this address?')"
+                                           class="inline-flex items-center gap-1 text-red-600 hover:text-red-800 font-semibold uppercase text-sm transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                                            Delete
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
             </section>
         </main>
