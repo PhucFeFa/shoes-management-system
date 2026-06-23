@@ -166,7 +166,7 @@
                     </c:if>
 
                     <c:if test="${not empty sessionScope.currentUser}">
-                        <a href="${pageContext.request.contextPath}/profile" class="relative group cursor-pointer block mt-1">
+                        <a href="${pageContext.request.contextPath}${sessionScope.currentUser.roleName eq 'Admin' or sessionScope.currentUser.roleName eq 'Staff' ? '/dashboard' : '/profile'}" class="relative group cursor-pointer block mt-1">
                             <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
                         </a>
 
