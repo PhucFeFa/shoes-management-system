@@ -52,11 +52,11 @@ public class LoginServlet extends HttpServlet {
 
             // Phân quyền điều hướng 
             String roleName = user.getRoleName();
-            if ("Admin".equalsIgnoreCase(roleName)) {
+            if ("Admin".equalsIgnoreCase(roleName) || "Staff".equalsIgnoreCase(roleName)) {
+                // Cả Admin và Staff
                 response.sendRedirect(request.getContextPath() + "/dashboard");
-            } else if ("Staff".equalsIgnoreCase(roleName)) {
-                response.sendRedirect(request.getContextPath() + "/import");
             } else {
+                //Customer
                 response.sendRedirect(request.getContextPath() + "/home");
             }
         } else {

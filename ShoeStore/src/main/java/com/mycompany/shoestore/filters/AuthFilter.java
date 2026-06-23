@@ -21,7 +21,7 @@ import java.util.List;
 public class AuthFilter implements Filter {
 
     private static final List<String> PUBLIC_URLS = Arrays.asList(
-        "/home", "/login", "/Logout", "/products","/ProductDetail"
+            "/home", "/login", "/Logout", "/products", "/ProductDetail"
     );
 
     @Override
@@ -64,15 +64,22 @@ public class AuthFilter implements Filter {
 
         String roleName = currentUser.getRoleName();
 
-        if (path.startsWith("/admin") || path.equals("/dashboard") || path.equals("/manage-account") || path.equals("/import")) {
+        // Admin và Staff coi dc
+        if (path.equals("/dashboard") || path.equals("/admin")) {
+            if (!"Admin".equalsIgnoreCase(roleName) && !"Staff".equalsIgnoreCase(roleName)) {
+                httpRes.sendRedirect(contextPath + "/home");
+                return;
+            }
+        } //Admin 
+        else if (path.startsWith("/admin/") || path.equals("/manage-account") || path.equals("/import")
+                || path.equals("/manage-voucher") || path.equals("/create-voucher")) {
             if (!"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }
-        }
-
-        if (path.startsWith("/staff")) {
-            if (!"Staff".equalsIgnoreCase(roleName) && !"Admin".equalsIgnoreCase(roleName)) {
+        } //Staff
+        else if (path.startsWith("/staff")) {
+            if (!"Staff".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }
