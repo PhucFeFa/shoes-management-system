@@ -158,6 +158,10 @@
     </ul>
 
     <div class="sole-footer">
+        <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/home'" style="margin-bottom: 8px;">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <span>Back to Shop</span>
+        </button>
         <form action="${pageContext.request.contextPath}/Logout" method="GET" style="margin: 0; width: 100%;">
             <button type="submit">
                 <span class="material-symbols-outlined">logout</span>

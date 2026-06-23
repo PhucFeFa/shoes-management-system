@@ -46,6 +46,11 @@
     <!-- CTA & Footer -->
     <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
         <div class="space-y-1 mt-2">
+            <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-lg transition-colors"
+               href="${pageContext.request.contextPath}/home">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                Back to Shop
+            </a>
             <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-lg transition-colors" href="#">
                 <span class="material-symbols-outlined text-[18px]">help</span>
                 Help
