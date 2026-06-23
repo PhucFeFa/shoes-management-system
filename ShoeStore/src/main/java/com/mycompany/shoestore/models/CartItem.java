@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.shoestore.models;
 
-/**
- *
- * @author pts03
- */
 public class CartItem {
 
     private String productName;
@@ -16,21 +8,83 @@ public class CartItem {
     private int quantity;
     private String productVariantId;
 
-    public CartItem() {}
+    // thêm
+    private String size;
+    private String color;
 
-    public CartItem(String productName, String imageUrl, double price, int quantity, String productVariantId) {
+    public CartItem() {
+    }
+
+    public CartItem(String productName,
+                    String imageUrl,
+                    double price,
+                    int quantity,
+                    String productVariantId,
+                    String size,
+                    String color) {
+
         this.productName = productName;
         this.imageUrl = imageUrl;
         this.price = price;
         this.quantity = quantity;
         this.productVariantId = productVariantId;
+        this.size = size;
+        this.color = color;
     }
 
-    public String getProductName() { return productName; }
-    public String getImageUrl() { return imageUrl; }
-    public double getPrice() { return price; }
-    public int getQuantity() { return quantity; }
-    public String getProductVariantId() { return productVariantId; }
+    public String getProductName() {
+        return productName;
+    }
 
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getProductVariantId() {
+        return productVariantId;
+    }
+
+    public void setProductVariantId(String productVariantId) {
+        this.productVariantId = productVariantId;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

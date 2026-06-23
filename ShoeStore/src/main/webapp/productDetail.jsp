@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="/WEB-INF/include/header.jsp"/>
 
 <<<<<<< Updated upstream
@@ -74,7 +75,7 @@
                     </div>
 
                     <!-- Price -->
-                    <div class="mb-10">
+                    <div class="mb-6">
 
                         <span class="text-gray-500 block mb-2">
                             Price
@@ -86,7 +87,51 @@
 
                     </div>
 
-                    <!-- Buttons -->
+                    <div class="mb-4">
+
+                        <label class="block font-semibold mb-2">
+                            Size
+                        </label>
+
+                        <select id="sizeSelect"
+                                class="w-full border rounded-lg px-4 py-3">
+
+                            <option value="">
+                                Select Size
+                            </option>
+
+                            <c:forEach var="size" items="${sizes}">
+                                <option value="${size}">
+                                    ${size}
+                                </option>
+                            </c:forEach>
+
+                        </select>
+
+                    </div>
+                    <div class="mb-6">
+
+                        <label class="block font-semibold mb-2">
+                            Color
+                        </label>
+
+                        <select id="colorSelect"
+                                class="w-full border rounded-lg px-4 py-3">
+
+                            <option value="">
+                                Select Color
+                            </option>
+
+                            <c:forEach var="color" items="${colors}">
+                                <option value="${color}">
+                                    ${color}
+                                </option>
+                            </c:forEach>
+
+                        </select>
+
+                    </div>
+
                     <div class="flex flex-wrap gap-4">
 
                         <form action="${pageContext.request.contextPath}/AddToCart"
@@ -95,6 +140,10 @@
                             <input type="hidden"
                                    name="productId"
                                    value="${product.id}">
+
+                            <input type="hidden"
+                                   id="selectedVariantId"
+                                   name="variantId">
 
                             <input type="hidden"
                                    name="returnUrl"
@@ -117,6 +166,48 @@
                 </div>
 
             </div>
-</main>
+            <script>
 
-<jsp:include page="/WEB-INF/include/footer.jsp"/>
+                const variants = [
+
+                <c:forEach var="v" items="${variants}" varStatus="s">
+                {
+                id : "${v.id}",
+                        size : "${v.size}",
+                        color : "${v.color}"
+                }
+                    <c:if test="${!s.last}">,</c:if>
+                </c:forEach>
+
+                ];
+
+                document.getElementById("sizeSelect")
+                        .addEventListener("change", updateVariant);
+
+                document.getElementById("colorSelect")
+                        .addEventListener("change", updateVariant);
+
+                function updateVariant() {
+
+                    let size =
+                            document.getElementById("sizeSelect").value;
+
+                    let color =
+                            document.getElementById("colorSelect").value;
+
+                    let variant = variants.find(v =>
+                        v.size === size &&
+                                v.color === color
+                    );
+
+                    if (variant) {
+
+                        document.getElementById("selectedVariantId")
+                                .value = variant.id;
+                    }
+                }
+
+            </script>
+            </main>
+
+            <jsp:include page="/WEB-INF/include/footer.jsp"/>
