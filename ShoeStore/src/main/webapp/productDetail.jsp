@@ -7,6 +7,8 @@
     <div class="max-w-6xl mx-auto px-6">
         <div class="bg-white rounded-2xl shadow-lg border p-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+```
             <!-- Image -->
             <div class="flex items-center justify-center">
                 <img src="${product.firstImageUrl}"

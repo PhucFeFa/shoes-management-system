@@ -171,7 +171,20 @@
                                                 <span
                                                     class="text-label-sm text-secondary mt-1">${p.category.name}</span>
 
-
+                                                <div
+                                                    class="mt-auto pt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                    <!-- Quick Add Form -->
+                                                    <form action="${pageContext.request.contextPath}/AddToCart"
+                                                        method="POST">
+                                                        <input type="hidden" name="productId" value="${p.id}">
+                                                        <button type="submit"
+                                                            class="w-full bg-primary text-on-primary py-3 text-label-sm font-label-sm uppercase tracking-widest hover:bg-primary/90 flex justify-center items-center gap-2">
+                                                            <span
+                                                                class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                                            ADD TO CART
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </c:forEach>

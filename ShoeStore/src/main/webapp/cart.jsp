@@ -114,23 +114,9 @@
 
                                     </div>
 
-                                    <div class="mt-2 flex flex-wrap gap-3">
-
-                                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">
-                                            Size:
-                                            <span class="font-semibold">
-                                                ${item.size}
-                                            </span>
-                                        </span>
-
-                                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">
-                                            Color:
-                                            <span class="font-semibold">
-                                                ${item.color}
-                                            </span>
-                                        </span>
-
-                                    </div>
+                                    <p class="text-gray-500 mt-1">
+                                        Premium Sneaker Collection
+                                    </p>
 
                                     <div class="mt-4 flex flex-wrap gap-8">
 

@@ -16,10 +16,9 @@ import java.util.Set;
 @WebServlet(name = "ProductDetail", urlPatterns = {"/ProductDetail"})
 public class ProductDetailServlet extends HttpServlet {
 
-    private final ProductDAO dao = new ProductDAO();
+    ProductDAO dao = new ProductDAO();
 
-    protected void processRequest(HttpServletRequest request,
-            HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
@@ -39,8 +38,7 @@ public class ProductDetailServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String productId = request.getParameter("id");
@@ -54,14 +52,14 @@ public class ProductDetailServlet extends HttpServlet {
                 return;
             }
 
-            List<ProductVariant> variants
-                    = dao.getVariantsByProductId(productId);
+            List<ProductVariant> variants =
+                    dao.getVariantsByProductId(productId);
 
-            Set<String> sizes
-                    = dao.getSizesByProduct(productId);
+            Set<String> sizes =
+                    dao.getSizesByProduct(productId);
 
-            Set<String> colors
-                    = dao.getColorsByProduct(productId);
+            Set<String> colors =
+                    dao.getColorsByProduct(productId);
 
             request.setAttribute("product", product);
             request.setAttribute("variants", variants);
@@ -78,8 +76,7 @@ public class ProductDetailServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         processRequest(request, response);
