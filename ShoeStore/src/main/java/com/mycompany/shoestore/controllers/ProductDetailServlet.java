@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.mycompany.shoestore.controllers;
 
 import com.mycompany.shoestore.dao.ProductDAO;
@@ -17,97 +13,77 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
 
-/**
- *
- * @author pts03
- */
 @WebServlet(name = "ProductDetail", urlPatterns = {"/ProductDetail"})
 public class ProductDetailServlet extends HttpServlet {
 
     ProductDAO dao = new ProductDAO();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+
+        try (PrintWriter out = response.getWriter()) {
+
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProductDetailServlet at "
+                    + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-       String productId = request.getParameter("id");
+        String productId = request.getParameter("id");
 
-    try {
-        ProductDAO dao = new ProductDAO();
-        Product product = dao.getProductById(productId);
-        List<ProductVariant> variants = dao.getVariantsByProductId(productId); // Đã có sẵn trong file bạn cung cấp
+        try {
 
-        Set<String> sizes = dao.getSizesByProduct(productId);
-        Set<String> colors = dao.getColorsByProduct(productId);
+            Product product = dao.getProductById(productId);
 
-        request.setAttribute("product", product);
-        request.setAttribute("variants", variants);
-        request.setAttribute("sizes", sizes);
-        request.setAttribute("colors", colors);
+            if (product == null) {
+                response.sendRedirect(request.getContextPath() + "/home");
+                return;
+            }
 
-        request.getRequestDispatcher("/productDetail.jsp").forward(request, response);
+            List<ProductVariant> variants =
+                    dao.getVariantsByProductId(productId);
 
-    } catch (Exception e) {
-        throw new ServletException(e);
+            Set<String> sizes =
+                    dao.getSizesByProduct(productId);
+
+            Set<String> colors =
+                    dao.getColorsByProduct(productId);
+
+            request.setAttribute("product", product);
+            request.setAttribute("variants", variants);
+            request.setAttribute("sizes", sizes);
+            request.setAttribute("colors", colors);
+
+            request.getRequestDispatcher("/productDetail.jsp")
+                    .forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException("Error loading product detail", e);
+        }
     }
-    }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Product Detail Servlet";
     }
 }
