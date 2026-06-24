@@ -136,16 +136,7 @@
                 <div class="flex items-center gap-8">
                     <a class="text-headline-md font-headline-md font-extrabold tracking-tighter text-primary dark:text-on-surface"
                        href="${pageContext.request.contextPath}/home">ADIDIS</a>
-                    <div class="hidden md:flex gap-6">
-                        <a class="text-label-md font-label-md uppercase text-primary dark:text-on-surface border-b-2 border-primary dark:border-on-surface pb-1"
-                           href="${pageContext.request.contextPath}/products">SHOP</a>
-                        <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                           href="#">NEW ARRIVALS</a>
-                        <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                           href="#">LABS</a>
-                        <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                           href="#">COLLECTIONS</a>
-                    </div>
+
                 </div>
                 <div class="flex items-center gap-4">
 
