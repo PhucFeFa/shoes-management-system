@@ -1,6 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html class="light" lang="en">
@@ -8,8 +6,8 @@
     <head>
         <meta charset="utf-8" />
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>ADIDIS | Profile</title>
-        <meta name="description" content="Manage your ADIDIS profile." />
+        <title>ADIDIS | My Addresses</title>
+        <meta name="description" content="Manage your ADIDIS shipping addresses." />
 
         <link href="https://fonts.googleapis.com" rel="preconnect" />
         <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -119,51 +117,90 @@
         </style>
     </head>
 
-    <body
-        class="bg-background text-on-background font-body-md text-body-md antialiased flex selection:bg-primary selection:text-on-primary min-h-screen">
+    <body class="bg-background text-on-background font-body-md text-body-md antialiased flex selection:bg-primary selection:text-on-primary min-h-screen">
 
         <jsp:include page="sidebar.jsp">
-            <jsp:param name="activePage" value="profile" />
+            <jsp:param name="activePage" value="address" />
         </jsp:include>
 
         <main class="ml-64 flex-1 flex flex-col min-h-screen">
 
-            <header
-                class="px-margin-desktop pt-margin-desktop pb-8 flex justify-between items-end border-b border-outline-variant/30">
+            <header class="px-margin-desktop pt-margin-desktop pb-8 flex justify-between items-end border-b border-outline-variant/30">
                 <div>
-                    <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Profile</h2>
+                    <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight uppercase">My Addresses</h2>
                     <p class="font-body-md text-body-md text-secondary mt-2 max-w-lg">
-                        Manage your account details and addresses.
+                        Manage your shipping addresses.
                     </p>
                 </div>
-                <div class="flex gap-4">
+                <div>
+                    <a href="${pageContext.request.contextPath}/AddAddress"
+                       class="inline-flex items-center justify-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-DEFAULT uppercase font-label-md text-label-md font-semibold hover:opacity-90 transition-all active:scale-95">
+                        <span class="material-symbols-outlined text-[18px]">add</span>
+                        Add Address
+                    </a>
                 </div>
             </header>
 
             <section class="px-margin-desktop py-12 flex-1 max-w-5xl">
-                <!-- User Information -->
-                <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm">
-                    <h3
-                        class="font-headline-md text-headline-md uppercase tracking-tight mb-6 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[24px]">person</span>
-                        Account Info
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Full Name
-                            </p>
-                            <p class="font-body-lg text-body-lg font-bold">
-                                ${sessionScope.currentUser.fullName}</p>
-                        </div>
-                        <div>
-                            <p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Email
-                                Address</p>
-                            <p class="font-body-lg text-body-lg font-bold">${sessionScope.currentUser.email}
+                
+                <c:choose>
+                    <c:when test="${empty addresses}">
+                        <div class="border border-dashed border-outline-variant bg-surface rounded-xl py-16 flex flex-col items-center justify-center">
+                            <span class="material-symbols-outlined text-[64px] text-secondary/50 mb-4">
+                                location_off
+                            </span>
+                            <h3 class="text-xl font-semibold text-primary mb-2">
+                                No Address Found
+                            </h3>
+                            <p class="text-secondary">
+                                You haven't added any shipping address yet.
                             </p>
                         </div>
-                    </div>
-                </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <c:forEach var="address" items="${addresses}">
+                                <div class="bg-surface border border-outline-variant rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+                                    
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-4">
+                                            <span class="material-symbols-outlined text-primary">
+                                                home_pin
+                                            </span>
+                                            <h3 class="font-bold text-lg uppercase tracking-wider text-primary">
+                                                Delivery Address
+                                            </h3>
+                                        </div>
+                                        <p class="font-bold text-primary mb-2">
+                                            ${address.addressLine}
+                                        </p>
+                                        <p class="text-secondary">
+                                            ${address.ward}, ${address.district}
+                                        </p>
+                                        <p class="text-secondary">
+                                            ${address.city}
+                                        </p>
+                                    </div>
 
+                                    <div class="flex items-center gap-6 mt-6 pt-4 border-t border-outline-variant/50">
+                                        <a href="${pageContext.request.contextPath}/EditAddress?id=${address.id}"
+                                           class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 font-semibold uppercase text-sm transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                                            Edit
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/DeleteAddress?id=${address.id}"
+                                           onclick="return confirm('Delete this address?')"
+                                           class="inline-flex items-center gap-1 text-red-600 hover:text-red-800 font-semibold uppercase text-sm transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                                            Delete
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
 
             </section>
         </main>
