@@ -81,4 +81,48 @@ INSERT INTO "import_details" ("ImportID", "ProductID", "ImportQuantity", "Receiv
 (1, '10000000-0000-0000-0000-000000000001', 30, 30, 80.00),  
 (2, '10000000-0000-0000-0000-000000000001', 30, 0, 120.00);
 
+-- ====================================================================
+-- BƯỚC 3: DỮ LIỆU MẪU CHO REVIEW VÀ ĐƠN HÀNG (Dành cho Test)
+-- ====================================================================
+
+-- 9. Khách hàng ảo (Virtual Users) và Địa chỉ (Addresses)
+INSERT INTO "users" ("id", "email", "password_hash", "role_id", "full_name") VALUES 
+('88888888-8888-8888-8888-888888888888', 'virtual1@solelab.com', '123456', '22222222-2222-2222-2222-222222222222', N'Nguyễn Văn Ảo'),
+('77777777-7777-7777-7777-777777777777', 'virtual2@solelab.com', '123456', '22222222-2222-2222-2222-222222222222', N'Trần Thị Giả');
+
+INSERT INTO "addresses" ("id", "user_id", "city", "district", "ward", "address_line") VALUES
+('1A1A1A1A-1A1A-1A1A-1A1A-1A1A1A1A1A1A', '99999999-9999-9999-9999-999999999999', N'Hà Nội', N'Cầu Giấy', N'Dịch Vọng Hậu', N'Số 1, Tôn Thất Thuyết'),
+('2A2A2A2A-2A2A-2A2A-2A2A-2A2A2A2A2A2A', '88888888-8888-8888-8888-888888888888', N'TP HCM', N'Quận 1', N'Bến Nghé', N'Đường Lê Duẩn'),
+('3A3A3A3A-3A3A-3A3A-3A3A-3A3A3A3A3A3A', '77777777-7777-7777-7777-777777777777', N'Đà Nẵng', N'Hải Châu', N'Hải Châu 1', N'Đường Bạch Đằng');
+
+-- 10. Orders & Order Items
+-- Đơn hàng hoàn thành cho Test User (Mua TẤT CẢ 4 sản phẩm để test Review)
+DECLARE @orderTestId UNIQUEIDENTIFIER = NEWID();
+INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "created_at") VALUES
+(@orderTestId, '99999999-9999-9999-9999-999999999999', '1A1A1A1A-1A1A-1A1A-1A1A-1A1A1A1A1A1A', 590.00, 'completed', SYSDATETIMEOFFSET());
+
+INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
+SELECT NEWID(), @orderTestId, id, 1, 150.00, SYSDATETIMEOFFSET() FROM "product_variants";
+
+-- Đơn hàng hoàn thành cho Virtual User 1
+DECLARE @orderVirtual1Id UNIQUEIDENTIFIER = NEWID();
+INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "created_at") VALUES
+(@orderVirtual1Id, '88888888-8888-8888-8888-888888888888', '2A2A2A2A-2A2A-2A2A-2A2A-2A2A2A2A2A2A', 160.00, 'completed', SYSDATETIMEOFFSET());
+
+INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
+SELECT TOP 1 NEWID(), @orderVirtual1Id, id, 1, 160.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001';
+
+-- Đơn hàng hoàn thành cho Virtual User 2
+DECLARE @orderVirtual2Id UNIQUEIDENTIFIER = NEWID();
+INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "created_at") VALUES
+(@orderVirtual2Id, '77777777-7777-7777-7777-777777777777', '3A3A3A3A-3A3A-3A3A-3A3A-3A3A3A3A3A3A', 190.00, 'completed', SYSDATETIMEOFFSET());
+
+INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
+SELECT TOP 1 NEWID(), @orderVirtual2Id, id, 1, 190.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000002';
+
+-- 11. Đánh giá ngẫu nhiên (Dummy Reviews)
+INSERT INTO "reviews" ("id", "user_id", "product_id", "rating", "comment", "created_at") VALUES
+(NEWID(), '88888888-8888-8888-8888-888888888888', '10000000-0000-0000-0000-000000000001', 5, N'Giày rất đẹp, chạy rất êm chân! Điểm 10 cho chất lượng.', SYSDATETIMEOFFSET()),
+(NEWID(), '77777777-7777-7777-7777-777777777777', '10000000-0000-0000-0000-000000000002', 4, N'Giao hàng nhanh, form giày hơi ôm nên mua tăng 1 size.', SYSDATETIMEOFFSET());
+
 PRINT 'Thêm dữ liệu mẫu hoàn tất!';
