@@ -1,13 +1,12 @@
 package com.mycompany.shoestore.models;
 
 public class CartItem {
-
+    
     private String productName;
     private String imageUrl;
     private double price;
     private int quantity;
     private String productVariantId;
-
     private String size;
     private String color;
 
@@ -21,7 +20,6 @@ public class CartItem {
                     String productVariantId,
                     String size,
                     String color) {
-
         this.productName = productName;
         this.imageUrl = imageUrl;
         this.price = price;
@@ -31,14 +29,7 @@ public class CartItem {
         this.color = color;
     }
 
-    public CartItem(String productName, String imageUrl, double price, int quantity, String productVariantId) {
-        this.productName = productName;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.quantity = quantity;
-        this.productVariantId = productVariantId;
-    }
-    
+    // ================== GETTERS & SETTERS ==================
 
     public String getProductName() {
         return productName;
@@ -96,6 +87,7 @@ public class CartItem {
         this.color = color;
     }
 
+    // Helper method
     public double getTotalPrice() {
         return price * quantity;
     }
