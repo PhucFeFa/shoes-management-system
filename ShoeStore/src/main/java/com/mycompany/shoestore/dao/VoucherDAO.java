@@ -55,4 +55,37 @@ public class VoucherDAO {
         return ps.executeUpdate() > 0;
     }
 }
+    public Voucher getVoucherById(String voucherId) throws Exception {
+
+    String sql =
+            "SELECT id, code, discount_percent "
+            + "FROM vouchers "
+            + "WHERE id = ? "
+            + "AND quantity > 0 "
+            + "AND start_date <= SYSDATETIMEOFFSET() "
+            + "AND end_date >= SYSDATETIMEOFFSET()";
+
+    try (Connection conn = db.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, voucherId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+
+                Voucher voucher = new Voucher();
+
+                voucher.setId(rs.getString("id"));
+                voucher.setCode(rs.getString("code"));
+                voucher.setDiscountPercent(
+                        rs.getDouble("discount_percent"));
+
+                return voucher;
+            }
+        }
+    }
+
+    return null;
+}
 }

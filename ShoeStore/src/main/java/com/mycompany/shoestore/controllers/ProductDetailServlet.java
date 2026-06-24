@@ -6,6 +6,7 @@ package com.mycompany.shoestore.controllers;
 
 import com.mycompany.shoestore.dao.ProductDAO;
 import com.mycompany.shoestore.models.Product;
+import com.mycompany.shoestore.models.ProductVariant;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,19 +14,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author pts03
  */
-
 @WebServlet(name = "ProductDetail", urlPatterns = {"/ProductDetail"})
 public class ProductDetailServlet extends HttpServlet {
 
     ProductDAO dao = new ProductDAO();
-
-
-
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,23 +65,26 @@ public class ProductDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String productId = request.getParameter("id");
+       String productId = request.getParameter("id");
 
+    try {
+        ProductDAO dao = new ProductDAO();
+        Product product = dao.getProductById(productId);
+        List<ProductVariant> variants = dao.getVariantsByProductId(productId); // Đã có sẵn trong file bạn cung cấp
 
-        try {
+        Set<String> sizes = dao.getSizesByProduct(productId);
+        Set<String> colors = dao.getColorsByProduct(productId);
 
-            Product product = dao.getProductById(productId);
+        request.setAttribute("product", product);
+        request.setAttribute("variants", variants);
+        request.setAttribute("sizes", sizes);
+        request.setAttribute("colors", colors);
 
-            request.setAttribute("product", product);
+        request.getRequestDispatcher("/productDetail.jsp").forward(request, response);
 
-
-            request.getRequestDispatcher("/productDetail.jsp")
-
-                    .forward(request, response);
-
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
+    } catch (Exception e) {
+        throw new ServletException(e);
+    }
     }
 
     /**
@@ -109,7 +111,3 @@ public class ProductDetailServlet extends HttpServlet {
         return "Short description";
     }
 }
-
-
-
-

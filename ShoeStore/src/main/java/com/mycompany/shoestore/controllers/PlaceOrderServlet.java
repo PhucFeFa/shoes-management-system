@@ -3,13 +3,17 @@ package com.mycompany.shoestore.controllers;
 import com.mycompany.shoestore.dao.CartDAO;
 import com.mycompany.shoestore.dao.OrderDAO;
 import com.mycompany.shoestore.dao.PaymentDAO;
+import com.mycompany.shoestore.dao.ProductVariantDAO;
 import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.models.CartItem;
 import com.mycompany.shoestore.models.User;
-
+import com.mycompany.shoestore.models.Voucher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +23,7 @@ public class PlaceOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request,
-            HttpServletResponse response)
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
@@ -29,8 +33,8 @@ public class PlaceOrderServlet extends HttpServlet {
             return;
         }
 
-        User currentUser
-                = (User) session.getAttribute("currentUser");
+        User currentUser =
+                (User) session.getAttribute("currentUser");
 
         if (currentUser == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -40,60 +44,134 @@ public class PlaceOrderServlet extends HttpServlet {
         try {
 
             CartDAO cartDAO = new CartDAO();
+            ProductVariantDAO variantDAO = new ProductVariantDAO();
+            OrderDAO orderDAO = new OrderDAO();
+            VoucherDAO voucherDAO = new VoucherDAO();
 
-            List<CartItem> checkoutItems
-                    = (List<CartItem>) session.getAttribute("checkoutItems");
+            List<CartItem> checkoutItems =
+                    (List<CartItem>) session.getAttribute("checkoutItems");
 
             if (checkoutItems == null || checkoutItems.isEmpty()) {
 
                 response.sendRedirect(
                         request.getContextPath() + "/Cart");
+
                 return;
             }
 
-            String addressId = request.getParameter("addressId");
+            // ===================== ADDRESS =====================
+
+            String addressId =
+                    request.getParameter("addressId");
 
             if (addressId == null || addressId.trim().isEmpty()) {
 
                 request.setAttribute(
                         "error",
-                        "Please select shipping address");
+                        "Vui lòng chọn địa chỉ giao hàng");
 
                 request.getRequestDispatcher("/checkout.jsp")
                         .forward(request, response);
+
                 return;
             }
 
-            String voucherId = request.getParameter("voucherId");
+            // ===================== VOUCHER =====================
 
-            double totalAmount;
+            String voucherId =
+                    request.getParameter("voucherId");
 
-            try {
-                totalAmount = Double.parseDouble(
-                        request.getParameter("finalAmount"));
-            } catch (Exception ex) {
-                throw new Exception("Invalid order amount");
+            if (voucherId != null
+                    && voucherId.trim().isEmpty()) {
+
+                voucherId = null;
             }
 
-            OrderDAO orderDAO = new OrderDAO();
+            // ===================== CHECK STOCK =====================
 
-            String orderId
-                    = orderDAO.createOrder(
+            for (CartItem item : checkoutItems) {
+
+                int currentStock =
+                        variantDAO.getStockByVariant(
+                                item.getProductVariantId());
+
+                if (currentStock < item.getQuantity()) {
+
+                    request.setAttribute(
+                            "error",
+                            item.getProductName()
+                            + " chỉ còn "
+                            + currentStock
+                            + " sản phẩm.");
+
+                    request.getRequestDispatcher("/checkout.jsp")
+                            .forward(request, response);
+
+                    return;
+                }
+            }
+
+            // ===================== CALCULATE TOTAL =====================
+
+            double subTotal = 0;
+
+            for (CartItem item : checkoutItems) {
+
+                subTotal +=
+                        item.getPrice()
+                        * item.getQuantity();
+            }
+
+            double shippingFee = 30000;
+
+            double totalAmount =
+                    subTotal + shippingFee;
+
+            // Áp dụng voucher nếu có
+            if (voucherId != null) {
+
+                Voucher voucher =
+                        voucherDAO.getVoucherById(voucherId);
+
+                if (voucher != null) {
+
+                    double discount =
+                            subTotal
+                            * voucher.getDiscountPercent()
+                            / 100.0;
+
+                    totalAmount -= discount;
+                }
+            }
+
+            if (totalAmount < 0) {
+                totalAmount = 0;
+            }
+
+            // ===================== CREATE ORDER =====================
+
+            String orderId =
+                    orderDAO.createOrder(
                             currentUser.getId(),
                             addressId,
                             totalAmount,
                             voucherId);
 
             if (orderId == null) {
-                throw new Exception("Cannot create order");
-            }
-            if (voucherId != null
-                    && !voucherId.trim().isEmpty()) {
 
-                VoucherDAO voucherDAO = new VoucherDAO();
-
-                voucherDAO.decreaseVoucherQuantity(voucherId);
+                throw new Exception(
+                        "Không thể tạo đơn hàng");
             }
+
+            // ===================== DECREASE VOUCHER =====================
+
+            if (voucherId != null) {
+
+                voucherDAO.decreaseVoucherQuantity(
+                        voucherId);
+            }
+
+            // ===================== ORDER ITEMS =====================
 
             for (CartItem item : checkoutItems) {
 
@@ -102,23 +180,26 @@ public class PlaceOrderServlet extends HttpServlet {
                         item.getProductVariantId(),
                         item.getQuantity(),
                         item.getPrice());
-                orderDAO.updateProductStock(
+
+                variantDAO.updateProductStock(
                         item.getProductVariantId(),
                         item.getQuantity());
-            }
-
-            PaymentDAO paymentDAO = new PaymentDAO();
-
-            paymentDAO.createCODPayment(
-                    orderId,
-                    totalAmount);
-
-            for (CartItem item : checkoutItems) {
 
                 cartDAO.removeCartItem(
                         currentUser.getId(),
                         item.getProductVariantId());
             }
+
+            // ===================== PAYMENT =====================
+
+            PaymentDAO paymentDAO =
+                    new PaymentDAO();
+
+            paymentDAO.createCODPayment(
+                    orderId,
+                    totalAmount);
+
+            // ===================== CLEAR SESSION =====================
 
             session.removeAttribute("checkoutItems");
 
@@ -133,7 +214,8 @@ public class PlaceOrderServlet extends HttpServlet {
 
             request.setAttribute(
                     "error",
-                    "Order failed: " + e.getMessage());
+                    "Đặt hàng thất bại: "
+                    + e.getMessage());
 
             request.getRequestDispatcher("/checkout.jsp")
                     .forward(request, response);

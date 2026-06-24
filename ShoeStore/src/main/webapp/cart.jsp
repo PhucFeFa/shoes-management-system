@@ -62,6 +62,11 @@
                     <c:set var="grandTotal" value="0"/>
 
                     <c:forEach var="item" items="${cart}">
+                        <c:if test="${item.quantity <= 0}">
+                            <span class="text-red-500 font-bold">
+                                Out Of Stock
+                            </span>
+                        </c:if>
 
 
                         <div class="border rounded-xl p-5 hover:shadow-lg transition">
@@ -95,6 +100,19 @@
                                     <h3 class="text-xl font-bold uppercase">
                                         ${item.productName}
                                     </h3>
+                                    <div class="flex gap-4 mt-2 text-sm text-gray-600">
+
+                                        <span>
+                                            Size:
+                                            <strong>${item.size}</strong>
+                                        </span>
+
+                                        <span>
+                                            Color:
+                                            <strong>${item.color}</strong>
+                                        </span>
+
+                                    </div>
 
                                     <p class="text-gray-500 mt-1">
                                         Premium Sneaker Collection
@@ -216,7 +234,7 @@
                                                                                     <span>${cart.size()}</span>
                                                                                 </div>
 
-                                                                             
+
 
                                                                                 <hr>
 
