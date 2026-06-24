@@ -353,7 +353,6 @@ public class ProductDAO {
 
         return colors;
     }
-
     public List<String> getColorsByProductAndSize(
         String productId,
         String sizeId) throws Exception {
@@ -386,5 +385,4 @@ public class ProductDAO {
     return list;
 }
     
-
 }
