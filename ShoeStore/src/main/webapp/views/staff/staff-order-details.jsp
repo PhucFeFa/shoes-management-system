@@ -136,9 +136,65 @@
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex h-screen">
 <!-- SideNavBar (Shared Component) -->
-<jsp:include page="sidebar.jsp">
-    <jsp:param name="activePage" value="orders" />
-</jsp:include>
+<aside class="bg-surface text-primary font-label-md text-label-md uppercase fixed left-0 top-0 h-full w-64 border-r border-outline-variant flex flex-col py-base z-50">
+    <!-- Header -->
+    <div class="px-6 py-8 border-b border-outline-variant mb-base flex items-center gap-4">
+        <div>
+            <h1 class="font-headline-md text-[16px] font-bold text-primary tracking-tight leading-tight">SOLE_LAB ADMIN</h1>
+            <p class="font-label-sm text-label-sm text-secondary mt-1 tracking-widest uppercase">Staff Portal</p>
+        </div>
+    </div>
+    
+    <!-- Main Navigation -->
+    <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="${pageContext.request.contextPath}/home">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none bg-primary text-on-primary font-bold active:scale-95 transition-transform" href="${pageContext.request.contextPath}/staff/orders">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            Orders
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
+            <span class="material-symbols-outlined">inventory_2</span>
+            Inventory
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
+            <span class="material-symbols-outlined">group</span>
+            Customers
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
+            <span class="material-symbols-outlined">settings</span>
+            Settings
+        </a>
+    </nav>
+    
+    <!-- Footer Navigation -->
+    <div class="px-4 pt-4 border-t border-outline-variant space-y-2 mt-auto">
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
+            <span class="material-symbols-outlined">help</span>
+            Help Center
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="${pageContext.request.contextPath}/logout">
+            <span class="material-symbols-outlined">logout</span>
+            Logout
+        </a>
+        
+        <div class="flex items-center gap-3 px-2 mt-4">
+            <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary text-[24px]">account_circle</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="font-label-md text-label-md text-primary normal-case">
+                    <c:out value="${sessionScope.currentUser.fullName}" default="Staff"/>
+                </span>
+                <span class="font-label-sm text-label-sm text-secondary capitalize">
+                    <c:out value="${sessionScope.currentUser.roleName}" default="staff"/>
+                </span>
+            </div>
+        </div>
+    </div>
+</aside>
 
 <!-- Main Content Canvas -->
 <main class="ml-64 flex-1 h-full overflow-y-auto bg-background">

@@ -62,6 +62,11 @@
                     <c:set var="grandTotal" value="0"/>
 
                     <c:forEach var="item" items="${cart}">
+                        <c:if test="${item.quantity <= 0}">
+                            <span class="text-red-500 font-bold">
+                                Out Of Stock
+                            </span>
+                        </c:if>
 
 
                         <div class="border rounded-xl p-5 hover:shadow-lg transition">
@@ -95,24 +100,23 @@
                                     <h3 class="text-xl font-bold uppercase">
                                         ${item.productName}
                                     </h3>
+                                    <div class="flex gap-4 mt-2 text-sm text-gray-600">
 
-                                    <div class="mt-2 flex flex-wrap gap-3">
-
-                                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                                        <span>
                                             Size:
-                                            <span class="font-semibold">
-                                                ${item.size}
-                                            </span>
+                                            <strong>${item.size}</strong>
                                         </span>
 
-                                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                                        <span>
                                             Color:
-                                            <span class="font-semibold">
-                                                ${item.color}
-                                            </span>
+                                            <strong>${item.color}</strong>
                                         </span>
 
                                     </div>
+
+                                    <p class="text-gray-500 mt-1">
+                                        Premium Sneaker Collection
+                                    </p>
 
                                     <div class="mt-4 flex flex-wrap gap-8">
 
@@ -230,10 +234,7 @@
                                                                                     <span>${cart.size()}</span>
                                                                                 </div>
 
-                                                                                <div class="flex justify-between">
-                                                                                    <span>Shipping</span>
-                                                                                    <span>Free</span>
-                                                                                </div>
+
 
                                                                                 <hr>
 
@@ -254,10 +255,8 @@
 
                                                                             <form id="checkoutForm"
                                                                                   action="${pageContext.request.contextPath}/checkout"
-                                                                                  method="post">
-
+                                                                                  method ="POST">
                                                                                 <div id="selectedProducts"></div>
-
                                                                                 <button type="submit"
                                                                                         class="block w-full mt-8 text-center bg-black text-white py-4 uppercase tracking-wider hover:bg-gray-800 transition rounded-lg">
                                                                                     Proceed To Checkout
@@ -314,7 +313,63 @@
                                                                         calculateTotal();
 
                                                                     });
+                                                                    document.getElementById("checkoutForm")
+                                                                            .addEventListener("submit", function (e) {
 
+                                                                                const container =
+                                                                                        document.getElementById("selectedProducts");
+
+                                                                                container.innerHTML = "";
+
+                                                                                let checkedCount = 0;
+
+                                                                                document.querySelectorAll(".cart-checkbox")
+                                                                                        .forEach(cb => {
+
+                                                                                            if (cb.checked) {
+
+                                                                                                checkedCount++;
+
+                                                                                                const input =
+                                                                                                        document.createElement("input");
+
+                                                                                                input.type = "hidden";
+                                                                                                input.name = "selectedItems";
+                                                                                                input.value = cb.value;
+
+                                                                                                container.appendChild(input);
+                                                                                            }
+                                                                                        });
+
+                                                                                if (checkedCount === 0) {
+
+                                                                                    e.preventDefault();
+
+                                                                                    alert("Please select at least one product.");
+                                                                                }
+                                                                            });
+                                                                    function calculateTotal() {
+
+                                                                        let total = 0;
+                                                                        let count = 0;
+
+                                                                        document.querySelectorAll(".cart-checkbox").forEach(cb => {
+
+                                                                            if (cb.checked) {
+
+                                                                                total += Number(cb.dataset.price)
+                                                                                        * Number(cb.dataset.qty);
+
+                                                                                count++;
+                                                                            }
+                                                                        });
+
+                                                                        document.getElementById("grandTotal").innerHTML =
+                                                                                "$" + total.toFixed(2);
+
+                                                                        document.getElementById("selectedCount").innerHTML =
+                                                                                count;
+                                                                    }
                                                                 </script>
 
                                                                 </main>

@@ -12,18 +12,16 @@ public class UserDTO {
     private String fullName;
     private String roleName;
     private Timestamp createdAt;
-    private String status; 
 
     public UserDTO() {
     }
 
-    public UserDTO(String id, String email, String fullName, String roleName, Timestamp createdAt, String status) {
+    public UserDTO(String id, String email, String fullName, String roleName, Timestamp createdAt) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
         this.roleName = roleName;
         this.createdAt = createdAt;
-        this.status = status;
     }
 
     public String getId() { return id; }
@@ -40,7 +38,4 @@ public class UserDTO {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
 }

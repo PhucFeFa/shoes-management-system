@@ -65,30 +65,26 @@ public class ProductDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String productId = request.getParameter("id");
+       String productId = request.getParameter("id");
 
-        try {
+    try {
+        ProductDAO dao = new ProductDAO();
+        Product product = dao.getProductById(productId);
+        List<ProductVariant> variants = dao.getVariantsByProductId(productId); // Đã có sẵn trong file bạn cung cấp
 
-            Product product = dao.getProductById(productId);
-            List<ProductVariant> variants
-                    = dao.getVariantsByProductId(productId);
+        Set<String> sizes = dao.getSizesByProduct(productId);
+        Set<String> colors = dao.getColorsByProduct(productId);
 
-            Set<String> sizes
-                    = dao.getSizesByProduct(productId);
+        request.setAttribute("product", product);
+        request.setAttribute("variants", variants);
+        request.setAttribute("sizes", sizes);
+        request.setAttribute("colors", colors);
 
-            Set<String> colors
-                    = dao.getColorsByProduct(productId);
-            request.setAttribute("product", product);
-            request.setAttribute("variants", variants);
-            request.setAttribute("sizes", sizes);
-            request.setAttribute("colors", colors);
+        request.getRequestDispatcher("/productDetail.jsp").forward(request, response);
 
-            request.getRequestDispatcher("/productDetail.jsp")
-                    .forward(request, response);
-
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
+    } catch (Exception e) {
+        throw new ServletException(e);
+    }
     }
 
     /**
