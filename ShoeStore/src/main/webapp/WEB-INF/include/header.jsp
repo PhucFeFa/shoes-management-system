@@ -136,27 +136,20 @@
                 <div class="flex items-center gap-8">
                     <a class="text-headline-md font-headline-md font-extrabold tracking-tighter text-primary dark:text-on-surface"
                        href="${pageContext.request.contextPath}/home">ADIDIS</a>
-                    <div class="hidden md:flex gap-6">
-                        <a class="text-label-md font-label-md uppercase text-primary dark:text-on-surface border-b-2 border-primary dark:border-on-surface pb-1"
-                           href="${pageContext.request.contextPath}/products">SHOP</a>
-                        <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                           href="#">NEW ARRIVALS</a>
-                        <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                           href="#">LABS</a>
-                        <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                           href="#">COLLECTIONS</a>
-                    </div>
+
                 </div>
                 <div class="flex items-center gap-4">
 
-                    <a href="${pageContext.request.contextPath}/Cart"
-                       class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        <c:set var="cartCount" value="${sessionScope.cartCount != null ? sessionScope.cartCount : 0}"/>
-                        <c:if test="${cartCount > 0}">
-                            <span class="absolute -top-1.5 -right-2 bg-error text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cartCount}</span>
-                        </c:if>
-                    </a>
+                    <c:if test="${not empty sessionScope.currentUser && sessionScope.currentUser.roleName eq 'Customer'}">
+                        <a href="${pageContext.request.contextPath}/Cart"
+                           class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
+                            <span class="material-symbols-outlined">shopping_cart</span>
+                            <c:set var="cartCount" value="${sessionScope.cartCount != null ? sessionScope.cartCount : 0}"/>
+                            <c:if test="${cartCount > 0}">
+                                <span class="absolute -top-1.5 -right-2 bg-error text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cartCount}</span>
+                            </c:if>
+                        </a>
+                    </c:if>
 
                     <c:if test="${empty sessionScope.currentUser}">
                         <a href="${pageContext.request.contextPath}/login" class="text-label-md font-label-md uppercase text-primary hover:opacity-80">Login</a>

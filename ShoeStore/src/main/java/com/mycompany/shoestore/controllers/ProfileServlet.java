@@ -60,6 +60,22 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         
+    HttpSession session = request.getSession(false);
+
+    if (session == null) {
+        response.sendRedirect(request.getContextPath() + "/login");
+        return;
+    }
+
+    User currentUser = (User) session.getAttribute("currentUser");
+
+    if (currentUser == null) {
+        response.sendRedirect(request.getContextPath() + "/login");
+        return;
+    }
+
+
     request.getRequestDispatcher("/views/customer/customer-profile.jsp")
            .forward(request, response);
     }

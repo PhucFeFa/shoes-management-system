@@ -48,7 +48,7 @@
                                     <div class="flex justify-between items-center">
                                         <label class="text-label-sm font-label-sm uppercase text-secondary"
                                             for="login-password">Password</label>
-                                        <a class="text-label-sm font-label-sm text-secondary hover:text-primary underline underline-offset-4 transition-colors"
+                                        <a class="relative z-10 block text-label-sm font-label-sm text-secondary hover:text-primary underline underline-offset-4 transition-colors"
                                             href="${pageContext.request.contextPath}/forgot-password">FORGOT PASSWORD?</a>
                                     </div>
                                     <div class="relative">
@@ -70,10 +70,11 @@
                                     <span
                                         class="material-symbols-outlined ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[18px]">arrow_forward</span>
                                 </button>
-                                <div class="pt-4 text-center"><a
-                                        class="text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest"
+                                <div class="pt-4 text-center relative z-10">
+                                    <a class="inline-block text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest"
                                         href="${pageContext.request.contextPath}/register">Don't have an account? Create
-                                        one</a></div>
+                                        one</a>
+                                </div>
                             </form>
                             <!-- REGISTER FORM (Hidden by default) -->
                             <!-- OTP VERIFICATION STATE (Hidden by default) -->

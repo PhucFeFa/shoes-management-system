@@ -22,6 +22,8 @@ public class ProductDAO {
         // Query to get latest active products with their first image
         String sql = "SELECT TOP (?) p.*, "
                 + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id) as first_image, "
+                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id), 0) as avg_rating, "
+                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id) as review_count, "
                 + "c.name as category_name, b.name as brand_name "
                 + "FROM products p "
                 + "LEFT JOIN categories c ON p.category_id = c.id "
@@ -42,6 +44,8 @@ public class ProductDAO {
                     p.setBrandId(rs.getString("brand_id"));
                     p.setStatus(rs.getString("status"));
                     p.setCreatedAt(rs.getTimestamp("created_at"));
+                    p.setAverageRating(rs.getDouble("avg_rating"));
+                    p.setReviewCount(rs.getInt("review_count"));
 
                     p.setFirstImageUrl(rs.getString("first_image"));
 
@@ -69,6 +73,8 @@ public class ProductDAO {
                 + " FROM product_images pi "
                 + " WHERE pi.product_id = p.id "
                 + " ORDER BY pi.sort_order) AS first_image, "
+                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id), 0) as avg_rating, "
+                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id) as review_count, "
                 + "c.name AS category_name, "
                 + "b.name AS brand_name "
                 + "FROM products p "
@@ -88,6 +94,8 @@ public class ProductDAO {
                     p.setBrandId(rs.getString("brand_id"));
                     p.setStatus(rs.getString("status"));
                     p.setCreatedAt(rs.getTimestamp("created_at"));
+                    p.setAverageRating(rs.getDouble("avg_rating"));
+                    p.setReviewCount(rs.getInt("review_count"));
                     p.setFirstImageUrl(rs.getString("first_image"));
 
                     Category c = new Category(
@@ -192,6 +200,8 @@ public class ProductDAO {
         StringBuilder sql = new StringBuilder(
                 "SELECT p.*, "
                 + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) as first_image, "
+                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id), 0) as avg_rating, "
+                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id) as review_count, "
                 + "c.name as category_name, b.name as brand_name "
                 + "FROM products p "
                 + "LEFT JOIN categories c ON p.category_id = c.id "
@@ -250,6 +260,8 @@ public class ProductDAO {
                     p.setBrandId(rs.getString("brand_id"));
                     p.setStatus(rs.getString("status"));
                     p.setCreatedAt(rs.getTimestamp("created_at"));
+                    p.setAverageRating(rs.getDouble("avg_rating"));
+                    p.setReviewCount(rs.getInt("review_count"));
                     p.setFirstImageUrl(rs.getString("first_image"));
 
                     p.setCategory(new Category(p.getCategoryId(), rs.getString("category_name")));
@@ -353,4 +365,36 @@ public class ProductDAO {
 
         return colors;
     }
+    public List<String> getColorsByProductAndSize(
+        String productId,
+        String sizeId) throws Exception {
+
+    List<String> list = new ArrayList<>();
+
+    String sql =
+        "SELECT DISTINCT c.name " +
+        "FROM product_variants pv " +
+        "JOIN colors c ON pv.color_id = c.id " +
+        "WHERE pv.product_id=? " +
+        "AND pv.size_id=? " +
+        "AND pv.stock_quantity > 0";
+
+    try (
+        Connection con = new DBContext().getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)
+    ) {
+
+        ps.setString(1, productId);
+        ps.setString(2, sizeId);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            list.add(rs.getString("name"));
+        }
+    }
+
+    return list;
+}
+    
 }

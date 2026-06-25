@@ -49,16 +49,9 @@ public class LoginServlet extends HttpServlet {
             } catch (Exception e) {
                 session.setAttribute("cartCount", 0);
             }
-
-            // Phân quyền điều hướng 
-            String roleName = user.getRoleName();
-            if ("Admin".equalsIgnoreCase(roleName) || "Staff".equalsIgnoreCase(roleName)) {
-                // Cả Admin và Staff
-                response.sendRedirect(request.getContextPath() + "/dashboard");
-            } else {
-                //Customer
-                response.sendRedirect(request.getContextPath() + "/home");
-            }
+            
+            // Redirect to homepage after successful login
+            response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.setAttribute("error", "Invalid email or password.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);

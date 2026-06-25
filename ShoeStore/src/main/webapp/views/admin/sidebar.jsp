@@ -1,169 +1,139 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
     .sole-sidebar {
-        width: 256px; /* 64 x 4 giống thiết kế w-64 */
+        width: 220px;
         height: 100vh;
         position: fixed;
         top: 0;
         left: 0;
-        background: #f9f9f9; /* Màu nền surface mờ */
-        border-right: 1px solid #e2e2e2; /* Đường kẻ viền bên phải */
+        background: #ffffff;
+        border-left: 4px solid #6C5CE7;
         display: flex;
         flex-direction: column;
-        padding: 8px 0;
-        font-family: 'Inter', sans-serif;
+        padding: 28px 0 24px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.05);
         z-index: 1000;
     }
     .sole-brand {
-        padding: 32px 24px;
-        border-bottom: 1px solid rgba(226, 226, 226, 0.5);
+        padding: 0 24px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 8px;
     }
     .sole-brand-name {
-        font-size: 24px;
+        font-size: 15px;
         font-weight: 700;
-        letter-spacing: -0.02em;
-        color: #000000;
-        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #1a1a1a;
     }
     .sole-brand-sub {
-        font-size: 12px;
-        color: #5d5f5f;
-        margin-top: 4px;
-        font-weight: 500;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #aaa;
+        margin-top: 3px;
     }
     .sole-nav {
         list-style: none;
         margin: 0;
-        padding: 24px 16px;
+        padding: 8px 0;
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
     }
     .sole-nav-item a {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px 16px;
-        font-size: 14px;
+        padding: 11px 24px;
+        font-size: 11px;
         font-weight: 600;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #5d5f5f; /* Màu chữ secondary nhạt */
+        color: #666;
         text-decoration: none;
-        border-radius: 4px;
-        transition: all 0.15s ease;
+        transition: background 0.12s, color 0.12s;
     }
     .sole-nav-item a:hover {
-        color: #000000;
-        background: #f3f3f4; /* Hiệu ứng hover xám nhạt */
+        color: #1a1a1a;
+        background: #f5f3ff;
     }
-    /* Giao diện nút Active giống hệt trang Profile trong ảnh */
     .sole-nav-item a.active {
-        background: #000000;
+        background: #1a1a1a;
         color: #ffffff;
-        font-weight: 700;
     }
-    .sole-nav-item a .material-symbols-outlined {
-        font-size: 20px;
+    .sole-nav-item a i {
+        font-size: 16px;
+        flex-shrink: 0;
+        opacity: 0.85;
+    }
+    .sole-nav-item a.active i {
+        opacity: 1;
     }
     .sole-footer {
-        padding: 24px 16px;
-        border-top: 1px solid rgba(226, 226, 226, 0.5);
+        padding: 16px 24px 0;
+        border-top: 1px solid #f0f0f0;
     }
-    .sole-footer button {
-        background: none;
-        border: none;
-        width: 100%;
-        text-align: left;
+    .sole-footer a {
         display: flex;
         align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        padding: 8px 16px;
-        font-size: 12px;
-        font-weight: 500;
+        gap: 10px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: #5d5f5f;
-        border-radius: 4px;
-        transition: background 0.15s, color 0.15s;
+        color: #999;
+        text-decoration: none;
+        transition: color 0.12s;
     }
-    .sole-footer button:hover {
-        color: #000000;
-        background: #f3f3f4;
+    .sole-footer a:hover {
+        color: #333;
     }
-    .sole-footer button .material-symbols-outlined {
-        font-size: 18px;
+    .sole-footer a i {
+        font-size: 16px;
     }
-    /* Đảm bảo nội dung trang chính thụt lề chuẩn theo sidebar mới */
     .main-content {
-        margin-left: 256px;
+        margin-left: 220px;
     }
 </style>
 
 <div class="sole-sidebar">
 
     <div class="sole-brand">
-        <div class="sole-brand-name">ADIDIS</div>
-        <div class="sole-brand-sub">Management Panel</div>
+        <div class="sole-brand-name">ShoesStore</div>
     </div>
 
     <ul class="sole-nav">
         <li class="sole-nav-item">
             <a href="${pageContext.request.contextPath}/dashboard"
                class="${activePage eq 'dashboard' ? 'active' : ''}">
-                <span class="material-symbols-outlined">dashboard</span>
+                <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
         </li>
-        
-        <c:if test="${sessionScope.currentUser.roleName eq 'Admin'}">
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/manage-account"
-                   class="${activePage eq 'user' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">group</span>
-                    <span>Users</span>
-                </a>
-            </li>
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/import"
-                   class="${activePage eq 'import' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">local_shipping</span>
-                    <span>Confirm Import</span>
-                </a>
-            </li>
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/manage-voucher"
-                   class="${activePage eq 'voucher' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">confirmation_number</span>
-                    <span>Voucher</span>
-                </a>
-            </li>
-        </c:if>
-
-        <c:if test="${sessionScope.currentUser.roleName eq 'Staff'}">
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/staff/request"
-                   class="${activePage eq 'request' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">description</span>
-                    <span>Request Import</span>
-                </a>
-            </li>
-        </c:if>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/manage-account"
+               class="${activePage eq 'user' ? 'active' : ''}">
+                <i class="bi bi-people"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/import"
+               class="${activePage eq 'import' ? 'active' : ''}">
+                <i class="bi bi-box-seam"></i>
+                <span>Confirm Import</span>
+            </a>
+        </li>
     </ul>
 
     <div class="sole-footer">
-        <form action="${pageContext.request.contextPath}/Logout" method="GET" style="margin: 0; width: 100%;">
-            <button type="submit">
-                <span class="material-symbols-outlined">logout</span>
-                <span>Logout</span>
-            </button>
-        </form>
+        <a href="${pageContext.request.contextPath}/home.jsp">
+            <i class="bi bi-box-arrow-left"></i>
+            <span>Back to Website</span>
+        </a>
     </div>
 
 </div>

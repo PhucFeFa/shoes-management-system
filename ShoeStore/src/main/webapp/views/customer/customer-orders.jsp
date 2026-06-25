@@ -189,7 +189,7 @@
                                     Orders
                                 </a>
                                 <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-                                    href="#">
+                                    href="${pageContext.request.contextPath}/profile/addresses">
                                     <span class="material-symbols-outlined text-[20px]">location_on</span>
                                     Addresses
                                 </a>

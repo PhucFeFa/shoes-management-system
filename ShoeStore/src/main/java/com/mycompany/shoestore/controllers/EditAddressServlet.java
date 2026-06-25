@@ -101,7 +101,7 @@ public class EditAddressServlet extends HttpServlet {
         dao.updateAddress(address);
 
         response.sendRedirect(
-                request.getContextPath() + "/Address");
+                request.getContextPath() + "/profile/addresses");
     }
     
     /**

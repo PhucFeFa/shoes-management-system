@@ -169,22 +169,25 @@
                                                     ${p.name}
                                                 </a>
                                                 <span
-                                                    class="text-label-sm text-secondary mt-1">${p.category.name}</span>
-
-                                                <div
-                                                    class="mt-auto pt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                    <!-- Quick Add Form -->
-                                                    <form action="${pageContext.request.contextPath}/AddToCart"
-                                                        method="POST">
-                                                        <input type="hidden" name="productId" value="${p.id}">
-                                                        <button type="submit"
-                                                            class="w-full bg-primary text-on-primary py-3 text-label-sm font-label-sm uppercase tracking-widest hover:bg-primary/90 flex justify-center items-center gap-2">
-                                                            <span
-                                                                class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
-                                                            ADD TO CART
-                                                        </button>
-                                                    </form>
+                                                    class="text-label-sm text-secondary mt-1 mb-2">${p.category.name}</span>
+                                                <div class="flex items-center gap-1 mt-auto">
+                                                    <c:choose>
+                                                        <c:when test="${p.reviewCount > 0}">
+                                                            <div class="relative inline-block text-gray-300 text-sm mr-1 whitespace-nowrap">
+                                                                ★★★★★
+                                                                <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap" style="width: ${p.averageRating / 5 * 100}%;">
+                                                                    ★★★★★
+                                                                </div>
+                                                            </div>
+                                                            <span class="text-label-sm text-secondary">(${p.reviewCount})</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div class="text-gray-300 text-sm mr-1">★★★★★</div>
+                                                            <span class="text-label-sm text-secondary">No reviews</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </c:forEach>

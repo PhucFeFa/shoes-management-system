@@ -71,7 +71,7 @@
                 Add Address
             </button>
 
-            <a href="${pageContext.request.contextPath}/Address"
+            <a href="${pageContext.request.contextPath}/profile/addresses"
                class="border border-gray-400 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-100 transition">
                 Back
             </a>
