@@ -1,5 +1,6 @@
 <%-- Author: PhucLHCE191132 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
 <jsp:include page="/WEB-INF/include/header.jsp" />
@@ -45,13 +46,13 @@
         </div>
         <div class="relative z-10 px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto">
             <div class="max-w-xl">
-                <p class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4">ADIDIS // INITIATIVE 01</p>
+                <p class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4">ELEVATE YOUR PERFORMANCE</p>
                 <h1 class="text-display-lg-mobile md:text-display-lg font-display-lg text-primary mb-8 leading-[1.05]">
-                    PHANTOM<br />IGNITE_V2
+                    DISCOVER<br />YOUR EDGE
                 </h1>
-                <button class="bg-primary text-on-primary px-10 py-5 text-label-md font-label-md uppercase tracking-wider hover:opacity-90 transition-all active:scale-95">
+                <a href="${pageContext.request.contextPath}/products" class="inline-block bg-primary text-on-primary px-10 py-5 text-label-md font-label-md uppercase tracking-wider hover:opacity-90 transition-all active:scale-95">
                     SHOP NOW
-                </button>
+                </a>
             </div>
         </div>
         <div class="absolute bottom-12 right-margin-desktop hidden lg:block">
@@ -116,6 +117,23 @@
                             </a>
                         </h3>
                         <p class="text-label-sm text-secondary mb-2">${product.category.name}</p>
+                        <div class="flex items-center gap-1 mb-2">
+                            <c:choose>
+                                <c:when test="${product.reviewCount > 0}">
+                                    <div class="relative inline-block text-gray-300 text-sm mr-1 whitespace-nowrap">
+                                        ★★★★★
+                                        <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap" style="width: ${product.averageRating / 5 * 100}%;">
+                                            ★★★★★
+                                        </div>
+                                    </div>
+                                    <span class="text-label-sm text-secondary">(${product.reviewCount})</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="text-gray-300 text-sm mr-1">★★★★★</div>
+                                    <span class="text-label-sm text-secondary">No reviews</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                         <p class="text-label-md font-label-md text-primary">$${product.price}</p>
                     </div>
                 </div>
@@ -123,32 +141,25 @@
         </div>
     </section>
 
-    <!-- Newsletter / Lab Section -->
+    <!-- About Us Section -->
     <section class="py-24 bg-surface-container-high px-margin-mobile md:px-margin-desktop">
         <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
             <div>
-                <h2 class="text-headline-lg font-headline-lg text-primary mb-6">THE RESEARCH LAB</h2>
-                <p class="text-body-lg text-on-surface-variant mb-8 max-w-md">
-                    Join the ADIDIS community to get early access to clinical trials, limited drop notifications, 
-                    and technical specs of our upcoming performance silhouettes.
+                <h2 class="text-headline-lg font-headline-lg text-primary mb-6">ABOUT ADIDIS</h2>
+                <p class="text-body-lg text-on-surface-variant mb-6 max-w-md">
+                    At ADIDIS, we blend cutting-edge engineering with urban aesthetics to create footwear that empowers your every step. Our mission is to push the boundaries of performance and style.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <input class="bg-surface px-6 py-4 border-none focus:ring-1 ring-primary w-full outline-none uppercase text-label-sm font-label-sm"
-                           placeholder="Email Address" type="email" />
-                    <button class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap hover:opacity-90 transition-all">
-                        SIGN UP
-                    </button>
-                </div>
+                <p class="text-body-lg text-on-surface-variant mb-8 max-w-md">
+                    Experience the perfect synergy of comfort and speed. We don't just design shoes; we engineer movement.
+                </p>
+                <a href="${pageContext.request.contextPath}/products" class="inline-block bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap hover:opacity-90 transition-all">
+                    DISCOVER MORE
+                </a>
             </div>
             <div class="relative aspect-video overflow-hidden group">
-                <img alt="Lab Atmosphere"
+                <img alt="About ADIDIS"
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuALitHG2_5Oy2ISbcyRbhrScu1yZd1SzUfmU7U8K4Ck83N3-PsFjGgDX0Cj5n5fdKnMJ98l6RQY44tljNSx3FXVOcC_rZg0qsN00T63dqkcQQdi3cRC5G4NWh4rbM16wwnnHtYUtcrwNlSXiSBF1UMOmGjCXiAPSM_l0TLXWsu6f4zu7-EM1X0eYegrRtFTLHTrCswQmRQSGWtNblv4sa2ZJzNMd77QzKkTXfOGiVl2prw7Zh0PpYI3HoV1_CzCDFA431R2gI2pd-I" />
-                <div class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <span class="text-on-primary text-label-md font-label-md uppercase tracking-widest border border-on-primary px-6 py-3">
-                        ENTER LAB_ACCESS
-                    </span>
-                </div>
+                     src="https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=1200&auto=format&fit=crop" />
             </div>
         </div>
     </section>

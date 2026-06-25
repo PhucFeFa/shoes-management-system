@@ -19,9 +19,17 @@ public class Product {
     private Brand brand;
     private List<ProductImage> images;
     private String firstImageUrl;
+    private double averageRating;
+    private int reviewCount;
 
     public Product() {
     }
+
+    public double getAverageRating() { return averageRating; }
+    public void setAverageRating(double averageRating) { this.averageRating = averageRating; }
+    
+    public int getReviewCount() { return reviewCount; }
+    public void setReviewCount(int reviewCount) { this.reviewCount = reviewCount; }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

@@ -7,6 +7,9 @@ package com.mycompany.shoestore.controllers;
 import com.mycompany.shoestore.dao.ProductDAO;
 import com.mycompany.shoestore.models.Product;
 import com.mycompany.shoestore.models.ProductVariant;
+import com.mycompany.shoestore.models.Review;
+import com.mycompany.shoestore.models.User;
+import com.mycompany.shoestore.dao.ReviewDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,6 +28,7 @@ import java.util.Set;
 public class ProductDetailServlet extends HttpServlet {
 
     ProductDAO dao = new ProductDAO();
+    ReviewDAO reviewDAO = new ReviewDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -80,11 +84,25 @@ public class ProductDetailServlet extends HttpServlet {
         request.setAttribute("sizes", sizes);
         request.setAttribute("colors", colors);
 
-        request.getRequestDispatcher("/productDetail.jsp").forward(request, response);
+            // Fetch Reviews
+            ReviewDAO reviewDAO = new ReviewDAO();
+            List<Review> reviews = reviewDAO.getReviewsByProduct(productId);
+            request.setAttribute("reviews", reviews);
 
-    } catch (Exception e) {
-        throw new ServletException(e);
-    }
+            // Check if user is logged in and can review
+            User currentUser = (User) request.getSession().getAttribute("currentUser");
+            if (currentUser != null) {
+                boolean canReview = reviewDAO.canUserReview(currentUser.getId(), productId);
+                Review myReview = reviewDAO.getReviewByUserAndProduct(currentUser.getId(), productId);
+                request.setAttribute("canReview", canReview);
+                request.setAttribute("myReview", myReview);
+            }
+
+            request.getRequestDispatcher("/productDetail.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     /**
