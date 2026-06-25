@@ -1,4 +1,3 @@
--- ====================================================================
 -- BƯỚC 1: XÓA DỮ LIỆU CŨ (Thứ tự: Bảng con trước, bảng cha sau)
 -- ====================================================================
 DELETE FROM "payments";
@@ -73,13 +72,23 @@ INSERT INTO "product_images" ("id", "product_id", "image_url", "sort_order") VAL
 
 -- 8. Imports & Details
 INSERT INTO "imports" ("Supplier", "UserID", "TotalAmount", "Status", "Note") VALUES
-(N'Nhà phân phối Nike VN', '00000000-0000-0000-0000-000000000001', 7400.00, 'completed', N'Hàng nhập đợt 1'), 
-(N'Tổng kho Adidas VN', '00000000-0000-0000-0000-000000000001', 3600.00, 'shipping', N'Hàng đang đi trên đường');
+(N'Nhà phân phối Nike VN', '00000000-0000-0000-0000-000000000001', 7400.00, 'completed', N'Hàng nhập đợt 1');
+
+DECLARE @CurrentImportID INT;
+SET @CurrentImportID = SCOPE_IDENTITY();
 
 INSERT INTO "import_details" ("ImportID", "ProductID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") VALUES
-(1, '10000000-0000-0000-0000-000000000001', 50, 50, 100.00), 
-(1, '10000000-0000-0000-0000-000000000001', 30, 30, 80.00),  
-(2, '10000000-0000-0000-0000-000000000001', 30, 0, 120.00);
+(@CurrentImportID, '10000000-0000-0000-0000-000000000001', 50, 50, 100.00), 
+(@CurrentImportID, '10000000-0000-0000-0000-000000000001', 30, 30, 80.00);
+
+-- 8.2. Chèn đơn nhập hàng thứ 2 (Adidas)
+INSERT INTO "imports" ("Supplier", "UserID", "TotalAmount", "Status", "Note") VALUES
+(N'Tổng kho Adidas VN', '00000000-0000-0000-0000-000000000001', 3600.00, 'shipping', N'Hàng đang đi trên đường');
+
+SET @CurrentImportID = SCOPE_IDENTITY();
+
+INSERT INTO "import_details" ("ImportID", "ProductID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") VALUES
+(@CurrentImportID, '10000000-0000-0000-0000-000000000001', 30, 0, 120.00);
 
 -- ====================================================================
 -- BƯỚC 3: DỮ LIỆU MẪU CHO REVIEW VÀ ĐƠN HÀNG (Dành cho Test)

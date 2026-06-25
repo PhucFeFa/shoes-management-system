@@ -41,6 +41,7 @@ CREATE TABLE "users"(
     "role_id" UNIQUEIDENTIFIER NOT NULL,
     "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
     "full_name" NVARCHAR(255) NULL,
+    "status" NVARCHAR(50) NOT NULL DEFAULT 'Active',
     PRIMARY KEY("id"),
     CONSTRAINT "users_email_unique" UNIQUE("email"),
     CONSTRAINT "users_role_id_foreign" FOREIGN KEY("role_id") REFERENCES "roles"("id")
