@@ -75,11 +75,6 @@ public class ProfileServlet extends HttpServlet {
         return;
     }
 
-    AddressDAO dao = new AddressDAO();
-    List<Address> addresses =
-            dao.getAddressesByUserId(currentUser.getId());
-
-    request.setAttribute("addresses", addresses);
 
     request.getRequestDispatcher("/views/customer/customer-profile.jsp")
            .forward(request, response);

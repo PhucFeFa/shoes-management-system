@@ -8,8 +8,8 @@
                 <head>
                     <meta charset="utf-8" />
                     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-                    <title>ADIDIS | Profile</title>
-                    <meta name="description" content="Manage your ADIDIS profile." />
+                    <title>ADIDIS | Addresses</title>
+                    <meta name="description" content="Manage your ADIDIS addresses." />
 
                     <link href="https://fonts.googleapis.com" rel="preconnect" />
                     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -134,7 +134,7 @@
                         </div>
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
@@ -144,7 +144,7 @@
                                     <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                     Orders
                                 </a>
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile/addresses">
                                     <span class="material-symbols-outlined text-[20px]">location_on</span>
                                     Addresses
@@ -173,9 +173,9 @@
                         <header
                             class="px-margin-desktop pt-margin-desktop pb-8 flex justify-between items-end border-b border-outline-variant/30">
                             <div>
-                                <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Profile</h2>
+                                <h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Addresses</h2>
                                 <p class="font-body-md text-body-md text-secondary mt-2 max-w-lg">
-                                    Manage your account details and addresses.
+                                    Manage your saved delivery addresses.
                                 </p>
                             </div>
                             <div class="flex gap-4">
@@ -183,30 +183,68 @@
                         </header>
 
                         <section class="px-margin-desktop py-12 flex-1 max-w-5xl">
-                            <!-- User Information -->
-                            <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm">
-                                <h3
-                                    class="font-headline-md text-headline-md uppercase tracking-tight mb-6 flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[24px]">person</span>
-                                    Account Info
-                                </h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div>
-                                        <p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Full Name
-                                        </p>
-                                        <p class="font-body-lg text-body-lg font-bold">
-                                            ${sessionScope.currentUser.fullName}</p>
-                                    </div>
-                                    <div>
-                                        <p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Email
-                                            Address</p>
-                                        <p class="font-body-lg text-body-lg font-bold">${sessionScope.currentUser.email}
-                                        </p>
-                                    </div>
+                            <!-- Address List -->
+                            <div class="border border-outline-variant bg-surface p-8 shadow-sm">
+                                <div
+                                    class="flex justify-between items-center mb-8 border-b border-outline-variant/50 pb-4">
+                                    <h3
+                                        class="font-headline-md text-headline-md uppercase tracking-tight flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[24px]">location_on</span>
+                                        My Addresses
+                                    </h3>
+                                    <a href="${pageContext.request.contextPath}/AddAddress"
+                                        class="bg-primary text-on-primary px-6 py-3 font-label-md text-label-md uppercase hover:opacity-90 transition-opacity flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[18px]">add</span>
+                                        Add Address
+                                    </a>
                                 </div>
+
+                                <c:choose>
+                                    <c:when test="${empty addresses}">
+                                        <div
+                                            class="py-12 text-center flex flex-col items-center justify-center border-2 border-dashed border-outline-variant">
+                                            <span
+                                                class="material-symbols-outlined text-[48px] text-outline-variant mb-4">location_off</span>
+                                            <p class="font-label-md text-label-md text-secondary uppercase">No address
+                                                found</p>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <c:forEach var="address" items="${addresses}">
+                                                <div
+                                                    class="border border-outline-variant p-6 hover:border-primary transition-colors flex flex-col justify-between group bg-surface-container-lowest">
+                                                    <div class="mb-6">
+                                                        <p class="font-body-lg text-body-lg font-bold uppercase mb-2">
+                                                            ${address.addressLine}</p>
+                                                        <p class="font-body-md text-body-md text-secondary uppercase">
+                                                            ${address.ward}, ${address.district}
+                                                        </p>
+                                                        <p class="font-body-md text-body-md text-secondary uppercase">
+                                                            ${address.city}
+                                                        </p>
+                                                    </div>
+                                                    <div class="flex gap-4 pt-4 border-t border-outline-variant/50">
+                                                        <a href="${pageContext.request.contextPath}/EditAddress?id=${address.id}"
+                                                            class="font-label-sm text-label-sm uppercase tracking-widest text-secondary hover:text-primary transition-colors flex items-center gap-1">
+                                                            <span
+                                                                class="material-symbols-outlined text-[16px]">edit</span>
+                                                            Edit
+                                                        </a>
+                                                        <a href="${pageContext.request.contextPath}/DeleteAddress?id=${address.id}"
+                                                            onclick="return confirm('Delete this address?')"
+                                                            class="font-label-sm text-label-sm uppercase tracking-widest text-[#ba1a1a] hover:text-[#93000a] transition-colors flex items-center gap-1">
+                                                            <span
+                                                                class="material-symbols-outlined text-[16px]">delete</span>
+                                                            Delete
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-
-
                         </section>
                     </main>
                 </body>

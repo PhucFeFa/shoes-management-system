@@ -188,7 +188,6 @@
                                                     </c:choose>
                                                 </div>
 
-                                                </div>
                                             </div>
                                         </div>
                                     </c:forEach>
