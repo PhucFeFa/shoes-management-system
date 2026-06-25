@@ -66,7 +66,7 @@ public class DeleteAddressServlet extends HttpServlet {
         }
 
         response.sendRedirect(
-                request.getContextPath() + "/profile");
+                request.getContextPath() + "/profile/addresses");
     }    
 
     /**

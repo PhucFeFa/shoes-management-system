@@ -11,22 +11,22 @@
                 </svg>
             </div>
             
-            <h1 class="text-4xl font-bold text-black mb-4">Đặt hàng thành công!</h1>
-            <p class="text-gray-600 mb-8">Cảm ơn bạn đã mua hàng. Chúng tôi sẽ liên hệ xác nhận sớm nhất.</p>
+            <h1 class="text-4xl font-bold text-black mb-4">Order Successfully Placed!</h1>
+            <p class="text-gray-600 mb-8">Thank you for your purchase. We will contact you soon to confirm.</p>
             
             <div class="bg-gray-100 rounded-xl p-6 mb-8">
-                <p class="text-sm text-gray-500">Mã đơn hàng</p>
+                <p class="text-sm text-gray-500">Order ID</p>
                 <p class="text-2xl font-bold text-black">${orderId}</p>
             </div>
             
             <a href="${pageContext.request.contextPath}/home" 
                class="inline-block px-10 py-4 bg-black text-white rounded-xl hover:bg-gray-800 transition">
-                Về Trang Chủ
+                Back to Home
             </a>
             
             <a href="${pageContext.request.contextPath}/orders" 
                class="inline-block mt-4 text-black hover:underline">
-                Xem chi tiết đơn hàng →
+                View order details →
             </a>
         </div>
     </div>

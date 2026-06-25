@@ -147,7 +147,7 @@
                                 <div class="mb-4">
                                     <label class="block font-semibold mb-2">Size</label>
                                     <select id="sizeSelect" class="w-full border rounded-lg px-4 py-3">
-                                        <option value="">Chọn Size</option>
+                                        <option value="">Select Size</option>
                                         <c:forEach var="size" items="${sizes}">
                                             <option value="${size}">${size}</option>
                                         </c:forEach>
@@ -157,7 +157,7 @@
                                 <div class="mb-6">
                                     <label class="block font-semibold mb-2">Color</label>
                                     <select id="colorSelect" class="w-full border rounded-lg px-4 py-3" disabled>
-                                        <option value="">Chọn Màu</option>
+                                        <option value="">Select Color</option>
                                     </select>
                                 </div>
 
@@ -450,7 +450,7 @@
 
                             sizeSelect.addEventListener("change", function () {
                                 const selectedSize = this.value;
-                                colorSelect.innerHTML = '<option value="">Chọn Màu</option>';
+                                colorSelect.innerHTML = '<option value="">Select Color</option>';
                                 colorSelect.disabled = true;
                                 stockInfo.textContent = "";
                                 addBtn.disabled = true;
