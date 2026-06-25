@@ -145,71 +145,39 @@
                                 </div>
 
                                 <div class="mb-4">
-
-                                    <label class="block font-semibold mb-2">
-                                        Size
-                                    </label>
-
+                                    <label class="block font-semibold mb-2">Size</label>
                                     <select id="sizeSelect" class="w-full border rounded-lg px-4 py-3">
-
-                                        <option value="">
-                                            Select Size
-                                        </option>
-
+                                        <option value="">Chọn Size</option>
                                         <c:forEach var="size" items="${sizes}">
-                                            <option value="${size}">
-                                                ${size}
-                                            </option>
+                                            <option value="${size}">${size}</option>
                                         </c:forEach>
-
                                     </select>
-
                                 </div>
+
                                 <div class="mb-6">
-
-                                    <label class="block font-semibold mb-2">
-                                        Color
-                                    </label>
-
-                                    <select id="colorSelect" class="w-full border rounded-lg px-4 py-3">
-
-                                        <option value="">
-                                            Select Color
-                                        </option>
-
-                                        <c:forEach var="color" items="${colors}">
-                                            <option value="${color}">
-                                                ${color}
-                                            </option>
-                                        </c:forEach>
-
+                                    <label class="block font-semibold mb-2">Color</label>
+                                    <select id="colorSelect" class="w-full border rounded-lg px-4 py-3" disabled>
+                                        <option value="">Chọn Màu</option>
                                     </select>
-
                                 </div>
 
-                                <div class="flex flex-wrap gap-4">
+                                <div class="mb-6">
+                                    <span id="stockInfo" class="font-semibold text-lg"></span>
+                                </div>
 
-                                    <form action="${pageContext.request.contextPath}/AddToCart" method="post">
-
+                                <div class="flex items-center gap-6 mt-4">
+                                    <form action="${pageContext.request.contextPath}/AddToCart" method="post" class="flex-1">
                                         <input type="hidden" name="productId" value="${product.id}">
-
                                         <input type="hidden" id="selectedVariantId" name="variantId">
-
-                                        <input type="hidden" name="returnUrl"
-                                            value="${pageContext.request.requestURI}?id=${product.id}">
-
-                                        <button type="submit"
-                                            class="bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition">
+                                        <input type="hidden" name="returnUrl" value="${pageContext.request.requestURI}?id=${product.id}">
+                                        <button id="addToCartBtn" type="submit" class="w-full bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition disabled:opacity-50" disabled>
                                             ADD TO CART
                                         </button>
-
                                     </form>
 
-                                    <a href="${pageContext.request.contextPath}/home"
-                                        class="border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition">
+                                    <a href="${pageContext.request.contextPath}/home" class="flex-1 flex items-center justify-center border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition">
                                         BACK TO PRODUCTS
                                     </a>
-
                                 </div>
 
                             </div>
@@ -464,46 +432,64 @@
                         </script>
 
                         <script>
-
                             const variants = [
-
                                 <c:forEach var="v" items="${variants}" varStatus="s">
-                                    {
-                                        id : "${v.id}",
-                                    size : "${v.size}",
-                                    color : "${v.color}"
-                }
-                                    <c:if test="${!s.last}">,</c:if>
+                                {
+                                    id: "${v.id}",
+                                    size: "${v.size}",
+                                    color: "${v.color}",
+                                    stock: ${v.stockQuantity}
+                                }<c:if test="${!s.last}">,</c:if>
                                 </c:forEach>
-
                             ];
 
-                            document.getElementById("sizeSelect")
-                                .addEventListener("change", updateVariant);
+                            const sizeSelect = document.getElementById("sizeSelect");
+                            const colorSelect = document.getElementById("colorSelect");
+                            const stockInfo = document.getElementById("stockInfo");
+                            const addBtn = document.getElementById("addToCartBtn");
 
-                            document.getElementById("colorSelect")
-                                .addEventListener("change", updateVariant);
+                            sizeSelect.addEventListener("change", function () {
+                                const selectedSize = this.value;
+                                colorSelect.innerHTML = '<option value="">Chọn Màu</option>';
+                                colorSelect.disabled = true;
+                                stockInfo.textContent = "";
+                                addBtn.disabled = true;
 
-                            function updateVariant() {
+                                if (!selectedSize) return;
 
-                                let size =
-                                    document.getElementById("sizeSelect").value;
+                                const availableColors = new Set();
+                                variants.forEach(v => {
+                                    if (v.size === selectedSize) availableColors.add(v.color);
+                                });
 
-                                let color =
-                                    document.getElementById("colorSelect").value;
+                                availableColors.forEach(color => {
+                                    const opt = document.createElement("option");
+                                    opt.value = color;
+                                    opt.textContent = color;
+                                    colorSelect.appendChild(opt);
+                                });
+                                colorSelect.disabled = false;
+                            });
 
-                                let variant = variants.find(v =>
-                                    v.size === size &&
-                                    v.color === color
-                                );
+                            colorSelect.addEventListener("change", function () {
+                                const size = sizeSelect.value;
+                                const color = this.value;
 
-                                if (variant) {
+                                if (!size || !color) return;
 
-                                    document.getElementById("selectedVariantId")
-                                        .value = variant.id;
+                                const variant = variants.find(v => v.size === size && v.color === color);
+                                if (!variant) return;
+
+                                document.getElementById("selectedVariantId").value = variant.id;
+
+                                if (variant.stock <= 0) {
+                                    stockInfo.innerHTML = '<span class="text-red-600">Out Of Stock</span>';
+                                    addBtn.disabled = true;
+                                } else {
+                                    stockInfo.innerHTML = `<span class="text-green-600">Available: ${variant.stock} items</span>`;
+                                    addBtn.disabled = false;
                                 }
-                            }
-
+                            });
                         </script>
             </main>
 

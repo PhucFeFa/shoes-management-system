@@ -8,7 +8,6 @@ public class CartItem {
     private int quantity;
     private String productVariantId;
 
-    // thêm
     private String size;
     private String color;
 
@@ -31,6 +30,15 @@ public class CartItem {
         this.size = size;
         this.color = color;
     }
+
+    public CartItem(String productName, String imageUrl, double price, int quantity, String productVariantId) {
+        this.productName = productName;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.quantity = quantity;
+        this.productVariantId = productVariantId;
+    }
+    
 
     public String getProductName() {
         return productName;
@@ -86,5 +94,9 @@ public class CartItem {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public double getTotalPrice() {
+        return price * quantity;
     }
 }

@@ -26,8 +26,7 @@ public class AuthFilter implements Filter {
     );
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -65,22 +64,15 @@ public class AuthFilter implements Filter {
 
         String roleName = currentUser.getRoleName();
 
-        // Admin và Staff coi dc
-        if (path.equals("/dashboard") || path.equals("/admin")) {
-            if (!"Admin".equalsIgnoreCase(roleName) && !"Staff".equalsIgnoreCase(roleName)) {
-                httpRes.sendRedirect(contextPath + "/home");
-                return;
-            }
-        } //Admin 
-        else if (path.startsWith("/admin/") || path.equals("/manage-account") || path.equals("/import")
-                || path.equals("/manage-voucher") || path.equals("/create-voucher")) {
+        if (path.startsWith("/admin") || path.equals("/manage-account") || path.equals("/import")) {
             if (!"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }
-        } //Staff
-        else if (path.startsWith("/staff")) {
-            if (!"Staff".equalsIgnoreCase(roleName)) {
+        }
+
+        if (path.startsWith("/staff")) {
+            if (!"Staff".equalsIgnoreCase(roleName) && !"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }
@@ -99,6 +91,5 @@ public class AuthFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 }
