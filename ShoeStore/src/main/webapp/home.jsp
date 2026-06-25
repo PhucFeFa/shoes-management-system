@@ -95,18 +95,6 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <!-- Add to Cart Form -->
-                        <form action="${pageContext.request.contextPath}/AddToCart" method="post"
-                              class="absolute bottom-0 left-0 w-full">
-                            <input type="hidden" name="productId" value="${product.id}" />
-                            <input type="hidden" name="variantId" value="${variant.id}">
-                            <input type="hidden" name="returnUrl"
-                                   value="${pageContext.request.requestURI}?id=${product.id}">
-                            <button type="submit"
-                                    class="add-to-cart-btn w-full bg-primary text-on-primary py-4 text-label-md font-label-md uppercase opacity-0 transform translate-y-4 transition-all duration-300">
-                                ADD TO CART
-                            </button>
-                        </form>
                     </div>
 
                     <div>

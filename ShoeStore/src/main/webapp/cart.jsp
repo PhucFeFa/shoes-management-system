@@ -73,7 +73,7 @@
 
                             <div class="flex flex-col md:flex-row gap-5">
 
-                                <!-- Checkbox chọn sản phẩm -->
+                                <!-- Select product checkbox -->
                                 <div class="flex items-center">
                                     <input type="checkbox"
                                            class="cart-checkbox w-5 h-5"
@@ -137,7 +137,7 @@
 
                                             <div class="flex items-center mt-2 border rounded-lg overflow-hidden w-fit">
 
-                                                <!-- Nút giảm -->
+                                                <!-- Decrease button -->
                                                 <form action="UpdateCart" method="post">
                                                     <input type="hidden"
                                                            name="variantId"
@@ -153,12 +153,12 @@
                                                             </button>
                                                             </form>
 
-                                                            <!-- Số lượng -->
+                                                            <!-- Quantity -->
                                                             <div class="w-14 h-10 flex items-center justify-center font-semibold border-x">
                                                                 ${item.quantity}
                                                             </div>
 
-                                                            <!-- Nút tăng -->
+                                                            <!-- Increase button -->
                                                             <form action="UpdateCart" method="post">
                                                                 <input type="hidden"
                                                                        name="variantId"
@@ -238,7 +238,7 @@
 
                                                                                 <hr>
 
-                                                                                    <!-- Tổng tiền -->
+                                                                                    <!-- Total amount -->
                                                                                     <c:set var="total" value="0"/>
 
                                                                                     <c:forEach var="item" items="${cart}">
