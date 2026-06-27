@@ -142,7 +142,7 @@
                                 <c:choose>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
                                         <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
-                                            href="${pageContext.request.contextPath}/admin">
+                                            href="${pageContext.request.contextPath}/dashboard">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>

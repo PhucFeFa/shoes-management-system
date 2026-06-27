@@ -68,7 +68,7 @@ public class PlaceOrderServlet extends HttpServlet {
 
                 request.setAttribute(
                         "error",
-                        "Vui lòng chọn địa chỉ giao hàng");
+                        "Please select a shipping address.");
 
                 request.getRequestDispatcher("/checkout.jsp")
                         .forward(request, response);
@@ -100,9 +100,9 @@ public class PlaceOrderServlet extends HttpServlet {
                     request.setAttribute(
                             "error",
                             item.getProductName()
-                            + " chỉ còn "
+                            + " only has "
                             + currentStock
-                            + " sản phẩm.");
+                            + " items left in stock.");
 
                     request.getRequestDispatcher("/checkout.jsp")
                             .forward(request, response);
@@ -214,7 +214,7 @@ public class PlaceOrderServlet extends HttpServlet {
 
             request.setAttribute(
                     "error",
-                    "Đặt hàng thất bại: "
+                    "Failed to place order: "
                     + e.getMessage());
 
             request.getRequestDispatcher("/checkout.jsp")
