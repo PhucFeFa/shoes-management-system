@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package com.mycompany.shoestore.controllers.admin;
 
 import com.mycompany.shoestore.dao.VoucherDAO;
@@ -16,46 +11,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "UpdateVoucherServlet", urlPatterns = {"/manage-voucher/edit"})
-public class UpdateVoucherServlet extends HttpServlet {
+@WebServlet(name = "CreateVoucherServlet", urlPatterns = {"/create-voucher"})
+public class CreateVoucherServlet extends HttpServlet {
 
-    private static final String UPDATE_FORM_JSP = "/views/admin/update-voucher.jsp";
+
+    private static final String VOUCHER_FORM_JSP = "/views/admin/voucher-form.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        
-        if (id == null || id.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/manage-voucher");
-            return;
-        }
-
-        VoucherDAO voucherDAO = new VoucherDAO();
-        VoucherDTO voucher = voucherDAO.getVoucherDTOById(id);
-
-        if (voucher == null) {
-            response.sendRedirect(request.getContextPath() + "/manage-voucher");
-            return;
-        }
-
-        // Định dạng ngày giờ để hiển thị khớp thẻ input datetime-local (yyyy-MM-ddTHH:mm)
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        String formattedStart = voucher.getStartDate() != null ? dateFormat.format(voucher.getStartDate()) : "";
-        String formattedEnd = voucher.getEndDate() != null ? dateFormat.format(voucher.getEndDate()) : "";
-
-        // Gửi dữ liệu gốc sang JSP điền vào form
-        request.setAttribute("voucher", voucher);
-        request.setAttribute("formattedStart", formattedStart);
-        request.setAttribute("formattedEnd", formattedEnd);
-
-        request.getRequestDispatcher(UPDATE_FORM_JSP).forward(request, response);
+        request.getRequestDispatcher(VOUCHER_FORM_JSP).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
         String code = request.getParameter("code");
         String discountPercentStr = request.getParameter("discountPercent");
         String maxDiscountAmountStr = request.getParameter("maxDiscountAmount");
@@ -66,8 +36,7 @@ public class UpdateVoucherServlet extends HttpServlet {
         String error = "";
         VoucherDAO voucherDAO = new VoucherDAO();
 
-        if (id == null || id.trim().isEmpty()
-                || code == null || code.trim().isEmpty()
+        if (code == null || code.trim().isEmpty()
                 || discountPercentStr == null || discountPercentStr.trim().isEmpty()
                 || maxDiscountAmountStr == null || maxDiscountAmountStr.trim().isEmpty()
                 || startDateStr == null || startDateStr.trim().isEmpty()
@@ -79,6 +48,8 @@ public class UpdateVoucherServlet extends HttpServlet {
             try {
                 code = code.trim().toUpperCase();
                 double discountPercent = Double.parseDouble(discountPercentStr);
+                
+             
                 double maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
                 int quantity = Integer.parseInt(quantityStr);
 
@@ -86,8 +57,7 @@ public class UpdateVoucherServlet extends HttpServlet {
                 Timestamp startDate = new Timestamp(dateFormat.parse(startDateStr).getTime());
                 Timestamp endDate = new Timestamp(dateFormat.parse(endDateStr).getTime());
 
-                // Sử dụng hàm kiểm tra trùng mã loại trừ chính ID này
-                if (voucherDAO.isCodeExistForUpdate(code, id)) {
+                if (voucherDAO.isCodeExist(code)) {
                     error = "Voucher code already exists!";
                 } else if (discountPercent <= 0 || discountPercent > 100) {
                     error = "Discount percent must be between 0.1% and 100%!";
@@ -100,21 +70,20 @@ public class UpdateVoucherServlet extends HttpServlet {
                 }
 
                 if (error.isEmpty()) {
-                    VoucherDTO updatedVoucher = new VoucherDTO();
-                    updatedVoucher.setId(id);
-                    updatedVoucher.setCode(code);
-                    updatedVoucher.setDiscountPercent(discountPercent);
-                    updatedVoucher.setMaxDiscountAmount(maxDiscountAmount);
-                    updatedVoucher.setStartDate(startDate);
-                    updatedVoucher.setEndDate(endDate);
-                    updatedVoucher.setQuantity(quantity);
+                    VoucherDTO newVoucher = new VoucherDTO();
+                    newVoucher.setCode(code);
+                    newVoucher.setDiscountPercent(discountPercent);
+                    newVoucher.setMaxDiscountAmount(maxDiscountAmount);
+                    newVoucher.setStartDate(startDate);
+                    newVoucher.setEndDate(endDate);
+                    newVoucher.setQuantity(quantity);
 
-                    boolean success = voucherDAO.updateVoucher(updatedVoucher);
+                    boolean success = voucherDAO.createVoucher(newVoucher);
                     if (success) {
                         response.sendRedirect(request.getContextPath() + "/manage-voucher");
                         return;
                     } else {
-                        error = "System error. Failed to update voucher!";
+                        error = "System error. Failed to save voucher!";
                     }
                 }
 
@@ -123,19 +92,14 @@ public class UpdateVoucherServlet extends HttpServlet {
             }
         }
 
-        // Nếu có lỗi, giữ lại dữ liệu đang nhập lỗi trên giao diện để người dùng sửa lại
-        VoucherDTO fallbackVoucher = new VoucherDTO();
-        fallbackVoucher.setId(id);
-        fallbackVoucher.setCode(code);
-        
         request.setAttribute("ERROR", error);
-        request.setAttribute("voucher", fallbackVoucher);
+        request.setAttribute("oldCode", code);
         request.setAttribute("oldPercent", discountPercentStr);
         request.setAttribute("oldMax", maxDiscountAmountStr);
-        request.setAttribute("formattedStart", startDateStr);
-        request.setAttribute("formattedEnd", endDateStr);
+        request.setAttribute("oldStart", startDateStr);
+        request.setAttribute("oldEnd", endDateStr);
         request.setAttribute("oldQty", quantityStr);
 
-        request.getRequestDispatcher(UPDATE_FORM_JSP).forward(request, response);
+        request.getRequestDispatcher(VOUCHER_FORM_JSP).forward(request, response);
     }
 }
