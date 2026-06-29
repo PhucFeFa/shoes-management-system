@@ -50,8 +50,14 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("cartCount", 0);
             }
             
-            // Redirect to homepage after successful login
-            response.sendRedirect(request.getContextPath() + "/home");
+            // Redirect based on role
+            String role = user.getRoleName();
+            if ("Admin".equalsIgnoreCase(role) || "Staff".equalsIgnoreCase(role)) {
+                // Redirect to /dashboard as mapped in web.xml
+                response.sendRedirect(request.getContextPath() + "/dashboard");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/home");
+            }
         } else {
             request.setAttribute("error", "Invalid email or password.");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
