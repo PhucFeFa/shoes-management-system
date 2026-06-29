@@ -64,7 +64,7 @@ public class AuthFilter implements Filter {
 
         String roleName = currentUser.getRoleName();
 
-        if (path.startsWith("/admin") || path.equals("/manage-account") || path.equals("/import")) {
+        if (path.startsWith("/admin") || path.equals("/dashboard") || path.equals("/manage-account") || path.equals("/import")) {
             if (!"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
@@ -80,7 +80,8 @@ public class AuthFilter implements Filter {
 
         if (path.startsWith("/profile") || path.equals("/Cart")
                 || path.equals("/AddToCart") || path.equals("/UpdateCart") || path.equals("/RemoveCart")
-                || path.equals("/AddAddress") || path.equals("/EditAddress") || path.equals("/DeleteAddress")) {
+                || path.equals("/AddAddress") || path.equals("/EditAddress") || path.equals("/DeleteAddress")
+                || path.equals("/checkout") || path.equals("/place-order") || path.equals("/order-success")) {
             if (!"Customer".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;

@@ -8,9 +8,11 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>SOLE_LAB ADMIN - Order Details</title>
+    <title>Adidis ADMIN - Order Details</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script id="tailwind-config">
         tailwind.config = {
@@ -111,6 +113,168 @@
         .material-symbols-outlined[style*="'FILL' 1"] {
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+
+        body, h1, h2, h3, h4, h5, h6, p, span:not(.material-symbols-outlined), div, table, tr, td, th, a, button, input, select, textarea {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        }
+
+        .adidis-sidebar {
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 16px 24px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            z-index: 1000;
+        }
+
+        .adidis-brand {
+            padding: 0 12px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+
+        .adidis-brand-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #000000;
+            text-transform: uppercase;
+        }
+
+        .adidis-brand-sub {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .adidis-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .adidis-nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #4b5563;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .adidis-nav-item a:hover {
+            color: #111827;
+            background: #f3f4f6;
+        }
+
+        .adidis-nav-item a.active {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .adidis-nav-item a i {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .adidis-footer {
+            padding: 24px 12px 0;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .adidis-footer a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .adidis-footer a:hover {
+            color: #000000;
+        }
+
+        .adidis-footer a i {
+            font-size: 18px;
+        }
+
+        .adidis-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .adidis-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .adidis-avatar i {
+            font-size: 18px;
+            color: #4b5563;
+        }
+
+        .adidis-user-details {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .adidis-user-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .adidis-user-role {
+            font-size: 11px;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+
+        .main-content {
+            margin-left: 220px;
+        }
         /* Custom scrollbar for minimal aesthetic */
         ::-webkit-scrollbar {
             width: 8px;
@@ -136,68 +300,55 @@
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex h-screen">
 <!-- SideNavBar (Shared Component) -->
-<aside class="bg-surface text-primary font-label-md text-label-md uppercase fixed left-0 top-0 h-full w-64 border-r border-outline-variant flex flex-col py-base z-50">
-    <!-- Header -->
-    <div class="px-6 py-8 border-b border-outline-variant mb-base flex items-center gap-4">
-        <div>
-            <h1 class="font-headline-md text-[16px] font-bold text-primary tracking-tight leading-tight">SOLE_LAB ADMIN</h1>
-            <p class="font-label-sm text-label-sm text-secondary mt-1 tracking-widest uppercase">Staff Portal</p>
-        </div>
+<div class="adidis-sidebar">
+    <div class="adidis-brand">
+        <div class="adidis-brand-name">Adidis</div>
+        <div class="adidis-brand-sub">Staff Portal</div>
     </div>
-    
-    <!-- Main Navigation -->
-    <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2">
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="${pageContext.request.contextPath}/home">
-            <span class="material-symbols-outlined">dashboard</span>
-            Dashboard
+
+    <ul class="adidis-nav">
+        <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/home" class="">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/staff/orders" class="active">
+                <i class="bi bi-cart"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="#" class="">
+                <i class="bi bi-box-seam"></i>
+                <span>Inventory</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="#" class="">
+                <i class="bi bi-people"></i>
+                <span>Customers</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="#" class="">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="adidis-footer">
+        <a href="${pageContext.request.contextPath}/home">
+            <i class="bi bi-box-arrow-left"></i>
+            <span>Back to Website</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none bg-primary text-on-primary font-bold active:scale-95 transition-transform" href="${pageContext.request.contextPath}/staff/orders">
-            <span class="material-symbols-outlined">shopping_cart</span>
-            Orders
-        </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
-            <span class="material-symbols-outlined">inventory_2</span>
-            Inventory
-        </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
-            <span class="material-symbols-outlined">group</span>
-            Customers
-        </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
-            <span class="material-symbols-outlined">settings</span>
-            Settings
-        </a>
-    </nav>
-    
-    <!-- Footer Navigation -->
-    <div class="px-4 pt-4 border-t border-outline-variant space-y-2 mt-auto">
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="#">
-            <span class="material-symbols-outlined">help</span>
-            Help Center
-        </a>
-        <a class="flex items-center gap-3 px-4 py-3 rounded-none text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform" href="${pageContext.request.contextPath}/logout">
-            <span class="material-symbols-outlined">logout</span>
-            Logout
-        </a>
-        
-        <div class="flex items-center gap-3 px-2 mt-4">
-            <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant flex items-center justify-center">
-                <span class="material-symbols-outlined text-secondary text-[24px]">account_circle</span>
-            </div>
-            <div class="flex flex-col">
-                <span class="font-label-md text-label-md text-primary normal-case">
-                    <c:out value="${sessionScope.currentUser.fullName}" default="Staff"/>
-                </span>
-                <span class="font-label-sm text-label-sm text-secondary capitalize">
-                    <c:out value="${sessionScope.currentUser.roleName}" default="staff"/>
-                </span>
-            </div>
-        </div>
     </div>
-</aside>
+</div>
 
 <!-- Main Content Canvas -->
-<main class="ml-64 flex-1 h-full overflow-y-auto bg-background">
+<main class="main-content flex-1 h-full overflow-y-auto bg-background">
     <div class="max-w-container-max mx-auto px-margin-desktop py-margin-desktop">
         
         <c:if test="${not empty sessionScope.successMessage}">

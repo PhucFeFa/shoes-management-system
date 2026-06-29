@@ -29,7 +29,7 @@ public class AddToCartServlet extends HttpServlet {
         String variantId = request.getParameter("variantId");
 
         if (variantId == null || variantId.trim().isEmpty()) {
-            session.setAttribute("cartMessage", "Vui lòng chọn Size và Color!");
+            session.setAttribute("cartMessage", "Please select Size and Color!");
             response.sendRedirect(request.getHeader("Referer"));
             return;
         }
@@ -39,7 +39,7 @@ public class AddToCartServlet extends HttpServlet {
             ProductVariant variant = variantDAO.getVariantById(variantId);
 
             if (variant == null || variant.getStockQuantity() <= 0) {
-                session.setAttribute("cartMessage", "Sản phẩm đã hết hàng!");
+                session.setAttribute("cartMessage", "Product is out of stock!");
                 response.sendRedirect(request.getHeader("Referer"));
                 return;
             }
@@ -50,11 +50,11 @@ public class AddToCartServlet extends HttpServlet {
             Integer count = (Integer) session.getAttribute("cartCount");
             session.setAttribute("cartCount", (count == null ? 0 : count) + 1);
 
-            session.setAttribute("cartMessage", "Đã thêm vào giỏ hàng thành công!");
+            session.setAttribute("cartMessage", "Product added to cart successfully!");
 
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("cartMessage", "Có lỗi xảy ra!");
+            session.setAttribute("cartMessage", "An error occurred!");
         }
 
         response.sendRedirect(request.getHeader("Referer"));

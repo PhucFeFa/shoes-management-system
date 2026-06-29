@@ -15,12 +15,12 @@ public class CartItem {
     }
 
     public CartItem(String productName,
-                    String imageUrl,
-                    double price,
-                    int quantity,
-                    String productVariantId,
-                    String size,
-                    String color) {
+            String imageUrl,
+            double price,
+            int quantity,
+            String productVariantId,
+            String size,
+            String color) {
 
         this.productName = productName;
         this.imageUrl = imageUrl;
@@ -38,7 +38,6 @@ public class CartItem {
         this.quantity = quantity;
         this.productVariantId = productVariantId;
     }
-    
 
     public String getProductName() {
         return productName;
