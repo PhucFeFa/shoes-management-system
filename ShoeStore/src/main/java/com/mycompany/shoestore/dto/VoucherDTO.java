@@ -2,22 +2,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.shoestore.models;
+package com.mycompany.shoestore.dto;
 
-/**
- *
- * @author pts03
- */
-public class Voucher {
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+
+public class VoucherDTO implements Serializable {
     private String id;
     private String code;
     private String discountType;
     private double discountValue;
-    private Double maxDiscountAmount; // using Double to allow null
-    private java.sql.Timestamp startDate;
-    private java.sql.Timestamp endDate;
+    private Double maxDiscountAmount;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private int quantity;
     private int usedQuantity;
+
+    public VoucherDTO() {
+    }
+
+    public VoucherDTO(String id, String code, String discountType, double discountValue, Double maxDiscountAmount, Timestamp startDate, Timestamp endDate, int quantity, int usedQuantity) {
+        this.id = id;
+        this.code = code;
+        this.discountType = discountType;
+        this.discountValue = discountValue;
+        this.maxDiscountAmount = maxDiscountAmount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.quantity = quantity;
+        this.usedQuantity = usedQuantity;
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -34,11 +49,11 @@ public class Voucher {
     public Double getMaxDiscountAmount() { return maxDiscountAmount; }
     public void setMaxDiscountAmount(Double maxDiscountAmount) { this.maxDiscountAmount = maxDiscountAmount; }
 
-    public java.sql.Timestamp getStartDate() { return startDate; }
-    public void setStartDate(java.sql.Timestamp startDate) { this.startDate = startDate; }
+    public Timestamp getStartDate() { return startDate; }
+    public void setStartDate(Timestamp startDate) { this.startDate = startDate; }
 
-    public java.sql.Timestamp getEndDate() { return endDate; }
-    public void setEndDate(java.sql.Timestamp endDate) { this.endDate = endDate; }
+    public Timestamp getEndDate() { return endDate; }
+    public void setEndDate(Timestamp endDate) { this.endDate = endDate; }
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }

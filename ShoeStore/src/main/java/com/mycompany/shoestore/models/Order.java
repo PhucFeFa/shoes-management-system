@@ -10,6 +10,8 @@ public class Order {
     private String addressId;
     private BigDecimal totalAmount;
     private String status;
+    private String paymentMethod;
+    private String paymentStatus;
     private String voucherId;
     private Timestamp createdAt;
     private String customerFullName;
@@ -31,6 +33,12 @@ public class Order {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public String getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 
     public String getVoucherId() { return voucherId; }
     public void setVoucherId(String voucherId) { this.voucherId = voucherId; }

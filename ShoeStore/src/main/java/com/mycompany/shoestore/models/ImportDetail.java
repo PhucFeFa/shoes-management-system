@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class ImportDetail {
     private int importDetailID;   // Khớp với ImportDetailID (INT IDENTITY)
     private int importID;         // Khớp với ImportID (INT - Khóa ngoại nối sang bảng imports)
-    private String productID;     // Khớp với ProductID (UNIQUEIDENTIFIER -> String)
+    private String variantID;     // Khớp với VariantID (UNIQUEIDENTIFIER -> String)
     private int importQuantity;   // Khớp với ImportQuantity (INT)
     private int receivedQuantity; // Khớp với ReceivedQuantity (INT)
     private BigDecimal unitPrice; // Khớp với UnitPrice (DECIMAL)
@@ -20,10 +20,10 @@ public class ImportDetail {
     }
 
     // Constructor có tham số
-    public ImportDetail(int importDetailID, int importID, String productID, int importQuantity, int receivedQuantity, BigDecimal unitPrice) {
+    public ImportDetail(int importDetailID, int importID, String variantID, int importQuantity, int receivedQuantity, BigDecimal unitPrice) {
         this.importDetailID = importDetailID;
         this.importID = importID;
-        this.productID = productID;
+        this.variantID = variantID;
         this.importQuantity = importQuantity;
         this.receivedQuantity = receivedQuantity;
         this.unitPrice = unitPrice;
@@ -46,12 +46,12 @@ public class ImportDetail {
         this.importID = importID;
     }
 
-    public String getProductID() {
-        return productID;
+    public String getVariantID() {
+        return variantID;
     }
 
-    public void setProductID(String productID) {
-        this.productID = productID;
+    public void setVariantID(String variantID) {
+        this.variantID = variantID;
     }
 
     public int getImportQuantity() {
@@ -83,7 +83,7 @@ public class ImportDetail {
         return "ImportDetail{" +
                 "importDetailID=" + importDetailID +
                 ", importID=" + importID +
-                ", productID='" + productID + '\'' +
+                ", variantID='" + variantID + '\'' +
                 ", importQuantity=" + importQuantity +
                 ", receivedQuantity=" + receivedQuantity +
                 ", unitPrice=" + unitPrice +

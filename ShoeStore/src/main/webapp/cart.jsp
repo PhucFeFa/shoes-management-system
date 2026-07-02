@@ -3,7 +3,7 @@
 
 <jsp:include page="/WEB-INF/include/header.jsp"/>
 
-<main class="pt-24 min-h-screen bg-white">
+<main class="pt-24 min-h-screen bg-surface">
 
     <!-- Header -->
     <section class="max-w-7xl mx-auto px-6 lg:px-12 mb-12">

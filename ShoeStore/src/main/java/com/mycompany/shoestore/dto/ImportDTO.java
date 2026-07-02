@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 
 public class ImportDTO {
     private int importID;
-    private String userID;       // ID người nhập đơn
+    private String staffID;       // ID người nhập đơn
     private String supplier;     // Nhà cung cấp
     private BigDecimal totalAmount; // Tổng tiền
     private OffsetDateTime orderDate; // Ngày nhập đơn
@@ -14,9 +14,9 @@ public class ImportDTO {
     public ImportDTO() {
     }
 
-    public ImportDTO(int importID, String userID, String supplier, BigDecimal totalAmount, OffsetDateTime orderDate, String status) {
+    public ImportDTO(int importID, String staffID, String supplier, BigDecimal totalAmount, OffsetDateTime orderDate, String status) {
         this.importID = importID;
-        this.userID = userID;
+        this.staffID = staffID;
         this.supplier = supplier;
         this.totalAmount = totalAmount;
         this.orderDate = orderDate;
@@ -27,8 +27,8 @@ public class ImportDTO {
     public int getImportID() { return importID; }
     public void setImportID(int importID) { this.importID = importID; }
 
-    public String getUserID() { return userID; }
-    public void setUserID(String userID) { this.userID = userID; }
+    public String getStaffID() { return staffID; }
+    public void setStaffID(String staffID) { this.staffID = staffID; }
 
     public String getSupplier() { return supplier; }
     public void setSupplier(String supplier) { this.supplier = supplier; }

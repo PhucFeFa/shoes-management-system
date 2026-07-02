@@ -64,9 +64,19 @@ public class AuthFilter implements Filter {
 
         String roleName = currentUser.getRoleName();
 
-        if (path.startsWith("/admin") || path.equals("/manage-account") || path.equals("/import")) {
+        // Dashboard and Import access for Admin
+        if (path.equals("/admin") || path.equals("/dashboard") || path.equals("/import")) {
             if (!"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
+                return;
+            }
+        }
+        
+        // Only Admin can access manage-account
+        if (path.equals("/manage-account")) {
+            if (!"Admin".equalsIgnoreCase(roleName)) {
+                // Redirect back to dashboard if not an admin
+                httpRes.sendRedirect(contextPath + "/dashboard");
                 return;
             }
         }
@@ -80,7 +90,8 @@ public class AuthFilter implements Filter {
 
         if (path.startsWith("/profile") || path.equals("/Cart")
                 || path.equals("/AddToCart") || path.equals("/UpdateCart") || path.equals("/RemoveCart")
-                || path.equals("/AddAddress") || path.equals("/EditAddress") || path.equals("/DeleteAddress")) {
+                || path.equals("/AddAddress") || path.equals("/EditAddress") || path.equals("/DeleteAddress")
+                || path.equals("/checkout") || path.equals("/place-order") || path.equals("/order-success")) {
             if (!"Customer".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
