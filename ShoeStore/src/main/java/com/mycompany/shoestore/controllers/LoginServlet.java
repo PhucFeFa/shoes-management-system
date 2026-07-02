@@ -38,6 +38,16 @@ public class LoginServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         User user = userDAO.login(email, password);
         
+        // Fallback to Staff table if not found in User table
+        if (user == null) {
+            try {
+                com.mycompany.shoestore.dao.StaffDAO staffDAO = new com.mycompany.shoestore.dao.StaffDAO();
+                user = staffDAO.checkLogin(email, password);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("currentUser", user);
@@ -52,9 +62,12 @@ public class LoginServlet extends HttpServlet {
             
             // Redirect based on role
             String role = user.getRoleName();
-            if ("Admin".equalsIgnoreCase(role) || "Staff".equalsIgnoreCase(role)) {
-                // Redirect to /dashboard as mapped in web.xml
+            if ("Admin".equalsIgnoreCase(role)) {
+                // Redirect Admin to /dashboard as mapped in web.xml
                 response.sendRedirect(request.getContextPath() + "/dashboard");
+            } else if ("Staff".equalsIgnoreCase(role)) {
+                // Redirect Staff to their specific dashboard/orders page
+                response.sendRedirect(request.getContextPath() + "/staff/orders");
             } else {
                 response.sendRedirect(request.getContextPath() + "/home");
             }
