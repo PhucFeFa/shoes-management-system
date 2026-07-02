@@ -57,7 +57,8 @@ public class UpdateVoucherServlet extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         String code = request.getParameter("code");
-        String discountPercentStr = request.getParameter("discountPercent");
+        String discountType = request.getParameter("discountType");
+        String discountValueStr = request.getParameter("discountValue");
         String maxDiscountAmountStr = request.getParameter("maxDiscountAmount");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
@@ -68,8 +69,8 @@ public class UpdateVoucherServlet extends HttpServlet {
 
         if (id == null || id.trim().isEmpty()
                 || code == null || code.trim().isEmpty()
-                || discountPercentStr == null || discountPercentStr.trim().isEmpty()
-                || maxDiscountAmountStr == null || maxDiscountAmountStr.trim().isEmpty()
+                || discountType == null || discountType.trim().isEmpty()
+                || discountValueStr == null || discountValueStr.trim().isEmpty()
                 || startDateStr == null || startDateStr.trim().isEmpty()
                 || endDateStr == null || endDateStr.trim().isEmpty()
                 || quantityStr == null || quantityStr.trim().isEmpty()) {
@@ -78,8 +79,13 @@ public class UpdateVoucherServlet extends HttpServlet {
         } else {
             try {
                 code = code.trim().toUpperCase();
-                double discountPercent = Double.parseDouble(discountPercentStr);
-                double maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
+                double discountValue = Double.parseDouble(discountValueStr);
+                
+                Double maxDiscountAmount = null;
+                if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
+                    maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
+                }
+                
                 int quantity = Integer.parseInt(quantityStr);
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
@@ -89,9 +95,11 @@ public class UpdateVoucherServlet extends HttpServlet {
                 // Sử dụng hàm kiểm tra trùng mã loại trừ chính ID này
                 if (voucherDAO.isCodeExistForUpdate(code, id)) {
                     error = "Voucher code already exists!";
-                } else if (discountPercent <= 0 || discountPercent > 100) {
+                } else if ("PERCENTAGE".equals(discountType) && (discountValue <= 0 || discountValue > 100)) {
                     error = "Discount percent must be between 0.1% and 100%!";
-                } else if (maxDiscountAmount < 0) {
+                } else if ("FIXED_AMOUNT".equals(discountType) && discountValue <= 0) {
+                    error = "Discount amount must be greater than 0!";
+                } else if (maxDiscountAmount != null && maxDiscountAmount < 0) {
                     error = "Max discount amount cannot be negative!";
                 } else if (quantity <= 0) {
                     error = "Quantity must be greater than 0!";
@@ -103,7 +111,8 @@ public class UpdateVoucherServlet extends HttpServlet {
                     VoucherDTO updatedVoucher = new VoucherDTO();
                     updatedVoucher.setId(id);
                     updatedVoucher.setCode(code);
-                    updatedVoucher.setDiscountPercent(discountPercent);
+                    updatedVoucher.setDiscountType(discountType);
+                    updatedVoucher.setDiscountValue(discountValue);
                     updatedVoucher.setMaxDiscountAmount(maxDiscountAmount);
                     updatedVoucher.setStartDate(startDate);
                     updatedVoucher.setEndDate(endDate);
@@ -130,7 +139,8 @@ public class UpdateVoucherServlet extends HttpServlet {
         
         request.setAttribute("ERROR", error);
         request.setAttribute("voucher", fallbackVoucher);
-        request.setAttribute("oldPercent", discountPercentStr);
+        request.setAttribute("oldType", discountType);
+        request.setAttribute("oldValue", discountValueStr);
         request.setAttribute("oldMax", maxDiscountAmountStr);
         request.setAttribute("formattedStart", startDateStr);
         request.setAttribute("formattedEnd", endDateStr);

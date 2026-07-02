@@ -1,6 +1,7 @@
 package com.mycompany.shoestore.controllers;
 
 import com.mycompany.shoestore.dao.OrderDAO;
+import com.mycompany.shoestore.dao.OrderStaffLogDAO;
 import com.mycompany.shoestore.models.User;
 
 import jakarta.servlet.ServletException;
@@ -45,6 +46,10 @@ public class UpdateOrderStatusServlet extends HttpServlet {
             }
             
             if (success) {
+                if ("Staff".equalsIgnoreCase(currentUser.getRoleName())) {
+                    OrderStaffLogDAO logDAO = new OrderStaffLogDAO();
+                    logDAO.insertLog(orderId, currentUser.getId(), "Updated status to " + status + (reason != null ? " (Reason: " + reason + ")" : ""));
+                }
                 session.setAttribute("successMessage", "Order status updated successfully.");
             } else {
                 session.setAttribute("errorMessage", "Failed to update order status.");

@@ -83,6 +83,7 @@
                             "container-max": "1440px"
                         },
                         "fontFamily": {
+                            "sans": ["Inter", "sans-serif"],
                             "label-md": ["Inter"],
                             "display-lg": ["Inter"],
                             "label-sm": ["Inter"],

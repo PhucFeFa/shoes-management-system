@@ -41,7 +41,8 @@ public class CheckoutServlet extends HttpServlet {
                 return;
             }
 
-            // Khử trùng lặp variantId (chặn lỗi duplicate nếu Cart.jsp render checkbox trùng)
+            // Khử trùng lặp variantId (chặn lỗi duplicate nếu Cart.jsp render checkbox
+            // trùng)
             Set<String> selectedSet = new LinkedHashSet<>(Arrays.asList(selectedItemsRaw));
             String[] selectedItems = selectedSet.toArray(new String[0]);
 
@@ -62,7 +63,7 @@ public class CheckoutServlet extends HttpServlet {
                 return;
             }
 
-            double shippingFee = 30000;
+            double shippingFee = 20;
             double finalTotal = subTotal + shippingFee;
 
             // Set attributes cho JSP

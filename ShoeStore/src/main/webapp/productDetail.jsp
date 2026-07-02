@@ -32,7 +32,7 @@
                     color: #eab308;
                 }
             </style>
-            <main class="pt-32 pb-24 min-h-screen bg-gray-50">
+            <main class="pt-24 pb-24 min-h-screen bg-surface">
 
                 <div class="max-w-6xl mx-auto px-6">
 

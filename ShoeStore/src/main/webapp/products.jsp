@@ -11,8 +11,6 @@
                 <div
                     class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-surface-variant pb-6">
                     <div>
-                        <h1 class="text-headline-lg font-headline-lg text-primary uppercase tracking-tighter">ADIDIS
-                        </h1>
                         <p class="text-body-md text-secondary mt-2">Discover the latest in engineered speed and
                             performance.</p>
                     </div>
@@ -35,8 +33,7 @@
                                     class="text-label-sm font-bold tracking-wider uppercase text-primary mb-4 border-b border-surface-variant pb-2">
                                     SEARCH</h3>
                                 <div class="relative">
-                                    <input type="text" name="search" value="${searchQuery}"
-                                        placeholder="Search..."
+                                    <input type="text" name="search" value="${searchQuery}" placeholder="Search..."
                                         class="w-full bg-surface-container text-label-sm text-primary border-none py-2 px-3 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
                                     <span
                                         class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
@@ -131,7 +128,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
+                                <div
+                                    class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
                                     <c:forEach var="p" items="${products}">
                                         <div
                                             class="group flex flex-col relative bg-surface hover:bg-surface-container transition-colors duration-300">
@@ -173,13 +171,16 @@
                                                 <div class="flex items-center gap-1 mt-auto">
                                                     <c:choose>
                                                         <c:when test="${p.reviewCount > 0}">
-                                                            <div class="relative inline-block text-gray-300 text-sm mr-1 whitespace-nowrap">
+                                                            <div
+                                                                class="relative inline-block text-gray-300 text-sm mr-1 whitespace-nowrap">
                                                                 ★★★★★
-                                                                <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap" style="width: ${p.averageRating / 5 * 100}%;">
+                                                                <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap"
+                                                                    style="width: ${p.averageRating / 5 * 100}%;">
                                                                     ★★★★★
                                                                 </div>
                                                             </div>
-                                                            <span class="text-label-sm text-secondary">(${p.reviewCount})</span>
+                                                            <span
+                                                                class="text-label-sm text-secondary">(${p.reviewCount})</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <div class="text-gray-300 text-sm mr-1">★★★★★</div>
@@ -197,19 +198,22 @@
                                 <c:if test="${totalPages > 1}">
                                     <div class="mt-12 flex justify-center items-center space-x-2">
                                         <c:if test="${currentPage > 1}">
-                                            <button onclick="goToPage(${currentPage - 1})" class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
+                                            <button onclick="goToPage(${currentPage - 1})"
+                                                class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
                                                 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                                             </button>
                                         </c:if>
 
                                         <c:forEach begin="1" end="${totalPages}" var="i">
-                                            <button onclick="goToPage(${i})" class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
+                                            <button onclick="goToPage(${i})"
+                                                class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
                                                 ${i}
                                             </button>
                                         </c:forEach>
 
                                         <c:if test="${currentPage < totalPages}">
-                                            <button onclick="goToPage(${currentPage + 1})" class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
+                                            <button onclick="goToPage(${currentPage + 1})"
+                                                class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
                                                 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                                             </button>
                                         </c:if>

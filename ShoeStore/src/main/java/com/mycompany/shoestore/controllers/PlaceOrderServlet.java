@@ -2,7 +2,6 @@ package com.mycompany.shoestore.controllers;
 
 import com.mycompany.shoestore.dao.CartDAO;
 import com.mycompany.shoestore.dao.OrderDAO;
-import com.mycompany.shoestore.dao.PaymentDAO;
 import com.mycompany.shoestore.dao.ProductVariantDAO;
 import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.models.CartItem;
@@ -48,6 +47,7 @@ public class PlaceOrderServlet extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO();
             VoucherDAO voucherDAO = new VoucherDAO();
 
+            @SuppressWarnings("unchecked")
             List<CartItem> checkoutItems =
                     (List<CartItem>) session.getAttribute("checkoutItems");
 
@@ -135,10 +135,16 @@ public class PlaceOrderServlet extends HttpServlet {
 
                 if (voucher != null) {
 
-                    double discount =
-                            subTotal
-                            * voucher.getDiscountPercent()
-                            / 100.0;
+                    double discount = 0;
+
+                    if ("PERCENTAGE".equalsIgnoreCase(voucher.getDiscountType())) {
+                        discount = subTotal * voucher.getDiscountValue() / 100.0;
+                        if (voucher.getMaxDiscountAmount() != null && discount > voucher.getMaxDiscountAmount()) {
+                            discount = voucher.getMaxDiscountAmount();
+                        }
+                    } else if ("FIXED_AMOUNT".equalsIgnoreCase(voucher.getDiscountType())) {
+                        discount = voucher.getDiscountValue();
+                    }
 
                     totalAmount -= discount;
                 }
@@ -148,6 +154,11 @@ public class PlaceOrderServlet extends HttpServlet {
                 totalAmount = 0;
             }
 
+            String paymentMethod = request.getParameter("paymentMethod");
+            if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
+                paymentMethod = "cod";
+            }
+
             // ===================== CREATE ORDER =====================
 
             String orderId =
@@ -155,7 +166,8 @@ public class PlaceOrderServlet extends HttpServlet {
                             currentUser.getId(),
                             addressId,
                             totalAmount,
-                            voucherId);
+                            voucherId,
+                            paymentMethod);
 
             if (orderId == null) {
 
@@ -190,14 +202,7 @@ public class PlaceOrderServlet extends HttpServlet {
                         item.getProductVariantId());
             }
 
-            // ===================== PAYMENT =====================
 
-            PaymentDAO paymentDAO =
-                    new PaymentDAO();
-
-            paymentDAO.createCODPayment(
-                    orderId,
-                    totalAmount);
 
             // ===================== CLEAR SESSION =====================
 

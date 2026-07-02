@@ -16,7 +16,7 @@ public class ImportDAO {
     // Hàm lấy toàn bộ danh sách phiếu nhập
     public List<ImportDTO> getAllImports() {
         List<ImportDTO> list = new ArrayList<>();
-        String sql = "SELECT ImportID, UserID, Supplier, TotalAmount, OrderDate, Status FROM [imports] ORDER BY ImportID DESC";
+        String sql = "SELECT ImportID, StaffID, Supplier, TotalAmount, OrderDate, Status FROM [imports] ORDER BY ImportID DESC";
         
         // Sử dụng try-with-resources để tự động đóng kết nối tránh tràn bộ nhớ
         try (Connection conn = new DBContext().getConnection(); 
@@ -26,7 +26,7 @@ public class ImportDAO {
             while (rs.next()) {
                 ImportDTO dto = new ImportDTO();
                 dto.setImportID(rs.getInt("ImportID"));
-                dto.setUserID(rs.getString("UserID"));
+                dto.setStaffID(rs.getString("StaffID"));
                 dto.setSupplier(rs.getNString("Supplier"));
                 dto.setTotalAmount(rs.getBigDecimal("TotalAmount"));
                 

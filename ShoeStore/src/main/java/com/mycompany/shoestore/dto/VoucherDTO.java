@@ -11,23 +11,27 @@ import java.sql.Timestamp;
 public class VoucherDTO implements Serializable {
     private String id;
     private String code;
-    private double discountPercent;
-    private double maxDiscountAmount;
+    private String discountType;
+    private double discountValue;
+    private Double maxDiscountAmount;
     private Timestamp startDate;
     private Timestamp endDate;
     private int quantity;
+    private int usedQuantity;
 
     public VoucherDTO() {
     }
 
-    public VoucherDTO(String id, String code, double discountPercent, double maxDiscountAmount, Timestamp startDate, Timestamp endDate, int quantity) {
+    public VoucherDTO(String id, String code, String discountType, double discountValue, Double maxDiscountAmount, Timestamp startDate, Timestamp endDate, int quantity, int usedQuantity) {
         this.id = id;
         this.code = code;
-        this.discountPercent = discountPercent;
+        this.discountType = discountType;
+        this.discountValue = discountValue;
         this.maxDiscountAmount = maxDiscountAmount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.quantity = quantity;
+        this.usedQuantity = usedQuantity;
     }
 
     public String getId() { return id; }
@@ -36,11 +40,14 @@ public class VoucherDTO implements Serializable {
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }
 
-    public double getDiscountPercent() { return discountPercent; }
-    public void setDiscountPercent(double discountPercent) { this.discountPercent = discountPercent; }
+    public String getDiscountType() { return discountType; }
+    public void setDiscountType(String discountType) { this.discountType = discountType; }
 
-    public double getMaxDiscountAmount() { return maxDiscountAmount; }
-    public void setMaxDiscountAmount(double maxDiscountAmount) { this.maxDiscountAmount = maxDiscountAmount; }
+    public double getDiscountValue() { return discountValue; }
+    public void setDiscountValue(double discountValue) { this.discountValue = discountValue; }
+
+    public Double getMaxDiscountAmount() { return maxDiscountAmount; }
+    public void setMaxDiscountAmount(Double maxDiscountAmount) { this.maxDiscountAmount = maxDiscountAmount; }
 
     public Timestamp getStartDate() { return startDate; }
     public void setStartDate(Timestamp startDate) { this.startDate = startDate; }
@@ -50,4 +57,7 @@ public class VoucherDTO implements Serializable {
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public int getUsedQuantity() { return usedQuantity; }
+    public void setUsedQuantity(int usedQuantity) { this.usedQuantity = usedQuantity; }
 }
