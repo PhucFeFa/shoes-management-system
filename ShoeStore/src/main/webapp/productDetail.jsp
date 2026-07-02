@@ -165,20 +165,47 @@
                                     <span id="stockInfo" class="font-semibold text-lg"></span>
                                 </div>
 
-                                <div class="flex items-center gap-6 mt-4">
-                                    <form action="${pageContext.request.contextPath}/AddToCart" method="post" class="flex-1">
-                                        <input type="hidden" name="productId" value="${product.id}">
-                                        <input type="hidden" id="selectedVariantId" name="variantId">
-                                        <input type="hidden" name="returnUrl" value="${pageContext.request.requestURI}?id=${product.id}">
-                                        <button id="addToCartBtn" type="submit" class="w-full bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition disabled:opacity-50" disabled>
-                                            ADD TO CART
-                                        </button>
-                                    </form>
-
-                                    <a href="${pageContext.request.contextPath}/home" class="flex-1 flex items-center justify-center border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition">
-                                        BACK TO PRODUCTS
-                                    </a>
-                                </div>
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.currentUser && (sessionScope.currentUser.roleName eq 'Admin' || sessionScope.currentUser.roleName eq 'Staff')}">
+                                        <div class="flex flex-col gap-4 mt-4 w-full">
+                                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                                                <div class="flex">
+                                                    <div class="flex-shrink-0">
+                                                        <span class="material-symbols-outlined text-yellow-500">warning</span>
+                                                    </div>
+                                                    <div class="ml-3">
+                                                        <p class="text-sm text-yellow-700">
+                                                            Admin/Staff accounts are only permitted to view products, not to make purchases.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-6 w-full">
+                                                <button class="flex-1 bg-gray-300 text-gray-500 px-8 py-4 rounded-lg cursor-not-allowed font-bold" disabled>
+                                                    READ ONLY VIEW
+                                                </button>
+                                                <a href="${pageContext.request.contextPath}/home" class="flex-1 flex items-center justify-center border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition font-bold">
+                                                    BACK TO PRODUCTS
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="flex items-center gap-6 mt-4">
+                                            <form action="${pageContext.request.contextPath}/AddToCart" method="post" class="flex-1">
+                                                <input type="hidden" name="productId" value="${product.id}">
+                                                <input type="hidden" id="selectedVariantId" name="variantId">
+                                                <input type="hidden" name="returnUrl" value="${pageContext.request.requestURI}?id=${product.id}">
+                                                <button id="addToCartBtn" type="submit" class="w-full bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition disabled:opacity-50" disabled>
+                                                    ADD TO CART
+                                                </button>
+                                            </form>
+                                            <a href="${pageContext.request.contextPath}/home" class="flex-1 flex items-center justify-center border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition">
+                                                BACK TO PRODUCTS
+                                            </a>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
 
                             </div>
 

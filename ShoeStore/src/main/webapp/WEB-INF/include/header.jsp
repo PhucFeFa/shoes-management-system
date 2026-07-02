@@ -158,9 +158,23 @@
                     </c:if>
 
                     <c:if test="${not empty sessionScope.currentUser}">
-                        <a href="${pageContext.request.contextPath}/profile" class="relative group cursor-pointer block mt-1">
-                            <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
-                        </a>
+                        <c:choose>
+                            <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
+                                <a href="${pageContext.request.contextPath}/dashboard" class="relative group cursor-pointer block mt-1" title="Admin Dashboard">
+                                    <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                                </a>
+                            </c:when>
+                            <c:when test="${sessionScope.currentUser.roleName eq 'Staff'}">
+                                <a href="${pageContext.request.contextPath}/staff/orders" class="relative group cursor-pointer block mt-1" title="Staff Dashboard">
+                                    <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/profile" class="relative group cursor-pointer block mt-1" title="My Profile">
+                                    <span class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
 
                         <form action="Logout" method="get">
                             <button

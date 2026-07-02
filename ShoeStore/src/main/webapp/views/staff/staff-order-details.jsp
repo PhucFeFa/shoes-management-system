@@ -308,6 +308,12 @@
 
     <ul class="adidis-nav">
         <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/home" class="">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/staff/orders" class="active">
                 <i class="bi bi-cart"></i>
                 <span>Orders</span>
@@ -317,6 +323,18 @@
             <a href="#" class="">
                 <i class="bi bi-box-seam"></i>
                 <span>Inventory</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="#" class="">
+                <i class="bi bi-people"></i>
+                <span>Customers</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="#" class="">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
             </a>
         </li>
     </ul>

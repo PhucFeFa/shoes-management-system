@@ -56,10 +56,10 @@ public class UserDAO {
     //View
     public List<UserDTO> getAllCustomers() {
         List<UserDTO> list = new ArrayList<>();
-        String sql = "SELECT u.id, u.email, u.full_name, u.created_at, 'Active' AS status, r.name AS role_name "
+        String sql = "SELECT u.id, u.email, u.full_name, u.created_at, u.status, r.name AS role_name "
                    + "FROM [users] u "
                    + "INNER JOIN [roles] r ON u.role_id = r.id "
-                   + "WHERE r.name = 'Customer'";
+                   + "WHERE u.role_id != '11111111-1111-1111-1111-111111111111'";
         
         DBContext db = new DBContext();
         try (Connection conn = db.getConnection();
@@ -85,8 +85,16 @@ public class UserDAO {
 
     //ChangeStatus
     public boolean changeStatus(String userId, String currentStatus) {
-        // Feature disabled because 'status' column does not exist in 'users' table
-        System.err.println("Cannot change status: 'status' column is missing in 'users' table.");
+        String newStatus = "Active".equalsIgnoreCase(currentStatus) ? "Inactive" : "Active";
+        String sql = "UPDATE [users] SET [status] = ? WHERE [id] = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setString(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

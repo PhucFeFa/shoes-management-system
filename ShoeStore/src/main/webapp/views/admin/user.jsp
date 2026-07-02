@@ -4,7 +4,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Customer Management - Admin</title>
+        <title>Account Management - Admin</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <style>
@@ -235,7 +235,7 @@
             <div class="main-content">
                 <div class="page-header">
                     <i class="bi bi-people" style="font-size:16px; color:#1a1a1a;"></i>
-                    <h3 class="page-title">Customer List</h3>
+                    <h3 class="page-title">Account List</h3>
                 </div>
 
                 <div class="table-card">
@@ -305,7 +305,6 @@
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">View</a>
                                                     <a href="${pageContext.request.contextPath}/manage-account/edit?id=${u.id}" class="btn-action btn-edit">Edit</a>
-                                                    <%--
                                                     <c:choose>
                                                         <c:when test="${u.status eq 'Active'}">
                                                             <a href="${pageContext.request.contextPath}/status-account?id=${u.id}&currentStatus=Active" 
@@ -318,7 +317,6 @@
                                                                onclick="return confirm('Are you sure you want to activate this account?');">Unblock</a>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                    --%>
                                                 </div>
                                             </td>
                                         </tr>
@@ -326,7 +324,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <tr class="empty-row">
-                                        <td colspan="8">No customers found in the system.</td>
+                                        <td colspan="8">No accounts found in the system.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>

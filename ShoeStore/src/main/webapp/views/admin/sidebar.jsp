@@ -76,7 +76,7 @@
         padding: 24px 16px;
         border-top: 1px solid rgba(226, 226, 226, 0.5);
     }
-    .sole-footer a {
+    .sole-footer button {
         background: none;
         border: none;
         width: 100%;
@@ -92,13 +92,12 @@
         color: #5d5f5f;
         border-radius: 4px;
         transition: background 0.15s, color 0.15s;
-        text-decoration: none;
     }
-    .sole-footer a:hover {
+    .sole-footer button:hover {
         color: #000000;
         background: #f3f3f4;
     }
-    .sole-footer a .material-symbols-outlined {
+    .sole-footer button .material-symbols-outlined {
         font-size: 18px;
     }
     /* Đảm bảo nội dung trang chính thụt lề chuẩn theo sidebar mới */
@@ -128,7 +127,7 @@
                 <a href="${pageContext.request.contextPath}/manage-account"
                    class="${activePage eq 'user' ? 'active' : ''}">
                     <span class="material-symbols-outlined">group</span>
-                    <span>Customers</span>
+                    <span>Users</span>
                 </a>
             </li>
             <li class="sole-nav-item">
@@ -149,13 +148,6 @@
 
         <c:if test="${sessionScope.currentUser.roleName eq 'Staff'}">
             <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/staff/orders"
-                   class="${activePage eq 'orders' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">receipt_long</span>
-                    <span>Order Management</span>
-                </a>
-            </li>
-            <li class="sole-nav-item">
                 <a href="${pageContext.request.contextPath}/staff/request"
                    class="${activePage eq 'request' ? 'active' : ''}">
                     <span class="material-symbols-outlined">description</span>
@@ -166,10 +158,12 @@
     </ul>
 
     <div class="sole-footer">
-        <a href="${pageContext.request.contextPath}/home">
-            <span class="material-symbols-outlined">logout</span>
-            <span>Back to Website</span>
-        </a>
+        <form action="${pageContext.request.contextPath}/Logout" method="GET" style="margin: 0; width: 100%;">
+            <button type="submit">
+                <span class="material-symbols-outlined">logout</span>
+                <span>Logout</span>
+            </button>
+        </form>
     </div>
 
 </div>
