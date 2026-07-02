@@ -122,7 +122,6 @@
             </a>
         </li>
         
-        <c:if test="${sessionScope.currentUser.roleName eq 'Admin'}">
             <li class="sole-nav-item">
                 <a href="${pageContext.request.contextPath}/manage-account"
                    class="${activePage eq 'user' ? 'active' : ''}">
@@ -144,24 +143,13 @@
                     <span>Voucher</span>
                 </a>
             </li>
-        </c:if>
-
-        <c:if test="${sessionScope.currentUser.roleName eq 'Staff'}">
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/staff/request"
-                   class="${activePage eq 'request' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">description</span>
-                    <span>Request Import</span>
-                </a>
-            </li>
-        </c:if>
     </ul>
 
     <div class="sole-footer">
-        <form action="${pageContext.request.contextPath}/Logout" method="GET" style="margin: 0; width: 100%;">
+        <form action="${pageContext.request.contextPath}/home" method="GET" style="margin: 0; width: 100%;">
             <button type="submit">
-                <span class="material-symbols-outlined">logout</span>
-                <span>Logout</span>
+                <span class="material-symbols-outlined">home</span>
+                <span>Back to Website</span>
             </button>
         </form>
     </div>
