@@ -13,8 +13,18 @@ public class Review {
     private Timestamp updatedAt;
     private boolean isUpdated;
     
-    // Additional fields for display
     private String userName;
+    
+    // Moderation and Reply fields
+    private String moderationStatus = "VISIBLE";
+    private String hideReason;
+    private String replyComment;
+    private String repliedBy;
+    private Timestamp replyUpdatedAt;
+    private String replierName; // For display
+    
+    private String productName; // For display
+    private String productImage; // For display
 
     public Review() {
     }
@@ -106,5 +116,72 @@ public class Review {
 
     public void setUpdated(boolean isUpdated) {
         this.isUpdated = isUpdated;
+    }
+
+
+
+
+    public String getModerationStatus() {
+        return moderationStatus;
+    }
+
+    public void setModerationStatus(String moderationStatus) {
+        this.moderationStatus = moderationStatus;
+    }
+
+    public String getHideReason() {
+        return hideReason;
+    }
+
+    public void setHideReason(String hideReason) {
+        this.hideReason = hideReason;
+    }
+
+    public String getReplyComment() {
+        return replyComment;
+    }
+
+    public void setReplyComment(String replyComment) {
+        this.replyComment = replyComment;
+    }
+
+    public String getRepliedBy() {
+        return repliedBy;
+    }
+
+    public void setRepliedBy(String repliedBy) {
+        this.repliedBy = repliedBy;
+    }
+
+    public Timestamp getReplyUpdatedAt() {
+        return replyUpdatedAt;
+    }
+
+    public void setReplyUpdatedAt(Timestamp replyUpdatedAt) {
+        this.replyUpdatedAt = replyUpdatedAt;
+    }
+
+    public String getReplierName() {
+        return replierName;
+    }
+
+    public void setReplierName(String replierName) {
+        this.replierName = replierName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 }

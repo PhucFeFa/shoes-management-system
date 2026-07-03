@@ -312,6 +312,12 @@
                                 </a>
                             </li>
                             <li class="adidis-nav-item">
+                                <a href="${pageContext.request.contextPath}/manage-reviews" class="">
+                                    <span class="material-symbols-outlined text-[18px]">rate_review</span>
+                                    <span>Reviews</span>
+                                </a>
+                            </li>
+                            <li class="adidis-nav-item">
                                 <a href="#" class="">
                                     <i class="bi bi-box-seam"></i>
                                     <span>Inventory</span>

@@ -81,7 +81,7 @@ public class AuthFilter implements Filter {
             }
         }
 
-        if (path.startsWith("/staff")) {
+        if (path.startsWith("/staff") || path.startsWith("/manage-reviews")) {
             if (!"Staff".equalsIgnoreCase(roleName) && !"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
