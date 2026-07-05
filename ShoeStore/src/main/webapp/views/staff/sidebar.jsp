@@ -8,36 +8,29 @@
 <div class="w-[256px] h-screen fixed top-0 left-0 bg-[#f9f9f9] border-r border-[#e2e2e2] flex flex-col py-2 font-['Inter',sans-serif] z-[1000]">
     <div class="px-6 py-8 border-b border-[#e2e2e2]/50">
         <div class="text-[24px] font-bold tracking-[-0.02em] text-black uppercase">ADIDIS</div>
-        <div class="text-[12px] text-[#5d5f5f] mt-1 font-medium">Management Panel</div>
+        <div class="text-[12px] text-[#5d5f5f] mt-1 font-medium">Staff Panel</div>
     </div>
 
     <ul class="list-none m-0 px-4 py-6 flex-1 flex flex-col gap-2">
         <li>
-            <a href="${pageContext.request.contextPath}/dashboard"
+            <a href="${pageContext.request.contextPath}/staff/dashboard"
                class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'dashboard' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
                 <span class="material-symbols-outlined text-[20px]">dashboard</span>
                 <span>Dashboard</span>
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/manage-account"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'user' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
-                <span class="material-symbols-outlined text-[20px]">group</span>
-                <span>Users</span>
-            </a>
-        </li>
-        <li>
-            <a href="${pageContext.request.contextPath}/import"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'import' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
+            <a href="${pageContext.request.contextPath}/staff/orders"
+               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'orders' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
                 <span class="material-symbols-outlined text-[20px]">local_shipping</span>
-                <span>Confirm Import</span>
+                <span>Orders</span>
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/manage-voucher"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'voucher' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
-                <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
-                <span>Voucher</span>
+            <a href="${pageContext.request.contextPath}/staff/manage-reviews"
+               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'reviews' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
+                <span class="material-symbols-outlined text-[20px]">rate_review</span>
+                <span>Reviews</span>
             </a>
         </li>
     </ul>

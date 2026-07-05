@@ -247,7 +247,7 @@
         }
 
         .main-content {
-            margin-left: 220px;
+            margin-left: 256px;
         }
         
         .main-content.admin-view {
@@ -259,58 +259,8 @@
 <body class="bg-background text-on-surface font-body-md overflow-x-hidden antialiased selection:bg-primary selection:text-on-primary min-h-screen">
 
     <!-- Staff Sidebar -->
-    <div class="adidis-sidebar">
-        <div class="adidis-brand">
-            <div class="adidis-brand-name">Adidis</div>
-            <div class="adidis-brand-sub">Staff Portal</div>
-        </div>
-
-        <ul class="adidis-nav">
-            <li class="adidis-nav-item">
-                <a href="${pageContext.request.contextPath}/home" class="">
-                    <i class="bi bi-speedometer2"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="adidis-nav-item">
-                <a href="${pageContext.request.contextPath}/staff/orders" class="">
-                    <i class="bi bi-cart"></i>
-                    <span>Orders</span>
-                </a>
-            </li>
-            <li class="adidis-nav-item">
-                <a href="${pageContext.request.contextPath}/manage-reviews" class="active">
-                    <span class="material-symbols-outlined text-[18px]">rate_review</span>
-                    <span>Reviews</span>
-                </a>
-            </li>
-            <li class="adidis-nav-item">
-                <a href="#" class="">
-                    <i class="bi bi-box-seam"></i>
-                    <span>Inventory</span>
-                </a>
-            </li>
-            <li class="adidis-nav-item">
-                <a href="#" class="">
-                    <i class="bi bi-people"></i>
-                    <span>Customers</span>
-                </a>
-            </li>
-            <li class="adidis-nav-item">
-                <a href="#" class="">
-                    <i class="bi bi-gear"></i>
-                    <span>Settings</span>
-                </a>
-            </li>
-        </ul>
-
-        <div class="adidis-footer">
-            <a href="${pageContext.request.contextPath}/home">
-                <i class="bi bi-box-arrow-left"></i>
-                <span>Back to Website</span>
-            </a>
-        </div>
-    </div>
+    <c:set var="activePage" value="reviews" scope="request" />
+    <jsp:include page="/views/staff/sidebar.jsp" />
 
     <!-- Main Wrapper -->
     <main class="main-content flex-1 flex flex-col min-h-screen">
@@ -327,7 +277,7 @@
 
         <!-- Control Bar: Filters & Search (GET form) -->
         <section class="px-margin-desktop py-6 flex justify-between items-center bg-surface-bright sticky top-0 z-30 shadow-[0_1px_0_rgba(0,0,0,0.05)]">
-            <form method="get" action="${pageContext.request.contextPath}/manage-reviews" class="flex items-center gap-4 flex-1">
+            <form method="get" action="${pageContext.request.contextPath}/staff/manage-reviews" class="flex items-center gap-4 flex-1">
                 <!-- Search Input -->
                 <div class="relative w-full max-w-md">
                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-secondary pointer-events-none">search</span>
@@ -487,7 +437,7 @@
                 </div>
 
                 <section>
-                    <form action="${pageContext.request.contextPath}/manage-reviews/reply" method="post" id="replyForm">
+                    <form action="${pageContext.request.contextPath}/staff/manage-reviews/reply" method="post" id="replyForm">
                         <input type="hidden" name="reviewId" id="reply-review-id" />
                         <input type="hidden" name="filter" value="${currentFilter}" />
                         <label class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant block mb-3">Moderator Reply</label>
@@ -497,7 +447,7 @@
                 </section>
 
                 <section id="flag-action-section">
-                    <form action="${pageContext.request.contextPath}/manage-reviews/hide" method="post" id="hideForm">
+                    <form action="${pageContext.request.contextPath}/staff/manage-reviews/hide" method="post" id="hideForm">
                         <input type="hidden" name="reviewId" id="hide-review-id" />
                         <input type="hidden" name="filter" value="${currentFilter}" />
                         <label class="font-label-md text-label-md uppercase tracking-widest text-error block mb-3">Flag Content</label>

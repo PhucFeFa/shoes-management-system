@@ -273,7 +273,7 @@
         }
 
         .main-content {
-            margin-left: 220px;
+            margin-left: 256px;
         }
         /* Custom scrollbar for minimal aesthetic */
         ::-webkit-scrollbar {
@@ -300,58 +300,8 @@
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex h-screen">
 <!-- SideNavBar (Shared Component) -->
-<div class="adidis-sidebar">
-    <div class="adidis-brand">
-        <div class="adidis-brand-name">Adidis</div>
-        <div class="adidis-brand-sub">Staff Portal</div>
-    </div>
-
-    <ul class="adidis-nav">
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/home" class="">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/staff/orders" class="active">
-                <i class="bi bi-cart"></i>
-                <span>Orders</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/manage-reviews" class="">
-                <span class="material-symbols-outlined text-[18px]">rate_review</span>
-                <span>Reviews</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="#" class="">
-                <i class="bi bi-box-seam"></i>
-                <span>Inventory</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="#" class="">
-                <i class="bi bi-people"></i>
-                <span>Customers</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="#" class="">
-                <i class="bi bi-gear"></i>
-                <span>Settings</span>
-            </a>
-        </li>
-    </ul>
-
-    <div class="adidis-footer">
-        <a href="${pageContext.request.contextPath}/home">
-            <i class="bi bi-box-arrow-left"></i>
-            <span>Back to Website</span>
-        </a>
-    </div>
-</div>
+<c:set var="activePage" value="orders" scope="request" />
+<jsp:include page="/views/staff/sidebar.jsp" />
 
 <!-- Main Content Canvas -->
 <main class="main-content flex-1 h-full overflow-y-auto bg-background">

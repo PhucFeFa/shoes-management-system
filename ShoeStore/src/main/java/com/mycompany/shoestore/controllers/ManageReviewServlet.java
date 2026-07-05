@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "ManageReviewServlet", urlPatterns = {
-        "/manage-reviews",
-        "/manage-reviews/reply",
-        "/manage-reviews/hide",
-        "/manage-reviews/approve-hide",
-        "/manage-reviews/reject-hide"
+        "/staff/manage-reviews",
+        "/staff/manage-reviews/reply",
+        "/staff/manage-reviews/hide",
+        "/staff/manage-reviews/approve-hide",
+        "/staff/manage-reviews/reject-hide"
 })
 public class ManageReviewServlet extends HttpServlet {
 
@@ -34,7 +34,7 @@ public class ManageReviewServlet extends HttpServlet {
         }
 
         String path = request.getServletPath();
-        if ("/manage-reviews".equals(path)) {
+        if ("/staff/manage-reviews".equals(path)) {
             String filterStatus = request.getParameter("filter");
             if (filterStatus == null || filterStatus.isEmpty()) {
                 filterStatus = "ALL";
@@ -46,7 +46,7 @@ public class ManageReviewServlet extends HttpServlet {
             request.setAttribute("currentFilter", filterStatus);
             request.getRequestDispatcher("/views/shared/manage-reviews.jsp").forward(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + "/manage-reviews");
+            response.sendRedirect(request.getContextPath() + "/staff/manage-reviews");
         }
     }
 
@@ -68,7 +68,7 @@ public class ManageReviewServlet extends HttpServlet {
         String reviewId = request.getParameter("reviewId");
         boolean isAjax = "true".equals(request.getParameter("ajax"));
 
-        if ("/manage-reviews/reply".equals(path)) {
+        if ("/staff/manage-reviews/reply".equals(path)) {
             String replyComment = request.getParameter("replyComment");
             if (replyComment != null && !replyComment.trim().isEmpty()) {
                 reviewDAO.updateStoreReply(reviewId, replyComment, currentUser.getId());
@@ -89,7 +89,7 @@ public class ManageReviewServlet extends HttpServlet {
                 }
                 session.setAttribute("errorMessage", "Reply cannot be empty.");
             }
-        } else if ("/manage-reviews/hide".equals(path)) {
+        } else if ("/staff/manage-reviews/hide".equals(path)) {
             String reason = request.getParameter("hideReason");
             if (reason != null && !reason.trim().isEmpty()) {
                 reviewDAO.updateReviewModeration(reviewId, "PENDING_HIDE", reason);
@@ -115,7 +115,7 @@ public class ManageReviewServlet extends HttpServlet {
         if (isAjax) return;
 
         String filter = request.getParameter("filter");
-        String redirectUrl = request.getContextPath() + "/manage-reviews";
+        String redirectUrl = request.getContextPath() + "/staff/manage-reviews";
         if (filter != null && !filter.isEmpty()) {
             redirectUrl += "?filter=" + filter;
         }
