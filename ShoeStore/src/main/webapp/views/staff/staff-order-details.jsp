@@ -392,8 +392,8 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-label-md text-[18px] text-primary font-bold"><fmt:formatNumber value="${item.priceAtPurchase}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></p>
-                                    <p class="font-label-sm text-secondary mt-1">Total: <fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></p>
+                                    <p class="font-label-md text-[18px] text-primary font-bold"><fmt:formatNumber value="${item.priceAtPurchase}" pattern="#,##0" /> đ</p>
+                                    <p class="font-label-sm text-secondary mt-1">Total: <fmt:formatNumber value="${item.totalPrice}" pattern="#,##0" /> đ</p>
                                 </div>
                             </div>
                         </c:forEach>
@@ -460,11 +460,11 @@
                         </div>
                         <div class="flex justify-between items-center text-secondary pt-2">
                             <span>Subtotal</span>
-                            <span><fmt:formatNumber value="${orderSummary.totalAmount}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></span>
+                            <span><fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ</span>
                         </div>
                         <div class="flex justify-between items-center text-primary font-bold pt-4 border-t border-outline-variant mt-2">
                             <span class="font-label-md uppercase tracking-widest">Total Amount</span>
-                            <span class="text-xl tracking-tight"><fmt:formatNumber value="${orderSummary.totalAmount}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></span>
+                            <span class="text-xl tracking-tight"><fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ</span>
                         </div>
                     </div>
                 </div>
@@ -564,3 +564,4 @@
 </script>
 </body>
 </html>
+

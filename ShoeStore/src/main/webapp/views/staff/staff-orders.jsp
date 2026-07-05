@@ -458,8 +458,7 @@
                                                         </td>
                                                         <td class="py-4 px-6 text-right font-label-md ${rowOpacity}">
                                                             <fmt:formatNumber value="${order.totalAmount}"
-                                                                type="currency" currencySymbol="₫"
-                                                                maxFractionDigits="0" />
+                                                                pattern="#,##0" /> đ
                                                         </td>
                                                         <td class="py-4 px-6">
                                                             <c:choose>
@@ -520,7 +519,7 @@
                                 <div
                                     class="px-6 py-4 border-t border-outline-variant flex items-center justify-between bg-surface-bright">
                                     <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">
-                                        Showing ${rangeStart}–${rangeEnd} of ${totalOrders} orders
+                                        Showing ${rangeStart}-${rangeEnd} of ${totalOrders} orders
                                     </span>
                                     <div class="flex items-center gap-2">
                                         <!-- Prev button -->

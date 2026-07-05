@@ -139,7 +139,7 @@
                                     </span>
 
                                     <span class="text-5xl font-bold text-black">
-                                        $${product.price}
+                                        <fmt:formatNumber value="${product.price}" pattern="#,##0"/> đ
                                     </span>
 
                                 </div>

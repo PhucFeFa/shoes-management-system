@@ -1,4 +1,4 @@
-<%-- 
+﻿<%-- 
     Document   : voucher-form
     Created on : Jun 20, 2026, 9:24:06 PM
     Author     : default
@@ -65,7 +65,7 @@
                                        oninput="this.setCustomValidity('')">
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Max Discount Amount ($)</label>
+                                <label class="form-label">Max Discount Amount (đ)</label>
                                 <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control" placeholder="50.0" value="${oldMax}" required
                                        oninvalid="this.setCustomValidity('Please enter a valid max discount amount.')"
                                        oninput="this.setCustomValidity('')">

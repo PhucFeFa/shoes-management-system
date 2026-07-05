@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+﻿<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +60,7 @@
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-label">Total Revenue</div>
-                <div class="stat-value">$124,592 <span class="stat-badge up">+12%</span></div>
+                <div class="stat-value">124,592 đ <span class="stat-badge up">+12%</span></div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Total Orders</div>
@@ -143,3 +143,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

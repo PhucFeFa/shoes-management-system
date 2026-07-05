@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -300,7 +301,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td><span class="cell-date">${u.createdAt}</span></td>
+                                            <td><span class="cell-date"><fmt:formatDate value="${u.createdAt}" pattern="yyyy-MM-dd HH:mm"/></span></td>
                                             <td style="text-align:center">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">View</a>
