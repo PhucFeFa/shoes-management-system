@@ -5,47 +5,164 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
-<div class="w-[256px] h-screen fixed top-0 left-0 bg-[#f9f9f9] border-r border-[#e2e2e2] flex flex-col py-2 font-['Inter',sans-serif] z-[1000]">
-    <div class="px-6 py-8 border-b border-[#e2e2e2]/50">
-        <div class="text-[24px] font-bold tracking-[-0.02em] text-black uppercase">ADIDIS</div>
-        <div class="text-[12px] text-[#5d5f5f] mt-1 font-medium">Management Panel</div>
+<style>
+    .adidis-sidebar {
+        width: 220px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        padding: 32px 16px 24px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        z-index: 1000;
+    }
+
+    .adidis-brand {
+        padding: 0 12px 24px;
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 24px;
+    }
+
+    .adidis-brand-name {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #000000;
+        text-transform: uppercase;
+    }
+
+    .adidis-brand-sub {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-top: 4px;
+    }
+
+    .adidis-nav {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .adidis-nav-item a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #4b5563;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+    }
+
+    .adidis-nav-item a:hover {
+        color: #111827;
+        background: #f3f4f6;
+    }
+
+    .adidis-nav-item a.active {
+        background: #000000;
+        color: #ffffff;
+    }
+
+    .adidis-nav-item a .material-symbols-outlined {
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .adidis-footer {
+        padding: 24px 12px 0;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .adidis-footer a,
+    .adidis-footer button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #6b7280;
+        text-decoration: none;
+        background: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: color 0.15s ease;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .adidis-footer a:hover,
+    .adidis-footer button:hover {
+        color: #000000;
+    }
+
+    .adidis-footer a .material-symbols-outlined,
+    .adidis-footer button .material-symbols-outlined {
+        font-size: 18px;
+    }
+</style>
+
+<div class="adidis-sidebar">
+    <div class="adidis-brand">
+        <div class="adidis-brand-name">ADIDIS</div>
+        <div class="adidis-brand-sub">Management Panel</div>
     </div>
 
-    <ul class="list-none m-0 px-4 py-6 flex-1 flex flex-col gap-2">
-        <li>
+    <ul class="adidis-nav">
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/dashboard"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'dashboard' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
-                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+               class="${activePage eq 'dashboard' ? 'active' : ''}">
+                <span class="material-symbols-outlined">dashboard</span>
                 <span>Dashboard</span>
             </a>
         </li>
-        <li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/manage-account"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'user' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
-                <span class="material-symbols-outlined text-[20px]">group</span>
+               class="${activePage eq 'user' ? 'active' : ''}">
+                <span class="material-symbols-outlined">group</span>
                 <span>Users</span>
             </a>
         </li>
-        <li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/import"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'import' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
-                <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+               class="${activePage eq 'import' ? 'active' : ''}">
+                <span class="material-symbols-outlined">local_shipping</span>
                 <span>Confirm Import</span>
             </a>
         </li>
-        <li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/manage-voucher"
-               class="flex items-center gap-3 px-4 py-3 text-[14px] font-semibold uppercase rounded transition-all duration-150 ${activePage eq 'voucher' ? 'bg-black text-white font-bold' : 'text-[#5d5f5f] hover:text-black hover:bg-[#f3f3f4]'}">
-                <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+               class="${activePage eq 'voucher' ? 'active' : ''}">
+                <span class="material-symbols-outlined">confirmation_number</span>
                 <span>Voucher</span>
             </a>
         </li>
     </ul>
 
-    <div class="px-4 py-6 border-t border-[#e2e2e2]/50">
-        <form action="${pageContext.request.contextPath}/home" method="GET" class="m-0 w-full">
-            <button type="submit" class="w-full text-left flex items-center gap-3 cursor-pointer px-4 py-2 text-[12px] font-medium uppercase text-[#5d5f5f] rounded transition-colors duration-150 hover:text-black hover:bg-[#f3f3f4] bg-transparent border-none">
-                <span class="material-symbols-outlined text-[18px]">home</span>
+    <div class="adidis-footer">
+        <form action="${pageContext.request.contextPath}/home" method="GET" style="margin:0;width:100%">
+            <button type="submit">
+                <span class="material-symbols-outlined">home</span>
                 <span>Back to Website</span>
             </button>
         </form>
