@@ -103,9 +103,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
-                                        <p class="text-label-md font-label-md text-primary">
-                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/> đ
-                                        </p>
+                                        <p class="text-label-md font-label-md text-primary"><fmt:formatNumber value="${product.price}" pattern="#,##0"/> đ</p>
                                     </div>
                                 </div>
                             </c:forEach>

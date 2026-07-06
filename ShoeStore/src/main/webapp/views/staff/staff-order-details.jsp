@@ -273,7 +273,7 @@
         }
 
         .main-content {
-            margin-left: 220px;
+            margin-left: 256px;
         }
         /* Custom scrollbar for minimal aesthetic */
         ::-webkit-scrollbar {
@@ -300,52 +300,8 @@
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex h-screen">
 <!-- SideNavBar (Shared Component) -->
-<div class="adidis-sidebar">
-    <div class="adidis-brand">
-        <div class="adidis-brand-name">Adidis</div>
-        <div class="adidis-brand-sub">Staff Portal</div>
-    </div>
-
-    <ul class="adidis-nav">
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/home" class="">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/staff/orders" class="active">
-                <i class="bi bi-cart"></i>
-                <span>Orders</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="#" class="">
-                <i class="bi bi-box-seam"></i>
-                <span>Inventory</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="#" class="">
-                <i class="bi bi-people"></i>
-                <span>Customers</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="#" class="">
-                <i class="bi bi-gear"></i>
-                <span>Settings</span>
-            </a>
-        </li>
-    </ul>
-
-    <div class="adidis-footer">
-        <a href="${pageContext.request.contextPath}/home">
-            <i class="bi bi-box-arrow-left"></i>
-            <span>Back to Website</span>
-        </a>
-    </div>
-</div>
+<c:set var="activePage" value="orders" scope="request" />
+<jsp:include page="/views/staff/sidebar.jsp" />
 
 <!-- Main Content Canvas -->
 <main class="main-content flex-1 h-full overflow-y-auto bg-background">
@@ -436,8 +392,8 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-label-md text-[18px] text-primary font-bold"><fmt:formatNumber value="${item.priceAtPurchase}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></p>
-                                    <p class="font-label-sm text-secondary mt-1">Total: <fmt:formatNumber value="${item.totalPrice}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></p>
+                                    <p class="font-label-md text-[18px] text-primary font-bold"><fmt:formatNumber value="${item.priceAtPurchase}" pattern="#,##0" /> đ</p>
+                                    <p class="font-label-sm text-secondary mt-1">Total: <fmt:formatNumber value="${item.totalPrice}" pattern="#,##0" /> đ</p>
                                 </div>
                             </div>
                         </c:forEach>
@@ -504,11 +460,11 @@
                         </div>
                         <div class="flex justify-between items-center text-secondary pt-2">
                             <span>Subtotal</span>
-                            <span><fmt:formatNumber value="${orderSummary.totalAmount}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></span>
+                            <span><fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ</span>
                         </div>
                         <div class="flex justify-between items-center text-primary font-bold pt-4 border-t border-outline-variant mt-2">
                             <span class="font-label-md uppercase tracking-widest">Total Amount</span>
-                            <span class="text-xl tracking-tight"><fmt:formatNumber value="${orderSummary.totalAmount}" type="currency" currencySymbol="₫" maxFractionDigits="0" /></span>
+                            <span class="text-xl tracking-tight"><fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ</span>
                         </div>
                     </div>
                 </div>
@@ -608,3 +564,4 @@
 </script>
 </body>
 </html>
+

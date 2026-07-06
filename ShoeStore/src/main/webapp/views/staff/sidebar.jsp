@@ -125,50 +125,29 @@
 <div class="adidis-sidebar">
     <div class="adidis-brand">
         <div class="adidis-brand-name">ADIDIS</div>
-        <div class="adidis-brand-sub">Management Panel</div>
+        <div class="adidis-brand-sub">Staff Panel</div>
     </div>
 
     <ul class="adidis-nav">
         <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/dashboard"
+            <a href="${pageContext.request.contextPath}/staff/dashboard"
                class="${activePage eq 'dashboard' ? 'active' : ''}">
                 <span class="material-symbols-outlined">dashboard</span>
                 <span>Dashboard</span>
             </a>
         </li>
         <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/manage-account"
-               class="${activePage eq 'user' ? 'active' : ''}">
-                <span class="material-symbols-outlined">group</span>
-                <span>Users</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/admin/manage-staff"
-               class="${activePage eq 'manage-staff' ? 'active' : ''}">
-                <span class="material-symbols-outlined">badge</span>
-                <span>Manage Staff</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/admin/audit-log"
-               class="${activePage eq 'audit-log' ? 'active' : ''}">
-                <span class="material-symbols-outlined">history</span>
-                <span>Audit Logs</span>
-            </a>
-        </li>
-        <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/import"
-               class="${activePage eq 'import' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/staff/orders"
+               class="${activePage eq 'orders' ? 'active' : ''}">
                 <span class="material-symbols-outlined">local_shipping</span>
-                <span>Confirm Import</span>
+                <span>Orders</span>
             </a>
         </li>
         <li class="adidis-nav-item">
-            <a href="${pageContext.request.contextPath}/manage-voucher"
-               class="${activePage eq 'voucher' ? 'active' : ''}">
-                <span class="material-symbols-outlined">confirmation_number</span>
-                <span>Voucher</span>
+            <a href="${pageContext.request.contextPath}/staff/manage-reviews"
+               class="${activePage eq 'reviews' ? 'active' : ''}">
+                <span class="material-symbols-outlined">rate_review</span>
+                <span>Reviews</span>
             </a>
         </li>
     </ul>

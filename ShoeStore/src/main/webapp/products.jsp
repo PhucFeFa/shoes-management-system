@@ -158,7 +158,7 @@
                                                     <span
                                                         class="text-label-sm text-secondary uppercase tracking-wider">${p.brand.name}</span>
                                                     <span class="text-label-sm font-label-sm text-primary font-bold">
-                                                        <fmt:formatNumber value="${p.price}" type="number" maxFractionDigits="0" /> đ
+                                                        <fmt:formatNumber value="${p.price}" pattern="#,##0" /> đ
                                                     </span>
                                                 </div>
                                                 <a href="${pageContext.request.contextPath}/ProductDetail?id=${p.id}"

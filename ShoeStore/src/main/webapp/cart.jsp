@@ -127,7 +127,7 @@
                                             </span>
 
                                             <p class="font-semibold">
-                                                <fmt:formatNumber value="${item.price}" type="number" maxFractionDigits="0"/> đ
+                                                <fmt:formatNumber value="${item.price}" pattern="#,##0"/> đ
                                             </p>
                                         </div>
 
@@ -184,7 +184,7 @@
                                                                             </span>
 
                                                                             <p class="font-bold text-lg">
-                                                                                <fmt:formatNumber value="${item.price * item.quantity}" type="number" maxFractionDigits="0"/> đ
+                                                                                <fmt:formatNumber value="${item.price * item.quantity}" pattern="#,##0"/> đ
                                                                             </p>
                                                                         </div>
 
@@ -249,7 +249,7 @@
 
                                                                                     <div class="flex justify-between text-xl font-bold">
                                                                                         <span>Total</span>
-                                                                                        <span id="grandTotal"><fmt:formatNumber value="${total}" type="number" maxFractionDigits="0"/> đ</span>
+                                                                                        <span id="grandTotal"><fmt:formatNumber value="${total}" pattern="#,##0"/> đ</span>
                                                                                     </div>
 
                                                                             </div>
@@ -302,7 +302,7 @@
                                                                                     });
 
                                                                             totalElement.innerHTML =
-                                                                                    total.toLocaleString('vi-VN') + " đ";
+                                                                                    total.toLocaleString('en-US') + " đ";
                                                                         }
 
                                                                         document.querySelectorAll(".cart-checkbox")
@@ -366,7 +366,7 @@
                                                                         });
 
                                                                         document.getElementById("grandTotal").innerHTML =
-                                                                                total.toLocaleString('vi-VN') + " đ";
+                                                                                total.toLocaleString('en-US') + " đ";
 
                                                                         document.getElementById("selectedCount").innerHTML =
                                                                                 count;

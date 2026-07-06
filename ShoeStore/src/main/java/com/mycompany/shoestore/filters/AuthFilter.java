@@ -73,18 +73,10 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
-        
-        // Only Admin can access manage-account
-        if (path.equals("/manage-account")) {
-            if (!"Admin".equalsIgnoreCase(roleName)) {
-                // Redirect back to dashboard if not an admin
-                httpRes.sendRedirect(contextPath + "/dashboard");
-                return;
-            }
-        }
 
+        // Staff URLs only accessible by Staff
         if (path.startsWith("/staff")) {
-            if (!"Staff".equalsIgnoreCase(roleName) && !"Admin".equalsIgnoreCase(roleName)) {
+            if (!"Staff".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }
