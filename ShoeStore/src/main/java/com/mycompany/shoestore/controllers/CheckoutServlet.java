@@ -63,13 +63,11 @@ public class CheckoutServlet extends HttpServlet {
                 return;
             }
 
-            double shippingFee = 20;
-            double finalTotal = subTotal + shippingFee;
+            double finalTotal = subTotal;
 
             // Set attributes cho JSP
             request.setAttribute("checkoutItems", checkoutItems);
             request.setAttribute("subTotal", subTotal);
-            request.setAttribute("shippingFee", shippingFee);
             request.setAttribute("finalTotal", finalTotal);
 
             // Voucher

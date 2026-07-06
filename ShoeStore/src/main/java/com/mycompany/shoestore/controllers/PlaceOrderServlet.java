@@ -122,10 +122,8 @@ public class PlaceOrderServlet extends HttpServlet {
                         * item.getQuantity();
             }
 
-            double shippingFee = 30000;
-
             double totalAmount =
-                    subTotal + shippingFee;
+                    subTotal;
 
             // Áp dụng voucher nếu có
             if (voucherId != null) {
@@ -154,11 +152,6 @@ public class PlaceOrderServlet extends HttpServlet {
                 totalAmount = 0;
             }
 
-            String paymentMethod = request.getParameter("paymentMethod");
-            if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
-                paymentMethod = "cod";
-            }
-
             // ===================== CREATE ORDER =====================
 
             String orderId =
@@ -167,7 +160,7 @@ public class PlaceOrderServlet extends HttpServlet {
                             addressId,
                             totalAmount,
                             voucherId,
-                            paymentMethod);
+                            "cod");
 
             if (orderId == null) {
 

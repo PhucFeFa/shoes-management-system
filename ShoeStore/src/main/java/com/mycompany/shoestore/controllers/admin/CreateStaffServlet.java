@@ -23,8 +23,8 @@ public class CreateStaffServlet extends HttpServlet {
         String fullName = request.getParameter("fullName");
         
         // Basic backend validation
-        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            request.getSession().setAttribute("errorMsg", "Email and Password are required.");
+        if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty() || fullName == null || fullName.trim().isEmpty()) {
+            request.getSession().setAttribute("errorMsg", "Full Name, Email and Password are required and cannot be empty or just spaces.");
             response.sendRedirect(request.getContextPath() + "/admin/manage-staff");
             return;
         }

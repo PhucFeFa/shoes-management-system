@@ -319,7 +319,7 @@
                           <input type="email" class="form-control form-control-sm" name="email" id="editEmail">
                       </div>
                       <div class="mb-3">
-                          <label for="editPassword" class="form-label" style="font-size: 12px; font-weight: 600;">New Password (leave blank to keep current)</label>
+                          <label for="editPassword" class="form-label" style="font-size: 12px; font-weight: 600;">New Password <span class="text-danger">*</span></label>
                           <input type="password" class="form-control form-control-sm" name="password" id="editPassword" placeholder="Enter new password">
                       </div>
                   </div>
@@ -358,9 +358,16 @@
             }
 
             function validateStaffForm() {
+                const fullName = document.getElementById('addFullName').value.trim();
                 const email = document.getElementById('addEmail').value.trim();
                 const password = document.getElementById('addPassword').value.trim();
                 const errorDiv = document.getElementById('addStaffError');
+                
+                if (fullName === '') {
+                    errorDiv.textContent = 'Full Name cannot be empty or just spaces.';
+                    errorDiv.classList.remove('d-none');
+                    return false;
+                }
                 
                 if (email === '' || password === '') {
                     errorDiv.textContent = 'Email and Password are required fields and cannot be empty.';
@@ -371,9 +378,16 @@
             }
             
             function validateEditStaffForm() {
+                const fullName = document.getElementById('editFullName').value.trim();
                 const email = document.getElementById('editEmail').value.trim();
                 const passwordInput = document.getElementById('editPassword').value;
                 const errorDiv = document.getElementById('editStaffError');
+                
+                if (fullName === '') {
+                    errorDiv.textContent = 'Full Name cannot be empty or just spaces.';
+                    errorDiv.classList.remove('d-none');
+                    return false;
+                }
                 
                 if (email === '') {
                     errorDiv.textContent = 'Email is a required field and cannot be empty.';
@@ -381,8 +395,8 @@
                     return false;
                 }
                 
-                if (passwordInput.length > 0 && passwordInput.trim() === '') {
-                    errorDiv.textContent = 'Password cannot be just spaces.';
+                if (passwordInput.trim() === '') {
+                    errorDiv.textContent = 'Password is required and cannot be empty or just spaces.';
                     errorDiv.classList.remove('d-none');
                     return false;
                 }

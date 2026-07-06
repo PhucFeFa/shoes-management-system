@@ -145,10 +145,6 @@
                         <a href="${pageContext.request.contextPath}/Cart"
                            class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
                             <span class="material-symbols-outlined">shopping_cart</span>
-                            <c:set var="cartCount" value="${sessionScope.cartCount != null ? sessionScope.cartCount : 0}"/>
-                            <c:if test="${cartCount > 0}">
-                                <span class="absolute -top-1.5 -right-2 bg-error text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cartCount}</span>
-                            </c:if>
                         </a>
                     </c:if>
 

@@ -34,6 +34,9 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("/login.jsp").forward(request, response);
             return;
         }
+        
+        email = email.trim();
+        password = password.trim();
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.login(email, password);
@@ -52,13 +55,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("currentUser", user);
             
-            try {
-                com.mycompany.shoestore.dao.CartDAO cartDao = new com.mycompany.shoestore.dao.CartDAO();
-                int totalItems = cartDao.getCartTotalQuantity(user.getId().toString());
-                session.setAttribute("cartCount", totalItems);
-            } catch (Exception e) {
-                session.setAttribute("cartCount", 0);
-            }
+
             
             // Redirect based on role
             String role = user.getRoleName();

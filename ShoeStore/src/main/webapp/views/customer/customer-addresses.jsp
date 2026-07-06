@@ -249,13 +249,12 @@
                                                                 class="material-symbols-outlined text-[16px]">edit</span>
                                                             Edit
                                                         </a>
-                                                        <a href="${pageContext.request.contextPath}/DeleteAddress?id=${address.id}"
-                                                            onclick="return confirm('Delete this address?')"
+                                                        <button onclick="openDeleteModal('${address.id}')"
                                                             class="font-label-sm text-label-sm uppercase tracking-widest text-[#ba1a1a] hover:text-[#93000a] transition-colors flex items-center gap-1">
                                                             <span
                                                                 class="material-symbols-outlined text-[16px]">delete</span>
                                                             Delete
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -265,6 +264,28 @@
                             </div>
                         </section>
                     </main>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div id="deleteModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
+                        <div class="bg-surface p-6 rounded-xl w-96 max-w-[90%] shadow-xl border border-outline-variant">
+                            <h3 class="font-headline-md text-xl mb-3 text-primary font-bold">Delete Address</h3>
+                            <p class="font-body-md text-secondary mb-6">Are you sure you want to delete this address? This action cannot be undone.</p>
+                            <div class="flex justify-end gap-3">
+                                <button onclick="closeDeleteModal()" class="px-5 py-2.5 border border-outline-variant rounded-lg text-secondary hover:bg-surface-container-low transition font-label-md">Cancel</button>
+                                <a id="confirmDeleteBtn" href="#" class="px-5 py-2.5 bg-[#ba1a1a] text-white rounded-lg hover:bg-[#93000a] transition font-label-md">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function openDeleteModal(id) {
+                            document.getElementById('deleteModal').classList.remove('hidden');
+                            document.getElementById('confirmDeleteBtn').href = '${pageContext.request.contextPath}/DeleteAddress?id=' + id;
+                        }
+                        function closeDeleteModal() {
+                            document.getElementById('deleteModal').classList.add('hidden');
+                        }
+                    </script>
                 </body>
 
                 </html>

@@ -106,17 +106,7 @@ public class CartDAO {
         return list;
     }
 
-    public int getCartTotalQuantity(String userId) throws Exception {
-        String sql = "SELECT SUM(quantity) as total FROM carts WHERE user_id = ?";
-        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, userId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-        }
-        return 0;
-    }
+
 
     public void removeItem(String userId, String variantId) throws Exception {
         String sql = "DELETE FROM carts WHERE user_id = ? AND product_variant_id = ?";

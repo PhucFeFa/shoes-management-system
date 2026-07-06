@@ -19,7 +19,24 @@ public class StaffDAO {
             
             if (rs.next()) {
                 String hash = rs.getString("password_hash");
-                if (password.equals(hash) || BCrypt.checkpw(password, hash)) {
+                String status = rs.getString("status");
+                
+                if (!"Active".equalsIgnoreCase(status)) {
+                    return null; // Blocked or inactive accounts cannot login
+                }
+                
+                boolean isMatch = false;
+                if (hash != null) {
+                    if (hash.equals(password)) {
+                        isMatch = true; // Legacy plain text
+                    } else if (hash.startsWith("$2a$")) {
+                        try {
+                            isMatch = org.mindrot.jbcrypt.BCrypt.checkpw(password, hash);
+                        } catch (Exception ignore) {}
+                    }
+                }
+                
+                if (isMatch) {
                     User user = new User();
                     user.setId(rs.getString("id"));
                     user.setEmail(rs.getString("email"));

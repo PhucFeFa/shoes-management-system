@@ -47,8 +47,7 @@ public class AddToCartServlet extends HttpServlet {
             CartDAO cartDAO = new CartDAO();
             cartDAO.addToCart(user.getId().toString(), variantId, 1);
 
-            Integer count = (Integer) session.getAttribute("cartCount");
-            session.setAttribute("cartCount", (count == null ? 0 : count) + 1);
+
 
             session.setAttribute("cartMessage", "Product added to cart successfully!");
 

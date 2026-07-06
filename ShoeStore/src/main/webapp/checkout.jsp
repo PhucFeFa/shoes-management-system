@@ -28,24 +28,36 @@
                             Shipping Address
                         </h2>
 
-                        <select name="addressId"
-                                class="w-full border rounded-lg p-3">
-
-                            <c:forEach items="${addresses}" var="a">
-
-                                <option value="${a.id}"
-                                        ${defaultAddress.id == a.id ? 'selected' : ''}>
-
-                                    ${a.addressLine},
-                                    ${a.ward},
-                                    ${a.district},
-                                    ${a.city}
-
-                                </option>
-
-                            </c:forEach>
-
-                        </select>
+                        <div class="relative" id="addressDropdown">
+                            <input type="hidden" name="addressId" id="addressIdInput" value="${defaultAddress.id}">
+                            <button type="button" class="dropdown-btn w-full border rounded-lg p-3 text-left flex justify-between items-center bg-white hover:border-gray-400 transition outline-none">
+                                <span class="dropdown-label truncate text-gray-700">
+                                    <c:choose>
+                                        <c:when test="${not empty defaultAddress}">
+                                            ${defaultAddress.addressLine}, ${defaultAddress.ward}, ${defaultAddress.district}, ${defaultAddress.city}
+                                        </c:when>
+                                        <c:otherwise>
+                                            Select an address
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                                <span class="material-symbols-outlined text-gray-400 dropdown-icon transition-transform">expand_more</span>
+                            </button>
+                            
+                            <ul class="dropdown-menu absolute z-50 w-full mt-2 bg-white border rounded-xl shadow-lg max-h-64 overflow-y-auto hidden">
+                                <c:forEach items="${addresses}" var="a">
+                                    <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b last:border-b-0"
+                                        data-value="${a.id}"
+                                        data-label="${a.addressLine}, ${a.ward}, ${a.district}, ${a.city}">
+                                        <div class="font-semibold text-gray-800">${a.addressLine}</div>
+                                        <div class="text-sm text-gray-500 mt-1">${a.ward}, ${a.district}, ${a.city}</div>
+                                    </li>
+                                </c:forEach>
+                                <c:if test="${empty addresses}">
+                                    <li class="p-4 text-gray-500 text-center">No addresses found. Please add one in profile.</li>
+                                </c:if>
+                            </ul>
+                        </div>
 
                     </div>
 
@@ -136,51 +148,40 @@
 
                             </label>
 
-                            <select id="voucherSelect"
-                                    name="voucherId"
-                                    class="w-full border rounded-lg p-3">
-
-                                <option value=""
+                            <div class="relative" id="voucherDropdown">
+                                <input type="hidden" name="voucherId" id="voucherIdInput" value="">
+                                <button type="button" 
+                                        ${empty addresses ? 'disabled' : ''}
+                                        class="dropdown-btn w-full border rounded-lg p-3 text-left flex justify-between items-center transition outline-none 
+                                        ${empty addresses ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:border-gray-400'}">
+                                    <span class="dropdown-label truncate ${empty addresses ? 'text-gray-400' : 'text-gray-700'}">No Voucher</span>
+                                    <span class="material-symbols-outlined text-gray-400 dropdown-icon transition-transform">expand_more</span>
+                                </button>
+                                
+                                <ul class="dropdown-menu absolute z-50 w-full mt-2 bg-white border rounded-xl shadow-lg max-h-64 overflow-y-auto hidden">
+                                    <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b"
+                                        data-value=""
+                                        data-label="No Voucher"
                                         data-percent="0">
-
-                                    No Voucher
-
-                                </option>
-
-                                <c:forEach items="${vouchers}" var="v">
-
-                                    <option value="${v.id}"
-                                            data-percent="${v.discountPercent}">
-
-                                        ${v.code}
-                                        (-${v.discountPercent}%)
-
-                                    </option>
-
-                                </c:forEach>
-
-                            </select>
+                                        <div class="font-semibold text-gray-800">No Voucher</div>
+                                    </li>
+                                    <c:forEach items="${vouchers}" var="v">
+                                        <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b last:border-b-0 flex justify-between items-center"
+                                            data-value="${v.id}"
+                                            data-label="${v.code} (-${v.discountValue}%)"
+                                            data-percent="${v.discountValue}">
+                                            <div>
+                                                <div class="font-bold text-gray-900">${v.code}</div>
+                                                <div class="text-xs text-gray-500 mt-1">Limited quantity</div>
+                                            </div>
+                                            <div class="text-sm font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">-${v.discountValue}%</div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
 
                         </div>
-                        <!-- Payment Method -->
-                        <div class="mb-8">
 
-                            <label class="block font-medium mb-2">
-                                Payment Method
-                            </label>
-
-                            <select name="paymentMethod"
-                                    class="w-full border rounded-lg p-3">
-
-                                <option value="cod">
-                                    Cash On Delivery (COD)
-                                </option>
-
-                                <option value="vnpay">
-                                    VNPay
-                                </option>
-
-                            </select>
 
                             <!-- Summary -->
 
@@ -202,21 +203,7 @@
 
                                 </div>
 
-                                <div class="flex justify-between">
 
-                                    <span class="text-gray-600">
-
-                                        Shipping
-
-                                    </span>
-
-                                    <span id="shippingDisplay">
-
-                                        ${shippingFee}
-
-                                    </span>
-
-                                </div>
 
                                 <div class="flex justify-between">
 
@@ -246,7 +233,7 @@
 
                                     <span id="totalDisplay">
 
-                                        ${finalTotal}
+                                        ${subTotal}
 
                                     </span>
 
@@ -257,22 +244,24 @@
                             <input type="hidden"
                                    name="finalAmount"
                                    id="finalAmountInput"
-                                   value="${finalTotal}">
+                                   value="${subTotal}">
 
                             <button type="submit"
-                                    class="w-full mt-6 bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition">
+                                    ${empty addresses ? 'disabled' : ''}
+                                    class="w-full mt-6 bg-black text-white py-3 rounded-xl transition ${empty addresses ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-800'}">
 
                                 Place Order
 
                             </button>
+                            <c:if test="${empty addresses}">
+                                <p class="text-red-500 text-sm text-center mt-3">Please add a shipping address in your profile to continue.</p>
+                            </c:if>
                             <a href="${pageContext.request.contextPath}/Cart"
                                class="block w-full mt-3 text-center border border-black py-3 rounded-xl hover:bg-gray-100 transition">
 
                                 Back To Cart
 
                             </a>
-
-                        </div>
 
                     </div>
 
@@ -286,47 +275,78 @@
         const subtotal =
                 Number("${subTotal}");
 
-        const shipping =
-                Number("${shippingFee}");
 
-        const voucherSelect =
-                document.getElementById("voucherSelect");
 
-        const discountDisplay =
-                document.getElementById("discountDisplay");
+        const discountDisplay = document.getElementById("discountDisplay");
+        const totalDisplay = document.getElementById("totalDisplay");
+        const finalAmountInput = document.getElementById("finalAmountInput");
 
-        const totalDisplay =
-                document.getElementById("totalDisplay");
-
-        const finalAmountInput =
-                document.getElementById("finalAmountInput");
-
-        voucherSelect.addEventListener("change", function () {
-
-            const percent =
-                    Number(
-                            this.options[this.selectedIndex]
-                            .dataset.percent
-                            );
-
-            const discount =
-                    subtotal * percent / 100;
-
-            let total =
-                    subtotal + shipping - discount;
-
-            if (total < 0) {
-                total = 0;
+        // Universal Custom Dropdown Logic
+        document.addEventListener('click', function(e) {
+            // Close all dropdowns if clicked outside
+            if (!e.target.closest('.relative')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.add('hidden');
+                    menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('rotate-180');
+                });
             }
+        });
 
-            discountDisplay.innerText =
-                    discount.toLocaleString('vi-VN') + "₫";
+        document.querySelectorAll('.relative').forEach(dropdown => {
+            const btn = dropdown.querySelector('.dropdown-btn');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            const label = dropdown.querySelector('.dropdown-label');
+            const icon = dropdown.querySelector('.dropdown-icon');
+            const input = dropdown.querySelector('input[type="hidden"]');
+            
+            if(!btn || !menu) return;
 
-            totalDisplay.innerText =
-                    total.toLocaleString('vi-VN') + "₫";
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close others
+                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                    if (m !== menu) {
+                        m.classList.add('hidden');
+                        m.previousElementSibling.querySelector('.dropdown-icon').classList.remove('rotate-180');
+                    }
+                });
 
-            finalAmountInput.value =
-                    total;
+                // Toggle current
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    icon.classList.add('rotate-180');
+                } else {
+                    menu.classList.add('hidden');
+                    icon.classList.remove('rotate-180');
+                }
+            });
+
+            menu.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const val = item.getAttribute('data-value');
+                    const text = item.getAttribute('data-label');
+                    
+                    label.textContent = text;
+                    input.value = val;
+                    
+                    // Close menu
+                    menu.classList.add('hidden');
+                    icon.classList.remove('rotate-180');
+
+                    // Trigger voucher change if it's the voucher dropdown
+                    if(dropdown.id === 'voucherDropdown') {
+                        const percent = Number(item.getAttribute('data-percent') || 0);
+                        const discount = subtotal * percent / 100;
+                        let total = subtotal - discount;
+                        if (total < 0) total = 0;
+
+                        discountDisplay.innerText = discount.toLocaleString('vi-VN') + "₫";
+                        totalDisplay.innerText = total.toLocaleString('vi-VN') + "₫";
+                        finalAmountInput.value = total;
+                    }
+                });
+            });
         });
 
     </script>

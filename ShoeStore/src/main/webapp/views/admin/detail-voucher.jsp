@@ -167,7 +167,7 @@
                                 <div class="detail-row">
                                     <span class="detail-label">Max Discount Amount</span>
                                     <span class="detail-value">
-                                        <fmt:formatNumber value="${item.maxDiscountAmount}" type="currency" currencySymbol="$"/>
+                                        <fmt:formatNumber value="${item.maxDiscountAmount}" type="number" maxFractionDigits="0"/> đ
                                     </span>
                                 </div>
                                 

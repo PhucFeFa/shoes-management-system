@@ -21,8 +21,8 @@ public class UpdateStaffServlet extends HttpServlet {
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullName");
         
-        if (id == null || email == null || email.trim().isEmpty()) {
-            request.getSession().setAttribute("errorMsg", "Email is required.");
+        if (id == null || email == null || email.trim().isEmpty() || fullName == null || fullName.trim().isEmpty()) {
+            request.getSession().setAttribute("errorMsg", "Full Name and Email are required and cannot be empty.");
             response.sendRedirect(request.getContextPath() + "/admin/manage-staff");
             return;
         }
@@ -43,14 +43,12 @@ public class UpdateStaffServlet extends HttpServlet {
             staff.setFullName(fullName.trim());
             
             String password = request.getParameter("password");
-            if (password != null && !password.isEmpty()) {
-                if (password.trim().isEmpty()) {
-                    request.getSession().setAttribute("errorMsg", "Password cannot be just spaces.");
-                    response.sendRedirect(request.getContextPath() + "/admin/manage-staff");
-                    return;
-                }
-                staff.setPasswordHash(org.mindrot.jbcrypt.BCrypt.hashpw(password.trim(), org.mindrot.jbcrypt.BCrypt.gensalt()));
+            if (password == null || password.trim().isEmpty()) {
+                request.getSession().setAttribute("errorMsg", "Password is required and cannot be just spaces.");
+                response.sendRedirect(request.getContextPath() + "/admin/manage-staff");
+                return;
             }
+            staff.setPasswordHash(org.mindrot.jbcrypt.BCrypt.hashpw(password.trim(), org.mindrot.jbcrypt.BCrypt.gensalt()));
 
             if (staffDAO.updateStaff(staff)) {
                 request.getSession().setAttribute("successMsg", "Staff updated successfully.");

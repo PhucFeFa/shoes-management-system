@@ -73,7 +73,7 @@ public class ReviewDAO {
     public boolean canUserReview(String userId, String productId) {
         String sql = "SELECT COUNT(*) FROM orders o " +
                      "JOIN order_items oi ON o.id = oi.order_id " +
-                     "JOIN product_variants pv ON oi.product_variant_id = pv.id " +
+                     "JOIN product_variants pv ON oi.product_variant_id = pv.variant_id " +
                      "WHERE o.user_id = ? AND pv.product_id = ? AND o.status = 'completed'";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
