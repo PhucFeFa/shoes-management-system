@@ -314,7 +314,7 @@ public class OrderDAO {
     }
 
     public int getCustomerCancellationCountLast30Days(String userId) {
-        String sql = "SELECT COUNT(*) FROM order_cancellations WHERE user_id = ? AND created_at >= DATEADD(day, -30, SYSDATETIMEOFFSET())";
+        String sql = "SELECT COUNT(*) FROM orders WHERE user_id = ? AND status = 'cancelled' AND created_at >= DATEADD(day, -30, SYSDATETIMEOFFSET())";
         try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
             try ( ResultSet rs = ps.executeQuery()) {
@@ -331,7 +331,6 @@ public class OrderDAO {
 
     public boolean cancelOrderWithTracking(String orderId, String userId, String reason) {
         String updateStatusSql = "UPDATE orders SET status = 'cancelled' WHERE id = ?";
-        String insertTrackingSql = "INSERT INTO order_cancellations (order_id, user_id, reason) VALUES (?, ?, ?)";
 
         Connection conn = null;
         try {
@@ -347,12 +346,8 @@ public class OrderDAO {
                 }
             }
 
-            try ( PreparedStatement psInsert = conn.prepareStatement(insertTrackingSql)) {
-                psInsert.setString(1, orderId);
-                psInsert.setString(2, userId);
-                psInsert.setString(3, reason);
-                psInsert.executeUpdate();
-            }
+            // Note: We no longer insert into order_cancellations as it doesn't exist
+            // If reason tracking is required in the future, add the table to DB
 
             conn.commit();
             return true;

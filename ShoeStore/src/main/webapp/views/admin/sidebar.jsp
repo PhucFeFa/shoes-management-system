@@ -144,6 +144,20 @@
             </a>
         </li>
         <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/manage-staff"
+               class="${activePage eq 'manage-staff' ? 'active' : ''}">
+                <span class="material-symbols-outlined">badge</span>
+                <span>Manage Staff</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/audit-log"
+               class="${activePage eq 'audit-log' ? 'active' : ''}">
+                <span class="material-symbols-outlined">history</span>
+                <span>Audit Logs</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/import"
                class="${activePage eq 'import' ? 'active' : ''}">
                 <span class="material-symbols-outlined">local_shipping</span>

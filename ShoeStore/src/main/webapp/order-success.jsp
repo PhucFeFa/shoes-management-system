@@ -19,15 +19,17 @@
                 <p class="text-2xl font-bold text-black">${orderId}</p>
             </div>
             
-            <a href="${pageContext.request.contextPath}/home" 
-               class="inline-block px-10 py-4 bg-black text-white rounded-xl hover:bg-gray-800 transition">
-                Back to Home
-            </a>
-            
-            <a href="${pageContext.request.contextPath}/orders" 
-               class="inline-block mt-4 text-black hover:underline">
-                View order details →
-            </a>
+            <div class="flex flex-col items-center gap-4">
+                <a href="${pageContext.request.contextPath}/home" 
+                   class="inline-block px-10 py-4 bg-black text-white rounded-xl hover:bg-gray-800 transition">
+                    Back to Home
+                </a>
+                
+                <a href="${pageContext.request.contextPath}/profile/order/details?id=${orderId}" 
+                   class="text-black hover:underline">
+                    View order details →
+                </a>
+            </div>
         </div>
     </div>
 </main>
