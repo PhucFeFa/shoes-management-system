@@ -64,25 +64,19 @@ public class AuthFilter implements Filter {
 
         String roleName = currentUser.getRoleName();
 
-        // Dashboard and Import access for Admin and Staff
-        if (path.equals("/admin") || path.equals("/dashboard") || path.equals("/import")) {
-            if (!"Admin".equalsIgnoreCase(roleName) && !"Staff".equalsIgnoreCase(roleName)) {
+        // Admin URLs only accessible by Admin
+        if (path.equals("/admin") || path.equals("/dashboard") || path.equals("/import") 
+            || path.startsWith("/manage-account") || path.startsWith("/manage-voucher") 
+            || path.equals("/create-voucher") || path.equals("/status-account")) {
+            if (!"Admin".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }
         }
-        
-        // Only Admin can access manage-account
-        if (path.equals("/manage-account")) {
-            if (!"Admin".equalsIgnoreCase(roleName)) {
-                // Redirect back to dashboard if not an admin
-                httpRes.sendRedirect(contextPath + "/dashboard");
-                return;
-            }
-        }
 
+        // Staff URLs only accessible by Staff
         if (path.startsWith("/staff")) {
-            if (!"Staff".equalsIgnoreCase(roleName) && !"Admin".equalsIgnoreCase(roleName)) {
+            if (!"Staff".equalsIgnoreCase(roleName)) {
                 httpRes.sendRedirect(contextPath + "/home");
                 return;
             }

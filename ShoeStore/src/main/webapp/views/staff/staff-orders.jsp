@@ -189,7 +189,7 @@
                         }
 
                         .main-content {
-                            margin-left: 220px;
+                            margin-left: 256px;
                         }
                     </style>
                     <!-- Tailwind CSS -->
@@ -292,52 +292,8 @@
                     class="bg-background text-on-background font-body-md text-body-md antialiased flex selection:bg-primary selection:text-on-primary min-h-screen">
 
                     <!-- ===================== SideNavBar ===================== -->
-                    <div class="adidis-sidebar">
-                        <div class="adidis-brand">
-                            <div class="adidis-brand-name">Adidis</div>
-                            <div class="adidis-brand-sub">Staff Portal</div>
-                        </div>
-
-                        <ul class="adidis-nav">
-                            <li class="adidis-nav-item">
-                                <a href="${pageContext.request.contextPath}/home" class="">
-                                    <i class="bi bi-speedometer2"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
-                            <li class="adidis-nav-item">
-                                <a href="${pageContext.request.contextPath}/staff/orders" class="active">
-                                    <i class="bi bi-cart"></i>
-                                    <span>Orders</span>
-                                </a>
-                            </li>
-                            <li class="adidis-nav-item">
-                                <a href="#" class="">
-                                    <i class="bi bi-box-seam"></i>
-                                    <span>Inventory</span>
-                                </a>
-                            </li>
-                            <li class="adidis-nav-item">
-                                <a href="#" class="">
-                                    <i class="bi bi-people"></i>
-                                    <span>Customers</span>
-                                </a>
-                            </li>
-                            <li class="adidis-nav-item">
-                                <a href="#" class="">
-                                    <i class="bi bi-gear"></i>
-                                    <span>Settings</span>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <div class="adidis-footer">
-                            <a href="${pageContext.request.contextPath}/home">
-                                <i class="bi bi-box-arrow-left"></i>
-                                <span>Back to Website</span>
-                            </a>
-                        </div>
-                    </div>
+                    <c:set var="activePage" value="orders" scope="request" />
+                    <jsp:include page="/views/staff/sidebar.jsp" />
 
                     <!-- ===================== Main Content ===================== -->
                     <main class="main-content flex-1 flex flex-col min-h-screen">
@@ -502,8 +458,7 @@
                                                         </td>
                                                         <td class="py-4 px-6 text-right font-label-md ${rowOpacity}">
                                                             <fmt:formatNumber value="${order.totalAmount}"
-                                                                type="currency" currencySymbol="₫"
-                                                                maxFractionDigits="0" />
+                                                                pattern="#,##0" /> đ
                                                         </td>
                                                         <td class="py-4 px-6">
                                                             <c:choose>
@@ -564,7 +519,7 @@
                                 <div
                                     class="px-6 py-4 border-t border-outline-variant flex items-center justify-between bg-surface-bright">
                                     <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">
-                                        Showing ${rangeStart}–${rangeEnd} of ${totalOrders} orders
+                                        Showing ${rangeStart}-${rangeEnd} of ${totalOrders} orders
                                     </span>
                                     <div class="flex items-center gap-2">
                                         <!-- Prev button -->

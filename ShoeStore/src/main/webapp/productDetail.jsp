@@ -139,7 +139,7 @@
                                     </span>
 
                                     <span class="text-5xl font-bold text-black">
-                                        $${product.price}
+                                        <fmt:formatNumber value="${product.price}" pattern="#,##0"/> đ
                                     </span>
 
                                 </div>
@@ -404,6 +404,22 @@
                                                 <p class="text-gray-700 mt-2 text-lg">
                                                     <c:out value="${r.comment}" />
                                                 </p>
+                                                
+                                                <c:if test="${not empty r.replyComment}">
+                                                    <div class="mt-4 p-4 bg-gray-100 rounded-lg border-l-4 border-gray-400">
+                                                        <div class="flex items-center gap-2 mb-1">
+                                                            <span class="font-bold text-gray-800 text-sm">Store Reply</span>
+                                                            <c:if test="${not empty r.replyUpdatedAt}">
+                                                                <span class="text-xs text-gray-500">
+                                                                    (<fmt:formatDate value="${r.replyUpdatedAt}" pattern="dd MMM yyyy, HH:mm" />)
+                                                                </span>
+                                                            </c:if>
+                                                        </div>
+                                                        <p class="text-gray-700 text-sm">
+                                                            <c:out value="${r.replyComment}" />
+                                                        </p>
+                                                    </div>
+                                                </c:if>
 
                                                 <c:if test="${r.updated}">
                                                     <div

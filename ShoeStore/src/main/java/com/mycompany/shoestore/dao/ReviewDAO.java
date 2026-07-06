@@ -12,10 +12,15 @@ import java.util.List;
 
 public class ReviewDAO {
 
-    // Lấy danh sách đánh giá của 1 sản phẩm
+    // Lấy danh sách đánh giá của 1 sản phẩm (chỉ hiển thị những đánh giá VISIBLE)
     public List<Review> getReviewsByProduct(String productId) {
         List<Review> list = new ArrayList<>();
-        String sql = "SELECT r.*, u.full_name FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.product_id = ? ORDER BY r.created_at DESC";
+        String sql = "SELECT r.*, u.full_name AS user_name, s.full_name AS replier_name " +
+                     "FROM reviews r " +
+                     "JOIN users u ON r.user_id = u.id " +
+                     "LEFT JOIN staffs s ON r.replied_by = s.id " +
+                     "WHERE r.product_id = ? AND r.moderation_status = 'VISIBLE' " +
+                     "ORDER BY r.created_at DESC";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, productId);
@@ -31,7 +36,13 @@ public class ReviewDAO {
                     r.setUpdatedAt(rs.getTimestamp("updated_at"));
                     r.setUpdated(rs.getBoolean("is_updated"));
                     r.setCreatedAt(rs.getTimestamp("created_at"));
-                    r.setUserName(rs.getString("full_name"));
+                    r.setUserName(rs.getString("user_name"));
+                    r.setModerationStatus(rs.getString("moderation_status"));
+                    r.setHideReason(rs.getString("hide_reason"));
+                    r.setReplyComment(rs.getString("reply_comment"));
+                    r.setRepliedBy(rs.getString("replied_by"));
+                    r.setReplyUpdatedAt(rs.getTimestamp("reply_updated_at"));
+                    r.setReplierName(rs.getString("replier_name"));
                     list.add(r);
                 }
             }
@@ -60,6 +71,11 @@ public class ReviewDAO {
                     r.setUpdatedAt(rs.getTimestamp("updated_at"));
                     r.setUpdated(rs.getBoolean("is_updated"));
                     r.setCreatedAt(rs.getTimestamp("created_at"));
+                    r.setModerationStatus(rs.getString("moderation_status"));
+                    r.setHideReason(rs.getString("hide_reason"));
+                    r.setReplyComment(rs.getString("reply_comment"));
+                    r.setRepliedBy(rs.getString("replied_by"));
+                    r.setReplyUpdatedAt(rs.getTimestamp("reply_updated_at"));
                     return r;
                 }
             }
@@ -123,13 +139,107 @@ public class ReviewDAO {
         return false;
     }
 
-    // Xóa đánh giá
+    // Xóa đánh giá (chỉ người tạo mới được xóa, hoặc Admin qua hàm khác)
     public boolean deleteReview(String id, String userId) {
         String sql = "DELETE FROM reviews WHERE id = ? AND user_id = ?";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
-            ps.setString(2, userId); // Đảm bảo chỉ người tạo mới được xóa
+            ps.setString(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // --- Review Management Methods (Admin/Staff) ---
+
+    // Lấy tất cả đánh giá cho trang quản lý
+    public List<Review> getAllReviews(String filterStatus) {
+        List<Review> list = new ArrayList<>();
+        String sql = "SELECT r.*, u.full_name AS user_name, s.full_name AS replier_name, p.name AS product_name, " +
+                     "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) AS product_image " +
+                     "FROM reviews r " +
+                     "JOIN users u ON r.user_id = u.id " +
+                     "JOIN products p ON r.product_id = p.id " +
+                     "LEFT JOIN staffs s ON r.replied_by = s.id ";
+        if (filterStatus != null && !filterStatus.isEmpty() && !filterStatus.equals("ALL")) {
+            sql += "WHERE r.moderation_status = ? ";
+        }
+        sql += "ORDER BY r.created_at DESC";
+
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            if (filterStatus != null && !filterStatus.isEmpty() && !filterStatus.equals("ALL")) {
+                ps.setString(1, filterStatus);
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Review r = new Review();
+                    r.setId(rs.getString("id"));
+                    r.setUserId(rs.getString("user_id"));
+                    r.setProductId(rs.getString("product_id"));
+                    r.setRating(rs.getInt("rating"));
+                    r.setComment(rs.getString("comment"));
+                    r.setPreviousComment(rs.getString("previous_comment"));
+                    r.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    r.setUpdated(rs.getBoolean("is_updated"));
+                    r.setCreatedAt(rs.getTimestamp("created_at"));
+                    r.setUserName(rs.getString("user_name"));
+                    r.setProductName(rs.getString("product_name"));
+                    r.setProductImage(rs.getString("product_image"));
+                    r.setModerationStatus(rs.getString("moderation_status"));
+                    r.setHideReason(rs.getString("hide_reason"));
+                    r.setReplyComment(rs.getString("reply_comment"));
+                    r.setRepliedBy(rs.getString("replied_by"));
+                    r.setReplyUpdatedAt(rs.getTimestamp("reply_updated_at"));
+                    r.setReplierName(rs.getString("replier_name"));
+                    list.add(r);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Cập nhật trạng thái kiểm duyệt (ẩn/duyệt)
+    public boolean updateReviewModeration(String reviewId, String status, String reason) {
+        String sql = "UPDATE reviews SET moderation_status = ?, hide_reason = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setString(2, reason);
+            ps.setString(3, reviewId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Cập nhật câu trả lời của cửa hàng
+    public boolean updateStoreReply(String reviewId, String replyComment, String staffId) {
+        String sql = "UPDATE reviews SET reply_comment = ?, replied_by = ?, reply_updated_at = SYSDATETIMEOFFSET() WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, replyComment);
+            ps.setString(2, staffId);
+            ps.setString(3, reviewId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Admin xóa vĩnh viễn đánh giá
+    public boolean deleteReviewByAdmin(String reviewId) {
+        String sql = "DELETE FROM reviews WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, reviewId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="/WEB-INF/include/header.jsp"/>
 
@@ -126,7 +127,7 @@
                                             </span>
 
                                             <p class="font-semibold">
-                                                $${item.price}
+                                                <fmt:formatNumber value="${item.price}" pattern="#,##0"/> đ
                                             </p>
                                         </div>
 
@@ -183,7 +184,7 @@
                                                                             </span>
 
                                                                             <p class="font-bold text-lg">
-                                                                                $${item.price * item.quantity}
+                                                                                <fmt:formatNumber value="${item.price * item.quantity}" pattern="#,##0"/> đ
                                                                             </p>
                                                                         </div>
 
@@ -248,7 +249,7 @@
 
                                                                                     <div class="flex justify-between text-xl font-bold">
                                                                                         <span>Total</span>
-                                                                                        <span id="grandTotal">$${total}</span>
+                                                                                        <span id="grandTotal"><fmt:formatNumber value="${total}" pattern="#,##0"/> đ</span>
                                                                                     </div>
 
                                                                             </div>
@@ -301,7 +302,7 @@
                                                                                     });
 
                                                                             totalElement.innerHTML =
-                                                                                    "$" + total.toFixed(2);
+                                                                                    total.toLocaleString('en-US') + " đ";
                                                                         }
 
                                                                         document.querySelectorAll(".cart-checkbox")
@@ -365,7 +366,7 @@
                                                                         });
 
                                                                         document.getElementById("grandTotal").innerHTML =
-                                                                                "$" + total.toFixed(2);
+                                                                                total.toLocaleString('en-US') + " đ";
 
                                                                         document.getElementById("selectedCount").innerHTML =
                                                                                 count;
