@@ -45,6 +45,7 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        overflow-y: auto;
     }
     .sole-nav-item a {
         display: flex;
@@ -133,6 +134,13 @@
                class="${activePage eq 'manage-staff' ? 'active' : ''}">
                 <span class="material-symbols-outlined">badge</span>
                 <span>Manage Staff</span>
+            </a>
+        </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/audit-log"
+               class="${activePage eq 'audit-log' ? 'active' : ''}">
+                <span class="material-symbols-outlined">history</span>
+                <span>Audit Logs</span>
             </a>
         </li>
         <li class="sole-nav-item">

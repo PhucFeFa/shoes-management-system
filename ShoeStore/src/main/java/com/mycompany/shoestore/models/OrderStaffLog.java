@@ -8,6 +8,10 @@ public class OrderStaffLog {
     private String staffId;
     private String action;
     private Timestamp createdAt;
+    
+    // Join fields
+    private String staffName;
+    private String staffEmail;
 
     public OrderStaffLog() {}
 
@@ -25,4 +29,10 @@ public class OrderStaffLog {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public String getStaffName() { return staffName; }
+    public void setStaffName(String staffName) { this.staffName = staffName; }
+
+    public String getStaffEmail() { return staffEmail; }
+    public void setStaffEmail(String staffEmail) { this.staffEmail = staffEmail; }
 }
