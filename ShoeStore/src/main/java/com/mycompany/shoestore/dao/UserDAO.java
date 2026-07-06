@@ -99,10 +99,11 @@ public class UserDAO {
     }
 
     public boolean isEmailExists(String email) {
-        String sql = "SELECT id FROM users WHERE email = ?";
+        String sql = "SELECT id FROM users WHERE email = ? UNION SELECT id FROM staffs WHERE email = ?";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
+            ps.setString(2, email);
             ResultSet rs = ps.executeQuery();
             return rs.next();
         } catch (Exception e) {

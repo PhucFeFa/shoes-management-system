@@ -121,28 +121,34 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/manage-account"
-                   class="${activePage eq 'user' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">group</span>
-                    <span>Users</span>
-                </a>
-            </li>
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/import"
-                   class="${activePage eq 'import' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">local_shipping</span>
-                    <span>Confirm Import</span>
-                </a>
-            </li>
-            <li class="sole-nav-item">
-                <a href="${pageContext.request.contextPath}/manage-voucher"
-                   class="${activePage eq 'voucher' ? 'active' : ''}">
-                    <span class="material-symbols-outlined">confirmation_number</span>
-                    <span>Voucher</span>
-                </a>
-            </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/manage-account"
+               class="${activePage eq 'user' ? 'active' : ''}">
+                <span class="material-symbols-outlined">group</span>
+                <span>Users</span>
+            </a>
+        </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/manage-staff"
+               class="${activePage eq 'manage-staff' ? 'active' : ''}">
+                <span class="material-symbols-outlined">badge</span>
+                <span>Manage Staff</span>
+            </a>
+        </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/import"
+               class="${activePage eq 'import' ? 'active' : ''}">
+                <span class="material-symbols-outlined">local_shipping</span>
+                <span>Confirm Import</span>
+            </a>
+        </li>
+        <li class="sole-nav-item">
+            <a href="${pageContext.request.contextPath}/manage-voucher"
+               class="${activePage eq 'voucher' ? 'active' : ''}">
+                <span class="material-symbols-outlined">confirmation_number</span>
+                <span>Voucher</span>
+            </a>
+        </li>
     </ul>
 
     <div class="sole-footer">
