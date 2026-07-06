@@ -20,4 +20,44 @@ public class OrderStaffLogDAO {
         }
         return false;
     }
+
+    public java.util.List<OrderStaffLog> getLogs(String searchQuery) {
+        java.util.List<OrderStaffLog> list = new java.util.ArrayList<>();
+        String sql = "SELECT l.*, s.full_name, s.email " +
+                     "FROM order_staff_logs l " +
+                     "JOIN staffs s ON l.staff_id = s.id ";
+        
+        boolean hasSearch = searchQuery != null && !searchQuery.trim().isEmpty();
+        if (hasSearch) {
+            sql += "WHERE s.full_name LIKE ? OR s.email LIKE ? ";
+        }
+        
+        sql += "ORDER BY l.created_at DESC";
+
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            if (hasSearch) {
+                ps.setString(1, "%" + searchQuery.trim() + "%");
+                ps.setString(2, "%" + searchQuery.trim() + "%");
+            }
+            
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderStaffLog log = new OrderStaffLog();
+                    log.setId(rs.getString("id"));
+                    log.setOrderId(rs.getString("order_id"));
+                    log.setStaffId(rs.getString("staff_id"));
+                    log.setAction(rs.getString("action"));
+                    log.setCreatedAt(rs.getTimestamp("created_at"));
+                    log.setStaffName(rs.getString("full_name"));
+                    log.setStaffEmail(rs.getString("email"));
+                    list.add(log);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

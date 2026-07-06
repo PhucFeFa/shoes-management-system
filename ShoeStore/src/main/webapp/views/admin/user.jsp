@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -217,6 +218,13 @@
                 color: #fff;
                 border-color: #15803d;
             }
+            .form-control:focus {
+                box-shadow: none;
+                border-color: #dee2e6;
+            }
+            .input-group-text, .form-control {
+                border-color: #dee2e6;
+            }
             .empty-row td {
                 text-align: center;
                 padding: 48px;
@@ -233,30 +241,35 @@
             <jsp:include page="sidebar.jsp" />
 
             <div class="main-content">
-                <div class="page-header">
-                    <i class="bi bi-people" style="font-size:16px; color:#1a1a1a;"></i>
-                    <h3 class="page-title">Account List</h3>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="page-header mb-0">
+                        <i class="bi bi-people" style="font-size:16px; color:#1a1a1a;"></i>
+                        <h3 class="page-title">Account List</h3>
+                    </div>
+                    <div style="height: 31px;"></div>
+                </div>
+
+                <div class="d-flex justify-content-end mb-3">
+                    <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px;">
+                    </form>
                 </div>
 
                 <div class="table-card">
                     <table class="user-table">
                         <colgroup>
-                            <col class="col-no">
-                            <col class="col-uuid">
-                            <col class="col-name">
-                            <col class="col-email">
-                            <col class="col-role">
-                            <col class="col-status">
-                            <col class="col-date">
-                            <col class="col-action">
+                            <col style="width: 5%;">
+                            <col style="width: 25%;">
+                            <col style="width: 30%;">
+                            <col style="width: 15%;">
+                            <col style="width: 25%;">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>ID (UUID)</th>
                                 <th>Full Name</th>
                                 <th>Email</th>
-                                <th>Role</th>
                                 <th>Status</th>
                                 <th>Created At</th>
                                 <th style="text-align:center">Action</th>
@@ -268,7 +281,6 @@
                                     <c:forEach items="${users}" var="u" varStatus="status">
                                         <tr>
                                             <td><span class="cell-no">${status.index + 1}</span></td>
-                                            <td><span class="cell-uuid">${u.id}</span></td>
                                             <td>
                                                 <c:choose>
                                                     <c:when test="${u.fullName != null}">
@@ -282,16 +294,6 @@
                                             <td><span class="cell-email">${u.email}</span></td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="${u.roleName eq 'Customer'}">
-                                                        <span class="role-badge badge-customer">Customer</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="role-badge badge-other">${u.roleName}</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:choose>
                                                     <c:when test="${u.status eq 'Active'}">
                                                         <span class="status-badge badge-active">Active</span>
                                                     </c:when>
@@ -300,7 +302,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td><span class="cell-date">${u.createdAt}</span></td>
+                                            <td><span class="cell-date"><fmt:formatDate value="${u.createdAt}" pattern="yyyy-MM-dd HH:mm"/></span></td>
                                             <td style="text-align:center">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">View</a>
@@ -324,7 +326,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <tr class="empty-row">
-                                        <td colspan="8">No accounts found in the system.</td>
+                                        <td colspan="5">No users found.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>
@@ -334,5 +336,31 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function searchTable() {
+                var input = document.getElementById("searchInput");
+                var filter = input.value.trim().toLowerCase();
+                var tableBody = document.querySelector(".user-table tbody");
+                var tr = tableBody.getElementsByTagName("tr");
+
+                for (var i = 0; i < tr.length; i++) {
+                    if (tr[i].classList.contains('empty-row')) continue;
+                    
+                    var tdName = tr[i].getElementsByTagName("td")[1];
+                    var tdEmail = tr[i].getElementsByTagName("td")[2];
+                    
+                    if (tdName && tdEmail) {
+                        var txtValueName = tdName.textContent || tdName.innerText;
+                        var txtValueEmail = tdEmail.textContent || tdEmail.innerText;
+                        
+                        if (txtValueName.toLowerCase().indexOf(filter) > -1 || txtValueEmail.toLowerCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }       
+                }
+            }
+        </script>
     </body>
 </html>

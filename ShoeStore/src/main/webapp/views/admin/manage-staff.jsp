@@ -146,6 +146,13 @@
                 transition: 0.2s;
             }
             .btn-add-staff:hover { background: #333; color: #fff; }
+            .form-control:focus {
+                box-shadow: none;
+                border-color: #dee2e6;
+            }
+            .input-group-text, .form-control {
+                border-color: #dee2e6;
+            }
             .empty-row td {
                 text-align: center;
                 padding: 48px;
@@ -189,10 +196,10 @@
                 </c:if>
 
                 <div class="d-flex justify-content-end mb-3">
-                    <div class="input-group" style="width: 300px;">
+                    <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by name or email..." onkeyup="searchTable()" style="font-size: 13px;">
-                    </div>
+                        <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px;">
+                    </form>
                 </div>
 
                 <div class="table-card">
@@ -384,7 +391,7 @@
 
             function searchTable() {
                 var input = document.getElementById("searchInput");
-                var filter = input.value.toLowerCase();
+                var filter = input.value.trim().toLowerCase();
                 var tableBody = document.getElementById("staffTableBody");
                 var tr = tableBody.getElementsByTagName("tr");
 
