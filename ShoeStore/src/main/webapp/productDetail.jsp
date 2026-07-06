@@ -146,19 +146,24 @@
 
                                 <div class="mb-4">
                                     <label class="block font-semibold mb-2">Size</label>
-                                    <select id="sizeSelect" class="w-full border rounded-lg px-4 py-3">
-                                        <option value="">Select Size</option>
+                                    <div class="flex flex-wrap gap-3" id="sizeContainer">
                                         <c:forEach var="size" items="${sizes}">
-                                            <option value="${size}">${size}</option>
+                                            <button type="button" class="size-btn border-2 border-gray-200 rounded-lg px-5 py-2 font-medium text-gray-700 transition" data-size="${size}">
+                                                ${size}
+                                            </button>
                                         </c:forEach>
-                                    </select>
+                                    </div>
                                 </div>
 
                                 <div class="mb-6">
                                     <label class="block font-semibold mb-2">Color</label>
-                                    <select id="colorSelect" class="w-full border rounded-lg px-4 py-3" disabled>
-                                        <option value="">Select Color</option>
-                                    </select>
+                                    <div class="flex flex-wrap gap-3" id="colorContainer">
+                                        <c:forEach var="color" items="${colors}">
+                                            <button type="button" class="color-btn border-2 border-gray-200 rounded-lg px-5 py-2 font-medium text-gray-700 transition" data-color="${color}">
+                                                ${color}
+                                            </button>
+                                        </c:forEach>
+                                    </div>
                                 </div>
 
                                 <div class="mb-6">
@@ -404,22 +409,6 @@
                                                 <p class="text-gray-700 mt-2 text-lg">
                                                     <c:out value="${r.comment}" />
                                                 </p>
-                                                
-                                                <c:if test="${not empty r.replyComment}">
-                                                    <div class="mt-4 p-4 bg-gray-100 rounded-lg border-l-4 border-gray-400">
-                                                        <div class="flex items-center gap-2 mb-1">
-                                                            <span class="font-bold text-gray-800 text-sm">Store Reply</span>
-                                                            <c:if test="${not empty r.replyUpdatedAt}">
-                                                                <span class="text-xs text-gray-500">
-                                                                    (<fmt:formatDate value="${r.replyUpdatedAt}" pattern="dd MMM yyyy, HH:mm" />)
-                                                                </span>
-                                                            </c:if>
-                                                        </div>
-                                                        <p class="text-gray-700 text-sm">
-                                                            <c:out value="${r.replyComment}" />
-                                                        </p>
-                                                    </div>
-                                                </c:if>
 
                                                 <c:if test="${r.updated}">
                                                     <div
@@ -486,53 +475,119 @@
                                 </c:forEach>
                             ];
 
-                            const sizeSelect = document.getElementById("sizeSelect");
-                            const colorSelect = document.getElementById("colorSelect");
                             const stockInfo = document.getElementById("stockInfo");
                             const addBtn = document.getElementById("addToCartBtn");
+                            const sizeBtns = document.querySelectorAll('.size-btn');
+                            const colorBtns = document.querySelectorAll('.color-btn');
 
-                            sizeSelect.addEventListener("change", function () {
-                                const selectedSize = this.value;
-                                colorSelect.innerHTML = '<option value="">Select Color</option>';
-                                colorSelect.disabled = true;
-                                stockInfo.textContent = "";
-                                addBtn.disabled = true;
+                            let selectedSize = null;
+                            let selectedColor = null;
 
-                                if (!selectedSize) return;
-
-                                const availableColors = new Set();
-                                variants.forEach(v => {
-                                    if (v.size === selectedSize) availableColors.add(v.color);
+                            function updateUI() {
+                                // Update Size buttons
+                                sizeBtns.forEach(btn => {
+                                    const size = btn.getAttribute('data-size');
+                                    let isAvailable = false;
+                                    
+                                    if (selectedColor) {
+                                        const v = variants.find(x => x.color === selectedColor && x.size === size);
+                                        isAvailable = v && v.stock > 0;
+                                    } else {
+                                        isAvailable = variants.some(x => x.size === size && x.stock > 0);
+                                    }
+                                    
+                                    if (!isAvailable) {
+                                        btn.classList.add('opacity-40', 'bg-gray-100', 'cursor-not-allowed', 'border-gray-200');
+                                        btn.classList.remove('hover:border-black', 'border-black', 'text-white', 'bg-black');
+                                    } else {
+                                        btn.classList.remove('opacity-40', 'bg-gray-100', 'cursor-not-allowed');
+                                        btn.classList.add('hover:border-black');
+                                        
+                                        if (selectedSize === size) {
+                                            btn.classList.add('border-black', 'text-white', 'bg-black');
+                                            btn.classList.remove('text-gray-700', 'border-gray-200');
+                                        } else {
+                                            btn.classList.remove('border-black', 'text-white', 'bg-black');
+                                            btn.classList.add('text-gray-700', 'border-gray-200');
+                                        }
+                                    }
                                 });
 
-                                availableColors.forEach(color => {
-                                    const opt = document.createElement("option");
-                                    opt.value = color;
-                                    opt.textContent = color;
-                                    colorSelect.appendChild(opt);
+                                // Update Color buttons
+                                colorBtns.forEach(btn => {
+                                    const color = btn.getAttribute('data-color');
+                                    let isAvailable = false;
+                                    
+                                    if (selectedSize) {
+                                        const v = variants.find(x => x.size === selectedSize && x.color === color);
+                                        isAvailable = v && v.stock > 0;
+                                    } else {
+                                        isAvailable = variants.some(x => x.color === color && x.stock > 0);
+                                    }
+                                    
+                                    if (!isAvailable) {
+                                        btn.classList.add('opacity-40', 'bg-gray-100', 'cursor-not-allowed', 'border-gray-200');
+                                        btn.classList.remove('hover:border-black', 'border-black', 'text-white', 'bg-black');
+                                    } else {
+                                        btn.classList.remove('opacity-40', 'bg-gray-100', 'cursor-not-allowed');
+                                        btn.classList.add('hover:border-black');
+                                        
+                                        if (selectedColor === color) {
+                                            btn.classList.add('border-black', 'text-white', 'bg-black');
+                                            btn.classList.remove('text-gray-700', 'border-gray-200');
+                                        } else {
+                                            btn.classList.remove('border-black', 'text-white', 'bg-black');
+                                            btn.classList.add('text-gray-700', 'border-gray-200');
+                                        }
+                                    }
                                 });
-                                colorSelect.disabled = false;
-                            });
 
-                            colorSelect.addEventListener("change", function () {
-                                const size = sizeSelect.value;
-                                const color = this.value;
-
-                                if (!size || !color) return;
-
-                                const variant = variants.find(v => v.size === size && v.color === color);
-                                if (!variant) return;
-
-                                document.getElementById("selectedVariantId").value = variant.id;
-
-                                if (variant.stock <= 0) {
-                                    stockInfo.innerHTML = '<span class="text-red-600">Out Of Stock</span>';
-                                    addBtn.disabled = true;
+                                // Check valid variant to add to cart
+                                if (selectedSize && selectedColor) {
+                                    const v = variants.find(x => x.size === selectedSize && x.color === selectedColor);
+                                    if (v && v.stock > 0) {
+                                        stockInfo.innerHTML = `<span class="text-green-600">Available: ${v.stock} items</span>`;
+                                        const variantIdField = document.getElementById("selectedVariantId");
+                                        if (variantIdField) variantIdField.value = v.id;
+                                        if (addBtn) addBtn.disabled = false;
+                                    } else {
+                                        stockInfo.innerHTML = `<span class="text-red-500">Out Of Stock</span>`;
+                                        if (addBtn) addBtn.disabled = true;
+                                    }
                                 } else {
-                                    stockInfo.innerHTML = `<span class="text-green-600">Available: ${variant.stock} items</span>`;
-                                    addBtn.disabled = false;
+                                    stockInfo.innerHTML = "";
+                                    if (addBtn) addBtn.disabled = true;
                                 }
+                            }
+
+                            sizeBtns.forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    if (btn.classList.contains('cursor-not-allowed')) return;
+                                    const size = btn.getAttribute('data-size');
+                                    if (selectedSize === size) {
+                                        selectedSize = null;
+                                    } else {
+                                        selectedSize = size;
+                                    }
+                                    updateUI();
+                                });
                             });
+
+                            colorBtns.forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    if (btn.classList.contains('cursor-not-allowed')) return;
+                                    const color = btn.getAttribute('data-color');
+                                    if (selectedColor === color) {
+                                        selectedColor = null;
+                                    } else {
+                                        selectedColor = color;
+                                    }
+                                    updateUI();
+                                });
+                            });
+
+                            // Initial call
+                            updateUI();
                         </script>
             </main>
 
