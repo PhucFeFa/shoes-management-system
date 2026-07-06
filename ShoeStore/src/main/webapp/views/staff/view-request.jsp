@@ -39,6 +39,14 @@
         </header>
 
         <section class="px-16 py-6 flex-1">
+            <!-- Success Message -->
+            <c:if test="${param.success eq 'true' or param.msg eq 'success'}">
+                <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 text-sm flex items-center gap-3">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Your import request has been submitted successfully and is now pending admin approval.
+                </div>
+            </c:if>
+
             <div class="border border-gray-200 bg-white overflow-hidden shadow-sm rounded-lg">
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-gray-50 border-b border-gray-200">
