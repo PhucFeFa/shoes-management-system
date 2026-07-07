@@ -47,7 +47,6 @@ public class RequestImportServlet extends HttpServlet {
         }
 
         String supplier = request.getParameter("supplier");
-        // Removed note parameter as it's for Admin use in Step 4
         String[] variantIDs = request.getParameterValues("variantId[]");
         String[] quantities = request.getParameterValues("quantity[]");
         String[] prices = request.getParameterValues("unitPrice[]");
@@ -67,6 +66,7 @@ public class RequestImportServlet extends HttpServlet {
 
         List<ImportDetailDTO> details = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
+        BigDecimal minPrice = new BigDecimal("1000");
 
         try {
             for (int i = 0; i < variantIDs.length; i++) {
@@ -76,7 +76,9 @@ public class RequestImportServlet extends HttpServlet {
                 BigDecimal unitPrice = new BigDecimal(prices[i]);
                 
                 if (qty <= 0) throw new IllegalArgumentException("Quantity must be greater than 0");
-                if (unitPrice.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Price cannot be negative");
+                if (unitPrice.compareTo(minPrice) < 0) {
+                    throw new IllegalArgumentException("Unit price must be at least 1,000đ");
+                }
 
                 ImportDetailDTO detail = new ImportDetailDTO();
                 detail.setVariantID(variantIDs[i]);
@@ -96,7 +98,7 @@ public class RequestImportServlet extends HttpServlet {
         importDTO.setSupplier(supplier);
         importDTO.setStaffID(user.getId());
         importDTO.setTotalAmount(totalAmount);
-        importDTO.setNote(null); // Explicitly null as it's for Admin later
+        importDTO.setNote(null);
         importDTO.setDetails(details);
 
         ImportDAO importDAO = new ImportDAO();
