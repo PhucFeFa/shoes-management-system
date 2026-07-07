@@ -1,29 +1,36 @@
 package com.mycompany.shoestore.dto;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.sql.Timestamp;
+import java.util.List;
 
 public class ImportDTO {
+    // From 'imports' table
     private int importID;
-    private String staffID;       // ID người nhập đơn
-    private String supplier;     // Nhà cung cấp
-    private BigDecimal totalAmount; // Tổng tiền
-    private OffsetDateTime orderDate; // Ngày nhập đơn
-    private String status;       // Trạng thái đơn
+    private String staffID;       
+    private String supplier;     
+    private BigDecimal totalAmount; 
+    private Timestamp orderDate; // Đổi sang Timestamp để dễ format trên JSP
+    private String status;       
+    private String note;         
+
+    private String staffName;    
+    private List<ImportDetailDTO> details;
 
     public ImportDTO() {
     }
 
-    public ImportDTO(int importID, String staffID, String supplier, BigDecimal totalAmount, OffsetDateTime orderDate, String status) {
+    public ImportDTO(int importID, String staffID, String supplier, BigDecimal totalAmount, Timestamp orderDate, String status, String note) {
         this.importID = importID;
         this.staffID = staffID;
         this.supplier = supplier;
         this.totalAmount = totalAmount;
         this.orderDate = orderDate;
         this.status = status;
+        this.note = note;
     }
 
-    // Getter và Setter
+    // Getters and Setters
     public int getImportID() { return importID; }
     public void setImportID(int importID) { this.importID = importID; }
 
@@ -36,9 +43,18 @@ public class ImportDTO {
     public BigDecimal getTotalAmount() { return totalAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
 
-    public OffsetDateTime getOrderDate() { return orderDate; }
-    public void setOrderDate(OffsetDateTime orderDate) { this.orderDate = orderDate; }
+    public Timestamp getOrderDate() { return orderDate; }
+    public void setOrderDate(Timestamp orderDate) { this.orderDate = orderDate; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
+
+    public String getStaffName() { return staffName; }
+    public void setStaffName(String staffName) { this.staffName = staffName; }
+
+    public List<ImportDetailDTO> getDetails() { return details; }
+    public void setDetails(List<ImportDetailDTO> details) { this.details = details; }
 }

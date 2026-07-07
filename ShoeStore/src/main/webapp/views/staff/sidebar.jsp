@@ -144,6 +144,13 @@
             </a>
         </li>
         <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/staff/view-request"
+               class="${activePage eq 'import-requests' ? 'active' : ''}">
+                <span class="material-symbols-outlined">input</span>
+                <span>Import</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/staff/manage-reviews"
                class="${activePage eq 'reviews' ? 'active' : ''}">
                 <span class="material-symbols-outlined">rate_review</span>
