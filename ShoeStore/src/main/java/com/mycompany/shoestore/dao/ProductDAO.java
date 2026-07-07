@@ -17,6 +17,55 @@ import java.util.Set;
 
 public class ProductDAO {
 
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT p.*, c.name as category_name, b.name as brand_name " +
+                     "FROM products p " +
+                     "LEFT JOIN categories c ON p.category_id = c.id " +
+                     "LEFT JOIN brands b ON p.brand_id = b.id " +
+                     "ORDER BY p.name ASC";
+                     
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+             
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getString("id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                product.setCategoryId(rs.getString("category_id"));
+                product.setBrandId(rs.getString("brand_id"));
+                product.setStatus(rs.getString("status"));
+                
+                Category c = new Category();
+                c.setName(rs.getString("category_name"));
+                product.setCategory(c);
+                
+                Brand b = new Brand();
+                b.setName(rs.getString("brand_name"));
+                product.setBrand(b);
+                
+                // Get one image for the product
+                String imageSql = "SELECT TOP 1 image_url FROM product_images WHERE product_id = ? ORDER BY sort_order";
+                try (PreparedStatement ips = conn.prepareStatement(imageSql)) {
+                    ips.setString(1, product.getId());
+                    try (ResultSet irs = ips.executeQuery()) {
+                        if (irs.next()) {
+                            product.setFirstImageUrl(irs.getString("image_url"));
+                        }
+                    }
+                }
+                
+                products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
     public List<Product> getLatestProducts(int limit) {
         List<Product> products = new ArrayList<>();
         // Query to get latest active products with their first image
