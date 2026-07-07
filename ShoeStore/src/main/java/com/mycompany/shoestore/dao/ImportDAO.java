@@ -202,6 +202,7 @@ public class ImportDAO {
         }
         return list;
     }
+
     public boolean updateImportStatus(int importID, String status, String note) {
         String sql = "UPDATE imports SET Status = ?, Note = ? WHERE ImportID = ?";
         try (Connection conn = new DBContext().getConnection();
@@ -214,5 +215,54 @@ public class ImportDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    //Report
+    public boolean reportReceivedQuantities(int importID, String[] detailIDs, String[] receivedQtys) {
+        String sqlUpdateDetail = "UPDATE import_details SET ReceivedQuantity = ? WHERE ImportDetailID = ?";
+   
+        String sqlUpdateImport = "UPDATE imports SET Status = 'REPORTED', " +
+                                 "TotalAmount = (SELECT SUM(ReceivedQuantity * UnitPrice) FROM import_details WHERE ImportID = ?) " +
+                                 "WHERE ImportID = ?";
+        
+        Connection conn = null;
+        try {
+            conn = new DBContext().getConnection();
+            conn.setAutoCommit(false);
+            
+           
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateDetail)) {
+                for (int i = 0; i < detailIDs.length; i++) {
+                    ps.setInt(1, Integer.parseInt(receivedQtys[i]));
+                    ps.setInt(2, Integer.parseInt(detailIDs[i]));
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+            
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateImport)) {
+                ps.setInt(1, importID);
+                ps.setInt(2, importID);
+                ps.executeUpdate();
+            }
+            
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (conn != null) {
+                try { 
+                    conn.setAutoCommit(true); 
+                    conn.close(); 
+                } catch (SQLException e) { 
+                    e.printStackTrace(); 
+                }
+            }
+        }
     }
 }

@@ -318,12 +318,21 @@
         <!-- Content -->
         <section class="px-margin-desktop py-6 flex-1">
 
-            <!-- Success Message -->
+            <!-- Success Message (New Request) -->
             <c:if test="${param.success eq 'true' or param.msg eq 'success'}">
                 <div
                     class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 font-body-md text-body-md flex items-center gap-3 rounded-lg">
                     <span class="material-symbols-outlined">check_circle</span>
                     Your import request has been submitted successfully and is now pending admin approval.
+                </div>
+            </c:if>
+
+            <!-- Success Message (Arrival Report) -->
+            <c:if test="${param.msg eq 'report_success'}">
+                <div
+                    class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 font-body-md text-body-md flex items-center gap-3 rounded-lg">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Your arrival report has been submitted successfully and is now pending admin approval.
                 </div>
             </c:if>
 
@@ -384,50 +393,19 @@
                                             <fmt:formatNumber value="${req.totalAmount}" pattern="#,##0" /> đ
                                         </td>
                                         <td class="py-4 px-6">
+                                            <c:set var="statusClass" value=""/>
                                             <c:choose>
-                                                <c:when test="${req.status == 'REQUESTING'}">
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-surface-variant text-on-surface font-label-sm text-label-sm uppercase tracking-widest rounded-md">
-                                                        Requesting
-                                                    </span>
-                                                </c:when>
-                                                <c:when test="${req.status == 'APPROVED'}">
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 border border-primary text-primary font-label-sm text-label-sm uppercase tracking-widest rounded-md">
-                                                        Approved
-                                                    </span>
-                                                </c:when>
-                                                <c:when test="${req.status == 'REPORTED'}">
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm uppercase tracking-widest rounded-md border border-tertiary-fixed-dim">
-                                                        Reported
-                                                    </span>
-                                                </c:when>
-                                                <c:when test="${req.status == 'ACCEPTED'}">
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase tracking-widest rounded-md">
-                                                        Accepted
-                                                    </span>
-                                                </c:when>
-                                                <c:when test="${req.status == 'COMPLETE'}">
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-primary text-on-primary font-label-sm text-label-sm uppercase tracking-widest rounded-md">
-                                                        Complete
-                                                    </span>
-                                                </c:when>
-                                                <c:when test="${req.status == 'CANCELLED'}">
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-error-container text-on-error-container font-label-sm text-label-sm uppercase tracking-widest rounded-md">
-                                                        Cancelled
-                                                    </span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-surface-container text-secondary font-label-sm text-label-sm uppercase tracking-widest rounded-md">
-                                                        <c:out value="${req.status}" />
-                                                    </span>
-                                                </c:otherwise>
+                                                <c:when test="${req.status == 'REQUESTING'}"><c:set var="statusClass" value="bg-blue-100 text-blue-700"/></c:when>
+                                                <c:when test="${req.status == 'APPROVED'}"><c:set var="statusClass" value="bg-yellow-100 text-yellow-700"/></c:when>
+                                                <c:when test="${req.status == 'REPORTED'}"><c:set var="statusClass" value="bg-purple-100 text-purple-700"/></c:when>
+                                                <c:when test="${req.status == 'ACCEPTED'}"><c:set var="statusClass" value="bg-green-100 text-green-700"/></c:when>
+                                                <c:when test="${req.status == 'COMPLETE'}"><c:set var="statusClass" value="bg-gray-900 text-white"/></c:when>
+                                                <c:when test="${req.status == 'CANCELLED'}"><c:set var="statusClass" value="bg-red-100 text-red-700"/></c:when>
+                                                <c:otherwise><c:set var="statusClass" value="bg-gray-100 text-gray-700"/></c:otherwise>
                                             </c:choose>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusClass}">
+                                                <c:out value="${req.status}"/>
+                                            </span>
                                         </td>
                                         <td class="py-4 px-6 text-center">
                                             <a href="${pageContext.request.contextPath}/staff/import-detail?id=${req.importID}"
