@@ -158,6 +158,13 @@
             </a>
         </li>
         <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/manage-products"
+               class="${activePage eq 'manage-products' ? 'active' : ''}">
+                <span class="material-symbols-outlined">inventory_2</span>
+                <span>Products</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/import"
                class="${activePage eq 'import' ? 'active' : ''}">
                 <span class="material-symbols-outlined">local_shipping</span>
