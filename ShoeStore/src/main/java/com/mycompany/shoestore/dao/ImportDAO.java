@@ -202,4 +202,17 @@ public class ImportDAO {
         }
         return list;
     }
+    public boolean updateImportStatus(int importID, String status, String note) {
+        String sql = "UPDATE imports SET Status = ?, Note = ? WHERE ImportID = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setNString(2, note);
+            ps.setInt(3, importID);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
