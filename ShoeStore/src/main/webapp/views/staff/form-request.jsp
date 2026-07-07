@@ -48,7 +48,7 @@
 
         <!-- Form Section -->
         <div class="px-16 py-10 flex-1">
-            <form action="${pageContext.request.contextPath}/staff/create-import" method="POST" id="importForm" class="max-w-6xl">
+            <form action="${pageContext.request.contextPath}/staff/create-import" method="POST" id="importForm" class="max-w-6xl" onsubmit="return validateForm()">
                 
                 <c:if test="${not empty error}">
                     <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm">
@@ -267,8 +267,9 @@
                            class="w-full border-gray-100 rounded-lg text-sm focus:ring-black focus:border-black py-2 text-center input-no-spinner">
                 </td>
                 <td class="py-4 px-4">
-                    <input type="number" name="unitPrice[]" min="0" value="0" required oninput="updateRow(this)"
+                    <input type="number" name="unitPrice[]" min="1000" value="1000" required oninput="updateRow(this)"
                            class="w-full border-gray-100 rounded-lg text-sm focus:ring-black focus:border-black py-2 text-right input-no-spinner">
+                    <p class="text-[9px] text-red-500 mt-1 hidden price-error">Min 1,000đ</p>
                 </td>
                 <td class="py-4 px-8 text-right font-bold text-sm subtotal">0 đ</td>
                 <td class="py-4 px-4 text-center">
@@ -288,8 +289,21 @@
 
         function updateRow(input) {
             const row = input.closest('tr');
-            const qty = parseInt(row.querySelector('input[name="quantity[]"]').value) || 0;
-            const price = parseFloat(row.querySelector('input[name="unitPrice[]"]').value) || 0;
+            const qtyInput = row.querySelector('input[name="quantity[]"]');
+            const priceInput = row.querySelector('input[name="unitPrice[]"]');
+            const priceError = row.querySelector('.price-error');
+
+            const qty = parseInt(qtyInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+
+            if (price < 1000) {
+                priceError.classList.remove('hidden');
+                priceInput.classList.add('border-red-500');
+            } else {
+                priceError.classList.add('hidden');
+                priceInput.classList.remove('border-red-500');
+            }
+
             const subtotal = qty * price;
             row.querySelector('.subtotal').textContent = new Intl.NumberFormat('vi-VN').format(subtotal) + ' đ';
             updateTotal();
@@ -303,6 +317,29 @@
                 total += (qty * price);
             });
             document.getElementById('totalAmountDisplay').textContent = new Intl.NumberFormat('vi-VN').format(total) + ' đ';
+        }
+
+        function validateForm() {
+            const rows = document.querySelectorAll('.item-row');
+            if (rows.length === 0) {
+                alert('Please add at least one product.');
+                return false;
+            }
+
+            let isValid = true;
+            rows.forEach(row => {
+                const price = parseFloat(row.querySelector('input[name="unitPrice[]"]').value) || 0;
+                if (price < 1000) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                alert('Unit price must be at least 1,000 đ for all items.');
+                return false;
+            }
+
+            return true;
         }
     </script>
 </body>
