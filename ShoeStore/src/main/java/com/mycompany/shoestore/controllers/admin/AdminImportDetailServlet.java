@@ -69,8 +69,8 @@ public class AdminImportDetailServlet extends HttpServlet {
             return;
         }
 
-        if ("cancel".equalsIgnoreCase(action) && (note == null || note.trim().isEmpty())) {
-            request.setAttribute("error", "Admin Note is strictly required when rejecting a request.");
+        if (note == null || note.trim().isEmpty()) {
+            request.setAttribute("error", "Admin Note is strictly required for all actions.");
             doGet(request, response);
             return;
         }

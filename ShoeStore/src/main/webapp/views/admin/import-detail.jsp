@@ -154,13 +154,13 @@
                                 <input type="hidden" name="id" value="${importDetail.importID}">
                                 
                                 <div class="flex flex-col gap-2 relative">
-                                    <label for="note" class="text-xs font-bold uppercase tracking-widest text-gray-500">Admin Note</label>
-                                    <textarea id="note" name="note" rows="4" 
+                                    <label for="note" class="text-xs font-bold uppercase tracking-widest text-gray-500">Admin Note <span class="text-red-500">*</span></label>
+                                    <textarea id="note" name="note" rows="4" required
                                               placeholder="Add remarks for approval, cancellation, or acceptance reason..."
                                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black text-sm p-3 placeholder-gray-400"></textarea>
                                     <div id="noteError" class="hidden text-red-600 text-xs font-semibold mt-1 flex items-center gap-1">
                                         <span class="material-symbols-outlined text-[14px]">error</span> 
-                                        Admin Note is required when rejecting/canceling.
+                                        Admin Note is strictly required.
                                     </div>
                                 </div>
                                 
@@ -226,14 +226,12 @@
             noteInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
             errorDiv.classList.add('hidden');
 
-            if (submitter && submitter.value === 'cancel') {
-                const noteValue = noteInput.value.trim();
-                if (noteValue === '') {
-                    noteInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
-                    errorDiv.classList.remove('hidden');
-                    event.preventDefault();
-                    return false;
-                }
+            const noteValue = noteInput.value.trim();
+            if (noteValue === '') {
+                noteInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                errorDiv.classList.remove('hidden');
+                event.preventDefault();
+                return false;
             }
             return true;
         }
