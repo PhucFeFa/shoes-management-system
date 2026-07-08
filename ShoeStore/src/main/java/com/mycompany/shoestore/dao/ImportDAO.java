@@ -265,4 +265,64 @@ public class ImportDAO {
             }
         }
     }
+
+    // StockIn
+    public boolean completeStockIn(int importID) {
+        String sqlGetDetails = "SELECT VariantID, ReceivedQuantity FROM import_details WHERE ImportID = ?";
+        String sqlUpdateStock = "UPDATE product_variants SET stock_quantity = stock_quantity + ? WHERE variant_id = ?";
+        String sqlUpdateStatus = "UPDATE imports SET Status = 'COMPLETE' WHERE ImportID = ?";
+
+        Connection conn = null;
+        try {
+            conn = new DBContext().getConnection();
+            conn.setAutoCommit(false);
+
+            List<ImportDetailDTO> items = new ArrayList<>();
+            try (PreparedStatement ps = conn.prepareStatement(sqlGetDetails)) {
+                ps.setInt(1, importID);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        ImportDetailDTO d = new ImportDetailDTO();
+                        d.setVariantID(rs.getString("VariantID"));
+                        d.setReceivedQuantity(rs.getInt("ReceivedQuantity"));
+                        items.add(d);
+                    }
+                }
+            }
+
+            // dua quality vo kho
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateStock)) {
+                for (ImportDetailDTO item : items) {
+                    ps.setInt(1, item.getReceivedQuantity());
+                    ps.setString(2, item.getVariantID());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+
+            // Status COMPLETE
+            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateStatus)) {
+                ps.setInt(1, importID);
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

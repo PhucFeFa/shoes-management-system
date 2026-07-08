@@ -336,6 +336,15 @@
                 </div>
             </c:if>
 
+            <!-- Success Message (Stock In) -->
+            <c:if test="${param.msg eq 'stockin_success'}">
+                <div
+                    class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 font-body-md text-body-md flex items-center gap-3 rounded-lg">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    Stock-in completed successfully! Items have been added to inventory.
+                </div>
+            </c:if>
+
             <!-- Data Table -->
             <div class="border border-outline-variant bg-surface overflow-hidden shadow-sm">
                 <table class="w-full text-left border-collapse">
@@ -389,8 +398,8 @@
                                                 <fmt:formatDate value="${req.orderDate}" pattern="HH:mm" />
                                             </span>
                                         </td>
-                                        <td class="py-4 px-6 text-right font-label-md">
-                                            <fmt:formatNumber value="${req.totalAmount}" pattern="#,##0" /> đ
+                                        <td class="py-4 px-6 text-right font-label-md whitespace-nowrap">
+                                            <fmt:formatNumber value="${req.totalAmount}" pattern="#,##0" />&nbsp;đ
                                         </td>
                                         <td class="py-4 px-6">
                                             <c:set var="statusClass" value=""/>
@@ -399,7 +408,7 @@
                                                 <c:when test="${req.status == 'APPROVED'}"><c:set var="statusClass" value="bg-yellow-100 text-yellow-700"/></c:when>
                                                 <c:when test="${req.status == 'REPORTED'}"><c:set var="statusClass" value="bg-purple-100 text-purple-700"/></c:when>
                                                 <c:when test="${req.status == 'ACCEPTED'}"><c:set var="statusClass" value="bg-green-100 text-green-700"/></c:when>
-                                                <c:when test="${req.status == 'COMPLETE'}"><c:set var="statusClass" value="bg-gray-900 text-white"/></c:when>
+                                                <c:when test="${req.status == 'COMPLETE'}"><c:set var="statusClass" value="bg-emerald-100 text-emerald-700"/></c:when>
                                                 <c:when test="${req.status == 'CANCELLED'}"><c:set var="statusClass" value="bg-red-100 text-red-700"/></c:when>
                                                 <c:otherwise><c:set var="statusClass" value="bg-gray-100 text-gray-700"/></c:otherwise>
                                             </c:choose>
