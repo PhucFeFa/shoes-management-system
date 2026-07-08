@@ -52,6 +52,12 @@
         </header>
 
         <div class="px-16 py-10 space-y-8">
+            <c:if test="${not empty error}">
+                <div class="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm">
+                    <c:out value="${error}"/>
+                </div>
+            </c:if>
+
             <!-- Info Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -70,7 +76,7 @@
                 </div>
             </div>
 
-            <!-- Admin Note (Only show if exists) -->
+            <!-- Admin Note -->
             <c:if test="${not empty importDetail.note}">
                 <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-900">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Admin Note</p>
@@ -83,42 +89,88 @@
                 <div class="px-8 py-4 bg-gray-50 border-b border-gray-200">
                     <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Requested Items</h3>
                 </div>
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-gray-100">
-                            <th class="py-4 px-8 text-[10px] font-bold uppercase text-gray-400">Product</th>
-                            <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-32 text-center">Size</th>
-                            <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-32 text-center">Color</th>
-                            <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-32 text-center">Quantity</th>
-                            <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-48 text-right">Unit Price</th>
-                            <th class="py-4 px-8 text-[10px] font-bold uppercase text-gray-400 w-48 text-right">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-50">
-                        <c:forEach var="item" items="${importDetail.details}">
-                            <tr>
-                                <td class="py-4 px-8 text-sm font-bold text-gray-900"><c:out value="${item.productName}"/></td>
-                                <td class="py-4 px-4 text-sm text-center text-gray-600"><c:out value="${item.size}"/></td>
-                                <td class="py-4 px-4 text-sm text-center text-gray-600"><c:out value="${item.color}"/></td>
-                                <td class="py-4 px-4 text-sm text-center font-bold text-gray-900"><c:out value="${item.importQuantity}"/></td>
-                                <td class="py-4 px-4 text-sm text-right text-gray-600">
-                                    <fmt:formatNumber value="${item.unitPrice}" pattern="#,##0"/> đ
-                                </td>
-                                <td class="py-4 px-8 text-sm text-right font-bold text-gray-900">
-                                    <fmt:formatNumber value="${item.unitPrice * item.importQuantity}" pattern="#,##0"/> đ
+                
+                <form action="${pageContext.request.contextPath}/staff/import-detail" method="POST" id="reportForm">
+                    <input type="hidden" name="importID" value="${importDetail.importID}">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-100">
+                                <th class="py-4 px-8 text-[10px] font-bold uppercase text-gray-400">Product</th>
+                                <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-24 text-center">Size</th>
+                                <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-24 text-center">Color</th>
+                                <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-28 text-center">Qty Request</th>
+                                
+                                <c:if test="${importDetail.status == 'APPROVED'}">
+                                    <th class="py-4 px-4 text-[10px] font-bold uppercase text-black w-32 text-center bg-yellow-50">Actual Received</th>
+                                </c:if>
+                                
+                                <c:if test="${importDetail.status != 'REQUESTING' && importDetail.status != 'APPROVED' && importDetail.status != 'CANCELLED'}">
+                                    <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-28 text-center">Qty Received</th>
+                                </c:if>
+
+                                <th class="py-4 px-4 text-[10px] font-bold uppercase text-gray-400 w-40 text-right">Unit Price</th>
+                                <th class="py-4 px-8 text-[10px] font-bold uppercase text-gray-400 w-40 text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <c:set var="calculatedTotal" value="0" />
+                            <c:forEach var="item" items="${importDetail.details}">
+                                <c:set var="isReported" value="${importDetail.status == 'REPORTED' || importDetail.status == 'ACCEPTED' || importDetail.status == 'COMPLETE'}" />
+                                <c:set var="displayQty" value="${isReported ? item.receivedQuantity : item.importQuantity}" />
+                                <c:set var="itemSubtotal" value="${item.unitPrice * displayQty}" />
+                                <c:set var="calculatedTotal" value="${calculatedTotal + itemSubtotal}" />
+                                
+                                <tr>
+                                    <td class="py-4 px-8 text-sm font-bold text-gray-900">
+                                        <c:out value="${item.productName}"/>
+                                        <input type="hidden" name="detailIDs" value="${item.importDetailID}">
+                                    </td>
+                                    <td class="py-4 px-4 text-sm text-center text-gray-600"><c:out value="${item.size}"/></td>
+                                    <td class="py-4 px-4 text-sm text-center text-gray-600"><c:out value="${item.color}"/></td>
+                                    <td class="py-4 px-4 text-sm text-center font-bold text-gray-400"><c:out value="${item.importQuantity}"/></td>
+                                    
+                                    <c:if test="${importDetail.status == 'APPROVED'}">
+                                        <td class="py-4 px-4 bg-yellow-50/30">
+                                            <input type="number" name="receivedQuantities" 
+                                                   min="0" max="${item.importQuantity}" 
+                                                   value="${item.importQuantity}" 
+                                                   required oninput="updateSubtotal(this, ${item.unitPrice})"
+                                                   class="w-full border-gray-200 rounded text-center text-sm focus:ring-black focus:border-black py-1">
+                                        </td>
+                                    </c:if>
+
+                                    <c:if test="${importDetail.status != 'REQUESTING' && importDetail.status != 'APPROVED' && importDetail.status != 'CANCELLED'}">
+                                        <td class="py-4 px-4 text-sm text-center font-bold text-gray-900"><c:out value="${item.receivedQuantity}"/></td>
+                                    </c:if>
+
+                                    <td class="py-4 px-4 text-sm text-right text-gray-600">
+                                        <fmt:formatNumber value="${item.unitPrice}" pattern="#,##0"/> đ
+                                    </td>
+                                    <td class="py-4 px-8 text-sm text-right font-bold text-gray-900 item-subtotal-display">
+                                        <fmt:formatNumber value="${itemSubtotal}" pattern="#,##0"/> đ
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-gray-50 border-t border-gray-200">
+                                <td colspan="${importDetail.status == 'APPROVED' || (importDetail.status != 'REQUESTING' && importDetail.status != 'APPROVED' && importDetail.status != 'CANCELLED') ? 6 : 5}" class="py-6 px-8 text-right text-[10px] font-bold uppercase tracking-widest text-gray-500">Total Amount</td>
+                                <td class="py-6 px-8 text-right text-2xl font-extrabold text-gray-900" id="totalAmountDisplay">
+                                    <fmt:formatNumber value="${calculatedTotal}" pattern="#,##0"/> đ
                                 </td>
                             </tr>
-                        </c:forEach>
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-50 border-t border-gray-200">
-                            <td colspan="5" class="py-6 px-8 text-right text-[10px] font-bold uppercase tracking-widest text-gray-500">Total Amount</td>
-                            <td class="py-6 px-8 text-right text-2xl font-extrabold text-gray-900">
-                                <fmt:formatNumber value="${importDetail.totalAmount}" pattern="#,##0"/> đ
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </tfoot>
+                    </table>
+
+                    <c:if test="${importDetail.status == 'APPROVED'}">
+                        <div class="px-8 py-6 bg-gray-50 border-t border-gray-200 flex justify-end">
+                            <button type="submit" name="action" value="report" 
+                                    class="px-10 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-gray-800 transition-all shadow-md active:scale-95">
+                                Submit Arrival Report
+                            </button>
+                        </div>
+                    </c:if>
+                </form>
             </div>
 
             <div class="flex justify-start">
@@ -129,5 +181,50 @@
             </div>
         </div>
     </main>
+
+    <script>
+        function updateSubtotal(input, unitPrice) {
+            const row = input.closest('tr');
+            const subtotalDisplay = row.querySelector('.item-subtotal-display');
+            const qty = parseInt(input.value) || 0;
+            const subtotal = qty * unitPrice;
+            
+            subtotalDisplay.textContent = new Intl.NumberFormat('vi-VN').format(subtotal) + ' đ';
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            const inputs = document.querySelectorAll('input[name="receivedQuantities"]');
+            if (inputs.length > 0) {
+                inputs.forEach(input => {
+                    const row = input.closest('tr');
+                    const subtotalText = row.querySelector('.item-subtotal-display').textContent;
+                    const subtotalValue = parseInt(subtotalText.replace(/[^0-9]/g, ''));
+                    total += subtotalValue;
+                });
+            }
+            document.getElementById('totalAmountDisplay').textContent = new Intl.NumberFormat('vi-VN').format(total) + ' đ';
+        }
+
+        document.getElementById('reportForm')?.addEventListener('submit', function(e) {
+            let isValid = true;
+            this.querySelectorAll('input[name="receivedQuantities"]').forEach(input => {
+                const max = parseInt(input.getAttribute('max'));
+                const val = parseInt(input.value);
+                if (val > max || val < 0) {
+                    isValid = false;
+                    input.classList.add('border-red-500');
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Received quantity must be between 0 and the requested quantity.');
+            }
+        });
+    </script>
 </body>
 </html>
