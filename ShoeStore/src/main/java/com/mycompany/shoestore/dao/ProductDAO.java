@@ -193,6 +193,219 @@ public class ProductDAO {
         return brands;
     }
 
+    public String getOrCreateCategory(String categoryName) {
+        String checkSql = "SELECT id FROM categories WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(checkSql)) {
+            ps.setString(1, categoryName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString("id");
+            }
+            String insertSql = "INSERT INTO categories (id, name) VALUES (NEWID(), ?)";
+            try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
+                psIns.setString(1, categoryName);
+                if (psIns.executeUpdate() > 0) {
+                    try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
+                        psSel.setString(1, categoryName);
+                        try (ResultSet rs2 = psSel.executeQuery()) {
+                            if (rs2.next()) return rs2.getString("id");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getOrCreateBrand(String brandName) {
+        String checkSql = "SELECT id FROM brands WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(checkSql)) {
+            ps.setString(1, brandName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString("id");
+            }
+            String insertSql = "INSERT INTO brands (id, name) VALUES (NEWID(), ?)";
+            try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
+                psIns.setString(1, brandName);
+                if (psIns.executeUpdate() > 0) {
+                    try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
+                        psSel.setString(1, brandName);
+                        try (ResultSet rs2 = psSel.executeQuery()) {
+                            if (rs2.next()) return rs2.getString("id");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String insertProduct(Product p, String imageUrl) {
+        String newId = java.util.UUID.randomUUID().toString();
+        p.setId(newId);
+        String sql = "INSERT INTO products (id, name, description, price, category_id, brand_id, status) VALUES (?, ?, ?, ?, ?, ?, 'inactive')";
+        
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newId);
+            ps.setString(2, p.getName());
+            ps.setString(3, p.getDescription());
+            ps.setDouble(4, p.getPrice());
+            ps.setString(5, p.getCategoryId());
+            ps.setString(6, p.getBrandId());
+            
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+                    String imgSql = "INSERT INTO product_images (product_id, image_url, sort_order) VALUES (?, ?, 1)";
+                    try (PreparedStatement psImg = conn.prepareStatement(imgSql)) {
+                        psImg.setString(1, newId);
+                        psImg.setString(2, imageUrl);
+                        psImg.executeUpdate();
+                    }
+                }
+                return newId;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean insertProductImage(String productId, String imageUrl, int sortOrder) {
+        String sql = "INSERT INTO product_images (product_id, image_url, sort_order) VALUES (?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, productId);
+            ps.setString(2, imageUrl);
+            ps.setInt(3, sortOrder);
+            
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteProductImagesByProductId(String productId) {
+        String sql = "DELETE FROM product_images WHERE product_id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, productId);
+            return ps.executeUpdate() >= 0; // return true even if 0 rows deleted
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateProduct(Product p) {
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category_id = ?, brand_id = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getDescription());
+            ps.setDouble(3, p.getPrice());
+            ps.setString(4, p.getCategoryId());
+            ps.setString(5, p.getBrandId());
+            ps.setString(6, p.getId());
+            
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean toggleProductStatus(String productId) {
+        String sql = "UPDATE products SET status = CASE WHEN status = 'active' THEN 'inactive' ELSE 'active' END WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, productId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteCategory(String categoryId) {
+        String checkSql = "SELECT COUNT(*) FROM products WHERE category_id = ?";
+        String deleteSql = "DELETE FROM categories WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection()) {
+            try (PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+                psCheck.setString(1, categoryId);
+                try (ResultSet rs = psCheck.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        return false; // Cannot delete, in use by products
+                    }
+                }
+            }
+            try (PreparedStatement psDel = conn.prepareStatement(deleteSql)) {
+                psDel.setString(1, categoryId);
+                return psDel.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteBrand(String brandId) {
+        String checkSql = "SELECT COUNT(*) FROM products WHERE brand_id = ?";
+        String deleteSql = "DELETE FROM brands WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection()) {
+            try (PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+                psCheck.setString(1, brandId);
+                try (ResultSet rs = psCheck.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        return false; // Cannot delete, in use by products
+                    }
+                }
+            }
+            try (PreparedStatement psDel = conn.prepareStatement(deleteSql)) {
+                psDel.setString(1, brandId);
+                return psDel.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateCategory(String id, String newName) {
+        String sql = "UPDATE categories SET name = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newName);
+            ps.setString(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateBrand(String id, String newName) {
+        String sql = "UPDATE brands SET name = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newName);
+            ps.setString(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public int countSearchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice, Double maxPrice) {
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) "

@@ -129,4 +129,56 @@ public class ProductVariantDAO {
         int stock = getStockByVariant(variantId);
         return stock >= requiredQuantity;
     }
+
+    public boolean addVariant(ProductVariant v) {
+        String sql = "INSERT INTO product_variants (variant_id, product_id, size, color, stock_quantity) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            // If the database requires a UUID or string, we generate a UUID.
+            String newId = java.util.UUID.randomUUID().toString();
+            v.setId(newId);
+            
+            ps.setString(1, v.getId());
+            ps.setString(2, v.getProductId());
+            ps.setString(3, v.getSize());
+            ps.setString(4, v.getColor());
+            ps.setInt(5, v.getStockQuantity());
+            
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateVariant(ProductVariant v) {
+        String sql = "UPDATE product_variants SET size = ?, color = ?, stock_quantity = ? WHERE variant_id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, v.getSize());
+            ps.setString(2, v.getColor());
+            ps.setInt(3, v.getStockQuantity());
+            ps.setString(4, v.getId());
+            
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteVariant(String variantId) {
+        String sql = "DELETE FROM product_variants WHERE variant_id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, variantId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
