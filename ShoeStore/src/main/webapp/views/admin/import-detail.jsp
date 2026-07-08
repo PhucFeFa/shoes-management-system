@@ -103,6 +103,9 @@
                                 <th class="py-3 px-6 text-xs font-bold uppercase text-gray-500 tracking-wider text-center">Size</th>
                                 <th class="py-3 px-6 text-xs font-bold uppercase text-gray-500 tracking-wider text-center">Color</th>
                                 <th class="py-3 px-6 text-xs font-bold uppercase text-gray-500 tracking-wider text-center">Qty</th>
+                                <c:if test="${importDetail.status == 'REPORTED' || importDetail.status == 'ACCEPTED' || importDetail.status == 'COMPLETE'}">
+                                    <th class="py-3 px-6 text-xs font-bold uppercase text-black bg-indigo-50 tracking-wider text-center">Received Qty</th>
+                                </c:if>
                                 <th class="py-3 px-6 text-xs font-bold uppercase text-gray-500 tracking-wider text-right">Unit Price</th>
                                 <th class="py-3 px-6 text-xs font-bold uppercase text-gray-500 tracking-wider text-right">Line Total</th>
                             </tr>
@@ -119,11 +122,18 @@
                                         </div>
                                     </td>
                                     <td class="py-4 px-6 text-sm text-center font-bold"><c:out value="${detail.importQuantity}"/></td>
+                                    
+                                    <c:set var="isPostApproved" value="${importDetail.status == 'REPORTED' || importDetail.status == 'ACCEPTED' || importDetail.status == 'COMPLETE'}" />
+                                    <c:if test="${isPostApproved}">
+                                        <td class="py-4 px-6 text-sm text-center font-bold text-indigo-700 bg-indigo-50/30"><c:out value="${detail.receivedQuantity}"/></td>
+                                    </c:if>
+
                                     <td class="py-4 px-6 text-sm text-right">
                                         <fmt:formatNumber value="${detail.unitPrice}" pattern="#,##0"/> đ
                                     </td>
                                     <td class="py-4 px-6 text-sm text-right font-bold text-black">
-                                        <fmt:formatNumber value="${detail.unitPrice * detail.importQuantity}" pattern="#,##0"/> đ
+                                        <c:set var="qtyToCalculate" value="${isPostApproved ? detail.receivedQuantity : detail.importQuantity}" />
+                                        <fmt:formatNumber value="${detail.unitPrice * qtyToCalculate}" pattern="#,##0"/> đ
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -139,33 +149,51 @@
                     <h3 class="text-lg font-bold mb-4">Process Request</h3>
                     
                     <c:choose>
-                        <c:when test="${importDetail.status == 'REQUESTING'}">
+                        <c:when test="${importDetail.status == 'REQUESTING' || importDetail.status == 'REPORTED'}">
                             <form id="approvalForm" action="${pageContext.request.contextPath}/admin/import-detail" method="POST" class="flex flex-col gap-6" onsubmit="return validateApprovalForm(event)">
                                 <input type="hidden" name="id" value="${importDetail.importID}">
                                 
                                 <div class="flex flex-col gap-2 relative">
                                     <label for="note" class="text-xs font-bold uppercase tracking-widest text-gray-500">Admin Note</label>
                                     <textarea id="note" name="note" rows="4" 
-                                              placeholder="Add remarks for approval or rejection reason..."
+                                              placeholder="Add remarks for approval, cancellation, or acceptance reason..."
                                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black text-sm p-3 placeholder-gray-400"></textarea>
                                     <div id="noteError" class="hidden text-red-600 text-xs font-semibold mt-1 flex items-center gap-1">
                                         <span class="material-symbols-outlined text-[14px]">error</span> 
-                                        Admin Note is required when rejecting.
+                                        Admin Note is required when rejecting/canceling.
                                     </div>
                                 </div>
                                 
                                 <div class="flex flex-col gap-3">
-                                    <button type="submit" name="action" value="approve" 
-                                            class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-green-700 transition-colors">
-                                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
-                                        Approve Request
-                                    </button>
-                                    
-                                    <button type="submit" name="action" value="cancel" 
-                                            class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-red-700 transition-colors">
-                                        <span class="material-symbols-outlined text-[18px]">cancel</span>
-                                        Reject Request
-                                    </button>
+                                    <c:choose>
+                                        <c:when test="${importDetail.status == 'REQUESTING'}">
+                                            <button type="submit" name="action" value="approve" 
+                                                    class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-green-700 transition-colors">
+                                                <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                Approve Request
+                                            </button>
+                                            
+                                            <button type="submit" name="action" value="cancel" 
+                                                    class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-red-700 transition-colors">
+                                                <span class="material-symbols-outlined text-[18px]">cancel</span>
+                                                Reject Request
+                                            </button>
+                                        </c:when>
+                                        
+                                        <c:when test="${importDetail.status == 'REPORTED'}">
+                                            <button type="submit" name="action" value="accept" 
+                                                    class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-green-700 transition-colors">
+                                                <span class="material-symbols-outlined text-[18px]">done_all</span>
+                                                Accept Arrival
+                                            </button>
+                                            
+                                            <button type="submit" name="action" value="cancel" 
+                                                    class="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-red-700 transition-colors">
+                                                <span class="material-symbols-outlined text-[18px]">cancel</span>
+                                                Cancel Arrival
+                                            </button>
+                                        </c:when>
+                                    </c:choose>
                                 </div>
                             </form>
                         </c:when>

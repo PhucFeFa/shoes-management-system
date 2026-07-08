@@ -81,6 +81,8 @@ public class AdminImportDetailServlet extends HttpServlet {
             
             if ("approve".equalsIgnoreCase(action)) {
                 status = "APPROVED";
+            } else if ("accept".equalsIgnoreCase(action)) {
+                status = "ACCEPTED";
             } else if ("cancel".equalsIgnoreCase(action)) {
                 status = "CANCELLED";
             }
