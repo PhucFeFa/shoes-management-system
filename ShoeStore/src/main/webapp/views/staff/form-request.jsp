@@ -39,11 +39,6 @@
                 <h2 class="text-3xl font-bold tracking-tight">Create Import Request</h2>
                 <p class="text-gray-500 mt-2">Fill in the details to request new stock from a supplier.</p>
             </div>
-            <a href="${pageContext.request.contextPath}/staff/view-request" 
-               class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                Back to List
-            </a>
         </header>
 
         <!-- Form Section -->
