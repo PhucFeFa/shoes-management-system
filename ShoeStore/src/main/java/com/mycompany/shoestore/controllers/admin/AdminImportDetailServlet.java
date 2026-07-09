@@ -69,8 +69,8 @@ public class AdminImportDetailServlet extends HttpServlet {
             return;
         }
 
-        if ("cancel".equalsIgnoreCase(action) && (note == null || note.trim().isEmpty())) {
-            request.setAttribute("error", "Admin Note is strictly required when rejecting a request.");
+        if (note == null || note.trim().isEmpty()) {
+            request.setAttribute("error", "Admin Note is strictly required for all actions.");
             doGet(request, response);
             return;
         }
@@ -81,6 +81,8 @@ public class AdminImportDetailServlet extends HttpServlet {
             
             if ("approve".equalsIgnoreCase(action)) {
                 status = "APPROVED";
+            } else if ("accept".equalsIgnoreCase(action)) {
+                status = "ACCEPTED";
             } else if ("cancel".equalsIgnoreCase(action)) {
                 status = "CANCELLED";
             }
