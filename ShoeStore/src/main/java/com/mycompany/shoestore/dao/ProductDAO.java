@@ -658,7 +658,6 @@ public class ProductDAO {
 
     return list;
 }
-}
     
     // ==========================================
     // CATEGORY & BRAND MANAGEMENT METHODS
