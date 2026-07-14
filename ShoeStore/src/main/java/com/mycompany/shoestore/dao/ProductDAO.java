@@ -658,5 +658,125 @@ public class ProductDAO {
 
     return list;
 }
+}
     
+    // ==========================================
+    // CATEGORY & BRAND MANAGEMENT METHODS
+    // ==========================================
+
+    public String getOrCreateCategory(String name) {
+        String id = null;
+        String checkSql = "SELECT id FROM categories WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+            psCheck.setString(1, name);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getString("id");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        if (id != null) return id;
+        
+        id = java.util.UUID.randomUUID().toString();
+        String insertSql = "INSERT INTO categories (id, name) VALUES (?, ?)";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement psInsert = conn.prepareStatement(insertSql)) {
+            psInsert.setString(1, id);
+            psInsert.setString(2, name);
+            psInsert.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; 
+        }
+        return id;
+    }
+
+    public boolean updateCategory(String id, String name) {
+        String sql = "UPDATE categories SET name = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setString(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteCategory(String id) {
+        String sql = "DELETE FROM categories WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps =prepareStatement(sql, conn)) {
+            ps.setString(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private PreparedStatement prepareStatement(String sql, Connection conn) throws java.sql.SQLException {
+        return conn.prepareStatement(sql);
+    }
+
+    public String getOrCreateBrand(String name) {
+        String id = null;
+        String checkSql = "SELECT id FROM brands WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+            psCheck.setString(1, name);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getString("id");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        if (id != null) return id;
+        
+        id = java.util.UUID.randomUUID().toString();
+        String insertSql = "INSERT INTO brands (id, name) VALUES (?, ?)";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement psInsert = conn.prepareStatement(insertSql)) {
+            psInsert.setString(1, id);
+            psInsert.setString(2, name);
+            psInsert.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; 
+        }
+        return id;
+    }
+
+    public boolean updateBrand(String id, String name) {
+        String sql = "UPDATE brands SET name = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setString(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteBrand(String id) {
+        String sql = "DELETE FROM brands WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
