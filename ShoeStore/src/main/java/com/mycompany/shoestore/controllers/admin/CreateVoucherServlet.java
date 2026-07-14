@@ -3,8 +3,11 @@ package com.mycompany.shoestore.controllers.admin;
 import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.dto.VoucherDTO;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,7 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "CreateVoucherServlet", urlPatterns = {"/create-voucher"})
 public class CreateVoucherServlet extends HttpServlet {
-
 
     private static final String VOUCHER_FORM_JSP = "/views/admin/voucher-form.jsp";
 
@@ -48,30 +50,32 @@ public class CreateVoucherServlet extends HttpServlet {
         } else {
             try {
                 code = code.trim().toUpperCase();
-                double discountValue = Double.parseDouble(discountValueStr);
+                BigDecimal discountValue = new BigDecimal(discountValueStr);
                 
-                Double maxDiscountAmount = null;
+                BigDecimal maxDiscountAmount = null;
                 if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
-                    maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
+                    maxDiscountAmount = new BigDecimal(maxDiscountAmountStr);
                 }
                 
                 int quantity = Integer.parseInt(quantityStr);
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                Timestamp startDate = new Timestamp(dateFormat.parse(startDateStr).getTime());
-                Timestamp endDate = new Timestamp(dateFormat.parse(endDateStr).getTime());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                OffsetDateTime startDate = LocalDateTime.parse(startDateStr, formatter).atOffset(ZoneOffset.UTC);
+                OffsetDateTime endDate = LocalDateTime.parse(endDateStr, formatter).atOffset(ZoneOffset.UTC);
 
                 if (voucherDAO.isCodeExist(code)) {
                     error = "Voucher code already exists!";
-                } else if ("PERCENTAGE".equals(discountType) && (discountValue <= 0 || discountValue > 100)) {
+                } else if ("PERCENTAGE".equals(discountType) && (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0)) {
                     error = "Discount percent must be between 0.1% and 100%!";
-                } else if ("FIXED_AMOUNT".equals(discountType) && discountValue <= 0) {
+                } else if ("FIXED_AMOUNT".equals(discountType) && discountValue.compareTo(BigDecimal.ZERO) <= 0) {
                     error = "Discount amount must be greater than 0!";
-                } else if (maxDiscountAmount != null && maxDiscountAmount < 0) {
+                } else if (maxDiscountAmount != null && maxDiscountAmount.compareTo(BigDecimal.ZERO) < 0) {
                     error = "Max discount amount cannot be negative!";
+                } else if (maxDiscountAmount != null && "FIXED_AMOUNT".equals(discountType) && maxDiscountAmount.compareTo(discountValue) < 0) {
+                    error = "Max discount amount must be greater than or equal to discount value!";
                 } else if (quantity <= 0) {
                     error = "Quantity must be greater than 0!";
-                } else if (!endDate.after(startDate)) {
+                } else if (!endDate.isAfter(startDate)) {
                     error = "End date must be after start date!";
                 }
 

@@ -17,20 +17,20 @@
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                 margin: 0;
             }
-            /* Main content chuẩn margin 220px theo sidebar */
             .main-content {
-                margin-left: 220px;
-                padding: 32px 36px;
+                margin-left: 256px; /* Cân bằng với sidebar rộng hơn (thường là 256px trong dashboard) */
+                padding: 40px 48px;
                 min-height: 100vh;
+                width: calc(100% - 256px);
             }
             .page-header {
                 display: flex;
                 align-items: center;
-                margin-bottom: 24px;
-                gap: 10px;
+                margin-bottom: 32px;
+                gap: 12px;
             }
             .page-title {
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 700;
                 letter-spacing: .12em;
                 text-transform: uppercase;
@@ -41,152 +41,143 @@
                 background: #fff;
                 border: 1px solid #e8e8e8;
                 border-radius: 4px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+                overflow: hidden; /* Bo góc cho table bên trong */
             }
             .user-table {
                 width: 100%;
                 border-collapse: collapse;
-                table-layout: fixed;
+                table-layout: fixed; /* Fix độ rộng cột */
             }
             .user-table thead tr {
-                border-bottom: 2px solid #e8e8e8;
+                border-bottom: 2px solid #f0f0f0;
+                background: #fcfcfc;
             }
             .user-table thead th {
-                font-size: 9px;
+                font-size: 10px;
                 font-weight: 700;
-                letter-spacing: .14em;
+                letter-spacing: .1em;
                 text-transform: uppercase;
                 color: #999;
-                padding: 14px 16px;
+                padding: 16px;
+                text-align: left;
             }
             .user-table tbody tr {
-                border-bottom: 1px solid #f0f0f0;
+                border-bottom: 1px solid #f8f8f8;
                 transition: background .12s;
             }
             .user-table tbody tr:hover {
                 background: #fafafa;
             }
             .user-table tbody td {
-                padding: 16px;
-                font-size: 13px;
+                padding: 18px 16px;
+                font-size: 14px;
                 color: #1a1a1a;
                 vertical-align: middle;
             }
-            /* Cấu hình độ rộng các cột */
-            .col-no {
-                width: 6%;
-            }
-            .col-code {
-                width: 22%;
-            }
-            .col-date {
-                width: 22%;
-            }
-            .col-qty {
-                width: 15%;
-            }
-            .col-action {
-                width: 13%;
-            }
+            
+            /* Cân bằng độ rộng các cột */
+            .col-no { width: 60px; }
+            .col-code { width: 180px; }
+            .col-type { width: 130px; }
+            .col-value { width: 140px; }
+            .col-valid { width: 180px; }
+            .col-usage { width: 120px; }
+            .col-action { width: 150px; }
 
-            .cell-no {
-                font-size: 12px;
-                color: #bbb;
-                font-weight: 600;
-            }
-            .cell-code {
-                font-weight: 600;
-                color: #1a1a1a;
-            }
-            .cell-date {
-                font-size: 12px;
-                color: #888;
-            }
-
+            .cell-no { font-size: 12px; color: #ccc; font-weight: 600; }
+            .cell-code { font-weight: 700; color: #1a1a1a; letter-spacing: 0.02em; }
+            .cell-date { font-size: 12px; color: #888; line-height: 1.4; }
+            
             .qty-badge {
-                font-size: 10px;
+                font-size: 11px;
                 font-weight: 700;
                 background: #f1f3f5;
                 color: #495057;
                 padding: 4px 10px;
                 border-radius: 4px;
+                display: inline-block;
+            }
+            .type-badge {
+                font-size: 9px;
+                font-weight: 700;
+                padding: 4px 10px;
+                border-radius: 20px;
                 text-transform: uppercase;
+                display: inline-block;
             }
-
-            .action-wrap {
-                display: flex;
-                gap: 6px;
-                justify-content: center;
-            }
+            .type-percentage { background: #e6fffa; color: #2c7a7b; }
+            .type-fixed { background: #ebf8ff; color: #2b6cb0; }
+            
+            .action-wrap { display: flex; gap: 8px; justify-content: center; }
             .btn-action {
                 font-size: 10px;
-                font-weight: 600;
+                font-weight: 700;
                 letter-spacing: .05em;
                 text-transform: uppercase;
-                padding: 6px 12px;
+                padding: 8px 14px;
                 text-decoration: none;
                 border-radius: 4px;
                 transition: all 0.2s ease;
+                border: 1px solid transparent;
             }
-            .btn-view {
-                background: #f1f1f1;
-                color: #333;
-            }
-            .btn-view:hover {
-                background: #e2e2e2;
-            }
-            .btn-edit {
-                background: #e8f4fd;
-                color: #1a6fa8;
-            }
-            .btn-edit:hover {
-                background: #d2e9fc;
-            }
-
-            .empty-row td {
-                text-align: center;
-                padding: 48px;
-                font-size: 12px;
-                color: #aaa;
+            .btn-view { background: #f8f9fa; color: #333; border-color: #e9ecef; }
+            .btn-view:hover { background: #e9ecef; }
+            .btn-edit { background: #e8f4fd; color: #1a6fa8; }
+            .btn-edit:hover { background: #d2e9fc; }
+            
+            .empty-row td { text-align: center; padding: 60px; font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; }
+            
+            /* Nút Create Voucher */
+            .btn-create {
+                background: #1a1a1a;
+                color: #fff;
+                font-size: 11px;
+                font-weight: 700;
                 text-transform: uppercase;
+                letter-spacing: .1em;
+                padding: 10px 20px;
+                border-radius: 4px;
+                border: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                transition: background 0.2s;
+            }
+            .btn-create:hover {
+                background: #333;
+                color: #fff;
             }
         </style>
     </head>
     <body>
         <div class="d-flex">
-            <%-- Thiết lập Active Page để sidebar tô màu đúng mục Voucher --%>
             <c:set var="activePage" value="voucher" scope="request" />
             <jsp:include page="sidebar.jsp" />
 
             <div class="main-content">
-                <div class="page-header d-flex justify-content-between align-items-center w-100">
+                <div class="page-header d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-ticket-perforated" style="font-size:16px; color:#1a1a1a;"></i>
+                        <i class="bi bi-ticket-perforated" style="font-size:18px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Voucher Management</h3>
                     </div>
 
-                    <a href="${pageContext.request.contextPath}/create-voucher" class="btn" style="background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 8px 16px; border-radius: 4px;">
-                        <i class="bi bi-plus-lg me-1"></i> Create Voucher
+                    <a href="${pageContext.request.contextPath}/create-voucher" class="btn-create">
+                        <i class="bi bi-plus-lg"></i> Create Voucher
                     </a>
                 </div>
 
                 <div class="table-card">
                     <table class="user-table">
-                        <colgroup>
-                            <col class="col-no">
-                            <col class="col-code">
-                            <col class="col-date">
-                            <col class="col-date">
-                            <col class="col-qty">
-                            <col class="col-action">
-                        </colgroup>
                         <thead>
                             <tr>
-                                <th>No.</th>
-                                <th>Voucher Code</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Quantity</th>
-                                <th style="text-align:center">Action</th>
+                                <th class="col-no">No.</th>
+                                <th class="col-code">Code</th>
+                                <th class="col-type">Type</th>
+                                <th class="col-value">Value</th>
+                                <th class="col-valid">Valid Period</th>
+                                <th class="col-usage">Usage</th>
+                                <th class="col-action" style="text-align:center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -194,22 +185,33 @@
                                 <c:when test="${not empty VOUCHER_LIST}">
                                     <c:forEach items="${VOUCHER_LIST}" var="v" varStatus="status">
                                         <tr>
-                                            <td><span class="cell-no">${status.count}</span></td>
-                                            <td><span class="cell-code">${v.code}</span></td>
-                                            <td>
-                                                <span class="cell-date">
-                                                    <fmt:formatDate value="${v.startDate}" pattern="yyyy-MM-dd HH:mm"/>
+                                            <td class="col-no"><span class="cell-no">${status.count}</span></td>
+                                            <td class="col-code"><span class="cell-code">${v.code}</span></td>
+                                            <td class="col-type">
+                                                <span class="type-badge ${v.discountType == 'PERCENTAGE' ? 'type-percentage' : 'type-fixed'}">
+                                                    ${v.discountType}
                                                 </span>
                                             </td>
-                                            <td>
-                                                <span class="cell-date">
-                                                    <fmt:formatDate value="${v.endDate}" pattern="yyyy-MM-dd HH:mm"/>
-                                                </span>
+                                            <td class="col-value">
+                                                <c:choose>
+                                                    <c:when test="${v.discountType == 'PERCENTAGE'}">
+                                                        <strong>${v.discountValue}%</strong>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <strong><fmt:formatNumber value="${v.discountValue}" type="currency" currencySymbol="đ"/></strong>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
-                                            <td>
-                                                <span class="qty-badge">${v.quantity}</span>
+                                            <td class="col-valid">
+                                                <div class="cell-date">
+                                                    <div>${v.startDate.toLocalDate()}</div>
+                                                    <div style="opacity: 0.6">${v.endDate.toLocalDate()}</div>
+                                                </div>
                                             </td>
-                                            <td>
+                                            <td class="col-usage">
+                                                <span class="qty-badge">${v.usedQuantity} / ${v.quantity}</span>
+                                            </td>
+                                            <td class="col-action">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">View</a>
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/edit?id=${v.id}" class="btn-action btn-edit">Edit</a>
@@ -220,7 +222,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <tr class="empty-row">
-                                        <td colspan="6">No vouchers found in the system.</td>
+                                        <td colspan="7">No vouchers found in the system.</td>
                                     </tr>
                                 </c:otherwise>
                             </c:choose>

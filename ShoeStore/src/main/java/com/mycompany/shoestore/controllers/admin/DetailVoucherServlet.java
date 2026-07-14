@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package com.mycompany.shoestore.controllers.admin;
 
 import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.dto.VoucherDTO;
 import java.io.IOException;
-import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,22 +17,18 @@ public class DetailVoucherServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String id = request.getParameter("id");
+        VoucherDAO dao = new VoucherDAO();
         VoucherDTO detailVoucher = null;
 
         if (id != null && !id.trim().isEmpty()) {
-            VoucherDAO dao = new VoucherDAO();
-            List<VoucherDTO> list = dao.getAllVouchers();
-            
-            // Tìm kiếm phần tử có ID trùng khớp trong danh sách mà không cần sửa DAO
-            for (VoucherDTO v : list) {
-                if (v.getId().equals(id)) {
-                    detailVoucher = v;
-                    break;
-                }
-            }
+            detailVoucher = dao.getVoucherDTOById(id);
         }
 
-        // Đẩy đối tượng chi tiết sang trang JSP
+        if (detailVoucher == null) {
+            response.sendRedirect(request.getContextPath() + "/manage-voucher");
+            return;
+        }
+
         request.setAttribute("VOUCHER_DETAIL", detailVoucher);
         request.setAttribute("activePage", "voucher");
         
