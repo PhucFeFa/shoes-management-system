@@ -12,17 +12,17 @@
         * { box-sizing: border-box; }
         body { background: #f5f5f3; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; }
         .main-content {
-            margin-left: 220px;
-            padding: 40px;
+            margin-left: 256px;
+            padding: 48px 60px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: calc(100% - 220px);
+            width: calc(100% - 256px);
         }
         .container-wrapper { width: 100%; max-width: 700px; }
-        .page-header { display: flex; align-items: center; margin-bottom: 24px; gap: 12px; }
+        .page-header { display: flex; align-items: center; margin-bottom: 24px; gap: 12px; width: 100%; }
         .page-title { font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #1a1a1a; margin: 0; }
         .detail-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 40px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f0f0f0; }
@@ -35,8 +35,8 @@
         .type-percentage { background: #e6fffa; color: #2c7a7b; }
         .type-fixed { background: #ebf8ff; color: #2b6cb0; }
         .qty-badge { font-size: 11px; font-weight: 700; background: #f1f3f5; color: #495057; padding: 4px 12px; border-radius: 4px; }
-        .btn-back { display: inline-flex; align-items: center; gap: 8px; background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 12px 24px; text-decoration: none; border-radius: 4px; transition: background 0.2s; }
-        .btn-back:hover { background: #333; color: #fff; }
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 12px 24px; text-decoration: none !important; border-radius: 4px; transition: background 0.2s; }
+        .btn-back:hover { background: #333; color: #fff; text-decoration: none !important; }
         .error-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 50px; text-align: center; width: 100%; }
     </style>
 </head>
@@ -80,10 +80,10 @@
                                 <span class="detail-value">
                                     <c:choose>
                                         <c:when test="${item.discountType == 'PERCENTAGE'}">
-                                            ${item.discountValue}%
+                                            <strong><fmt:formatNumber value="${item.discountValue}" pattern="#,##0.##" />%</strong>
                                         </c:when>
                                         <c:otherwise>
-                                            <fmt:formatNumber value="${item.discountValue}" type="currency" currencySymbol="đ"/>
+                                            <strong><fmt:formatNumber value="${item.discountValue}" pattern="#,##0.##" /> đ</strong>
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
@@ -94,7 +94,7 @@
                                 <span class="detail-value">
                                     <c:choose>
                                         <c:when test="${not empty item.maxDiscountAmount}">
-                                            <fmt:formatNumber value="${item.maxDiscountAmount}" type="currency" currencySymbol="đ"/>
+                                            <strong><fmt:formatNumber value="${item.maxDiscountAmount}" pattern="#,##0.##" /> đ</strong>
                                         </c:when>
                                         <c:otherwise>No Limit</c:otherwise>
                                     </c:choose>
@@ -116,6 +116,12 @@
                                     <span class="qty-badge">${item.usedQuantity} / ${item.quantity} used</span>
                                 </span>
                             </div>
+                            
+                            <div class="pt-3">
+                                <a href="${pageContext.request.contextPath}/manage-voucher" class="btn-back">
+                                    <i class="bi bi-arrow-left"></i> Back to list
+                                </a>
+                            </div>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -124,6 +130,9 @@
                             <p class="mt-3 mb-4 text-secondary" style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">
                                 Voucher information could not be found.
                             </p>
+                            <a href="${pageContext.request.contextPath}/manage-voucher" class="btn-back">
+                                <i class="bi bi-arrow-left"></i> Back to list
+                            </a>
                         </div>
                     </c:otherwise>
                 </c:choose>

@@ -88,7 +88,9 @@ public class UpdateVoucherServlet extends HttpServlet {
                 OffsetDateTime startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(ZoneOffset.UTC);
                 OffsetDateTime endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(ZoneOffset.UTC);
 
-                if (voucherDAO.isCodeExistForUpdate(code, id)) {
+                if (code.length() < 6) {
+                    error = "Voucher code must be at least 6 characters long!";
+                } else if (voucherDAO.isCodeExistForUpdate(code, id)) {
                     error = "Voucher code already exists!";
                 } else if ("PERCENTAGE".equals(discountType) && (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0)) {
                     error = "Discount percent must be between 0.1% and 100%!";
