@@ -54,8 +54,8 @@ public class UpdateVoucherServlet extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         String code = request.getParameter("code");
-        String discountType = request.getParameter("discountType");
         String discountValueStr = request.getParameter("discountValue");
+        String minOrderAmountStr = request.getParameter("minOrderAmount");
         String maxDiscountAmountStr = request.getParameter("maxDiscountAmount");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
@@ -66,8 +66,8 @@ public class UpdateVoucherServlet extends HttpServlet {
 
         if (id == null || id.trim().isEmpty()
                 || code == null || code.trim().isEmpty()
-                || discountType == null || discountType.trim().isEmpty()
                 || discountValueStr == null || discountValueStr.trim().isEmpty()
+                || minOrderAmountStr == null || minOrderAmountStr.trim().isEmpty()
                 || startDateStr == null || startDateStr.trim().isEmpty()
                 || endDateStr == null || endDateStr.trim().isEmpty()
                 || quantityStr == null || quantityStr.trim().isEmpty()) {
@@ -77,6 +77,7 @@ public class UpdateVoucherServlet extends HttpServlet {
             try {
                 code = code.trim().toUpperCase();
                 BigDecimal discountValue = new BigDecimal(discountValueStr);
+                BigDecimal minOrderAmount = new BigDecimal(minOrderAmountStr);
                 
                 BigDecimal maxDiscountAmount = null;
                 if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
@@ -92,14 +93,14 @@ public class UpdateVoucherServlet extends HttpServlet {
                     error = "Voucher code must be at least 6 characters long!";
                 } else if (voucherDAO.isCodeExistForUpdate(code, id)) {
                     error = "Voucher code already exists!";
-                } else if ("PERCENTAGE".equals(discountType) && (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0)) {
-                    error = "Discount percent must be between 0.1% and 100%!";
-                } else if ("FIXED_AMOUNT".equals(discountType) && discountValue.compareTo(BigDecimal.ZERO) <= 0) {
-                    error = "Discount amount must be greater than 0!";
+                } else if (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0) {
+                    error = "Discount percentage must be between 0.1% and 100%!";
+                } else if (minOrderAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    error = "Minimum order amount cannot be negative!";
                 } else if (maxDiscountAmount != null && maxDiscountAmount.compareTo(BigDecimal.ZERO) < 0) {
                     error = "Max discount amount cannot be negative!";
-                } else if (maxDiscountAmount != null && "FIXED_AMOUNT".equals(discountType) && maxDiscountAmount.compareTo(discountValue) < 0) {
-                    error = "Max discount amount must be greater than or equal to discount value!";
+                } else if (maxDiscountAmount != null && minOrderAmount.compareTo(maxDiscountAmount) > 0) {
+                    error = "Minimum order amount cannot be greater than maximum discount amount!";
                 } else if (quantity <= 0) {
                     error = "Quantity must be greater than 0!";
                 } else if (!endDate.isAfter(startDate)) {
@@ -110,8 +111,8 @@ public class UpdateVoucherServlet extends HttpServlet {
                     VoucherDTO updatedVoucher = new VoucherDTO();
                     updatedVoucher.setId(id);
                     updatedVoucher.setCode(code);
-                    updatedVoucher.setDiscountType(discountType);
                     updatedVoucher.setDiscountValue(discountValue);
+                    updatedVoucher.setMinOrderAmount(minOrderAmount);
                     updatedVoucher.setMaxDiscountAmount(maxDiscountAmount);
                     updatedVoucher.setStartDate(startDate);
                     updatedVoucher.setEndDate(endDate);
@@ -135,15 +136,17 @@ public class UpdateVoucherServlet extends HttpServlet {
         VoucherDTO fallbackVoucher = new VoucherDTO();
         fallbackVoucher.setId(id);
         fallbackVoucher.setCode(code);
+        fallbackVoucher.setDiscountValue(new BigDecimal(discountValueStr));
+        fallbackVoucher.setMinOrderAmount(new BigDecimal(minOrderAmountStr));
+        if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
+            fallbackVoucher.setMaxDiscountAmount(new BigDecimal(maxDiscountAmountStr));
+        }
+        fallbackVoucher.setQuantity(Integer.parseInt(quantityStr));
         
         request.setAttribute("ERROR", error);
         request.setAttribute("voucher", fallbackVoucher);
-        request.setAttribute("oldType", discountType);
-        request.setAttribute("oldValue", discountValueStr);
-        request.setAttribute("oldMax", maxDiscountAmountStr);
         request.setAttribute("formattedStart", startDateStr);
         request.setAttribute("formattedEnd", endDateStr);
-        request.setAttribute("oldQty", quantityStr);
 
         request.getRequestDispatcher(UPDATE_FORM_JSP).forward(request, response);
     }

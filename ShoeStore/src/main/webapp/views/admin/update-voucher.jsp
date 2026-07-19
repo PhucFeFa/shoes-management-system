@@ -46,8 +46,6 @@
         .form-control:focus, .form-select:focus { border-color: #1a1a1a; box-shadow: none; outline: none; }
         .btn-save { background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 12px 24px; border-radius: 4px; border: none; transition: background 0.2s; }
         .btn-save:hover { background: #333; }
-        .btn-back { background: #f1f1f1; color: #333; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 12px 24px; border-radius: 4px; text-decoration: none; display: inline-block; transition: background 0.2s; }
-        .btn-back:hover { background: #e2e2e2; }
         .alert-error { background: #fff5f5; color: #e03131; border: 1px solid #ffc9c9; padding: 16px; border-radius: 4px; font-size: 13px; margin-bottom: 24px; }
     </style>
 </head>
@@ -75,26 +73,23 @@
 
                         <div class="mb-4">
                             <label class="form-label">Voucher Code</label>
-                            <input type="text" name="code" class="form-control w-100" value="${not empty ERROR ? param.code : voucher.code}" required />
+                            <input type="text" name="code" class="form-control w-100" value="${voucher.code}" required />
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label">Discount Type</label>
-                            <select name="discountType" class="form-select w-100" required>
-                                <c:set var="currentType" value="${not empty ERROR ? oldType : voucher.discountType}" />
-                                <option value="PERCENTAGE" ${currentType == 'PERCENTAGE' ? 'selected' : ''}>Percentage (%)</option>
-                                <option value="FIXED_AMOUNT" ${currentType == 'FIXED_AMOUNT' ? 'selected' : ''}>Fixed Amount (đ)</option>
-                            </select>
+                            <label class="form-label">Discount Percentage (%)</label>
+                            <input type="number" step="0.1" min="0.1" max="100" name="discountValue" class="form-control w-100" value="${voucher.discountValue}" required />
+                            <small class="text-muted" style="font-size: 11px;">Value must be between 0.1 and 100</small>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Discount Value</label>
-                                <input type="number" step="0.01" name="discountValue" class="form-control w-100" value="${not empty ERROR ? oldValue : voucher.discountValue}" required />
+                                <label class="form-label">Min Order Amount (đ)</label>
+                                <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control w-100" value="${voucher.minOrderAmount}" required />
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Max Discount Amount (đ)</label>
-                                <input type="number" step="0.01" name="maxDiscountAmount" class="form-control w-100" value="${not empty ERROR ? oldMax : voucher.maxDiscountAmount}" placeholder="Leave empty for no limit" />
+                                <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control w-100" value="${voucher.maxDiscountAmount}" placeholder="Leave empty for no limit" />
                             </div>
                         </div>
 
@@ -111,12 +106,11 @@
 
                         <div class="mb-4" style="max-width: 50%;">
                             <label class="form-label">Total Quantity</label>
-                            <input type="number" name="quantity" class="form-control w-100" value="${not empty ERROR ? oldQty : voucher.quantity}" required />
+                            <input type="number" name="quantity" min="1" class="form-control w-100" value="${voucher.quantity}" required />
                         </div>
 
                         <div class="d-flex gap-3 mt-2">
                             <button type="submit" class="btn-save">Save Changes</button>
-                            <a href="${pageContext.request.contextPath}/manage-voucher" class="btn-back">Cancel</a>
                         </div>
                     </form>
                 </div>

@@ -31,12 +31,10 @@
         .detail-value { font-size: 14px; color: #1a1a1a; font-weight: 600; }
         .detail-value.code { font-weight: 700; color: #1a1a1a; letter-spacing: 0.05em; }
         .detail-value.id { font-size: 12px; color: #bbb; font-family: monospace; }
-        .type-badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
-        .type-percentage { background: #e6fffa; color: #2c7a7b; }
-        .type-fixed { background: #ebf8ff; color: #2b6cb0; }
+        .status-badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 12px; text-transform: uppercase; }
+        .status-active { background: #e6fffa; color: #2c7a7b; }
+        .status-inactive { background: #fff5f5; color: #e03131; }
         .qty-badge { font-size: 11px; font-weight: 700; background: #f1f3f5; color: #495057; padding: 4px 12px; border-radius: 4px; }
-        .btn-back { display: inline-flex; align-items: center; gap: 8px; background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 12px 24px; text-decoration: none !important; border-radius: 4px; transition: background 0.2s; }
-        .btn-back:hover { background: #333; color: #fff; text-decoration: none !important; }
         .error-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; padding: 50px; text-align: center; width: 100%; }
     </style>
 </head>
@@ -67,25 +65,16 @@
                             </div>
 
                             <div class="detail-row">
-                                <span class="detail-label">Discount Type</span>
+                                <span class="detail-label">Discount Percentage</span>
                                 <span class="detail-value">
-                                    <span class="type-badge ${item.discountType == 'PERCENTAGE' ? 'type-percentage' : 'type-fixed'}">
-                                        ${item.discountType}
-                                    </span>
+                                    <strong><fmt:formatNumber value="${item.discountValue}" pattern="#,##0.##" />%</strong>
                                 </span>
                             </div>
 
                             <div class="detail-row">
-                                <span class="detail-label">Discount Value</span>
+                                <span class="detail-label">Min Order Amount</span>
                                 <span class="detail-value">
-                                    <c:choose>
-                                        <c:when test="${item.discountType == 'PERCENTAGE'}">
-                                            <strong><fmt:formatNumber value="${item.discountValue}" pattern="#,##0.##" />%</strong>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <strong><fmt:formatNumber value="${item.discountValue}" pattern="#,##0.##" /> đ</strong>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <strong><fmt:formatNumber value="${item.minOrderAmount}" pattern="#,##0.##" /> đ</strong>
                                 </span>
                             </div>
 
@@ -102,11 +91,18 @@
                             </div>
 
                             <div class="detail-row">
-                                <span class="detail-label">Valid Period</span>
+                                <span class="detail-label">Start Date</span>
                                 <span class="detail-value">
-                                    ${item.startDate.toLocalDate()} ${item.startDate.toLocalTime()} 
-                                    <span style="color: #ccc; margin: 0 8px;">—</span> 
-                                    ${item.endDate.toLocalDate()} ${item.endDate.toLocalTime()}
+                                    <fmt:parseDate value="${item.startDate.toString().substring(0,16)}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedStartDate" type="both" />
+                                    <fmt:formatDate value="${parsedStartDate}" pattern="dd/MM/yyyy" />
+                                </span>
+                            </div>
+
+                            <div class="detail-row">
+                                <span class="detail-label">End Date</span>
+                                <span class="detail-value">
+                                    <fmt:parseDate value="${item.endDate.toString().substring(0,16)}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedEndDate" type="both" />
+                                    <fmt:formatDate value="${parsedEndDate}" pattern="dd/MM/yyyy" />
                                 </span>
                             </div>
 
@@ -117,10 +113,13 @@
                                 </span>
                             </div>
                             
-                            <div class="pt-3">
-                                <a href="${pageContext.request.contextPath}/manage-voucher" class="btn-back">
-                                    <i class="bi bi-arrow-left"></i> Back to list
-                                </a>
+                            <div class="detail-row">
+                                <span class="detail-label">Status</span>
+                                <span class="detail-value">
+                                    <span class="status-badge ${item.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}">
+                                        ${item.status}
+                                    </span>
+                                </span>
                             </div>
                         </div>
                     </c:when>
@@ -130,9 +129,6 @@
                             <p class="mt-3 mb-4 text-secondary" style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">
                                 Voucher information could not be found.
                             </p>
-                            <a href="${pageContext.request.contextPath}/manage-voucher" class="btn-back">
-                                <i class="bi bi-arrow-left"></i> Back to list
-                            </a>
                         </div>
                     </c:otherwise>
                 </c:choose>

@@ -27,14 +27,14 @@
             .user-table tbody tr:hover { background: #fafafa; }
             .user-table tbody td { padding: 18px 16px; font-size: 14px; color: #1a1a1a; vertical-align: middle; }
             
-            .col-no { width: 60px; } .col-code { width: 180px; } .col-type { width: 130px; } .col-value { width: 140px; } .col-valid { width: 180px; } .col-usage { width: 120px; } .col-action { width: 150px; }
+            .col-no { width: 50px; } .col-code { width: 140px; } .col-value { width: 90px; } .col-min { width: 110px; } .col-date { width: 120px; } .col-usage { width: 100px; } .col-status { width: 90px; } .col-action { width: 180px; }
             .cell-no { font-size: 12px; color: #ccc; font-weight: 600; }
             .cell-code { font-weight: 700; color: #1a1a1a; letter-spacing: 0.02em; }
-            .cell-date { font-size: 12px; color: #888; line-height: 1.4; }
             .qty-badge { font-size: 11px; font-weight: 700; background: #f1f3f5; color: #495057; padding: 4px 10px; border-radius: 4px; display: inline-block; }
-            .type-badge { font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; display: inline-block; }
-            .type-percentage { background: #e6fffa; color: #2c7a7b; }
-            .type-fixed { background: #ebf8ff; color: #2b6cb0; }
+            
+            .status-badge { font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; display: inline-block; }
+            .status-active { background: #e6fffa; color: #2c7a7b; }
+            .status-inactive { background: #fff5f5; color: #e03131; }
             
             .action-wrap { display: flex; gap: 8px; justify-content: center; }
             .btn-action { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 8px 14px; text-decoration: none !important; border-radius: 4px; transition: all 0.2s ease; border: 1px solid transparent; }
@@ -42,6 +42,8 @@
             .btn-view:hover { background: #e9ecef; }
             .btn-edit { background: #e8f4fd; color: #1a6fa8; }
             .btn-edit:hover { background: #d2e9fc; }
+            .btn-delete { background: #fff5f5; color: #e03131; }
+            .btn-delete:hover { background: #ffe3e3; }
             .empty-row td { text-align: center; padding: 60px; font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; }
             
             .btn-create {
@@ -58,7 +60,7 @@
                 align-items: center;
                 gap: 8px;
                 transition: background 0.2s;
-                text-decoration: none !important; /* Xóa gạch chân */
+                text-decoration: none !important;
             }
             .btn-create:hover { background: #333; color: #fff; text-decoration: none !important; }
         </style>
@@ -83,10 +85,12 @@
                             <tr>
                                 <th class="col-no">No.</th>
                                 <th class="col-code">Code</th>
-                                <th class="col-type">Type</th>
-                                <th class="col-value">Value</th>
-                                <th class="col-valid">Valid Period</th>
+                                <th class="col-value">Value (%)</th>
+                                <th class="col-min">Min Order</th>
+                                <th class="col-date">Start Date</th>
+                                <th class="col-date">End Date</th>
                                 <th class="col-usage">Usage</th>
+                                <th class="col-status">Status</th>
                                 <th class="col-action" style="text-align:center">Action</th>
                             </tr>
                         </thead>
@@ -97,39 +101,42 @@
                                         <tr>
                                             <td class="col-no"><span class="cell-no">${status.count}</span></td>
                                             <td class="col-code"><span class="cell-code">${v.code}</span></td>
-                                            <td class="col-type">
-                                                <span class="type-badge ${v.discountType == 'PERCENTAGE' ? 'type-percentage' : 'type-fixed'}">
-                                                    ${v.discountType}
-                                                </span>
-                                            </td>
                                             <td class="col-value">
-                                                <c:choose>
-                                                    <c:when test="${v.discountType == 'PERCENTAGE'}">
-                                                        <strong><fmt:formatNumber value="${v.discountValue}" pattern="#,##0.##" />%</strong>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <strong><fmt:formatNumber value="${v.discountValue}" pattern="#,##0.##" /> đ</strong>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <strong><fmt:formatNumber value="${v.discountValue}" pattern="#,##0.##" />%</strong>
                                             </td>
-                                            <td class="col-valid">
-                                                <div class="cell-date">
-                                                    <div>${v.startDate.toLocalDate()}</div>
-                                                    <div style="opacity: 0.6">${v.endDate.toLocalDate()}</div>
-                                                </div>
+                                            <td class="col-min">
+                                                <span style="font-size: 13px;"><fmt:formatNumber value="${v.minOrderAmount}" pattern="#,##0.##" /> đ</span>
+                                            </td>
+                                            <td class="col-date">
+                                                <c:set var="sDate" value="${v.startDate.toString()}" />
+                                                <fmt:parseDate value="${sDate.substring(0,10)}" pattern="yyyy-MM-dd" var="parsedS" type="date" />
+                                                <fmt:formatDate value="${parsedS}" pattern="dd/MM/yyyy" />
+                                            </td>
+                                            <td class="col-date">
+                                                <c:set var="eDate" value="${v.endDate.toString()}" />
+                                                <fmt:parseDate value="${eDate.substring(0,10)}" pattern="yyyy-MM-dd" var="parsedE" type="date" />
+                                                <fmt:formatDate value="${parsedE}" pattern="dd/MM/yyyy" />
                                             </td>
                                             <td class="col-usage"><span class="qty-badge">${v.usedQuantity} / ${v.quantity}</span></td>
+                                            <td class="col-status">
+                                                <span class="status-badge ${v.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}">
+                                                    ${v.status}
+                                                </span>
+                                            </td>
                                             <td class="col-action">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">View</a>
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/edit?id=${v.id}" class="btn-action btn-edit">Edit</a>
+                                                    <c:if test="${v.status == 'ACTIVE'}">
+                                                        <a href="javascript:void(0);" onclick="confirmDelete('${v.id}')" class="btn-action btn-delete">Delete</a>
+                                                    </c:if>
                                                 </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
-                                    <tr class="empty-row"><td colspan="7">No vouchers found in the system.</td></tr>
+                                    <tr class="empty-row"><td colspan="9">No vouchers found in the system.</td></tr>
                                 </c:otherwise>
                             </c:choose>
                         </tbody>
@@ -138,5 +145,12 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function confirmDelete(id) {
+                if (confirm('Are you sure you want to delete this voucher? This will change status to INACTIVE.')) {
+                    window.location.href = '${pageContext.request.contextPath}/manage-voucher/delete?id=' + id;
+                }
+            }
+        </script>
     </body>
 </html>

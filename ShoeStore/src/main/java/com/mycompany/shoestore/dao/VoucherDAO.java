@@ -21,7 +21,7 @@ public class VoucherDAO {
 
     public List<Voucher> getAvailableVouchers() throws Exception {
         List<Voucher> list = new ArrayList<>();
-        String sql = "SELECT * FROM vouchers WHERE quantity > 0 AND GETDATE() BETWEEN start_date AND end_date";
+        String sql = "SELECT * FROM vouchers WHERE quantity > 0 AND status = 'ACTIVE' AND SYSDATETIMEOFFSET() BETWEEN start_date AND end_date";
 
         try ( Connection con = db.getConnection();  PreparedStatement ps = con.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
 
@@ -29,7 +29,7 @@ public class VoucherDAO {
                 Voucher v = new Voucher();
                 v.setId(rs.getString("id"));
                 v.setCode(rs.getString("code"));
-                v.setDiscountType(rs.getString("discount_type"));
+                // Note: Voucher model still uses double/Timestamp, might need update later if requested
                 v.setDiscountValue(rs.getDouble("discount_value"));
                 if (rs.getObject("max_discount_amount") != null) {
                     v.setMaxDiscountAmount(rs.getDouble("max_discount_amount"));
@@ -54,7 +54,7 @@ public class VoucherDAO {
     }
 
     public Voucher getVoucherById(String voucherId) throws Exception {
-        String sql = "SELECT * FROM vouchers WHERE id = ? AND quantity > 0 AND start_date <= SYSDATETIMEOFFSET() AND end_date >= SYSDATETIMEOFFSET()";
+        String sql = "SELECT * FROM vouchers WHERE id = ? AND quantity > 0 AND status = 'ACTIVE' AND start_date <= SYSDATETIMEOFFSET() AND end_date >= SYSDATETIMEOFFSET()";
 
         try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, voucherId);
@@ -63,7 +63,6 @@ public class VoucherDAO {
                     Voucher voucher = new Voucher();
                     voucher.setId(rs.getString("id"));
                     voucher.setCode(rs.getString("code"));
-                    voucher.setDiscountType(rs.getString("discount_type"));
                     voucher.setDiscountValue(rs.getDouble("discount_value"));
                     if (rs.getObject("max_discount_amount") != null) {
                         voucher.setMaxDiscountAmount(rs.getDouble("max_discount_amount"));
@@ -84,7 +83,7 @@ public class VoucherDAO {
     //View list
     public List<VoucherDTO> getAllVouchers() {
         List<VoucherDTO> list = new ArrayList<>();
-        String sql = "SELECT [id], [code], [discount_type], [discount_value], [max_discount_amount], [start_date], [end_date], [quantity], [used_quantity] FROM [vouchers]";
+        String sql = "SELECT [id], [code], [discount_value], [min_order_amount], [max_discount_amount], [start_date], [end_date], [quantity], [used_quantity], [status] FROM [vouchers] WHERE [status] = 'ACTIVE'";
 
         try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
 
@@ -92,13 +91,14 @@ public class VoucherDAO {
                 VoucherDTO dto = new VoucherDTO(
                         rs.getString("id"),
                         rs.getString("code"),
-                        rs.getString("discount_type"),
                         rs.getBigDecimal("discount_value"),
+                        rs.getBigDecimal("min_order_amount"),
                         rs.getBigDecimal("max_discount_amount"),
                         rs.getObject("start_date", OffsetDateTime.class),
                         rs.getObject("end_date", OffsetDateTime.class),
                         rs.getInt("quantity"),
-                        rs.getInt("used_quantity")
+                        rs.getInt("used_quantity"),
+                        rs.getString("status")
                 );
                 list.add(dto);
             }
@@ -110,15 +110,15 @@ public class VoucherDAO {
 
     //Create
     public boolean createVoucher(VoucherDTO voucher) {
-        String sql = "INSERT INTO [vouchers] ([id], [code], [discount_type], [discount_value], [max_discount_amount], [start_date], [end_date], [quantity], [used_quantity]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)";
+        String sql = "INSERT INTO [vouchers] ([id], [code], [discount_value], [min_order_amount], [max_discount_amount], [start_date], [end_date], [quantity], [used_quantity], [status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 'ACTIVE')";
         String uniqueId = java.util.UUID.randomUUID().toString();
 
         try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, uniqueId);
             ps.setString(2, voucher.getCode().toUpperCase().trim());
-            ps.setString(3, voucher.getDiscountType());
-            ps.setBigDecimal(4, voucher.getDiscountValue());
+            ps.setBigDecimal(3, voucher.getDiscountValue());
+            ps.setBigDecimal(4, voucher.getMinOrderAmount());
             ps.setBigDecimal(5, voucher.getMaxDiscountAmount());
             ps.setObject(6, voucher.getStartDate());
             ps.setObject(7, voucher.getEndDate());
@@ -133,7 +133,7 @@ public class VoucherDAO {
 
     //Detail
     public VoucherDTO getVoucherDTOById(String id) {
-        String sql = "SELECT [id], [code], [discount_type], [discount_value], [max_discount_amount], [start_date], [end_date], [quantity], [used_quantity] FROM [vouchers] WHERE [id] = ?";
+        String sql = "SELECT [id], [code], [discount_value], [min_order_amount], [max_discount_amount], [start_date], [end_date], [quantity], [used_quantity], [status] FROM [vouchers] WHERE [id] = ?";
         try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
             try ( ResultSet rs = ps.executeQuery()) {
@@ -141,13 +141,14 @@ public class VoucherDAO {
                     return new VoucherDTO(
                             rs.getString("id"),
                             rs.getString("code"),
-                            rs.getString("discount_type"),
                             rs.getBigDecimal("discount_value"),
+                            rs.getBigDecimal("min_order_amount"),
                             rs.getBigDecimal("max_discount_amount"),
                             rs.getObject("start_date", OffsetDateTime.class),
                             rs.getObject("end_date", OffsetDateTime.class),
                             rs.getInt("quantity"),
-                            rs.getInt("used_quantity")
+                            rs.getInt("used_quantity"),
+                            rs.getString("status")
                     );
                 }
             }
@@ -159,12 +160,12 @@ public class VoucherDAO {
 
     //Update
     public boolean updateVoucher(VoucherDTO voucher) {
-        String sql = "UPDATE [vouchers] SET [code] = ?, [discount_type] = ?, [discount_value] = ?, [max_discount_amount] = ?, [start_date] = ?, [end_date] = ?, [quantity] = ? WHERE [id] = ?";
+        String sql = "UPDATE [vouchers] SET [code] = ?, [discount_value] = ?, [min_order_amount] = ?, [max_discount_amount] = ?, [start_date] = ?, [end_date] = ?, [quantity] = ? WHERE [id] = ?";
         try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, voucher.getCode().toUpperCase().trim());
-            ps.setString(2, voucher.getDiscountType());
-            ps.setBigDecimal(3, voucher.getDiscountValue());
+            ps.setBigDecimal(2, voucher.getDiscountValue());
+            ps.setBigDecimal(3, voucher.getMinOrderAmount());
             ps.setBigDecimal(4, voucher.getMaxDiscountAmount());
             ps.setObject(5, voucher.getStartDate());
             ps.setObject(6, voucher.getEndDate());
@@ -177,6 +178,7 @@ public class VoucherDAO {
         }
         return false;
     }
+
 
     public boolean isCodeExist(String code) {
         String sql = "SELECT COUNT(*) FROM [vouchers] WHERE [code] = ?";
@@ -203,6 +205,17 @@ public class VoucherDAO {
                     return rs.getInt(1) > 0;
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+        // Xoamem
+    public boolean deleteVoucher(String id) {
+        String sql = "UPDATE [vouchers] SET [status] = 'INACTIVE' WHERE [id] = ?";
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -7,27 +7,29 @@ import java.time.OffsetDateTime;
 public class VoucherDTO implements Serializable {
     private String id;
     private String code;
-    private String discountType; // PERCENTAGE or FIXED_AMOUNT
     private BigDecimal discountValue;
+    private BigDecimal minOrderAmount;
     private BigDecimal maxDiscountAmount;
     private OffsetDateTime startDate;
     private OffsetDateTime endDate;
     private int quantity;
     private int usedQuantity;
+    private String status;
 
     public VoucherDTO() {
     }
 
-    public VoucherDTO(String id, String code, String discountType, BigDecimal discountValue, BigDecimal maxDiscountAmount, OffsetDateTime startDate, OffsetDateTime endDate, int quantity, int usedQuantity) {
+    public VoucherDTO(String id, String code, BigDecimal discountValue, BigDecimal minOrderAmount, BigDecimal maxDiscountAmount, OffsetDateTime startDate, OffsetDateTime endDate, int quantity, int usedQuantity, String status) {
         this.id = id;
         this.code = code;
-        this.discountType = discountType;
         this.discountValue = discountValue;
+        this.minOrderAmount = minOrderAmount;
         this.maxDiscountAmount = maxDiscountAmount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.quantity = quantity;
         this.usedQuantity = usedQuantity;
+        this.status = status;
     }
 
     public String getId() { return id; }
@@ -36,11 +38,11 @@ public class VoucherDTO implements Serializable {
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }
 
-    public String getDiscountType() { return discountType; }
-    public void setDiscountType(String discountType) { this.discountType = discountType; }
-
     public BigDecimal getDiscountValue() { return discountValue; }
     public void setDiscountValue(BigDecimal discountValue) { this.discountValue = discountValue; }
+
+    public BigDecimal getMinOrderAmount() { return minOrderAmount; }
+    public void setMinOrderAmount(BigDecimal minOrderAmount) { this.minOrderAmount = minOrderAmount; }
 
     public BigDecimal getMaxDiscountAmount() { return maxDiscountAmount; }
     public void setMaxDiscountAmount(BigDecimal maxDiscountAmount) { this.maxDiscountAmount = maxDiscountAmount; }
@@ -56,4 +58,7 @@ public class VoucherDTO implements Serializable {
 
     public int getUsedQuantity() { return usedQuantity; }
     public void setUsedQuantity(int usedQuantity) { this.usedQuantity = usedQuantity; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

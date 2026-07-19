@@ -25,8 +25,6 @@
         .form-control:focus, .form-select:focus { border-color: #1a1a1a; box-shadow: none; }
         .btn-black { background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; padding: 12px 24px; border-radius: 4px; border: none; transition: background 0.2s; }
         .btn-black:hover { background: #333; color: #fff; }
-        .btn-cancel { background: #f1f1f1; color: #333; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; padding: 12px 24px; border-radius: 4px; text-decoration: none; display: inline-block; text-align: center; }
-        .btn-cancel:hover { background: #e2e2e2; }
     </style>
 </head>
 <body>
@@ -55,17 +53,15 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label">Discount Type</label>
-                            <select name="discountType" class="form-select" required>
-                                <option value="PERCENTAGE" ${oldType == 'PERCENTAGE' ? 'selected' : ''}>Percentage (%)</option>
-                                <option value="FIXED_AMOUNT" ${oldType == 'FIXED_AMOUNT' ? 'selected' : ''}>Fixed Amount (đ)</option>
-                            </select>
+                            <label class="form-label">Discount Percentage (%)</label>
+                            <input type="number" step="0.1" min="0.1" max="100" name="discountValue" class="form-control" placeholder="20.0" value="${oldValue}" required>
+                            <small class="text-muted" style="font-size: 11px;">Value must be between 0.1 and 100</small>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Discount Value</label>
-                                <input type="number" step="0.01" min="0.1" name="discountValue" class="form-control" placeholder="20.0" value="${oldValue}" required>
+                                <label class="form-label">Min Order Amount (đ)</label>
+                                <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control" placeholder="0.0" value="${oldMin}" required>
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Max Discount Amount (đ)</label>
@@ -84,14 +80,13 @@
                             </div>
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-4" style="max-width: 50%;">
                             <label class="form-label">Quantity</label>
                             <input type="number" min="1" name="quantity" class="form-control" placeholder="1000" value="${oldQty}" required>
                         </div>
 
                         <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn-black">Save Voucher</button>
-                            <a href="${pageContext.request.contextPath}/manage-voucher" class="btn-cancel">Cancel</a>
                         </div>
                     </form>
                 </div>
