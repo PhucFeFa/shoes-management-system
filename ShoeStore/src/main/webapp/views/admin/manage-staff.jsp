@@ -50,11 +50,11 @@
                 border-bottom: 2px solid #e8e8e8;
             }
             .user-table thead th {
-                font-size: 9px;
+                font-size: 11px;
                 font-weight: 700;
-                letter-spacing: .14em;
+                letter-spacing: .1em;
                 text-transform: uppercase;
-                color: #999;
+                color: #1a1a1a;
                 padding: 14px 16px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -140,7 +140,7 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: .05em;
-                padding: 8px 16px;
+                padding: 10px 16px;
                 border: none;
                 border-radius: 4px;
                 transition: 0.2s;
@@ -169,15 +169,14 @@
             <jsp:include page="/views/admin/sidebar.jsp" />
 
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center mb-4">
                     <div class="page-header mb-0">
                         <i class="bi bi-person-badge" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Manage Staff</h3>
                     </div>
-                    <button type="button" class="btn-add-staff" data-bs-toggle="modal" data-bs-target="#addStaffModal">
-                        + Add New Staff
-                    </button>
                 </div>
+
+
 
                 <c:if test="${not empty sessionScope.successMsg}">
                     <div class="alert alert-success alert-dismissible fade show" role="alert" id="alertMsg">
@@ -195,7 +194,10 @@
                     </div>
                 </c:if>
 
-                <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn-add-staff" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                        + Add New Staff
+                    </button>
                     <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
                         <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px;">

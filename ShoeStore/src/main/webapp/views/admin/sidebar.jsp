@@ -165,6 +165,20 @@
             </a>
         </li>
         <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/manage-categories"
+               class="${activePage eq 'manage-categories' ? 'active' : ''}">
+                <span class="material-symbols-outlined">category</span>
+                <span>Categories</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
+            <a href="${pageContext.request.contextPath}/admin/manage-brands"
+               class="${activePage eq 'manage-brands' ? 'active' : ''}">
+                <span class="material-symbols-outlined">branding_watermark</span>
+                <span>Brands</span>
+            </a>
+        </li>
+        <li class="adidis-nav-item">
             <a href="${pageContext.request.contextPath}/import"
                class="${activePage eq 'import' ? 'active' : ''}">
                 <span class="material-symbols-outlined">local_shipping</span>
