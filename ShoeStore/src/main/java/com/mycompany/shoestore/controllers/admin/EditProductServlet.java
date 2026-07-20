@@ -31,11 +31,45 @@ public class EditProductServlet extends HttpServlet {
             String id = request.getParameter("id");
             String name = request.getParameter("name");
             String description = request.getParameter("description");
-            double price = Double.parseDouble(request.getParameter("price"));
+            String priceStr = request.getParameter("price");
             String categoryName = request.getParameter("categoryName");
             String brandName = request.getParameter("brandName");
 
+            if (name == null || name.trim().isEmpty()) {
+                request.getSession().setAttribute("errorMsg", "Product name cannot be empty.");
+                response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+                return;
+            }
+            name = name.trim();
+            if (name.matches("\\d+")) {
+                request.getSession().setAttribute("errorMsg", "Product name cannot consist only of numbers.");
+                response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+                return;
+            }
+
             ProductDAO productDAO = new ProductDAO();
+            
+            String finalName = name;
+            String finalId = id;
+            boolean exists = productDAO.getAllProducts().stream()
+                    .anyMatch(p -> p.getName().equalsIgnoreCase(finalName) && !p.getId().equals(finalId));
+            if (exists) {
+                request.getSession().setAttribute("errorMsg", "This product name conflicts with an existing product.");
+                response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+                return;
+            }
+
+            double price;
+            try {
+                price = Double.parseDouble(priceStr);
+                if (price <= 0) {
+                    throw new Exception("Price must be > 0");
+                }
+            } catch (Exception ex) {
+                request.getSession().setAttribute("errorMsg", "Product price must be a valid number and greater than 0.");
+                response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+                return;
+            }
 
             String categoryId = productDAO.getOrCreateCategory(categoryName);
             String brandId = productDAO.getOrCreateBrand(brandName);
@@ -70,14 +104,14 @@ public class EditProductServlet extends HttpServlet {
                     }
                 }
 
-                request.getSession().setAttribute("successMsg", "Cập nhật sản phẩm thành công!");
+                request.getSession().setAttribute("successMsg", "Product updated successfully!");
             } else {
-                request.getSession().setAttribute("errorMsg", "Cập nhật sản phẩm thất bại. Vui lòng thử lại.");
+                request.getSession().setAttribute("errorMsg", "Failed to update product. Please try again.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMsg", "Lỗi hệ thống: " + e.getMessage());
+            request.getSession().setAttribute("errorMsg", "System error: " + e.getMessage());
         }
 
         response.sendRedirect(request.getContextPath() + "/admin/manage-products");

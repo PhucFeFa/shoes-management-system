@@ -58,11 +58,11 @@
                 border-bottom: 2px solid #e8e8e8;
             }
             .user-table thead th {
-                font-size: 9px;
+                font-size: 11px;
                 font-weight: 700;
-                letter-spacing: .14em;
+                letter-spacing: .1em;
                 text-transform: uppercase;
-                color: #999;
+                color: #1a1a1a;
                 padding: 14px 16px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -139,19 +139,20 @@
             <jsp:include page="/views/admin/sidebar.jsp" />
 
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center mb-2">
                     <div class="page-header mb-0">
                         <i class="bi bi-box-seam" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Manage Variants: ${product.name}</h3>
                     </div>
-                    <div>
-                        <a href="${pageContext.request.contextPath}/admin/manage-products" class="btn-back">
-                            <i class="bi bi-arrow-left"></i> Back
-                        </a>
-                        <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#addVariantModal">
-                            + Add New Variant
-                        </button>
-                    </div>
+                </div>
+
+                <div class="d-flex justify-content-start mb-3 gap-2">
+                    <a href="${pageContext.request.contextPath}/admin/manage-products" class="btn-back">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                    <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#addVariantModal">
+                        + Add New Variant
+                    </button>
                 </div>
 
                 <c:if test="${not empty sessionScope.successMsg}">
@@ -172,7 +173,7 @@
 
                 <div class="info-card">
                     <div class="row">
-                        <div class="col-md-3"><strong>Product ID:</strong> <span class="text-muted">${product.id}</span></div>
+                        <div class="col-md-3"><strong>Product Name:</strong> <span class="text-muted">${product.name}</span></div>
                         <div class="col-md-3"><strong>Category:</strong> <span class="text-muted">${product.category.name}</span></div>
                         <div class="col-md-3"><strong>Brand:</strong> <span class="text-muted">${product.brand.name}</span></div>
                         <div class="col-md-3"><strong>Base Price:</strong> <span class="text-muted"><fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/> đ</span></div>
