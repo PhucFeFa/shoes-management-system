@@ -110,11 +110,11 @@
                 border-bottom: 2px solid #e8e8e8;
             }
             .user-table thead th {
-                font-size: 9px;
+                font-size: 11px;
                 font-weight: 700;
-                letter-spacing: .14em;
+                letter-spacing: .1em;
                 text-transform: uppercase;
-                color: #999;
+                color: #1a1a1a;
                 padding: 14px 16px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -166,7 +166,7 @@
             .action-wrap {
                 display: flex;
                 gap: 6px;
-                justify-content: center;
+                justify-content: flex-start;
                 align-items: center;
                 flex-wrap: nowrap;
             }
@@ -186,7 +186,9 @@
                 line-height: 1.2;
                 border: 1px solid transparent;
                 cursor: pointer;
+                min-width: 60px;
             }
+            .btn-action.btn-variants { min-width: 76px; }
             .btn-edit { background-color: #e8f4fd; color: #1a6fa8; }
             .btn-edit:hover { background-color: #d2e9fc; color: #0b4f7c; }
             .btn-delete { background-color: #fff5f5; color: #e53e3e; border-color: #fed7d7; }
@@ -198,7 +200,7 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: .05em;
-                padding: 8px 16px;
+                padding: 10px 16px;
                 border: none;
                 border-radius: 4px;
                 transition: 0.2s;
@@ -235,15 +237,14 @@
             <jsp:include page="/views/admin/sidebar.jsp" />
 
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center mb-4">
                     <div class="page-header mb-0">
                         <i class="bi bi-box-seam" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Manage Products</h3>
                     </div>
-                    <button type="button" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                        + Add New Product
-                    </button>
                 </div>
+
+
 
                 <c:if test="${not empty sessionScope.successMsg}">
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="alertMsg">
@@ -261,7 +262,10 @@
                     </div>
                 </c:if>
 
-                <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                        + Add New Product
+                    </button>
                     <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
                         <input type="text" id="searchInput" onkeyup="searchTable()" class="form-control border-start-0" placeholder="Search product name..." style="font-size: 13px;">
@@ -271,14 +275,14 @@
                 <div class="table-card">
                     <table class="user-table">
                         <colgroup>
-                            <col style="width: 5%;">
+                            <col style="width: 4%;">
                             <col style="width: 8%;">
-                            <col style="width: 25%;">
-                            <col style="width: 12%;">
-                            <col style="width: 12%;">
-                            <col style="width: 12%;">
+                            <col style="width: 22%;">
                             <col style="width: 10%;">
-                            <col style="width: 16%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 26%;">
                         </colgroup>
                         <thead>
                             <tr>
@@ -311,8 +315,8 @@
                                                 </span>
                                             </td>
                                             <td style="text-align:center">
-                                                <div class="action-wrap" style="display: flex; gap: 5px; justify-content: center;">
-                                                    <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}" class="btn-action" style="background-color: #f39c12; color: white; text-decoration: none;">Variants</a>
+                                                <div class="action-wrap">
+                                                    <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}" class="btn-action btn-variants" style="background-color: #f39c12; color: white; text-decoration: none;">Variants</a>
                                                     <button type="button" class="btn-action btn-edit" 
                                                             data-id="${product.id}" 
                                                             data-name="${product.name}" 

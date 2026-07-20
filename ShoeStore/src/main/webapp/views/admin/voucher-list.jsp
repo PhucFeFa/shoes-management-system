@@ -51,11 +51,11 @@
                 border-bottom: 2px solid #e8e8e8;
             }
             .user-table thead th {
-                font-size: 9px;
+                font-size: 11px;
                 font-weight: 700;
-                letter-spacing: .14em;
+                letter-spacing: .1em;
                 text-transform: uppercase;
-                color: #999;
+                color: #1a1a1a;
                 padding: 14px 16px;
             }
             .user-table tbody tr {

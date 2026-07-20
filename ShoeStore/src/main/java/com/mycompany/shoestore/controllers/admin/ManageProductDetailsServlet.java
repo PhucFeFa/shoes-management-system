@@ -67,17 +67,37 @@ public class ManageProductDetailsServlet extends HttpServlet {
                 String size = request.getParameter("size");
                 String color = request.getParameter("color");
                 
-                ProductVariant v = new ProductVariant();
-                v.setProductId(productId);
-                v.setSize(size);
-                v.setColor(color);
-                v.setStockQuantity(0); // Admin only defines the variant, stock is added via Import process
-                
-                boolean success = vDao.addVariant(v);
-                if (success) {
-                    request.getSession().setAttribute("successMsg", "Đã thêm phiên bản thành công.");
+                if (size == null || size.trim().isEmpty() || color == null || color.trim().isEmpty()) {
+                    request.getSession().setAttribute("errorMsg", "Size and color cannot be empty.");
                 } else {
-                    request.getSession().setAttribute("errorMsg", "Thêm thất bại.");
+                    size = size.trim();
+                    color = color.trim();
+                    if (!size.matches("^\\d+(\\.\\d+)?$")) {
+                        request.getSession().setAttribute("errorMsg", "Size must be a valid number.");
+                    } else if (color.matches("\\d+")) {
+                        request.getSession().setAttribute("errorMsg", "Color cannot consist only of numbers.");
+                    } else {
+                        String finalSize = size;
+                        String finalColor = color;
+                        boolean exists = vDao.getVariantsByProductId(productId).stream()
+                                .anyMatch(vr -> vr.getSize().equalsIgnoreCase(finalSize) && vr.getColor().equalsIgnoreCase(finalColor));
+                        if (exists) {
+                            request.getSession().setAttribute("errorMsg", "This variant (Size + Color) already exists.");
+                        } else {
+                            ProductVariant v = new ProductVariant();
+                            v.setProductId(productId);
+                            v.setSize(size);
+                            v.setColor(color);
+                            v.setStockQuantity(0); // Admin only defines the variant, stock is added via Import process
+                            
+                            boolean success = vDao.addVariant(v);
+                            if (success) {
+                                request.getSession().setAttribute("successMsg", "Variant added successfully.");
+                            } else {
+                                request.getSession().setAttribute("errorMsg", "Failed to add variant.");
+                            }
+                        }
+                    }
                 }
                 
             } else if ("edit_variant".equals(action)) {
@@ -85,34 +105,57 @@ public class ManageProductDetailsServlet extends HttpServlet {
                 String size = request.getParameter("size");
                 String color = request.getParameter("color");
                 
-                ProductVariant existing = vDao.getVariantById(variantId);
-                int currentStock = existing != null ? existing.getStockQuantity() : 0;
-                
-                ProductVariant v = new ProductVariant();
-                v.setId(variantId);
-                v.setSize(size);
-                v.setColor(color);
-                v.setStockQuantity(currentStock); // Preserve existing stock
-                
-                boolean success = vDao.updateVariant(v);
-                if (success) {
-                    request.getSession().setAttribute("successMsg", "Đã cập nhật phiên bản thành công.");
+                if (size == null || size.trim().isEmpty() || color == null || color.trim().isEmpty()) {
+                    request.getSession().setAttribute("errorMsg", "Size and color cannot be empty.");
                 } else {
-                    request.getSession().setAttribute("errorMsg", "Cập nhật thất bại.");
+                    size = size.trim();
+                    color = color.trim();
+                    if (!size.matches("^\\d+(\\.\\d+)?$")) {
+                        request.getSession().setAttribute("errorMsg", "Size must be a valid number.");
+                    } else if (color.matches("\\d+")) {
+                        request.getSession().setAttribute("errorMsg", "Color cannot consist only of numbers.");
+                    } else {
+                        String finalSize = size;
+                        String finalColor = color;
+                        String finalVariantId = variantId;
+                        boolean exists = vDao.getVariantsByProductId(productId).stream()
+                                .anyMatch(vr -> vr.getSize().equalsIgnoreCase(finalSize) 
+                                            && vr.getColor().equalsIgnoreCase(finalColor) 
+                                            && !vr.getId().equals(finalVariantId));
+                        if (exists) {
+                            request.getSession().setAttribute("errorMsg", "This variant (Size + Color) conflicts with an existing one.");
+                        } else {
+                            ProductVariant existing = vDao.getVariantById(variantId);
+                            int currentStock = existing != null ? existing.getStockQuantity() : 0;
+                            
+                            ProductVariant v = new ProductVariant();
+                            v.setId(variantId);
+                            v.setSize(size);
+                            v.setColor(color);
+                            v.setStockQuantity(currentStock); // Preserve existing stock
+                            
+                            boolean success = vDao.updateVariant(v);
+                            if (success) {
+                                request.getSession().setAttribute("successMsg", "Variant updated successfully.");
+                            } else {
+                                request.getSession().setAttribute("errorMsg", "Failed to update variant.");
+                            }
+                        }
+                    }
                 }
                 
             } else if ("delete_variant".equals(action)) {
                 String variantId = request.getParameter("variantId");
                 boolean success = vDao.deleteVariant(variantId);
                 if (success) {
-                    request.getSession().setAttribute("successMsg", "Đã xóa phiên bản thành công.");
+                    request.getSession().setAttribute("successMsg", "Variant deleted successfully.");
                 } else {
-                    request.getSession().setAttribute("errorMsg", "Xóa thất bại. Phiên bản này có thể đã được đặt hàng.");
+                    request.getSession().setAttribute("errorMsg", "Failed to delete. This variant might have been ordered.");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMsg", "Lỗi hệ thống.");
+            request.getSession().setAttribute("errorMsg", "System error.");
         }
         
         response.sendRedirect(request.getContextPath() + "/admin/product/details?id=" + productId);

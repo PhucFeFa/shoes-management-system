@@ -33,10 +33,39 @@ public class AddProductServlet extends HttpServlet {
         String categoryName = request.getParameter("categoryName");
         String brandName = request.getParameter("brandName");
 
+        if (name == null || name.trim().isEmpty()) {
+            request.getSession().setAttribute("errorMsg", "Product name cannot be empty.");
+            response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+            return;
+        }
+        name = name.trim();
+        if (name.matches("\\d+")) {
+            request.getSession().setAttribute("errorMsg", "Product name cannot consist only of numbers.");
+            response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+            return;
+        }
+
+        ProductDAO dao = new ProductDAO();
+        String finalName = name;
+        boolean exists = dao.getAllProducts().stream().anyMatch(p -> p.getName().equalsIgnoreCase(finalName));
+        if (exists) {
+            request.getSession().setAttribute("errorMsg", "This product already exists in the system.");
+            response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+            return;
+        }
+
         try {
-            double price = Double.parseDouble(priceStr);
-            
-            ProductDAO dao = new ProductDAO();
+            double price;
+            try {
+                price = Double.parseDouble(priceStr);
+                if (price <= 0) {
+                    throw new Exception("Price must be > 0");
+                }
+            } catch (Exception ex) {
+                request.getSession().setAttribute("errorMsg", "Product price must be a valid number and greater than 0.");
+                response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+                return;
+            }
             
             String categoryId = dao.getOrCreateCategory(categoryName);
             String brandId = dao.getOrCreateBrand(brandName);
@@ -68,13 +97,13 @@ public class AddProductServlet extends HttpServlet {
                         dao.insertProductImage(productId, dbUrl, sortOrder++);
                     }
                 }
-                request.getSession().setAttribute("successMsg", "Tạo sản phẩm thành công!");
+                request.getSession().setAttribute("successMsg", "Product created successfully!");
             } else {
-                request.getSession().setAttribute("errorMsg", "Không thể tạo sản phẩm, vui lòng thử lại.");
+                request.getSession().setAttribute("errorMsg", "Cannot create product, please try again.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMsg", "Lỗi định dạng dữ liệu đầu vào hoặc upload ảnh: " + e.getMessage());
+            request.getSession().setAttribute("errorMsg", "Data format or image upload error: " + e.getMessage());
         }
         
         response.sendRedirect(request.getContextPath() + "/admin/manage-products");

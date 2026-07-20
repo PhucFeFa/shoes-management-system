@@ -40,35 +40,60 @@ public class ManageBrandServlet extends HttpServlet {
         try {
             if ("add".equals(action)) {
                 String name = request.getParameter("name");
-                if (name != null && !name.trim().isEmpty()) {
-                    dao.getOrCreateBrand(name.trim());
-                    request.getSession().setAttribute("successMsg", "Đã thêm thương hiệu mới: " + name);
+                if (name == null || name.trim().isEmpty()) {
+                    request.getSession().setAttribute("errorMsg", "Brand name cannot be empty.");
                 } else {
-                    request.getSession().setAttribute("errorMsg", "Tên thương hiệu không hợp lệ.");
+                    name = name.trim();
+                    if (name.matches("\\d+")) {
+                        request.getSession().setAttribute("errorMsg", "Brand name cannot consist only of numbers.");
+                    } else {
+                        String finalName = name;
+                        boolean exists = dao.getAllBrands().stream().anyMatch(b -> b.getName().equalsIgnoreCase(finalName));
+                        if (exists) {
+                            request.getSession().setAttribute("errorMsg", "This brand already exists in the system.");
+                        } else {
+                            dao.getOrCreateBrand(finalName);
+                            request.getSession().setAttribute("successMsg", "Successfully added new brand: " + finalName);
+                        }
+                    }
                 }
             } else if ("edit".equals(action)) {
                 String id = request.getParameter("id");
                 String name = request.getParameter("name");
-                if (id != null && name != null && !name.trim().isEmpty()) {
-                    boolean success = dao.updateBrand(id, name.trim());
-                    if (success) {
-                        request.getSession().setAttribute("successMsg", "Đã cập nhật thương hiệu thành công.");
+                if (id == null || name == null || name.trim().isEmpty()) {
+                    request.getSession().setAttribute("errorMsg", "Brand name cannot be empty.");
+                } else {
+                    name = name.trim();
+                    if (name.matches("\\d+")) {
+                        request.getSession().setAttribute("errorMsg", "Brand name cannot consist only of numbers.");
                     } else {
-                        request.getSession().setAttribute("errorMsg", "Cập nhật thất bại.");
+                        String finalName = name;
+                        String finalId = id;
+                        boolean exists = dao.getAllBrands().stream().anyMatch(b -> b.getName().equalsIgnoreCase(finalName) && !b.getId().equals(finalId));
+                        if (exists) {
+                            request.getSession().setAttribute("errorMsg", "This brand name conflicts with an existing brand.");
+                        } else {
+                            boolean success = dao.updateBrand(id, name);
+                            if (success) {
+                                request.getSession().setAttribute("successMsg", "Brand updated successfully.");
+                            } else {
+                                request.getSession().setAttribute("errorMsg", "Failed to update brand.");
+                            }
+                        }
                     }
                 }
             } else if ("delete".equals(action)) {
                 String id = request.getParameter("id");
                 boolean success = dao.deleteBrand(id);
                 if (success) {
-                    request.getSession().setAttribute("successMsg", "Đã xóa thương hiệu thành công.");
+                    request.getSession().setAttribute("successMsg", "Brand deleted successfully.");
                 } else {
-                    request.getSession().setAttribute("errorMsg", "Không thể xóa. Thương hiệu này đang chứa sản phẩm!");
+                    request.getSession().setAttribute("errorMsg", "Cannot delete. This brand contains products!");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMsg", "Lỗi hệ thống.");
+            request.getSession().setAttribute("errorMsg", "System error.");
         }
         
         response.sendRedirect(request.getContextPath() + "/admin/manage-brands");

@@ -51,11 +51,11 @@
                 border-bottom: 2px solid #e8e8e8;
             }
             .user-table thead th {
-                font-size: 9px;
+                font-size: 11px;
                 font-weight: 700;
-                letter-spacing: .14em;
+                letter-spacing: .1em;
                 text-transform: uppercase;
-                color: #999;
+                color: #1a1a1a;
                 padding: 14px 16px;
                 white-space: nowrap;
                 overflow: hidden;
@@ -92,20 +92,26 @@
                 flex-wrap: nowrap;
             }
             .btn-action {
-                border: none;
-                font-size: 9px;
-                font-weight: 700;
-                letter-spacing: .1em;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                font-weight: 600;
+                letter-spacing: .05em;
                 text-transform: uppercase;
-                padding: 5px 10px;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: opacity .15s;
+                padding: 6px 12px;
+                text-decoration: none;
                 white-space: nowrap;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+                line-height: 1.2;
+                border: 1px solid transparent;
+                cursor: pointer;
             }
-            .btn-action:hover { opacity: 0.8; }
-            .btn-edit { background: #e8f0fe; color: #1967d2; }
-            .btn-delete { background: #fce8e6; color: #d93025; }
+            .btn-edit { background-color: #e8f4fd; color: #1a6fa8; }
+            .btn-edit:hover { background-color: #d2e9fc; color: #0b4f7c; }
+            .btn-delete { background-color: #fff5f5; color: #e53e3e; border-color: #fed7d7; }
+            .btn-delete:hover { background-color: #e53e3e; color: #fff; border-color: #e53e3e; }
             .btn-add {
                 background: #1a1a1a;
                 color: #fff;
@@ -126,15 +132,14 @@
             <jsp:include page="/views/admin/sidebar.jsp" />
 
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center mb-4">
                     <div class="page-header mb-0">
                         <i class="bi bi-award" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Manage Brands</h3>
                     </div>
-                    <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#addBrandModal">
-                        + Add New Brand
-                    </button>
                 </div>
+
+
 
                 <c:if test="${not empty sessionScope.successMsg}">
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
@@ -152,7 +157,10 @@
                     </div>
                 </c:if>
 
-                <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                        + Add New Brand
+                    </button>
                     <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
                         <input type="text" id="searchInput" onkeyup="searchTable()" class="form-control border-start-0" placeholder="Search brand name..." style="font-size: 13px;">
