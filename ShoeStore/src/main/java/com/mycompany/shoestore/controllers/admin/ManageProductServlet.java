@@ -35,6 +35,8 @@ public class ManageProductServlet extends HttpServlet {
             }
             
             request.setAttribute("products", allProducts);
+            request.setAttribute("categories", productDAO.getAllCategories());
+            request.setAttribute("brands", productDAO.getAllBrands());
             request.setAttribute("searchQuery", searchQuery);
             request.setAttribute("activePage", "manage-products");
             request.getRequestDispatcher("/views/admin/manage-products.jsp").forward(request, response);

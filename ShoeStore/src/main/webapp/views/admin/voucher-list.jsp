@@ -62,7 +62,113 @@
                 transition: background 0.2s;
                 text-decoration: none !important;
             }
-            .btn-create:hover { background: #333; color: #fff; text-decoration: none !important; }
+            .user-table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+            .user-table thead tr {
+                border-bottom: 2px solid #e8e8e8;
+            }
+            .user-table thead th {
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: .1em;
+                text-transform: uppercase;
+                color: #1a1a1a;
+                padding: 14px 16px;
+            }
+            .user-table tbody tr {
+                border-bottom: 1px solid #f0f0f0;
+                transition: background .12s;
+            }
+            .user-table tbody tr:hover {
+                background: #fafafa;
+            }
+            .user-table tbody td {
+                padding: 16px;
+                font-size: 13px;
+                color: #1a1a1a;
+                vertical-align: middle;
+            }
+            /* Cấu hình độ rộng các cột */
+            .col-no {
+                width: 6%;
+            }
+            .col-code {
+                width: 22%;
+            }
+            .col-date {
+                width: 22%;
+            }
+            .col-qty {
+                width: 15%;
+            }
+            .col-action {
+                width: 13%;
+            }
+
+            .cell-no {
+                font-size: 12px;
+                color: #bbb;
+                font-weight: 600;
+            }
+            .cell-code {
+                font-weight: 600;
+                color: #1a1a1a;
+            }
+            .cell-date {
+                font-size: 12px;
+                color: #888;
+            }
+
+            .qty-badge {
+                font-size: 10px;
+                font-weight: 700;
+                background: #f1f3f5;
+                color: #495057;
+                padding: 4px 10px;
+                border-radius: 4px;
+                text-transform: uppercase;
+            }
+
+            .action-wrap {
+                display: flex;
+                gap: 6px;
+                justify-content: center;
+            }
+            .btn-action {
+                font-size: 10px;
+                font-weight: 600;
+                letter-spacing: .05em;
+                text-transform: uppercase;
+                padding: 6px 12px;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+            }
+            .btn-view {
+                background: #f1f1f1;
+                color: #333;
+            }
+            .btn-view:hover {
+                background: #e2e2e2;
+            }
+            .btn-edit {
+                background: #e8f4fd;
+                color: #1a6fa8;
+            }
+            .btn-edit:hover {
+                background: #d2e9fc;
+            }
+
+            .empty-row td {
+                text-align: center;
+                padding: 48px;
+                font-size: 12px;
+                color: #aaa;
+                text-transform: uppercase;
+            }
         </style>
     </head>
     <body>
