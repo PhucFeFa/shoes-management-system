@@ -309,13 +309,6 @@
                                     orders quickly.
                                 </p>
                             </div>
-                            <div class="flex gap-4">
-                                <button
-                                    class="px-6 py-3 border-[1.5px] border-primary font-label-md text-label-md uppercase text-primary hover:bg-primary hover:text-on-primary transition-colors rounded-lg flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[18px]">download</span>
-                                    Export CSV
-                                </button>
-                            </div>
                         </header>
 
                         <!-- Control Bar: Filters & Search (GET form) -->
