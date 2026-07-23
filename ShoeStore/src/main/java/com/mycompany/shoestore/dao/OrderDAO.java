@@ -396,7 +396,7 @@ public class OrderDAO {
             return false;
         }
         String status = summary.getStatus().toLowerCase();
-        if (status.equals("cancelled") || status.equals("completed") || status.equals("shipped") || status.equals("shipping") || status.equals("delivered")) {
+        if (status.equals("cancelled") || status.equals("completed") || status.equals("delivered")) {
             return false;
         }
 

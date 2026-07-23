@@ -295,7 +295,6 @@
         .status-shipping { background-color: #000000; color: #ffffff; }
         .status-completed { background-color: #d1fae5; color: #065f46; border-color: #065f46; }
         .status-cancelled { background-color: #ffdad6; color: #93000a; border-color: #93000a; }
-        .status-returned { background-color: #fef08a; color: #854d0e; border-color: #854d0e; }
     </style>
 </head>
 <body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden flex h-screen">
@@ -323,11 +322,6 @@
         <!-- Page Header & Action Bar -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-outline-variant pb-6">
             <div>
-                <div class="flex items-center gap-2 text-secondary font-label-md text-label-md uppercase mb-4 tracking-widest">
-                    <a class="hover:text-primary transition-colors" href="${pageContext.request.contextPath}/staff/orders">Orders</a>
-                    <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-                    <span class="text-primary">Details</span>
-                </div>
                 <div class="flex items-center gap-4">
                     <h2 class="font-headline-lg text-headline-lg text-primary uppercase tracking-tighter">ORDER #SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}</h2>
                     <span class="px-3 py-1 font-label-sm text-label-sm uppercase tracking-widest border status-${orderSummary.status}">${orderSummary.status}</span>
@@ -336,27 +330,34 @@
             </div>
             <div class="flex items-center gap-3">
                 <c:if test="${orderSummary.status != 'cancelled'}">
-                    <c:if test="${orderSummary.status == 'pending' || orderSummary.status == 'confirmed'}">
+                    <c:if test="${orderSummary.status == 'pending' || orderSummary.status == 'confirmed' || orderSummary.status == 'shipping'}">
                         <button type="button" onclick="document.getElementById('cancel-modal').classList.remove('hidden')" class="border-[1.5px] border-primary text-primary bg-transparent hover:bg-primary hover:text-on-primary transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
                             Cancel Order
                         </button>
                     </c:if>
                     
                     <c:choose>
-                        <c:when test="${orderSummary.status == 'completed' || orderSummary.status == 'delivered' || orderSummary.status == 'returned'}">
+                        <c:when test="${orderSummary.status == 'completed' || orderSummary.status == 'delivered'}">
                             <span class="px-6 py-3 font-label-md text-label-md uppercase text-065f46 bg-d1fae5 border border-065f46 cursor-not-allowed">
-                                Order ${orderSummary.status == 'returned' ? 'Returned' : 'Completed'}
+                                Order Completed
                             </span>
                         </c:when>
                         <c:otherwise>
                             <form id="update-status-form" action="${pageContext.request.contextPath}/staff/order/update-status" method="POST" class="flex items-center gap-2" onsubmit="return handleStatusUpdate(event)">
                                 <input type="hidden" name="orderId" value="${orderSummary.id}">
                                 <select name="status" class="border-[1.5px] border-primary bg-surface-container-lowest text-primary font-label-md text-label-md uppercase pl-4 pr-10 py-3 outline-none focus:ring-0 cursor-pointer">
-                                    <option value="pending" ${orderSummary.status == 'pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="confirmed" ${orderSummary.status == 'confirmed' ? 'selected' : ''}>Confirmed</option>
-                                    <option value="shipping" ${orderSummary.status == 'shipping' ? 'selected' : ''}>Shipped</option>
-                                    <option value="completed" ${orderSummary.status == 'completed' ? 'selected' : ''}>Delivered / Completed</option>
-                                    <option value="returned" ${orderSummary.status == 'returned' ? 'selected' : ''}>Returned</option>
+                                    <c:if test="${orderSummary.status == 'pending'}">
+                                        <option value="pending" selected>Pending</option>
+                                        <option value="confirmed">Confirmed</option>
+                                    </c:if>
+                                    <c:if test="${orderSummary.status == 'confirmed'}">
+                                        <option value="confirmed" selected>Confirmed</option>
+                                        <option value="shipping">Shipped</option>
+                                    </c:if>
+                                    <c:if test="${orderSummary.status == 'shipping'}">
+                                        <option value="shipping" selected>Shipped</option>
+                                        <option value="completed">Delivered / Completed</option>
+                                    </c:if>
                                 </select>
                                 <button type="submit" class="border-[1.5px] border-primary text-on-primary bg-primary hover:bg-opacity-90 transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
                                     Save
