@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package com.mycompany.shoestore.controllers.admin;
 
 import com.mycompany.shoestore.dao.VoucherDAO;
@@ -28,6 +23,6 @@ public class ManageVoucherServlet extends HttpServlet {
         request.setAttribute("VOUCHER_LIST", list);
         request.setAttribute("activePage", "voucher");
         
-        request.getRequestDispatcher("views/admin/voucher-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/admin/voucher-list.jsp").forward(request, response);
     }
 }

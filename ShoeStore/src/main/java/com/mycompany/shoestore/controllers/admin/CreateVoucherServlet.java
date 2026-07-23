@@ -3,8 +3,11 @@ package com.mycompany.shoestore.controllers.admin;
 import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.dto.VoucherDTO;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,8 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "CreateVoucherServlet", urlPatterns = {"/create-voucher"})
 public class CreateVoucherServlet extends HttpServlet {
 
-
     private static final String VOUCHER_FORM_JSP = "/views/admin/voucher-form.jsp";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -27,8 +30,8 @@ public class CreateVoucherServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String code = request.getParameter("code");
-        String discountType = request.getParameter("discountType");
         String discountValueStr = request.getParameter("discountValue");
+        String minOrderAmountStr = request.getParameter("minOrderAmount");
         String maxDiscountAmountStr = request.getParameter("maxDiscountAmount");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
@@ -38,8 +41,8 @@ public class CreateVoucherServlet extends HttpServlet {
         VoucherDAO voucherDAO = new VoucherDAO();
 
         if (code == null || code.trim().isEmpty()
-                || discountType == null || discountType.trim().isEmpty()
                 || discountValueStr == null || discountValueStr.trim().isEmpty()
+                || minOrderAmountStr == null || minOrderAmountStr.trim().isEmpty()
                 || startDateStr == null || startDateStr.trim().isEmpty()
                 || endDateStr == null || endDateStr.trim().isEmpty()
                 || quantityStr == null || quantityStr.trim().isEmpty()) {
@@ -48,38 +51,42 @@ public class CreateVoucherServlet extends HttpServlet {
         } else {
             try {
                 code = code.trim().toUpperCase();
-                double discountValue = Double.parseDouble(discountValueStr);
+                BigDecimal discountValue = new BigDecimal(discountValueStr);
+                BigDecimal minOrderAmount = new BigDecimal(minOrderAmountStr);
                 
-                Double maxDiscountAmount = null;
+                BigDecimal maxDiscountAmount = null;
                 if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
-                    maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
+                    maxDiscountAmount = new BigDecimal(maxDiscountAmountStr);
                 }
                 
                 int quantity = Integer.parseInt(quantityStr);
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                Timestamp startDate = new Timestamp(dateFormat.parse(startDateStr).getTime());
-                Timestamp endDate = new Timestamp(dateFormat.parse(endDateStr).getTime());
+                OffsetDateTime startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(ZoneOffset.UTC);
+                OffsetDateTime endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(ZoneOffset.UTC);
 
-                if (voucherDAO.isCodeExist(code)) {
+                if (code.length() < 6) {
+                    error = "Voucher code must be at least 6 characters long!";
+                } else if (voucherDAO.isCodeExist(code)) {
                     error = "Voucher code already exists!";
-                } else if ("PERCENTAGE".equals(discountType) && (discountValue <= 0 || discountValue > 100)) {
-                    error = "Discount percent must be between 0.1% and 100%!";
-                } else if ("FIXED_AMOUNT".equals(discountType) && discountValue <= 0) {
-                    error = "Discount amount must be greater than 0!";
-                } else if (maxDiscountAmount != null && maxDiscountAmount < 0) {
+                } else if (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0) {
+                    error = "Discount percentage must be between 0.1% and 100%!";
+                } else if (minOrderAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    error = "Minimum order amount cannot be negative!";
+                } else if (maxDiscountAmount != null && maxDiscountAmount.compareTo(BigDecimal.ZERO) < 0) {
                     error = "Max discount amount cannot be negative!";
+                } else if (maxDiscountAmount != null && minOrderAmount.compareTo(maxDiscountAmount) > 0) {
+                    error = "Minimum order amount cannot be greater than maximum discount amount!";
                 } else if (quantity <= 0) {
                     error = "Quantity must be greater than 0!";
-                } else if (!endDate.after(startDate)) {
+                } else if (!endDate.isAfter(startDate)) {
                     error = "End date must be after start date!";
                 }
 
                 if (error.isEmpty()) {
                     VoucherDTO newVoucher = new VoucherDTO();
                     newVoucher.setCode(code);
-                    newVoucher.setDiscountType(discountType);
                     newVoucher.setDiscountValue(discountValue);
+                    newVoucher.setMinOrderAmount(minOrderAmount);
                     newVoucher.setMaxDiscountAmount(maxDiscountAmount);
                     newVoucher.setStartDate(startDate);
                     newVoucher.setEndDate(endDate);
@@ -101,8 +108,8 @@ public class CreateVoucherServlet extends HttpServlet {
 
         request.setAttribute("ERROR", error);
         request.setAttribute("oldCode", code);
-        request.setAttribute("oldType", discountType);
         request.setAttribute("oldValue", discountValueStr);
+        request.setAttribute("oldMin", minOrderAmountStr);
         request.setAttribute("oldMax", maxDiscountAmountStr);
         request.setAttribute("oldStart", startDateStr);
         request.setAttribute("oldEnd", endDateStr);
