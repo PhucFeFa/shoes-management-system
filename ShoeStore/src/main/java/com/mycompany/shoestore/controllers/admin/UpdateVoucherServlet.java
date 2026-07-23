@@ -1,15 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package com.mycompany.shoestore.controllers.admin;
 
 import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.dto.VoucherDTO;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UpdateVoucherServlet extends HttpServlet {
 
     private static final String UPDATE_FORM_JSP = "/views/admin/update-voucher.jsp";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,11 +39,9 @@ public class UpdateVoucherServlet extends HttpServlet {
         }
 
         // Định dạng ngày giờ để hiển thị khớp thẻ input datetime-local (yyyy-MM-ddTHH:mm)
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-        String formattedStart = voucher.getStartDate() != null ? dateFormat.format(voucher.getStartDate()) : "";
-        String formattedEnd = voucher.getEndDate() != null ? dateFormat.format(voucher.getEndDate()) : "";
+        String formattedStart = voucher.getStartDate() != null ? voucher.getStartDate().format(FORMATTER) : "";
+        String formattedEnd = voucher.getEndDate() != null ? voucher.getEndDate().format(FORMATTER) : "";
 
-        // Gửi dữ liệu gốc sang JSP điền vào form
         request.setAttribute("voucher", voucher);
         request.setAttribute("formattedStart", formattedStart);
         request.setAttribute("formattedEnd", formattedEnd);
@@ -57,8 +54,8 @@ public class UpdateVoucherServlet extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         String code = request.getParameter("code");
-        String discountType = request.getParameter("discountType");
         String discountValueStr = request.getParameter("discountValue");
+        String minOrderAmountStr = request.getParameter("minOrderAmount");
         String maxDiscountAmountStr = request.getParameter("maxDiscountAmount");
         String startDateStr = request.getParameter("startDate");
         String endDateStr = request.getParameter("endDate");
@@ -69,8 +66,8 @@ public class UpdateVoucherServlet extends HttpServlet {
 
         if (id == null || id.trim().isEmpty()
                 || code == null || code.trim().isEmpty()
-                || discountType == null || discountType.trim().isEmpty()
                 || discountValueStr == null || discountValueStr.trim().isEmpty()
+                || minOrderAmountStr == null || minOrderAmountStr.trim().isEmpty()
                 || startDateStr == null || startDateStr.trim().isEmpty()
                 || endDateStr == null || endDateStr.trim().isEmpty()
                 || quantityStr == null || quantityStr.trim().isEmpty()) {
@@ -79,31 +76,34 @@ public class UpdateVoucherServlet extends HttpServlet {
         } else {
             try {
                 code = code.trim().toUpperCase();
-                double discountValue = Double.parseDouble(discountValueStr);
+                BigDecimal discountValue = new BigDecimal(discountValueStr);
+                BigDecimal minOrderAmount = new BigDecimal(minOrderAmountStr);
                 
-                Double maxDiscountAmount = null;
+                BigDecimal maxDiscountAmount = null;
                 if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
-                    maxDiscountAmount = Double.parseDouble(maxDiscountAmountStr);
+                    maxDiscountAmount = new BigDecimal(maxDiscountAmountStr);
                 }
                 
                 int quantity = Integer.parseInt(quantityStr);
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-                Timestamp startDate = new Timestamp(dateFormat.parse(startDateStr).getTime());
-                Timestamp endDate = new Timestamp(dateFormat.parse(endDateStr).getTime());
+                OffsetDateTime startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(ZoneOffset.UTC);
+                OffsetDateTime endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(ZoneOffset.UTC);
 
-                // Sử dụng hàm kiểm tra trùng mã loại trừ chính ID này
-                if (voucherDAO.isCodeExistForUpdate(code, id)) {
+                if (code.length() < 6) {
+                    error = "Voucher code must be at least 6 characters long!";
+                } else if (voucherDAO.isCodeExistForUpdate(code, id)) {
                     error = "Voucher code already exists!";
-                } else if ("PERCENTAGE".equals(discountType) && (discountValue <= 0 || discountValue > 100)) {
-                    error = "Discount percent must be between 0.1% and 100%!";
-                } else if ("FIXED_AMOUNT".equals(discountType) && discountValue <= 0) {
-                    error = "Discount amount must be greater than 0!";
-                } else if (maxDiscountAmount != null && maxDiscountAmount < 0) {
+                } else if (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0) {
+                    error = "Discount percentage must be between 0.1% and 100%!";
+                } else if (minOrderAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    error = "Minimum order amount cannot be negative!";
+                } else if (maxDiscountAmount != null && maxDiscountAmount.compareTo(BigDecimal.ZERO) < 0) {
                     error = "Max discount amount cannot be negative!";
+                } else if (maxDiscountAmount != null && minOrderAmount.compareTo(maxDiscountAmount) > 0) {
+                    error = "Minimum order amount cannot be greater than maximum discount amount!";
                 } else if (quantity <= 0) {
                     error = "Quantity must be greater than 0!";
-                } else if (!endDate.after(startDate)) {
+                } else if (!endDate.isAfter(startDate)) {
                     error = "End date must be after start date!";
                 }
 
@@ -111,8 +111,8 @@ public class UpdateVoucherServlet extends HttpServlet {
                     VoucherDTO updatedVoucher = new VoucherDTO();
                     updatedVoucher.setId(id);
                     updatedVoucher.setCode(code);
-                    updatedVoucher.setDiscountType(discountType);
                     updatedVoucher.setDiscountValue(discountValue);
+                    updatedVoucher.setMinOrderAmount(minOrderAmount);
                     updatedVoucher.setMaxDiscountAmount(maxDiscountAmount);
                     updatedVoucher.setStartDate(startDate);
                     updatedVoucher.setEndDate(endDate);
@@ -136,15 +136,17 @@ public class UpdateVoucherServlet extends HttpServlet {
         VoucherDTO fallbackVoucher = new VoucherDTO();
         fallbackVoucher.setId(id);
         fallbackVoucher.setCode(code);
+        fallbackVoucher.setDiscountValue(new BigDecimal(discountValueStr));
+        fallbackVoucher.setMinOrderAmount(new BigDecimal(minOrderAmountStr));
+        if (maxDiscountAmountStr != null && !maxDiscountAmountStr.trim().isEmpty()) {
+            fallbackVoucher.setMaxDiscountAmount(new BigDecimal(maxDiscountAmountStr));
+        }
+        fallbackVoucher.setQuantity(Integer.parseInt(quantityStr));
         
         request.setAttribute("ERROR", error);
         request.setAttribute("voucher", fallbackVoucher);
-        request.setAttribute("oldType", discountType);
-        request.setAttribute("oldValue", discountValueStr);
-        request.setAttribute("oldMax", maxDiscountAmountStr);
         request.setAttribute("formattedStart", startDateStr);
         request.setAttribute("formattedEnd", endDateStr);
-        request.setAttribute("oldQty", quantityStr);
 
         request.getRequestDispatcher(UPDATE_FORM_JSP).forward(request, response);
     }
