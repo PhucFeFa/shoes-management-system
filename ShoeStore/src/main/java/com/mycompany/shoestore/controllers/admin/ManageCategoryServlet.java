@@ -21,7 +21,42 @@ public class ManageCategoryServlet extends HttpServlet {
             ProductDAO dao = new ProductDAO();
             List<Category> categories = dao.getAllCategories();
             
-            request.setAttribute("categories", categories);
+            String searchQuery = request.getParameter("search");
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                String q = searchQuery.toLowerCase().trim();
+                categories = categories.stream()
+                        .filter(c -> c.getName().toLowerCase().contains(q))
+                        .collect(java.util.stream.Collectors.toList());
+            }
+            
+            int pageSize = 10;
+            int totalCategories = categories.size();
+            int totalPages = (int) Math.ceil((double) totalCategories / pageSize);
+            if (totalPages < 1) totalPages = 1;
+            
+            int currentPage = 1;
+            String pageParam = request.getParameter("page");
+            if (pageParam != null) {
+                try {
+                    currentPage = Integer.parseInt(pageParam);
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+            }
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            int startIndex = (currentPage - 1) * pageSize;
+            int endIndex = Math.min(startIndex + pageSize, totalCategories);
+            List<Category> paginatedCategories = categories.subList(startIndex, endIndex);
+            
+            request.setAttribute("categories", paginatedCategories);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalCategories", totalCategories);
+            request.setAttribute("rangeStart", totalCategories == 0 ? 0 : startIndex + 1);
+            request.setAttribute("rangeEnd", endIndex);
+            request.setAttribute("searchQuery", searchQuery);
             request.setAttribute("activePage", "manage-categories");
             request.getRequestDispatcher("/views/admin/manage-categories.jsp").forward(request, response);
         } catch (Exception e) {

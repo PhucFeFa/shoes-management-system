@@ -10,40 +10,40 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <style>
             * { box-sizing: border-box; }
-            body { background: #f5f5f3; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; }
+            body { background: #f5f5f3; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow-y: scroll; }
             .main-content {
-                margin-left: 256px;
-                padding: 40px 48px;
+                margin-left: 220px;
+                padding: 32px 36px;
                 min-height: 100vh;
-                width: calc(100% - 256px);
+                width: 100%;
             }
-            .page-header { display: flex; align-items: center; margin-bottom: 32px; gap: 12px; }
-            .page-title { font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #1a1a1a; margin: 0; }
-            .table-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); overflow: hidden; }
+            .page-header { display: flex; align-items: center; margin-bottom: 24px; gap: 10px; }
+            .page-title { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #1a1a1a; margin: 0; }
+            .table-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; overflow: hidden; }
             .user-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-            .user-table thead tr { border-bottom: 2px solid #f0f0f0; background: #fcfcfc; }
-            .user-table thead th { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #999; padding: 16px; text-align: left; }
-            .user-table tbody tr { border-bottom: 1px solid #f8f8f8; transition: background .12s; }
+            .user-table thead tr { border-bottom: 2px solid #e8e8e8; background: #fff; }
+            .user-table thead th { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #1a1a1a; padding: 14px 16px; text-align: left; }
+            .user-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .12s; }
             .user-table tbody tr:hover { background: #fafafa; }
-            .user-table tbody td { padding: 18px 16px; font-size: 14px; color: #1a1a1a; vertical-align: middle; }
+            .user-table tbody td { padding: 16px; font-size: 13px; color: #1a1a1a; vertical-align: middle; }
             
             .col-no { width: 50px; } .col-code { width: 140px; } .col-value { width: 90px; } .col-min { width: 110px; } .col-date { width: 120px; } .col-usage { width: 100px; } .col-status { width: 90px; } .col-action { width: 180px; }
             .cell-no { font-size: 12px; color: #ccc; font-weight: 600; }
             .cell-code { font-weight: 700; color: #1a1a1a; letter-spacing: 0.02em; }
             .qty-badge { font-size: 11px; font-weight: 700; background: #f1f3f5; color: #495057; padding: 4px 10px; border-radius: 4px; display: inline-block; }
             
-            .status-badge { font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; display: inline-block; }
-            .status-active { background: #e6fffa; color: #2c7a7b; }
-            .status-inactive { background: #fff5f5; color: #e03131; }
+            .status-badge { font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; display: inline-block; letter-spacing: .1em; }
+            .status-active { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
+            .status-inactive { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; }
             
-            .action-wrap { display: flex; gap: 8px; justify-content: center; }
-            .btn-action { font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 8px 14px; text-decoration: none !important; border-radius: 4px; transition: all 0.2s ease; border: 1px solid transparent; }
-            .btn-view { background: #f8f9fa; color: #333; border-color: #e9ecef; }
-            .btn-view:hover { background: #e9ecef; }
+            .action-wrap { display: flex; gap: 6px; justify-content: center; align-items: center; }
+            .btn-action { font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 6px 12px; text-decoration: none !important; border-radius: 4px; transition: all 0.2s ease; border: 1px solid transparent; line-height: 1.2; }
+            .btn-view { background: #f1f1f1; color: #333; }
+            .btn-view:hover { background: #e2e2e2; color: #000; }
             .btn-edit { background: #e8f4fd; color: #1a6fa8; }
-            .btn-edit:hover { background: #d2e9fc; }
-            .btn-delete { background: #fff5f5; color: #e03131; }
-            .btn-delete:hover { background: #ffe3e3; }
+            .btn-edit:hover { background: #d2e9fc; color: #0b4f7c; }
+            .btn-delete { background: #fff5f5; color: #e53e3e; border-color: #fed7d7; }
+            .btn-delete:hover { background: #e53e3e; color: #fff; border-color: #e53e3e; }
             .empty-row td { text-align: center; padding: 60px; font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; }
             
             .btn-create {
@@ -155,12 +155,14 @@
                 font-weight: 600;
                 letter-spacing: .05em;
                 text-transform: uppercase;
-                padding: 10px 16px;
+                padding: 0 16px;
+                height: 38px;
                 border-radius: 4px;
                 cursor: pointer;
                 text-decoration: none;
                 display: inline-flex;
                 align-items: center;
+                justify-content: center;
             }
             .btn-add:hover {
                 background: #000;
@@ -196,6 +198,54 @@
                 color: #aaa;
                 text-transform: uppercase;
             }
+
+            /* Pagination */
+            .pagination-footer {
+                padding: 16px;
+                border-top: 1px solid #e8e8e8;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+            }
+            .pagination-info {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: .05em;
+            }
+            .pagination-controls {
+                display: flex;
+                gap: 6px;
+            }
+            .page-btn {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #e8e8e8;
+                border-radius: 50%;
+                font-size: 12px;
+                font-weight: 600;
+                color: #555;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+            .page-btn:hover:not(.disabled) {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+            .page-btn.active {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+            .page-btn.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
         </style>
     </head>
     <body>
@@ -203,20 +253,22 @@
             <c:set var="activePage" value="voucher" scope="request" />
             <jsp:include page="sidebar.jsp" />
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-ticket-perforated" style="font-size:18px; color:#1a1a1a;"></i>
+                <div class="d-flex align-items-center mb-4">
+                    <div class="page-header mb-0">
+                        <i class="bi bi-ticket-perforated" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Voucher Management</h3>
                     </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <a href="${pageContext.request.contextPath}/create-voucher" class="btn-add">
-                            <i class="bi bi-plus-lg me-1"></i> Create Voucher
-                        </a>
-                        <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
-                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by voucher code..." style="font-size: 13px;" onkeyup="searchTable()">
-                        </form>
-                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
+                    <form action="${pageContext.request.contextPath}/manage-voucher" method="GET" class="input-group" style="width: 300px;">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search by voucher code..." style="font-size: 13px;">
+                        <button type="submit" class="d-none"></button>
+                    </form>
+                    <a href="${pageContext.request.contextPath}/create-voucher" class="btn-add">
+                        + Create Voucher
+                    </a>
                 </div>
                 <div class="table-card">
                     <table class="user-table">
@@ -224,12 +276,12 @@
                             <tr>
                                 <th class="col-no">No.</th>
                                 <th class="col-code">Code</th>
-                                <th class="col-value">Value (%)</th>
+                                <th class="col-value">Value</th>
                                 <th class="col-min">Min Order</th>
                                 <th class="col-date">Start Date</th>
                                 <th class="col-date">End Date</th>
                                 <th class="col-usage">Usage</th>
-                                <th class="col-status">Status</th>
+                                <th class="col-status" style="text-align:center">Status</th>
                                 <th class="col-action" style="text-align:center">Action</th>
                             </tr>
                         </thead>
@@ -241,7 +293,14 @@
                                             <td class="col-no"><span class="cell-no">${status.count}</span></td>
                                             <td class="col-code"><span class="cell-code">${v.code}</span></td>
                                             <td class="col-value">
-                                                <strong><fmt:formatNumber value="${v.discountValue}" pattern="#,##0.##" />%</strong>
+                                                <c:choose>
+                                                    <c:when test="${v.discountValue <= 100}">
+                                                        <strong><fmt:formatNumber value="${v.discountValue}" pattern="#,##0.##" />%</strong>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <strong><fmt:formatNumber value="${v.discountValue}" pattern="#,##0" /> đ</strong>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td class="col-min">
                                                 <span style="font-size: 13px;"><fmt:formatNumber value="${v.minOrderAmount}" pattern="#,##0.##" /> đ</span>
@@ -257,12 +316,12 @@
                                                 <fmt:formatDate value="${parsedE}" pattern="dd/MM/yyyy" />
                                             </td>
                                             <td class="col-usage"><span class="qty-badge">${v.usedQuantity} / ${v.quantity}</span></td>
-                                            <td class="col-status">
+                                            <td class="col-status" style="text-align:center">
                                                 <span class="status-badge ${v.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}">
                                                     ${v.status}
                                                 </span>
                                             </td>
-                                            <td class="col-action">
+                                            <td class="col-action" style="text-align:center">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">View</a>
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/edit?id=${v.id}" class="btn-action btn-edit">Edit</a>
@@ -280,6 +339,44 @@
                             </c:choose>
                         </tbody>
                     </table>
+
+                    <!-- Pagination Footer -->
+                    <div class="pagination-footer">
+                        <span class="pagination-info">Showing ${rangeStart}-${rangeEnd} of ${totalVouchers} vouchers</span>
+                        <div class="pagination-controls">
+                            <!-- Prev button -->
+                            <c:choose>
+                                <c:when test="${currentPage <= 1}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/manage-voucher?page=${currentPage - 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- Page numbers -->
+                            <c:forEach begin="1" end="${totalPages}" var="p">
+                                <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/manage-voucher?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <!-- Next button -->
+                            <c:choose>
+                                <c:when test="${currentPage >= totalPages}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/manage-voucher?page=${currentPage + 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -16,11 +16,13 @@
                 background: #f5f5f3;
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                 margin: 0;
+                overflow-y: scroll;
             }
             .main-content {
                 margin-left: 220px;
                 padding: 32px 36px;
                 min-height: 100vh;
+                width: 100%;
             }
             .page-header {
                 display: flex;
@@ -233,6 +235,54 @@
                 letter-spacing: .06em;
                 text-transform: uppercase;
             }
+
+            /* Pagination */
+            .pagination-footer {
+                padding: 16px;
+                border-top: 1px solid #e8e8e8;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+            }
+            .pagination-info {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: .05em;
+            }
+            .pagination-controls {
+                display: flex;
+                gap: 6px;
+            }
+            .page-btn {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #e8e8e8;
+                border-radius: 50%;
+                font-size: 12px;
+                font-weight: 600;
+                color: #555;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+            .page-btn:hover:not(.disabled) {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+            .page-btn.active {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+            .page-btn.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
         </style>
     </head>
     <body>
@@ -241,18 +291,18 @@
             <jsp:include page="sidebar.jsp" />
 
             <div class="main-content">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center mb-4">
                     <div class="page-header mb-0">
                         <i class="bi bi-people" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Account List</h3>
                     </div>
-                    <div style="height: 31px;"></div>
                 </div>
 
-                <div class="d-flex justify-content-end mb-3">
-                    <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
+                <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
+                    <form action="${pageContext.request.contextPath}/manage-account" method="GET" class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px;">
+                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px;">
+                        <button type="submit" class="d-none"></button>
                     </form>
                 </div>
 
@@ -307,7 +357,6 @@
                                             <td style="text-align:center">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">View</a>
-                                                    <a href="${pageContext.request.contextPath}/manage-account/edit?id=${u.id}" class="btn-action btn-edit">Edit</a>
                                                     <c:choose>
                                                         <c:when test="${u.status eq 'Active'}">
                                                             <a href="${pageContext.request.contextPath}/status-account?id=${u.id}&currentStatus=Active" 
@@ -333,6 +382,44 @@
                             </c:choose>
                         </tbody>
                     </table>
+
+                    <!-- Pagination Footer -->
+                    <div class="pagination-footer">
+                        <span class="pagination-info">Showing ${rangeStart}-${rangeEnd} of ${totalUsers} users</span>
+                        <div class="pagination-controls">
+                            <!-- Prev button -->
+                            <c:choose>
+                                <c:when test="${currentPage <= 1}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/manage-account?page=${currentPage - 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- Page numbers -->
+                            <c:forEach begin="1" end="${totalPages}" var="p">
+                                <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/manage-account?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <!-- Next button -->
+                            <c:choose>
+                                <c:when test="${currentPage >= totalPages}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/manage-account?page=${currentPage + 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

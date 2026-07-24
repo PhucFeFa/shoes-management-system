@@ -34,7 +34,33 @@ public class ManageProductServlet extends HttpServlet {
                         .collect(Collectors.toList());
             }
             
-            request.setAttribute("products", allProducts);
+            int pageSize = 10;
+            int totalProducts = allProducts.size();
+            int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+            if (totalPages < 1) totalPages = 1;
+            
+            int currentPage = 1;
+            String pageParam = request.getParameter("page");
+            if (pageParam != null) {
+                try {
+                    currentPage = Integer.parseInt(pageParam);
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+            }
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            int startIndex = (currentPage - 1) * pageSize;
+            int endIndex = Math.min(startIndex + pageSize, totalProducts);
+            List<Product> paginatedProducts = allProducts.subList(startIndex, endIndex);
+            
+            request.setAttribute("products", paginatedProducts);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalProducts", totalProducts);
+            request.setAttribute("rangeStart", totalProducts == 0 ? 0 : startIndex + 1);
+            request.setAttribute("rangeEnd", endIndex);
             request.setAttribute("categories", productDAO.getAllCategories());
             request.setAttribute("brands", productDAO.getAllBrands());
             request.setAttribute("searchQuery", searchQuery);

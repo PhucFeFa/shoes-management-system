@@ -10,14 +10,16 @@
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background: #f5f5f3; margin: 0; overflow-y: scroll; }
         .main-content { 
             margin-left: 220px; 
             padding: 32px 36px;
+            min-height: 100vh;
+            width: 100%;
         }
         .page-header {
             display: flex;
@@ -35,9 +37,8 @@
         }
         .table-card {
             background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,.05);
-            border: 1px solid #eee;
+            border-radius: 4px;
+            border: 1px solid #e8e8e8;
             overflow: hidden;
         }
         .user-table {
@@ -130,6 +131,61 @@
             color: #bbb;
             font-weight: 600;
         }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #dee2e6;
+        }
+        .input-group-text, .form-control {
+            border-color: #dee2e6;
+        }
+        
+        /* Pagination */
+        .pagination-footer {
+            padding: 16px;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+        }
+        .pagination-info {
+            font-size: 11px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+        .pagination-controls {
+            display: flex;
+            gap: 6px;
+        }
+        .page-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e8e8e8;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .page-btn:hover:not(.disabled) {
+            border-color: #1a1a1a;
+            color: #1a1a1a;
+        }
+        .page-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #1a1a1a;
+        }
+        .page-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body class="bg-[#f5f5f3] text-[#1a1c1c] antialiased flex min-h-screen">
@@ -145,14 +201,11 @@
             </div>
         </div>
         
-        <div class="flex justify-end items-center mb-3">
-            <form onsubmit="event.preventDefault(); searchTable();" class="relative w-72">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="bi bi-search text-gray-400 text-sm"></i>
-                </div>
-                <input type="text" id="searchInput" onkeyup="searchTable()" 
-                       class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-1 focus:ring-black focus:border-black transition-colors" 
-                       placeholder="Search supplier or staff...">
+        <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
+            <form action="${pageContext.request.contextPath}/import" method="GET" class="input-group" style="width: 300px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search supplier or staff..." style="font-size: 13px;">
+                <button type="submit" class="d-none"></button>
             </form>
         </div>
 
@@ -206,13 +259,24 @@
                                         <td style="text-align:center">
                                             <c:set var="statusClass" value=""/>
                                             <c:choose>
-                                                <c:when test="${item.status == 'REQUESTING'}"><c:set var="statusClass" value="background: #e8f4fd; color: #1a6fa8;"/></c:when>
-                                                <c:when test="${item.status == 'APPROVED'}"><c:set var="statusClass" value="background: #fff8e6; color: #b38600;"/></c:when>
-                                                <c:when test="${item.status == 'REPORTED'}"><c:set var="statusClass" value="background: #f4e8fd; color: #7a1aa8;"/></c:when>
-                                                <c:when test="${item.status == 'ACCEPTED'}"><c:set var="statusClass" value="background: #e6f4ea; color: #1e7e34;"/></c:when>
-                                                <c:when test="${item.status == 'COMPLETE'}"><c:set var="statusClass" value="background: #e8e8e8; color: #1a1a1a;"/></c:when>
-                                                <c:when test="${item.status == 'CANCELLED'}"><c:set var="statusClass" value="background: #f8d7da; color: #b21f2d;"/></c:when>
-                                                <c:otherwise><c:set var="statusClass" value="background: #f5f5f5; color: #666;"/></c:otherwise>
+                                                <c:when test="${item.status == 'REQUESTING' || item.status == 'PENDING'}">
+                                                    <c:set var="statusClass" value="background: #e8f4fd; color: #1a6fa8; border: 1px solid #d2e9fc;"/>
+                                                </c:when>
+                                                <c:when test="${item.status == 'APPROVED' || item.status == 'SHIPPING'}">
+                                                    <c:set var="statusClass" value="background: #fff8e6; color: #b38600; border: 1px solid #ffe8cc;"/>
+                                                </c:when>
+                                                <c:when test="${item.status == 'REPORTED'}">
+                                                    <c:set var="statusClass" value="background: #f4e8fd; color: #7a1aa8; border: 1px solid #e9d5ff;"/>
+                                                </c:when>
+                                                <c:when test="${item.status == 'ACCEPTED' || item.status == 'COMPLETE' || item.status == 'COMPLETED'}">
+                                                    <c:set var="statusClass" value="background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7;"/>
+                                                </c:when>
+                                                <c:when test="${item.status == 'CANCELLED' || item.status == 'REJECTED'}">
+                                                    <c:set var="statusClass" value="background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7;"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="statusClass" value="background: #f5f5f5; color: #666; border: 1px solid #e8e8e8;"/>
+                                                </c:otherwise>
                                             </c:choose>
                                             <span class="status-badge" style="${statusClass}">
                                                 <c:out value="${item.status}"/>
@@ -229,6 +293,44 @@
                         </c:choose>
                     </tbody>
                 </table>
+                
+                <!-- Pagination Footer -->
+                <div class="pagination-footer">
+                    <span class="pagination-info">Showing ${rangeStart}-${rangeEnd} of ${totalImports} imports</span>
+                    <div class="pagination-controls">
+                        <!-- Prev button -->
+                        <c:choose>
+                            <c:when test="${currentPage <= 1}">
+                                <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/import?page=${currentPage - 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <!-- Page numbers -->
+                        <c:forEach begin="1" end="${totalPages}" var="p">
+                            <c:choose>
+                                <c:when test="${p == currentPage}">
+                                    <span class="page-btn active"><c:out value="${p}" /></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/import?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+
+                        <!-- Next button -->
+                        <c:choose>
+                            <c:when test="${currentPage >= totalPages}">
+                                <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/import?page=${currentPage + 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

@@ -38,7 +38,43 @@ public class ManageProductDetailsServlet extends HttpServlet {
             List<ProductVariant> variants = vDao.getVariantsByProductId(productId);
 
             request.setAttribute("product", product);
-            request.setAttribute("variants", variants);
+            
+            String search = request.getParameter("search");
+            if (search != null && !search.trim().isEmpty()) {
+                String q = search.trim().toLowerCase();
+                variants = variants.stream()
+                    .filter(v -> (v.getColor() != null && v.getColor().toLowerCase().contains(q)) ||
+                                 (v.getSize() != null && v.getSize().toLowerCase().contains(q)))
+                    .collect(java.util.stream.Collectors.toList());
+            }
+            
+            int pageSize = 10;
+            int totalDetails = variants.size();
+            int totalPages = (int) Math.ceil((double) totalDetails / pageSize);
+            if (totalPages < 1) totalPages = 1;
+            
+            int currentPage = 1;
+            String pageParam = request.getParameter("page");
+            if (pageParam != null) {
+                try {
+                    currentPage = Integer.parseInt(pageParam);
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+            }
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            int startIndex = (currentPage - 1) * pageSize;
+            int endIndex = Math.min(startIndex + pageSize, totalDetails);
+            List<ProductVariant> paginatedDetails = variants.subList(startIndex, endIndex);
+            
+            request.setAttribute("variants", paginatedDetails);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalDetails", totalDetails);
+            request.setAttribute("rangeStart", totalDetails == 0 ? 0 : startIndex + 1);
+            request.setAttribute("rangeEnd", endIndex);
             request.setAttribute("activePage", "manage-products"); // Keep sidebar highlight on Products
             
             request.getRequestDispatcher("/views/admin/manage-product-details.jsp").forward(request, response);

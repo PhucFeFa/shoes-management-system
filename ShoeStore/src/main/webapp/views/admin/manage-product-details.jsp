@@ -16,6 +16,7 @@
                 background: #f5f5f3;
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                 margin: 0;
+                overflow-y: scroll;
             }
             .main-content {
                 margin-left: 220px;
@@ -114,7 +115,11 @@
                 font-weight: 600;
                 letter-spacing: .05em;
                 text-transform: uppercase;
-                padding: 10px 16px;
+                padding: 0 16px;
+                height: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 border-radius: 4px;
                 cursor: pointer;
             }
@@ -127,11 +132,62 @@
                 font-weight: 600;
                 letter-spacing: .05em;
                 text-transform: uppercase;
-                padding: 10px 16px;
+                padding: 0 16px;
+                height: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 border-radius: 4px;
-                margin-right: 12px;
             }
             .btn-back:hover { background: #cbd5e1; color: #334155; }
+            
+            /* Pagination */
+            .pagination-footer {
+                padding: 16px;
+                border-top: 1px solid #e8e8e8;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+            }
+            .pagination-info {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: .05em;
+            }
+            .pagination-controls {
+                display: flex;
+                gap: 6px;
+            }
+            .page-btn {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #e8e8e8;
+                border-radius: 50%;
+                font-size: 12px;
+                font-weight: 600;
+                color: #555;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+            .page-btn:hover:not(.disabled) {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+            .page-btn.active {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+            .page-btn.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
         </style>
     </head>
     <body>
@@ -146,10 +202,13 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-start mb-3 gap-2">
-                    <a href="${pageContext.request.contextPath}/admin/manage-products" class="btn-back">
-                        <i class="bi bi-arrow-left"></i> Back
-                    </a>
+                <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
+                    <form action="${pageContext.request.contextPath}/admin/product/details" method="GET" class="input-group" style="width: 300px;">
+                        <input type="hidden" name="id" value="${product.id}">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" name="search" value="${param.search}" class="form-control border-start-0" placeholder="Search variants..." style="font-size: 13px;">
+                        <button type="submit" class="d-none"></button>
+                    </form>
                     <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#addVariantModal">
                         + Add New Variant
                     </button>
@@ -170,15 +229,6 @@
                         <c:remove var="errorMsg" scope="session"/>
                     </div>
                 </c:if>
-
-                <div class="info-card">
-                    <div class="row">
-                        <div class="col-md-3"><strong>Product Name:</strong> <span class="text-muted">${product.name}</span></div>
-                        <div class="col-md-3"><strong>Category:</strong> <span class="text-muted">${product.category.name}</span></div>
-                        <div class="col-md-3"><strong>Brand:</strong> <span class="text-muted">${product.brand.name}</span></div>
-                        <div class="col-md-3"><strong>Base Price:</strong> <span class="text-muted"><fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/> đ</span></div>
-                    </div>
-                </div>
 
                 <div class="table-card">
                     <table class="user-table">
@@ -229,6 +279,44 @@
                             </c:choose>
                         </tbody>
                     </table>
+
+                    <!-- Pagination Footer -->
+                    <div class="pagination-footer">
+                        <span class="pagination-info">Showing ${rangeStart}-${rangeEnd} of ${totalDetails} variants</span>
+                        <div class="pagination-controls">
+                            <!-- Prev button -->
+                            <c:choose>
+                                <c:when test="${currentPage <= 1}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}&page=${currentPage - 1}${not empty param.search ? '&search=' : ''}${not empty param.search ? param.search : ''}" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- Page numbers -->
+                            <c:forEach begin="1" end="${totalPages}" var="p">
+                                <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}&page=${p}${not empty param.search ? '&search=' : ''}${not empty param.search ? param.search : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <!-- Next button -->
+                            <c:choose>
+                                <c:when test="${currentPage >= totalPages}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}&page=${currentPage + 1}${not empty param.search ? '&search=' : ''}${not empty param.search ? param.search : ''}" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -302,6 +390,22 @@
                 document.getElementById('editVariantColor').value = color;
                 var modal = new bootstrap.Modal(document.getElementById('editVariantModal'));
                 modal.show();
+            }
+
+            function searchTable() {
+                var input = document.getElementById("searchInput");
+                var filter = input.value.toLowerCase();
+                var table = document.querySelector(".user-table");
+                var trs = table.querySelectorAll("tbody tr");
+
+                trs.forEach(function(tr) {
+                    var text = tr.textContent.toLowerCase();
+                    if (text.includes(filter)) {
+                        tr.style.display = "";
+                    } else {
+                        tr.style.display = "none";
+                    }
+                });
             }
         </script>
     </body>

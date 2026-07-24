@@ -21,7 +21,42 @@ public class ManageBrandServlet extends HttpServlet {
             ProductDAO dao = new ProductDAO();
             List<Brand> brands = dao.getAllBrands();
             
-            request.setAttribute("brands", brands);
+            String searchQuery = request.getParameter("search");
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                String q = searchQuery.toLowerCase().trim();
+                brands = brands.stream()
+                        .filter(b -> b.getName().toLowerCase().contains(q))
+                        .collect(java.util.stream.Collectors.toList());
+            }
+            
+            int pageSize = 10;
+            int totalBrands = brands.size();
+            int totalPages = (int) Math.ceil((double) totalBrands / pageSize);
+            if (totalPages < 1) totalPages = 1;
+            
+            int currentPage = 1;
+            String pageParam = request.getParameter("page");
+            if (pageParam != null) {
+                try {
+                    currentPage = Integer.parseInt(pageParam);
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+            }
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            int startIndex = (currentPage - 1) * pageSize;
+            int endIndex = Math.min(startIndex + pageSize, totalBrands);
+            List<Brand> paginatedBrands = brands.subList(startIndex, endIndex);
+            
+            request.setAttribute("brands", paginatedBrands);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalBrands", totalBrands);
+            request.setAttribute("rangeStart", totalBrands == 0 ? 0 : startIndex + 1);
+            request.setAttribute("rangeEnd", endIndex);
+            request.setAttribute("searchQuery", searchQuery);
             request.setAttribute("activePage", "manage-brands");
             request.getRequestDispatcher("/views/admin/manage-brands.jsp").forward(request, response);
         } catch (Exception e) {

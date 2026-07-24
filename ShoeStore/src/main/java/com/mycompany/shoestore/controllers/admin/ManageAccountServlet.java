@@ -20,8 +20,43 @@ public class ManageAccountServlet extends HttpServlet {
         UserDAO userDao = new UserDAO();
         List<UserDTO> userList = userDao.getAllCustomers();
         
-        request.setAttribute("users", userList);
+        String searchQuery = request.getParameter("search");
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            String q = searchQuery.toLowerCase().trim();
+            userList = userList.stream()
+                    .filter(u -> (u.getFullName() != null && u.getFullName().toLowerCase().contains(q)) || 
+                                 (u.getEmail() != null && u.getEmail().toLowerCase().contains(q)))
+                    .collect(java.util.stream.Collectors.toList());
+        }
         
+        int pageSize = 10;
+        int totalUsers = userList.size();
+        int totalPages = (int) Math.ceil((double) totalUsers / pageSize);
+        if (totalPages < 1) totalPages = 1;
+        
+        int currentPage = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                currentPage = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
+        }
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        
+        int startIndex = (currentPage - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, totalUsers);
+        List<UserDTO> paginatedUsers = userList.subList(startIndex, endIndex);
+        
+        request.setAttribute("users", paginatedUsers);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalUsers", totalUsers);
+        request.setAttribute("rangeStart", totalUsers == 0 ? 0 : startIndex + 1);
+        request.setAttribute("rangeEnd", endIndex);
+        request.setAttribute("searchQuery", searchQuery);
         // Thêm dấu gạch chéo hợp lệ ở đầu đường dẫn điều hướng
         request.getRequestDispatcher("/views/admin/user.jsp").forward(request, response);
     } 

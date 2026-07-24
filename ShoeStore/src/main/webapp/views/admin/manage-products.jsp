@@ -75,6 +75,7 @@
                 background: #f5f5f3;
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
                 margin: 0;
+                overflow-y: scroll;
             }
             .main-content {
                 margin-left: 220px;
@@ -166,7 +167,7 @@
             .action-wrap {
                 display: flex;
                 gap: 6px;
-                justify-content: flex-start;
+                justify-content: center;
                 align-items: center;
                 flex-wrap: nowrap;
             }
@@ -188,11 +189,23 @@
                 cursor: pointer;
                 min-width: 60px;
             }
-            .btn-action.btn-variants { min-width: 76px; }
+            .btn-action.btn-variants {
+                min-width: 76px;
+                background-color: #1a1a1a;
+                color: #ffffff;
+                border-color: #1a1a1a;
+            }
+            .btn-action.btn-variants:hover {
+                background-color: #333333;
+                color: #ffffff;
+                border-color: #333333;
+            }
             .btn-edit { background-color: #e8f4fd; color: #1a6fa8; }
             .btn-edit:hover { background-color: #d2e9fc; color: #0b4f7c; }
             .btn-delete { background-color: #fff5f5; color: #e53e3e; border-color: #fed7d7; }
             .btn-delete:hover { background-color: #e53e3e; color: #fff; border-color: #e53e3e; }
+            .btn-show { background-color: #f0fdf4; color: #15803d; border-color: #dcfce7; }
+            .btn-show:hover { background-color: #15803d; color: #fff; border-color: #15803d; }
             .btn-add-product {
                 background: #1a1a1a;
                 color: #fff;
@@ -200,7 +213,11 @@
                 font-weight: 600;
                 text-transform: uppercase;
                 letter-spacing: .05em;
-                padding: 10px 16px;
+                padding: 0 16px;
+                height: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 border: none;
                 border-radius: 4px;
                 transition: 0.2s;
@@ -228,6 +245,54 @@
                 background: #f8f9fa;
                 border: 1px solid #e8e8e8;
                 border-radius: 4px;
+            }
+            
+            /* Pagination */
+            .pagination-footer {
+                padding: 16px;
+                border-top: 1px solid #e8e8e8;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+            }
+            .pagination-info {
+                font-size: 11px;
+                font-weight: 600;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: .05em;
+            }
+            .pagination-controls {
+                display: flex;
+                gap: 6px;
+            }
+            .page-btn {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #e8e8e8;
+                border-radius: 50%;
+                font-size: 12px;
+                font-weight: 600;
+                color: #555;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+            .page-btn:hover:not(.disabled) {
+                border-color: #1a1a1a;
+                color: #1a1a1a;
+            }
+            .page-btn.active {
+                background: #1a1a1a;
+                color: #fff;
+                border-color: #1a1a1a;
+            }
+            .page-btn.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
             }
         </style>
     </head>
@@ -262,14 +327,15 @@
                     </div>
                 </c:if>
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
+                    <form action="${pageContext.request.contextPath}/admin/manage-products" method="GET" class="input-group" style="width: 300px;">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search product name..." style="font-size: 13px;">
+                        <button type="submit" class="d-none"></button>
+                    </form>
                     <button type="button" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">
                         + Add New Product
                     </button>
-                    <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" id="searchInput" onkeyup="searchTable()" class="form-control border-start-0" placeholder="Search product name..." style="font-size: 13px;">
-                    </form>
                 </div>
 
                 <div class="table-card">
@@ -303,7 +369,7 @@
                                         <tr>
                                             <td><span class="cell-no">${status.index + 1}</span></td>
                                             <td>
-                                                <img src="${not empty product.firstImageUrl ? product.firstImageUrl : 'https://via.placeholder.com/40'}" class="product-img" alt="${product.name}">
+                                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${not empty product.firstImageUrl ? product.firstImageUrl : 'https://via.placeholder.com/40'}" class="product-img" alt="${product.name}">
                                             </td>
                                             <td><span class="cell-name">${product.name}</span></td>
                                             <td><span class="cell-brand">${product.brand.name}</span></td>
@@ -316,7 +382,7 @@
                                             </td>
                                             <td style="text-align:center">
                                                 <div class="action-wrap">
-                                                    <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}" class="btn-action btn-variants" style="background-color: #f39c12; color: white; text-decoration: none;">Variants</a>
+                                                    <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}" class="btn-action btn-variants">Variants</a>
                                                     <button type="button" class="btn-action btn-edit" 
                                                             data-id="${product.id}" 
                                                             data-name="${product.name}" 
@@ -332,7 +398,7 @@
                                                                 <button type="submit" class="btn-action btn-delete">Hide</button>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <button type="submit" class="btn-action btn-edit" style="background-color: #28a745; border-color: #28a745; color: white;">Show</button>
+                                                                <button type="submit" class="btn-action btn-show">Show</button>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </form>
@@ -349,6 +415,44 @@
                             </c:choose>
                         </tbody>
                     </table>
+
+                    <!-- Pagination Footer -->
+                    <div class="pagination-footer">
+                        <span class="pagination-info">Showing ${rangeStart}-${rangeEnd} of ${totalProducts} products</span>
+                        <div class="pagination-controls">
+                            <!-- Prev button -->
+                            <c:choose>
+                                <c:when test="${currentPage <= 1}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/admin/manage-products?page=${currentPage - 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- Page numbers -->
+                            <c:forEach begin="1" end="${totalPages}" var="p">
+                                <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/admin/manage-products?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <!-- Next button -->
+                            <c:choose>
+                                <c:when test="${currentPage >= totalPages}">
+                                    <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/admin/manage-products?page=${currentPage + 1}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -557,3 +661,5 @@
         </script>
     </body>
 </html>
+
+
