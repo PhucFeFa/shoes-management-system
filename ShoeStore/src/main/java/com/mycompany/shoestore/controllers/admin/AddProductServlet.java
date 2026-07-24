@@ -82,7 +82,7 @@ public class AddProductServlet extends HttpServlet {
 
             if (productId != null) {
                 // Process File Uploads
-                String uploadPath = request.getServletContext().getRealPath("") + File.separator + "assets" + File.separator + "images" + File.separator + "products";
+                String uploadPath = "D:\\Upload_ShoesStore";
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
 
@@ -93,7 +93,8 @@ public class AddProductServlet extends HttpServlet {
                         String fileName = UUID.randomUUID().toString() + "_" + getFileName(part);
                         part.write(uploadPath + File.separator + fileName);
                         
-                        String dbUrl = request.getContextPath() + "/assets/images/products/" + fileName;
+                        // Use /uploads/ path for the database URL so Tomcat can map it
+                        String dbUrl = request.getContextPath() + "/uploads/" + fileName;
                         dao.insertProductImage(productId, dbUrl, sortOrder++);
                     }
                 }

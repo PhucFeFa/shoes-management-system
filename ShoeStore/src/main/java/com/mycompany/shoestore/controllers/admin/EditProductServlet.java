@@ -86,7 +86,7 @@ public class EditProductServlet extends HttpServlet {
 
             if (success) {
                 // Process File Upload if a new image was provided
-                String uploadPath = request.getServletContext().getRealPath("") + File.separator + "assets" + File.separator + "images" + File.separator + "products";
+                String uploadPath = "D:\\Upload_ShoesStore";
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
 
@@ -96,7 +96,7 @@ public class EditProductServlet extends HttpServlet {
                         String fileName = UUID.randomUUID().toString() + "_" + getFileName(part);
                         part.write(uploadPath + File.separator + fileName);
                         
-                        String dbUrl = request.getContextPath() + "/assets/images/products/" + fileName;
+                        String dbUrl = request.getContextPath() + "/uploads/" + fileName;
                         
                         // Replace existing images since we only allow 1 image per product
                         productDAO.deleteProductImagesByProductId(id);
