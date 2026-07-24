@@ -147,6 +147,25 @@
                 border-radius: 4px;
                 transition: all 0.2s ease;
             }
+            .btn-add {
+                background: #1a1a1a;
+                color: #fff;
+                border: none;
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: .05em;
+                text-transform: uppercase;
+                padding: 10px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+            }
+            .btn-add:hover {
+                background: #000;
+                color: #fff;
+            }
             .btn-view {
                 background: #f1f1f1;
                 color: #333;
@@ -160,6 +179,14 @@
             }
             .btn-edit:hover {
                 background: #d2e9fc;
+            }
+
+            .form-control:focus {
+                box-shadow: none;
+                border-color: #dee2e6;
+            }
+            .input-group-text, .form-control {
+                border-color: #dee2e6;
             }
 
             .empty-row td {
@@ -176,14 +203,20 @@
             <c:set var="activePage" value="voucher" scope="request" />
             <jsp:include page="sidebar.jsp" />
             <div class="main-content">
-                <div class="page-header d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-ticket-perforated" style="font-size:18px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Voucher Management</h3>
                     </div>
-                    <a href="${pageContext.request.contextPath}/create-voucher" class="btn-create">
-                        <i class="bi bi-plus-lg"></i> Create Voucher
-                    </a>
+                    <div class="d-flex align-items-center gap-3">
+                        <a href="${pageContext.request.contextPath}/create-voucher" class="btn-add">
+                            <i class="bi bi-plus-lg me-1"></i> Create Voucher
+                        </a>
+                        <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                            <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search by voucher code..." style="font-size: 13px;" onkeyup="searchTable()">
+                        </form>
+                    </div>
                 </div>
                 <div class="table-card">
                     <table class="user-table">
@@ -252,6 +285,29 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            function searchTable() {
+                var input = document.getElementById("searchInput");
+                var filter = input.value.trim().toLowerCase();
+                var tableBody = document.querySelector(".user-table tbody");
+                var tr = tableBody.getElementsByTagName("tr");
+
+                for (var i = 0; i < tr.length; i++) {
+                    if (tr[i].classList.contains('empty-row')) continue;
+                    
+                    var tdCode = tr[i].getElementsByTagName("td")[1];
+                    
+                    if (tdCode) {
+                        var codeText = tdCode.textContent || tdCode.innerText;
+                        
+                        if (codeText.toLowerCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+
             function confirmDelete(id) {
                 if (confirm('Are you sure you want to delete this voucher? This will change status to INACTIVE.')) {
                     window.location.href = '${pageContext.request.contextPath}/manage-voucher/delete?id=' + id;

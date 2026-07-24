@@ -23,7 +23,8 @@ public class UpdateOrderStatusServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
 
-        if (currentUser == null || (!"Admin".equalsIgnoreCase(currentUser.getRoleName()) && !"Staff".equalsIgnoreCase(currentUser.getRoleName()))) {
+        if (currentUser == null || (!"Admin".equalsIgnoreCase(currentUser.getRoleName())
+                && !"Staff".equalsIgnoreCase(currentUser.getRoleName()))) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -34,28 +35,55 @@ public class UpdateOrderStatusServlet extends HttpServlet {
 
         if (orderId != null && !orderId.trim().isEmpty() && status != null && !status.trim().isEmpty()) {
             OrderDAO dao = new OrderDAO();
+            var summary = dao.getOrderSummaryById(orderId);
             boolean success = false;
-            
-            if ("cancelled".equalsIgnoreCase(status)) {
-                success = dao.cancelOrderWithStockRestore(orderId);
-                if (success) {
-                    System.out.println("Order " + orderId + " cancelled by Admin/Staff " + currentUser.getId() + ". Reason: " + reason);
+
+            if (summary != null) {
+                String curStatus = summary.getStatus().toLowerCase();
+                boolean validTransition = false;
+
+                if ("cancelled".equalsIgnoreCase(status)) {
+                    if (!"completed".equals(curStatus) && !"cancelled".equals(curStatus)) {
+                        validTransition = true;
+                    }
+                } else if ("pending".equals(curStatus) && "confirmed".equalsIgnoreCase(status)) {
+                    validTransition = true;
+                } else if ("confirmed".equals(curStatus) && "shipping".equalsIgnoreCase(status)) {
+                    validTransition = true;
+                } else if ("shipping".equals(curStatus)
+                        && ("completed".equalsIgnoreCase(status) || "delivered".equalsIgnoreCase(status))) {
+                    validTransition = true;
+                }
+
+                if (validTransition) {
+                    if ("cancelled".equalsIgnoreCase(status)) {
+                        success = dao.cancelOrderWithStockRestore(orderId);
+                        if (success) {
+                            System.out.println("Order " + orderId + " cancelled by Admin/Staff " + currentUser.getId()
+                                    + ". Reason: " + reason);
+                        }
+                    } else {
+                        success = dao.updateOrderStatus(orderId, status);
+                    }
+
+                    if (success) {
+                        if ("Staff".equalsIgnoreCase(currentUser.getRoleName())) {
+                            OrderStaffLogDAO logDAO = new OrderStaffLogDAO();
+                            logDAO.insertLog(orderId, currentUser.getId(), "Updated status to " + status
+                                    + (reason != null ? " (Reason: " + reason + ")" : ""));
+                        }
+                        session.setAttribute("successMessage", "Order status updated successfully.");
+                    } else {
+                        session.setAttribute("errorMessage", "Failed to update order status.");
+                    }
+                } else {
+                    session.setAttribute("errorMessage", "Invalid status transition.");
                 }
             } else {
-                success = dao.updateOrderStatus(orderId, status);
-            }
-            
-            if (success) {
-                if ("Staff".equalsIgnoreCase(currentUser.getRoleName())) {
-                    OrderStaffLogDAO logDAO = new OrderStaffLogDAO();
-                    logDAO.insertLog(orderId, currentUser.getId(), "Updated status to " + status + (reason != null ? " (Reason: " + reason + ")" : ""));
-                }
-                session.setAttribute("successMessage", "Order status updated successfully.");
-            } else {
-                session.setAttribute("errorMessage", "Failed to update order status.");
+                session.setAttribute("errorMessage", "Order not found.");
             }
         }
-        
+
         response.sendRedirect(request.getContextPath() + "/staff/order/details?id=" + orderId);
     }
 }

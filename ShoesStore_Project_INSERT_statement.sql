@@ -129,9 +129,25 @@ INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT TOP 1 NEWID(), @orderVirtual2Id, id, 1, 190.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000002';
 
+-- Đơn hàng Pending cho Test User
+DECLARE @orderPending1Id UNIQUEIDENTIFIER = NEWID();
+INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "created_at") VALUES
+(@orderPending1Id, '99999999-9999-9999-9999-999999999999', '1A1A1A1A-1A1A-1A1A-1A1A-1A1A1A1A1A1A', 350.00, 'pending', SYSDATETIMEOFFSET());
+
+INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
+SELECT TOP 1 NEWID(), @orderPending1Id, id, 2, 175.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001';
+
+-- Đơn hàng Pending cho Virtual User 1
+DECLARE @orderPending2Id UNIQUEIDENTIFIER = NEWID();
+INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "created_at") VALUES
+(@orderPending2Id, '88888888-8888-8888-8888-888888888888', '2A2A2A2A-2A2A-2A2A-2A2A-2A2A2A2A2A2A', 220.00, 'pending', SYSDATETIMEOFFSET());
+
+INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
+SELECT TOP 1 NEWID(), @orderPending2Id, id, 2, 110.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000004';
+
 -- 11. Đánh giá ngẫu nhiên (Dummy Reviews)
 INSERT INTO "reviews" ("id", "user_id", "product_id", "rating", "comment", "created_at") VALUES
 (NEWID(), '88888888-8888-8888-8888-888888888888', '10000000-0000-0000-0000-000000000001', 5, N'Giày rất đẹp, chạy rất êm chân! Điểm 10 cho chất lượng.', SYSDATETIMEOFFSET()),
 (NEWID(), '77777777-7777-7777-7777-777777777777', '10000000-0000-0000-0000-000000000002', 4, N'Giao hàng nhanh, form giày hơi ôm nên mua tăng 1 size.', SYSDATETIMEOFFSET());
 
-PRINT 'Thêm dữ liệu mẫu hoàn tất!';
+PRINT 'Thêm dữ liệu mẫu hoàn tất!';

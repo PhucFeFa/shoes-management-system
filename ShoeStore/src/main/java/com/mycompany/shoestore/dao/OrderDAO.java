@@ -331,6 +331,11 @@ public class OrderDAO {
 
     public boolean cancelOrderWithTracking(String orderId, String userId, String reason) {
         String updateStatusSql = "UPDATE orders SET status = 'cancelled' WHERE id = ?";
+        String restoreStockSql = "UPDATE pv "
+                + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
+                + "FROM product_variants pv "
+                + "JOIN order_items oi ON pv.variant_id = oi.product_variant_id "
+                + "WHERE oi.order_id = ?";
 
         Connection conn = null;
         try {
@@ -346,8 +351,10 @@ public class OrderDAO {
                 }
             }
 
-            // Note: We no longer insert into order_cancellations as it doesn't exist
-            // If reason tracking is required in the future, add the table to DB
+            try ( PreparedStatement psRestore = conn.prepareStatement(restoreStockSql)) {
+                psRestore.setString(1, orderId);
+                psRestore.executeUpdate();
+            }
 
             conn.commit();
             return true;
@@ -396,7 +403,7 @@ public class OrderDAO {
             return false;
         }
         String status = summary.getStatus().toLowerCase();
-        if (status.equals("cancelled") || status.equals("completed") || status.equals("shipped") || status.equals("shipping") || status.equals("delivered")) {
+        if (status.equals("cancelled") || status.equals("completed") || status.equals("delivered")) {
             return false;
         }
 
