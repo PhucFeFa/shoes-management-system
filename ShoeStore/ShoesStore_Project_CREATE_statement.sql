@@ -23,12 +23,14 @@ CREATE TABLE "brands"(
 CREATE TABLE "vouchers"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     "code" NVARCHAR(50) NOT NULL,
-    "discount_percent" DECIMAL(5, 2) NOT NULL,
+    "discount_value" DECIMAL(18, 2) NOT NULL,
+    "min_order_amount" DECIMAL(18, 2) NOT NULL DEFAULT 0.00 CHECK ("min_order_amount" >= 0),
     "max_discount_amount" DECIMAL(18, 2) NULL,
     "start_date" DATETIMEOFFSET NOT NULL,
     "end_date" DATETIMEOFFSET NOT NULL,
     "quantity" INT NOT NULL,
     "used_quantity" INT NOT NULL DEFAULT 0,
+    "status" NVARCHAR(50) NOT NULL DEFAULT 'ACTIVE',
     PRIMARY KEY("id"),
     CONSTRAINT "vouchers_code_unique" UNIQUE("code")
 );
@@ -149,6 +151,8 @@ CREATE TABLE "orders"(
     "total_amount" DECIMAL(18, 2) NOT NULL, 
     "status" NVARCHAR(50) NOT NULL DEFAULT 'pending' CHECK ("status" IN('pending', 'confirmed', 'shipping', 'completed', 'cancelled')),
     "voucher_id" UNIQUEIDENTIFIER NULL,
+    "payment_method" NVARCHAR(50) NOT NULL DEFAULT 'cod' CHECK ("payment_method" IN('cod')),
+    "payment_status" NVARCHAR(50) NOT NULL DEFAULT 'pending' CHECK ("payment_status" IN('pending', 'paid', 'failed', 'refunded')),
     "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
     PRIMARY KEY("id"),
     CONSTRAINT "orders_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id"),
@@ -166,17 +170,6 @@ CREATE TABLE "order_items"(
     PRIMARY KEY("id"),
     CONSTRAINT "order_items_order_id_foreign" FOREIGN KEY("order_id") REFERENCES "orders"("id"),
     CONSTRAINT "order_items_product_variant_id_foreign" FOREIGN KEY("product_variant_id") REFERENCES "product_variants"("id")
-);
-
-CREATE TABLE "payments"(
-    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
-    "order_id" UNIQUEIDENTIFIER NOT NULL, 
-    "method" NVARCHAR(50) NOT NULL CHECK ("method" IN('cod', 'banking', 'momo', 'vnpay')),
-    "status" NVARCHAR(50) NOT NULL CHECK ("status" IN('pending', 'paid', 'failed', 'refunded')),
-    "amount" DECIMAL(18, 2) NOT NULL,
-    "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    PRIMARY KEY("id"),
-    CONSTRAINT "payments_order_id_foreign" FOREIGN KEY("order_id") REFERENCES "orders"("id")
 );
 
 CREATE TABLE "reviews"(

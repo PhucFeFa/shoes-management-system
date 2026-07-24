@@ -23,13 +23,13 @@ public class ToggleProductStatusServlet extends HttpServlet {
             boolean success = dao.toggleProductStatus(productId);
             
             if (success) {
-                request.getSession().setAttribute("successMsg", "Cập nhật trạng thái sản phẩm thành công!");
+                request.getSession().setAttribute("successMsg", "Update status product completed!");
             } else {
-                request.getSession().setAttribute("errorMsg", "Không thể cập nhật trạng thái.");
+                request.getSession().setAttribute("errorMsg", "Can not update product status!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMsg", "Lỗi xử lý hệ thống!");
+            request.getSession().setAttribute("errorMsg", "System error!");
         }
         
         response.sendRedirect(request.getContextPath() + "/admin/manage-products");
