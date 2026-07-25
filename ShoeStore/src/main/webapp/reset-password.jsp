@@ -29,7 +29,9 @@
                                 for="reset-password">New Password</label>
                             <input
                                 class="w-full bg-surface-container text-body-md font-body-md text-primary border border-transparent p-4 rounded-full focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow shadow-sm hover:shadow-md"
-                                id="reset-password" name="password" placeholder="••••••••" type="password" required />
+                                id="reset-password" name="password" placeholder="••••••••" type="password" required
+                                minlength="6" pattern="(?=.*\d)(?=.*[A-Z]).{6,}" title="Must contain at least one uppercase letter and one number" />
+                            <p class="font-label-sm text-label-sm text-secondary mt-1 ml-4">Min 6 chars, 1 uppercase, 1 number.</p>
                         </div>
                         <div class="flex flex-col space-y-2">
                             <label class="text-label-sm font-label-sm uppercase text-secondary ml-4"
@@ -37,7 +39,7 @@
                             <input
                                 class="w-full bg-surface-container text-body-md font-body-md text-primary border border-transparent p-4 rounded-full focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow shadow-sm hover:shadow-md"
                                 id="reset-confirm" name="confirmPassword" placeholder="••••••••" type="password"
-                                required />
+                                required minlength="6" />
                         </div>
                         <button
                             class="w-full bg-primary text-on-primary py-4 mt-2 rounded-full text-label-md font-label-md uppercase tracking-widest hover:bg-primary/90 transition-all shadow-md hover:shadow-lg flex justify-center items-center group font-bold"
@@ -54,4 +56,14 @@
                 </div>
             </div>
         </div>
+        <script>
+            document.getElementById('form-reset').addEventListener('submit', function (e) {
+                const pass = document.getElementById('reset-password').value;
+                const confirm = document.getElementById('reset-confirm').value;
+                if (pass !== confirm) {
+                    e.preventDefault();
+                    alert("Passwords do not match!");
+                }
+            });
+        </script>
         <jsp:include page="/WEB-INF/include/footer.jsp" />

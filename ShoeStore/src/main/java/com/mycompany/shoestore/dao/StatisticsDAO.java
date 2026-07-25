@@ -131,7 +131,7 @@ public class StatisticsDAO {
                      "        RANK() OVER (PARTITION BY YEAR(o.created_at), MONTH(o.created_at) ORDER BY SUM(oi.quantity) DESC) as Rank " +
                      "    FROM order_items oi " +
                      "    JOIN orders o ON oi.order_id = o.id " +
-                     "    JOIN product_variants pv ON oi.product_variant_id = pv.variant_id " +
+                     "    JOIN product_variants pv ON oi.product_variant_id = pv.id " +
                      "    JOIN products p ON pv.product_id = p.id " +
                      "    WHERE o.status = 'completed' " +
                      "    GROUP BY YEAR(o.created_at), MONTH(o.created_at), p.name, pv.size, pv.color " +

@@ -74,7 +74,7 @@
 
                                 <div class="flex gap-4 border-b pb-5">
 
-                                    <img src="${item.imageUrl}"
+                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${item.imageUrl}"
                                          alt="${item.productName}"
                                          class="w-24 h-24 object-cover rounded-lg border">
 
@@ -353,4 +353,6 @@
 </main>
 
 <jsp:include page="/WEB-INF/include/footer.jsp"/>
+
+
 

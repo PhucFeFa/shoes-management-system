@@ -1,4 +1,4 @@
--- 1. Các bảng độc lập (không có khóa ngoại hoặc chỉ tham chiếu bảng đã tạo)
+-- 1. Independent tables (no foreign keys or only reference already-created tables)
 CREATE TABLE "roles"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
     "name" NVARCHAR(50) NOT NULL,
@@ -35,7 +35,19 @@ CREATE TABLE "vouchers"(
     CONSTRAINT "vouchers_code_unique" UNIQUE("code")
 );
 
--- 2. Bảng users (phụ thuộc roles)
+-- 2. staffs table (independent — staff are separate from regular users)
+CREATE TABLE "staffs"(
+    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
+    "email" NVARCHAR(255) NOT NULL, 
+    "password_hash" NVARCHAR(MAX) NOT NULL, 
+    "full_name" NVARCHAR(255) NULL,
+    "status" NVARCHAR(50) NOT NULL DEFAULT 'Active',
+    "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    PRIMARY KEY("id"),
+    CONSTRAINT "staffs_email_unique" UNIQUE("email")
+);
+
+-- 3. users table (depends on roles)
 CREATE TABLE "users"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "email" NVARCHAR(255) NOT NULL, 
@@ -49,7 +61,7 @@ CREATE TABLE "users"(
     CONSTRAINT "users_role_id_foreign" FOREIGN KEY("role_id") REFERENCES "roles"("id")
 );
 
--- 3. Bảng addresses (phụ thuộc users)
+-- 4. addresses table (depends on users)
 CREATE TABLE "addresses"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "user_id" UNIQUEIDENTIFIER NOT NULL, 
@@ -61,7 +73,7 @@ CREATE TABLE "addresses"(
     CONSTRAINT "addresses_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id")
 );
 
--- 4. Bảng products (phụ thuộc categories, brands)
+-- 5. products tables (depend on categories, brands)
 CREATE TABLE "products"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "name" NVARCHAR(255) NOT NULL, 
@@ -81,7 +93,7 @@ CREATE TABLE "product_variants"(
     "product_id" UNIQUEIDENTIFIER NOT NULL, 
     "size" NVARCHAR(50) NOT NULL, 
     "color" NVARCHAR(50) NOT NULL, 
-    "stock_quantity" INT NOT NULL, 
+    "stock_quantity" INT NOT NULL DEFAULT 0, 
     "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
     PRIMARY KEY("id"),
     CONSTRAINT "product_variants_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "products"("id")
@@ -97,53 +109,47 @@ CREATE TABLE "product_images"(
     CONSTRAINT "product_images_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "products"("id")
 );
 
--- 5. Bảng imports (phụ thuộc users)
+-- 6. imports tables (StaffID references staffs, VariantID references product_variants)
 CREATE TABLE "imports"(
     "ImportID" INT IDENTITY(1,1) NOT NULL,
     "Supplier" NVARCHAR(255) NOT NULL,
-    "UserID" UNIQUEIDENTIFIER NOT NULL,
+    "StaffID" UNIQUEIDENTIFIER NOT NULL,
     "OrderDate" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
     "TotalAmount" DECIMAL(18, 2) NOT NULL DEFAULT 0.00,
-    "Status" NVARCHAR(50) NOT NULL DEFAULT 'pending', 
+    "Status" NVARCHAR(50) NOT NULL DEFAULT 'REQUESTING', 
     "Note" NVARCHAR(MAX) NULL,
     PRIMARY KEY("ImportID"),
-    CONSTRAINT "imports_user_id_foreign" FOREIGN KEY("UserID") REFERENCES "users"("id")
+    CONSTRAINT "imports_staff_id_foreign" FOREIGN KEY("StaffID") REFERENCES "staffs"("id")
 );
 
 CREATE TABLE "import_details"(
     "ImportDetailID" INT IDENTITY(1,1) NOT NULL,
     "ImportID" INT NOT NULL,
-    "ProductID" UNIQUEIDENTIFIER NOT NULL,
+    "VariantID" UNIQUEIDENTIFIER NOT NULL,
     "ImportQuantity" INT NOT NULL CHECK ("ImportQuantity" > 0),
     "ReceivedQuantity" INT NOT NULL DEFAULT 0 CHECK ("ReceivedQuantity" >= 0),
     "UnitPrice" DECIMAL(18, 2) NOT NULL CHECK ("UnitPrice" >= 0),
     PRIMARY KEY("ImportDetailID"),
     CONSTRAINT "chk_received_quantity_logic" CHECK ("ReceivedQuantity" <= "ImportQuantity"),
     CONSTRAINT "import_details_import_id_foreign" FOREIGN KEY("ImportID") REFERENCES "imports"("ImportID"),
-    CONSTRAINT "import_details_product_id_foreign" FOREIGN KEY("ProductID") REFERENCES "products"("id")
+    CONSTRAINT "import_details_variant_id_foreign" FOREIGN KEY("VariantID") REFERENCES "product_variants"("id")
 );
 
--- 6. Bảng giao dịch (carts, orders, reviews, payments)
+-- 7. carts table (flat structure: one row per user+variant, matches CartDAO)
+--    No separate cart_items table — product_variant_id and quantity are directly on carts
 CREATE TABLE "carts"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "user_id" UNIQUEIDENTIFIER NOT NULL, 
+    "product_variant_id" UNIQUEIDENTIFIER NOT NULL,
+    "quantity" INT NOT NULL DEFAULT 1,
     "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
     PRIMARY KEY("id"),
-    CONSTRAINT "carts_user_id_unique" UNIQUE("user_id"),
-    CONSTRAINT "carts_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id")
+    CONSTRAINT "carts_user_variant_unique" UNIQUE("user_id", "product_variant_id"),
+    CONSTRAINT "carts_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id"),
+    CONSTRAINT "carts_product_variant_id_foreign" FOREIGN KEY("product_variant_id") REFERENCES "product_variants"("id")
 );
 
-CREATE TABLE "cart_items"(
-    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
-    "cart_id" UNIQUEIDENTIFIER NOT NULL, 
-    "product_variant_id" UNIQUEIDENTIFIER NOT NULL, 
-    "quantity" INT NOT NULL DEFAULT 1, 
-    "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
-    PRIMARY KEY("id"),
-    CONSTRAINT "cart_items_cart_id_foreign" FOREIGN KEY("cart_id") REFERENCES "carts"("id"),
-    CONSTRAINT "cart_items_product_variant_id_foreign" FOREIGN KEY("product_variant_id") REFERENCES "product_variants"("id")
-);
-
+-- 8. orders tables
 CREATE TABLE "orders"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "user_id" UNIQUEIDENTIFIER NOT NULL, 
@@ -172,6 +178,18 @@ CREATE TABLE "order_items"(
     CONSTRAINT "order_items_product_variant_id_foreign" FOREIGN KEY("product_variant_id") REFERENCES "product_variants"("id")
 );
 
+CREATE TABLE "order_staff_logs"(
+    "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    "order_id" UNIQUEIDENTIFIER NOT NULL,
+    "staff_id" UNIQUEIDENTIFIER NOT NULL,
+    "action" NVARCHAR(255) NOT NULL,
+    "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    PRIMARY KEY("id"),
+    CONSTRAINT "order_staff_logs_order_id_foreign" FOREIGN KEY("order_id") REFERENCES "orders"("id"),
+    CONSTRAINT "order_staff_logs_staff_id_foreign" FOREIGN KEY("staff_id") REFERENCES "staffs"("id")
+);
+
+-- 9. reviews table
 CREATE TABLE "reviews"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "user_id" UNIQUEIDENTIFIER NOT NULL, 
@@ -182,7 +200,13 @@ CREATE TABLE "reviews"(
     "updated_at" DATETIMEOFFSET NULL,
     "is_updated" BIT NOT NULL DEFAULT 0,
     "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    "moderation_status" NVARCHAR(50) DEFAULT 'VISIBLE',
+    "hide_reason" NVARCHAR(MAX) NULL,
+    "reply_comment" NVARCHAR(MAX) NULL,
+    "replied_by" UNIQUEIDENTIFIER NULL,
+    "reply_updated_at" DATETIMEOFFSET NULL,
     PRIMARY KEY("id"),
     CONSTRAINT "reviews_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id"),
-    CONSTRAINT "reviews_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "products"("id")
+    CONSTRAINT "reviews_product_id_foreign" FOREIGN KEY("product_id") REFERENCES "products"("id"),
+    CONSTRAINT "reviews_replied_by_foreign" FOREIGN KEY("replied_by") REFERENCES "staffs"("id")
 );

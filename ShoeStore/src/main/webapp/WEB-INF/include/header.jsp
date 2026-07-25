@@ -131,7 +131,7 @@
         <body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary">
 
             <!-- TopNavBar -->
-            <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl">
+            <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
                 <nav
                     class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full max-w-container-max mx-auto">
                     <div class="flex items-center gap-8">
@@ -203,7 +203,7 @@
                 <div id="cartModal"
                     class="fixed inset-0 bg-primary/50 backdrop-blur-sm flex items-center justify-center z-[100]">
                     <div
-                        class="bg-surface rounded-none border border-outline-variant shadow-2xl p-8 w-96 text-center transform transition-all">
+                        class="bg-surface rounded-2xl border border-outline-variant shadow-2xl p-8 w-96 text-center transform transition-all">
                         <span class="material-symbols-outlined text-[48px] text-primary mb-4">check_circle</span>
                         <h2 class="text-headline-md font-headline-md text-primary uppercase tracking-wider mb-2">
                             Success

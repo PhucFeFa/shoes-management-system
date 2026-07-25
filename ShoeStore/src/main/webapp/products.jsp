@@ -34,7 +34,7 @@
                                     SEARCH</h3>
                                 <div class="relative">
                                     <input type="text" name="search" value="${searchQuery}" placeholder="Search..."
-                                        class="w-full bg-surface-container text-label-sm text-primary border-none py-2 px-3 rounded-none focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
+                                        class="w-full bg-surface-container text-label-sm text-primary border-none py-2 px-3 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
                                     <span
                                         class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
                                 </div>
@@ -49,7 +49,7 @@
                                     <c:forEach var="cat" items="${categories}">
                                         <label class="flex items-center space-x-3 cursor-pointer group">
                                             <input type="checkbox" name="category" value="${cat.id}"
-                                                class="w-5 h-5 border-2 border-outline rounded-none text-primary focus:ring-primary focus:ring-offset-0 transition-colors"
+                                                class="w-4 h-4 border-2 border-outline rounded text-primary focus:ring-primary focus:ring-offset-0 transition-colors"
                                                 ${selectedCategories !=null && selectedCategories.contains(cat.id)
                                                 ? 'checked' : '' }>
                                             <span
@@ -68,7 +68,7 @@
                                     <c:forEach var="brand" items="${brands}">
                                         <label class="flex items-center space-x-3 cursor-pointer group">
                                             <input type="checkbox" name="brand" value="${brand.id}"
-                                                class="w-5 h-5 border-2 border-outline rounded-none text-primary focus:ring-primary focus:ring-offset-0 transition-colors"
+                                                class="w-4 h-4 border-2 border-outline rounded text-primary focus:ring-primary focus:ring-offset-0 transition-colors"
                                                 ${selectedBrands !=null && selectedBrands.contains(brand.id) ? 'checked'
                                                 : '' }>
                                             <span
@@ -86,22 +86,22 @@
                                 <div class="flex items-center space-x-4">
                                     <input type="number" name="minPrice" value="${minPrice}" placeholder="Min" min="0"
                                         step="0.01"
-                                        class="w-full bg-surface-container text-body-md text-primary border-none p-2 rounded-none focus:ring-2 focus:ring-primary focus:outline-none">
+                                        class="w-full bg-surface-container text-body-md text-primary border-none p-2 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none">
                                     <span class="text-secondary">-</span>
                                     <input type="number" name="maxPrice" value="${maxPrice}" placeholder="Max" min="0"
                                         step="0.01"
-                                        class="w-full bg-surface-container text-body-md text-primary border-none p-2 rounded-none focus:ring-2 focus:ring-primary focus:outline-none">
+                                        class="w-full bg-surface-container text-body-md text-primary border-none p-2 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none">
                                 </div>
                             </div>
 
                             <!-- Action Buttons -->
                             <div class="flex flex-col space-y-3 pt-4">
                                 <button type="submit"
-                                    class="w-full bg-primary text-on-primary py-4 text-label-md font-label-md uppercase tracking-widest hover:bg-primary/90 transition-colors">
+                                    class="w-full bg-primary text-on-primary py-4 text-label-md font-label-md uppercase tracking-widest hover:bg-primary/90 transition-colors rounded-full">
                                     APPLY FILTERS
                                 </button>
                                 <a href="${pageContext.request.contextPath}/products"
-                                    class="w-full bg-transparent text-secondary py-3 text-center text-label-sm font-label-sm uppercase tracking-widest hover:text-primary transition-colors border border-outline-variant">
+                                    class="w-full bg-transparent text-secondary py-3 text-center text-label-sm font-label-sm uppercase tracking-widest hover:text-primary transition-colors border border-outline-variant rounded-full">
                                     CLEAR ALL
                                 </a>
                             </div>
@@ -114,7 +114,7 @@
                         <c:choose>
                             <c:when test="${empty products}">
                                 <div
-                                    class="flex flex-col items-center justify-center py-20 px-4 text-center bg-surface-container-low border border-surface-variant">
+                                    class="flex flex-col items-center justify-center py-20 px-4 text-center bg-surface-container-low border border-surface-variant rounded-2xl">
                                     <span
                                         class="material-symbols-outlined text-[64px] text-secondary mb-4">inventory_2</span>
                                     <h2 class="text-headline-md font-headline-md text-primary mb-2">No Products Found
@@ -122,7 +122,7 @@
                                     <p class="text-body-md text-secondary">Try adjusting your filters or search query to
                                         find what you're looking for.</p>
                                     <a href="${pageContext.request.contextPath}/products"
-                                        class="mt-6 border-b-2 border-primary text-label-md font-label-md uppercase text-primary pb-1 hover:opacity-80">
+                                        class="mt-6 bg-primary text-on-primary px-6 py-3 text-label-md font-label-md uppercase rounded-full hover:opacity-80 transition-all">
                                         Clear Filters
                                     </a>
                                 </div>
@@ -132,22 +132,18 @@
                                     class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
                                     <c:forEach var="p" items="${products}">
                                         <div
-                                            class="group flex flex-col relative bg-surface hover:bg-surface-container transition-colors duration-300">
+                                            class="group flex flex-col relative bg-surface hover:bg-surface-container transition-colors duration-300 rounded-2xl overflow-hidden shadow-sm hover:shadow-md">
 
                                             <!-- Product Image -->
                                             <a href="${pageContext.request.contextPath}/ProductDetail?id=${p.id}"
-                                                class="relative aspect-square overflow-hidden bg-surface-container-high block">
+                                                class="relative aspect-square overflow-hidden bg-surface-container-high block rounded-t-2xl">
                                                 <c:choose>
                                                     <c:when test="${not empty p.firstImageUrl}">
-                                                        <img src="${p.firstImageUrl}" alt="${p.name}"
+                                                        <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${p.firstImageUrl}" alt="${p.name}"
                                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <div
-                                                            class="w-full h-full flex items-center justify-center text-secondary">
-                                                            <span
-                                                                class="material-symbols-outlined text-4xl">image_not_supported</span>
-                                                        </div>
+                                                        <img src="${pageContext.request.contextPath}/assets/fallback.png" alt="${p.name}" class="w-full h-full object-cover">
                                                     </c:otherwise>
                                                 </c:choose>
                                             </a>
@@ -171,9 +167,9 @@
                                                     <c:choose>
                                                         <c:when test="${p.reviewCount > 0}">
                                                             <div
-                                                                class="relative inline-block text-gray-300 text-sm mr-1 whitespace-nowrap">
+                                                                class="relative inline-block text-outline-variant text-sm mr-1 whitespace-nowrap">
                                                                 ★★★★★
-                                                                <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap"
+                                                                <div class="absolute top-0 left-0 overflow-hidden text-primary whitespace-nowrap"
                                                                     style="width: ${p.averageRating / 5 * 100}%;">
                                                                     ★★★★★
                                                                 </div>
@@ -182,7 +178,7 @@
                                                                 class="text-label-sm text-secondary">(${p.reviewCount})</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <div class="text-gray-300 text-sm mr-1">★★★★★</div>
+                                                            <div class="text-outline-variant text-sm mr-1">★★★★★</div>
                                                             <span class="text-label-sm text-secondary">No reviews</span>
                                                         </c:otherwise>
                                                     </c:choose>
@@ -198,21 +194,21 @@
                                     <div class="mt-12 flex justify-center items-center space-x-2">
                                         <c:if test="${currentPage > 1}">
                                             <button onclick="goToPage(${currentPage - 1})"
-                                                class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
+                                                class="w-10 h-10 flex items-center justify-center border border-outline rounded-full hover:border-primary hover:text-primary transition-colors">
                                                 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                                             </button>
                                         </c:if>
 
                                         <c:forEach begin="1" end="${totalPages}" var="i">
                                             <button onclick="goToPage(${i})"
-                                                class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
+                                                class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors rounded-full ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
                                                 ${i}
                                             </button>
                                         </c:forEach>
 
                                         <c:if test="${currentPage < totalPages}">
                                             <button onclick="goToPage(${currentPage + 1})"
-                                                class="w-10 h-10 flex items-center justify-center border border-outline hover:border-primary hover:text-primary transition-colors">
+                                                class="w-10 h-10 flex items-center justify-center border border-outline rounded-full hover:border-primary hover:text-primary transition-colors">
                                                 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                                             </button>
                                         </c:if>
@@ -230,17 +226,7 @@
                     document.getElementById('pageInput').value = page;
                     document.getElementById('filterForm').submit();
                 }
-
-                // Optional: Auto-submit form on checkbox change (for real-time filtering without clicking apply)
-                // Uncomment if requested by client. Currently, it requires hitting 'APPLY FILTERS' for better UX on mobile.
-                /*
-                document.querySelectorAll('#filterForm input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        document.getElementById('pageInput').value = 1; // reset page on filter change
-                        document.getElementById('filterForm').submit();
-                    });
-                });
-                */
             </script>
 
             <jsp:include page="/WEB-INF/include/footer.jsp" />
+

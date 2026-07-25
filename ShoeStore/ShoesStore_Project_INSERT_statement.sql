@@ -4,7 +4,6 @@ DELETE FROM "order_items";
 DELETE FROM "orders";
 DELETE FROM "import_details";
 DELETE FROM "imports";
-DELETE FROM "cart_items";
 DELETE FROM "carts";
 DELETE FROM "reviews";
 DELETE FROM "addresses";
@@ -13,6 +12,7 @@ DELETE FROM "product_variants";
 DELETE FROM "products";
 DELETE FROM "vouchers";
 DELETE FROM "users";
+DELETE FROM "staffs";
 DELETE FROM "roles";
 DELETE FROM "categories";
 DELETE FROM "brands";
@@ -26,12 +26,16 @@ INSERT INTO "roles" ("id", "name") VALUES
 ('11111111-1111-1111-1111-111111111111', 'Admin'),
 ('22222222-2222-2222-2222-222222222222', 'Customer');
 
--- 2. Users
+-- 2. Staffs
+INSERT INTO "staffs" ("id", "email", "password_hash", "full_name") VALUES 
+('EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', 'staff@solelab.com', '123456', 'Staff SoleLab');
+
+-- 3. Users
 INSERT INTO "users" ("id", "email", "password_hash", "role_id", "full_name") VALUES 
 ('99999999-9999-9999-9999-999999999999', 'test@solelab.com', '123456', '22222222-2222-2222-2222-222222222222', 'Test User'),
 ('00000000-0000-0000-0000-000000000001', 'admin@solelab.com', '123456', '11111111-1111-1111-1111-111111111111', 'Admin SoleLab');
 
--- 3. Categories & Brands
+-- 4. Categories & Brands
 INSERT INTO "categories" ("id", "name") VALUES 
 ('11111111-1111-1111-1111-111111111111', 'Running'),
 ('22222222-2222-2222-2222-222222222222', 'Basketball'),
@@ -44,12 +48,12 @@ INSERT INTO "brands" ("id", "name") VALUES
 ('CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC', 'Puma'),
 ('DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'New Balance');
 
--- 4. Vouchers
+-- 5. Vouchers
 INSERT INTO "vouchers" ("id", "code", "discount_value", "min_order_amount", "max_discount_amount", "start_date", "end_date", "quantity", "status") VALUES
 ('77777777-7777-7777-7777-777777777777', 'WELCOME20', 20.00, 0.00, 50000.00, '2023-01-01', '2030-12-31', 1000, 'ACTIVE'),
 ('88888888-8888-8888-8888-888888888888', 'MINUS50K', 50000.00, 0.00, NULL, '2023-01-01', '2030-12-31', 1000, 'ACTIVE');
 
--- 5. Products
+-- 6. Products
 INSERT INTO "products" ("id", "name", "description", "price", "category_id", "brand_id", "status") VALUES 
 ('10000000-0000-0000-0000-000000000001', 'Air Max Pulse', 'Giày chạy bộ nam với đệm Air Max.', 160.00, '11111111-1111-1111-1111-111111111111', 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'active'),
 ('10000000-0000-0000-0000-000000000002', 'Ultraboost Light', 'Giày chạy bộ siêu nhẹ, êm ái.', 190.00, '11111111-1111-1111-1111-111111111111', 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'active'),
@@ -76,9 +80,11 @@ INSERT INTO "products" ("id", "name", "description", "price", "category_id", "br
 ('10000000-0000-0000-0000-000000000023', 'Dummy Product 23', 'Giày mẫu số 23.', 123.00, '33333333-3333-3333-3333-333333333333', 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC', 'active'),
 ('10000000-0000-0000-0000-000000000024', 'Dummy Product 24', 'Giày mẫu số 24.', 124.00, '44444444-4444-4444-4444-444444444444', 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'active');
 
--- 6. Product Variants
+-- 7. Product Variants
 INSERT INTO "product_variants" ("id", "product_id", "size", "color", "stock_quantity", "created_at") VALUES
 (NEWID(), '10000000-0000-0000-0000-000000000001', '39', 'Black', 50, SYSDATETIMEOFFSET()),
+(NEWID(), '10000000-0000-0000-0000-000000000001', '40', 'Black', 50, SYSDATETIMEOFFSET()),
+(NEWID(), '10000000-0000-0000-0000-000000000001', '40', 'White', 20, SYSDATETIMEOFFSET()),
 (NEWID(), '10000000-0000-0000-0000-000000000002', '40', 'Black', 50, SYSDATETIMEOFFSET()),
 (NEWID(), '10000000-0000-0000-0000-000000000003', '41', 'White', 30, SYSDATETIMEOFFSET()),
 (NEWID(), '10000000-0000-0000-0000-000000000004', '42', 'Red', 20, SYSDATETIMEOFFSET()),
@@ -103,7 +109,7 @@ INSERT INTO "product_variants" ("id", "product_id", "size", "color", "stock_quan
 (NEWID(), '10000000-0000-0000-0000-000000000023', '42', 'Blue', 50, SYSDATETIMEOFFSET()),
 (NEWID(), '10000000-0000-0000-0000-000000000024', '43', 'Red', 50, SYSDATETIMEOFFSET());
 
--- 7. Product Images
+-- 8. Product Images
 INSERT INTO "product_images" ("id", "product_id", "image_url", "sort_order") VALUES 
 (NEWID(), '10000000-0000-0000-0000-000000000001', 'https://static.nike.com/a/images/t_default/f12eb6bc-26ee-4eb3-81a1-f3b1456d2cf9/air-max-pulse-mens-shoes-2bZSZV.png', 1),
 (NEWID(), '10000000-0000-0000-0000-000000000002', 'https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/c6c39e0bd58249fcab17af430113c2f0_9366/Ultraboost_Light_Running_Shoes_White_HQ6339_01_standard.jpg', 1),
@@ -130,31 +136,33 @@ INSERT INTO "product_images" ("id", "product_id", "image_url", "sort_order") VAL
 (NEWID(), '10000000-0000-0000-0000-000000000023', 'https://via.placeholder.com/600x600.png?text=Shoe+23', 1),
 (NEWID(), '10000000-0000-0000-0000-000000000024', 'https://via.placeholder.com/600x600.png?text=Shoe+24', 1);
 
--- 8. Imports & Details
-INSERT INTO "imports" ("Supplier", "UserID", "TotalAmount", "Status", "Note") VALUES
-(N'Nhà phân phối Nike VN', '00000000-0000-0000-0000-000000000001', 7400.00, 'completed', N'Hàng nhập đợt 1');
+-- 9. Imports & Details
+INSERT INTO "imports" ("Supplier", "StaffID", "TotalAmount", "Status", "Note") VALUES
+(N'Nhà phân phối Nike VN', 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', 7400.00, 'completed', N'Hàng nhập đợt 1');
 
 DECLARE @CurrentImportID INT;
 SET @CurrentImportID = SCOPE_IDENTITY();
 
-INSERT INTO "import_details" ("ImportID", "ProductID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") VALUES
-(@CurrentImportID, '10000000-0000-0000-0000-000000000001', 50, 50, 100.00), 
-(@CurrentImportID, '10000000-0000-0000-0000-000000000001', 30, 30, 80.00);
+INSERT INTO "import_details" ("ImportID", "VariantID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") 
+SELECT TOP 1 @CurrentImportID, id, 50, 50, 100.00 FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001' AND size = '39';
 
--- 8.2. Chèn đơn nhập hàng thứ 2 (Adidas)
-INSERT INTO "imports" ("Supplier", "UserID", "TotalAmount", "Status", "Note") VALUES
-(N'Tổng kho Adidas VN', '00000000-0000-0000-0000-000000000001', 3600.00, 'shipping', N'Hàng đang đi trên đường');
+INSERT INTO "import_details" ("ImportID", "VariantID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") 
+SELECT TOP 1 @CurrentImportID, id, 30, 30, 80.00 FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001' AND size = '40' AND color = 'White';
+
+-- 9.2. Chèn đơn nhập hàng thứ 2 (Adidas)
+INSERT INTO "imports" ("Supplier", "StaffID", "TotalAmount", "Status", "Note") VALUES
+(N'Tổng kho Adidas VN', 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE', 3600.00, 'shipping', N'Hàng đang đi trên đường');
 
 SET @CurrentImportID = SCOPE_IDENTITY();
 
-INSERT INTO "import_details" ("ImportID", "ProductID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") VALUES
-(@CurrentImportID, '10000000-0000-0000-0000-000000000001', 30, 0, 120.00);
+INSERT INTO "import_details" ("ImportID", "VariantID", "ImportQuantity", "ReceivedQuantity", "UnitPrice") 
+SELECT TOP 1 @CurrentImportID, id, 30, 0, 120.00 FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001';
 
 -- ====================================================================
 -- BƯỚC 3: DỮ LIỆU MẪU CHO REVIEW VÀ ĐƠN HÀNG (Dành cho Test)
 -- ====================================================================
 
--- 9. Khách hàng ảo (Virtual Users) và Địa chỉ (Addresses)
+-- 10. Khách hàng ảo (Virtual Users) và Địa chỉ (Addresses)
 INSERT INTO "users" ("id", "email", "password_hash", "role_id", "full_name") VALUES 
 ('88888888-8888-8888-8888-888888888888', 'virtual1@solelab.com', '123456', '22222222-2222-2222-2222-222222222222', N'Nguyễn Văn Ảo'),
 ('77777777-7777-7777-7777-777777777777', 'virtual2@solelab.com', '123456', '22222222-2222-2222-2222-222222222222', N'Trần Thị Giả');
@@ -164,7 +172,7 @@ INSERT INTO "addresses" ("id", "user_id", "city", "district", "ward", "address_l
 ('2A2A2A2A-2A2A-2A2A-2A2A-2A2A2A2A2A2A', '88888888-8888-8888-8888-888888888888', N'TP HCM', N'Quận 1', N'Bến Nghé', N'Đường Lê Duẩn'),
 ('3A3A3A3A-3A3A-3A3A-3A3A-3A3A3A3A3A3A', '77777777-7777-7777-7777-777777777777', N'Đà Nẵng', N'Hải Châu', N'Hải Châu 1', N'Đường Bạch Đằng');
 
--- 10. Orders & Order Items
+-- 11. Orders & Order Items
 -- Đơn hàng hoàn thành cho Test User (Mua TẤT CẢ 4 sản phẩm để test Review)
 DECLARE @orderTestId UNIQUEIDENTIFIER = NEWID();
 INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
@@ -205,7 +213,7 @@ INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT TOP 1 NEWID(), @orderPending2Id, id, 2, 110.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000004';
 
--- 11. Đánh giá ngẫu nhiên (Dummy Reviews)
+-- 12. Đánh giá ngẫu nhiên (Dummy Reviews)
 INSERT INTO "reviews" ("id", "user_id", "product_id", "rating", "comment", "created_at") VALUES
 (NEWID(), '88888888-8888-8888-8888-888888888888', '10000000-0000-0000-0000-000000000001', 5, N'Giày rất đẹp, chạy rất êm chân! Điểm 10 cho chất lượng.', SYSDATETIMEOFFSET()),
 (NEWID(), '77777777-7777-7777-7777-777777777777', '10000000-0000-0000-0000-000000000002', 4, N'Giao hàng nhanh, form giày hơi ôm nên mua tăng 1 size.', SYSDATETIMEOFFSET());

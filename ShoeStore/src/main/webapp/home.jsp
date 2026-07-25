@@ -1,4 +1,4 @@
-<%-- Author: PhucLHCE191132 --%>
+
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <%@ page contentType="text/html" pageEncoding="UTF-8" %>
@@ -11,7 +11,7 @@
                         <section class="relative w-full overflow-hidden flex items-center min-h-[60vh] rounded-3xl group">
                             <div class="absolute inset-0 z-0 overflow-hidden rounded-3xl">
                                 <!-- Background Image -->
-                                <img alt="Runners"
+                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="Runners"
                                      class="w-full h-full object-cover object-center scale-105 transform group-hover:scale-100 transition-transform duration-1000"
                                      src="${pageContext.request.contextPath}/assets/hero_runner.avif" />
                                 <!-- Dark Overlay for Text Readability -->
@@ -23,7 +23,7 @@
                                     <h1 class="text-display-lg-mobile md:text-display-lg font-display-lg text-white mb-8 leading-[1.05]">
                                         DISCOVER<br />YOUR EDGE
                                     </h1>
-                                    <a href="${pageContext.request.contextPath}/products" class="inline-block bg-transparent border-2 border-white text-white px-10 py-5 text-label-md font-label-md uppercase tracking-wider hover:bg-white hover:text-black transition-all active:scale-95">
+                                    <a href="${pageContext.request.contextPath}/products" class="inline-block bg-transparent border-2 border-white text-white px-10 py-5 text-label-md font-label-md uppercase tracking-wider rounded-full hover:bg-white hover:text-black transition-all active:scale-95">
                                         SHOP NOW
                                     </a>
                                 </div>
@@ -55,19 +55,19 @@
                                 <div
                                     class="product-card group relative cursor-pointer transition-transform duration-500 hover:-translate-y-2">
                                     <div
-                                        class="bg-surface-container aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 relative">
+                                        class="bg-surface-container aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 relative rounded-2xl">
                                         <!-- Product Image -->
                                         <c:choose>
                                             <c:when test="${not empty product.firstImageUrl}">
                                                 <a
                                                     href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}">
-                                                    <img alt="${product.name}"
+                                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="${product.name}"
                                                         class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                                                         src="${product.firstImageUrl}" />
                                                 </a>
                                             </c:when>
                                             <c:otherwise>
-                                                <img alt="${product.name}"
+                                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="${product.name}"
                                                     class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                                                     src="https://via.placeholder.com/300?text=No+Image" />
                                             </c:otherwise>
@@ -78,7 +78,7 @@
                                     <div>
                                         <h3 class="text-label-md font-label-md font-bold uppercase mb-1">
                                             <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}"
-                                                class="hover:text-blue-600">
+                                                class="hover:text-primary">
                                                 ${product.name}
                                             </a>
                                         </h3>
@@ -87,9 +87,9 @@
                                             <c:choose>
                                                 <c:when test="${product.reviewCount > 0}">
                                                     <div
-                                                        class="relative inline-block text-gray-300 text-sm mr-1 whitespace-nowrap">
+                                                        class="relative inline-block text-outline-variant text-sm mr-1 whitespace-nowrap">
                                                         ★★★★★
-                                                        <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap"
+                                                        <div class="absolute top-0 left-0 overflow-hidden text-primary whitespace-nowrap"
                                                             style="width: ${product.averageRating / 5 * 100}%;">
                                                             ★★★★★
                                                         </div>
@@ -98,7 +98,7 @@
                                                         class="text-label-sm text-secondary">(${product.reviewCount})</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <div class="text-gray-300 text-sm mr-1">★★★★★</div>
+                                                    <div class="text-outline-variant text-sm mr-1">★★★★★</div>
                                                     <span class="text-label-sm text-secondary">No reviews</span>
                                                 </c:otherwise>
                                             </c:choose>
@@ -125,17 +125,18 @@
                                     engineer movement.
                                 </p>
                                 <a href="${pageContext.request.contextPath}/products"
-                                    class="inline-block bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap hover:opacity-90 transition-all">
+                                    class="inline-block bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap rounded-full hover:opacity-90 transition-all active:scale-95">
                                     DISCOVER MORE
                                 </a>
                             </div>
-                            <div class="relative aspect-video overflow-hidden group">
-                                <img alt="About ADIDIS"
+                            <div class="relative aspect-video overflow-hidden rounded-2xl group">
+                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="About ADIDIS"
                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    src="https://images.unsplash.com/photo-1556906781-9a412961c28c?q=80&w=1200&auto=format&fit=crop" />
+                                    src="${pageContext.request.contextPath}/assets/banner.png" />
                             </div>
                         </div>
                     </section>
                 </main>
 
                 <jsp:include page="/WEB-INF/include/footer.jsp" />
+

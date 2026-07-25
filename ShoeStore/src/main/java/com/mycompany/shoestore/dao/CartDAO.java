@@ -11,20 +11,19 @@ public class CartDAO {
     DBContext db = new DBContext();
 
     public String getDefaultVariantId(String productId) throws Exception {
-        String sql = "SELECT TOP 1 variant_id FROM product_variants WHERE product_id = ?";
-        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "SELECT TOP 1 id FROM product_variants WHERE product_id = ?";
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, productId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("variant_id");
+                return rs.getString("id");
             }
         }
         return null;
     }
 
-    // ADD TO CART
     public void addToCart(String userId, String variantId, int qty) throws Exception {
-        try ( Connection conn = db.getConnection()) {
+        try (Connection conn = db.getConnection()) {
             String check = "SELECT quantity FROM carts WHERE user_id = ? AND product_variant_id = ?";
             PreparedStatement ps = conn.prepareStatement(check);
             ps.setString(1, userId);
@@ -50,12 +49,12 @@ public class CartDAO {
     }
 
     public CartItem getCartItemByVariant(String userId, String variantId) throws Exception {
-        String sql = "SELECT p.name, p.price, pv.variant_id, pv.size, pv.color, pi.image_url, c.quantity "
+        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, pi.image_url, c.quantity "
                 + "FROM carts c "
-                + "JOIN product_variants pv ON c.product_variant_id = pv.variant_id "
+                + "JOIN product_variants pv ON c.product_variant_id = pv.id "
                 + "JOIN products p ON pv.product_id = p.id "
                 + "LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.sort_order = 1 "
-                + "WHERE c.user_id = ? AND pv.variant_id = ?";
+                + "WHERE c.user_id = ? AND pv.id = ?";
 
         try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
@@ -79,9 +78,9 @@ public class CartDAO {
     }
 
     public List<CartItem> getCart(String userId) throws Exception {
-        String sql = "SELECT p.name, p.price, pv.variant_id, pv.size, pv.color, pi.image_url, c.quantity " +
+        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, pi.image_url, c.quantity " +
                      "FROM carts c " +
-                     "JOIN product_variants pv ON c.product_variant_id = pv.variant_id " +
+                     "JOIN product_variants pv ON c.product_variant_id = pv.id " +
                      "JOIN products p ON pv.product_id = p.id " +
                      "LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.sort_order = 1 " +
                      "WHERE c.user_id = ?";
@@ -106,11 +105,9 @@ public class CartDAO {
         return list;
     }
 
-
-
     public void removeItem(String userId, String variantId) throws Exception {
         String sql = "DELETE FROM carts WHERE user_id = ? AND product_variant_id = ?";
-        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
             ps.setString(2, variantId);
             ps.executeUpdate();
@@ -119,7 +116,7 @@ public class CartDAO {
 
     public void increaseQuantity(String userId, String variantId) throws Exception {
         String sql = "UPDATE carts SET quantity = quantity + 1 WHERE user_id = ? AND product_variant_id = ?";
-        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
             ps.setString(2, variantId);
             ps.executeUpdate();
@@ -128,7 +125,7 @@ public class CartDAO {
 
     public void decreaseQuantity(String userId, String variantId) throws Exception {
         String update = "UPDATE carts SET quantity = quantity - 1 WHERE user_id = ? AND product_variant_id = ? AND quantity > 1";
-        try ( Connection conn = db.getConnection();  PreparedStatement ps = conn.prepareStatement(update)) {
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(update)) {
             ps.setString(1, userId);
             ps.setString(2, variantId);
             int rows = ps.executeUpdate();
@@ -147,7 +144,7 @@ public class CartDAO {
     }
 
     public int getVariantStock(String variantId) throws Exception {
-        String sql = "SELECT stock_quantity FROM product_variants WHERE variant_id = ?";
+        String sql = "SELECT stock_quantity FROM product_variants WHERE id = ?";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, variantId);
             ResultSet rs = ps.executeQuery();
@@ -159,7 +156,7 @@ public class CartDAO {
     }
 
     public void updateProductStock(String variantId, int quantity) throws Exception {
-        String sql = "UPDATE product_variants SET stock_quantity = stock_quantity - ? WHERE variant_id = ?";
+        String sql = "UPDATE product_variants SET stock_quantity = stock_quantity - ? WHERE id = ?";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, quantity);
             ps.setString(2, variantId);
@@ -168,7 +165,7 @@ public class CartDAO {
     }
 
     public boolean updateProductNegativeStock(String variantId, int quantity) throws Exception {
-        String sql = "UPDATE product_variants SET stock_quantity = stock_quantity - ? WHERE variant_id = ? AND stock_quantity >= ?";
+        String sql = "UPDATE product_variants SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, quantity);
             ps.setString(2, variantId);

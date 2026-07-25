@@ -34,191 +34,134 @@
             </style>
             <main class="pt-24 pb-24 min-h-screen bg-surface">
 
-                <div class="max-w-6xl mx-auto px-6">
+                <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
 
-                    <!-- Product Detail Card -->
-                    <div class="bg-white rounded-2xl shadow-lg border p-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 mb-16">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <!-- Product Image -->
+                        <div class="flex items-center justify-center bg-surface-container-high rounded-3xl p-12 self-start">
+                            <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${product.firstImageUrl}" alt="${product.name}"
+                                class="w-full h-auto object-contain mix-blend-multiply">
+                        </div>
 
-                            <!-- Product Image -->
-                            <div class="flex items-center justify-center">
-
-                                <img src="${product.firstImageUrl}" alt="${product.name}"
-                                    class="max-h-[500px] w-auto object-contain">
-
+                        <!-- Product Info -->
+                        <div class="flex flex-col py-8">
+                            
+                            <!-- Brand & Category -->
+                            <div class="mb-4 text-secondary text-label-md uppercase tracking-widest font-label-md">
+                                ${product.brand.name} • ${product.category.name}
                             </div>
 
-                            <!-- Product Info -->
-                            <div class="flex flex-col justify-center">
+                            <!-- Title -->
+                            <h1 class="text-display-lg-mobile md:text-display-lg font-display-lg font-bold uppercase text-primary tracking-tight leading-none mb-6">
+                                ${product.name}
+                            </h1>
 
-                                <h1 class="text-4xl font-bold uppercase mb-2">
-                                    ${product.name}
-                                </h1>
+                            <!-- Price -->
+                            <div class="text-headline-lg font-headline-lg font-bold text-primary mb-8">
+                                <fmt:formatNumber value="${product.price}" pattern="#,##0"/> đ
+                            </div>
 
-                                <c:choose>
-                                    <c:when test="${not empty reviews}">
-                                        <c:set var="totalRating" value="0" />
-                                        <c:forEach var="r" items="${reviews}">
-                                            <c:set var="totalRating" value="${totalRating + r.rating}" />
-                                        </c:forEach>
-                                        <c:set var="avgRating" value="${totalRating / reviews.size()}" />
-                                        <div class="flex items-center mb-6">
-                                            <div
-                                                class="relative inline-block text-gray-300 font-bold text-xl mr-2 whitespace-nowrap">
+                            <!-- Rating -->
+                            <c:choose>
+                                <c:when test="${not empty reviews}">
+                                    <c:set var="totalRating" value="0" />
+                                    <c:forEach var="r" items="${reviews}">
+                                        <c:set var="totalRating" value="${totalRating + r.rating}" />
+                                    </c:forEach>
+                                    <c:set var="avgRating" value="${totalRating / reviews.size()}" />
+                                    <div class="flex items-center gap-2 mb-8 border-b border-outline-variant/30 pb-8">
+                                        <div class="relative inline-block text-outline-variant text-xl tracking-widest mr-2 whitespace-nowrap">
+                                            ★★★★★
+                                            <div class="absolute top-0 left-0 overflow-hidden text-primary whitespace-nowrap"
+                                                style="width: ${avgRating / 5 * 100}%;">
                                                 ★★★★★
-                                                <div class="absolute top-0 left-0 overflow-hidden text-yellow-500 whitespace-nowrap"
-                                                    style="width: ${avgRating / 5 * 100}%;">
-                                                    ★★★★★
-                                                </div>
                                             </div>
-                                            <span class="text-gray-500 font-medium">
-                                                <fmt:formatNumber value="${avgRating}" maxFractionDigits="1" /> / 5
-                                                (${reviews.size()} reviews)
-                                            </span>
                                         </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="flex items-center mb-6">
-                                            <div class="text-gray-300 font-bold text-xl mr-2">★★★★★</div>
-                                            <span class="text-gray-500 font-medium">No reviews yet</span>
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-
-                                <div class="space-y-4 mb-8">
-
-                                    <div class="flex">
-                                        <span class="font-semibold w-32">
-                                            Category:
-                                        </span>
-                                        <span>
-                                            ${product.category.name}
+                                        <span class="text-body-md font-body-md text-secondary">
+                                            <fmt:formatNumber value="${avgRating}" maxFractionDigits="1" /> / 5
+                                            (${reviews.size()} reviews)
                                         </span>
                                     </div>
-
-                                    <div class="flex">
-                                        <span class="font-semibold w-32">
-                                            Brand:
-                                        </span>
-                                        <span>
-                                            ${product.brand.name}
-                                        </span>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="flex items-center gap-2 mb-8 border-b border-outline-variant/30 pb-8">
+                                        <div class="text-outline-variant text-xl tracking-widest mr-2">★★★★★</div>
+                                        <span class="text-body-md font-body-md text-secondary">No reviews yet</span>
                                     </div>
+                                </c:otherwise>
+                            </c:choose>
 
-                                    <div class="flex">
-                                        <span class="font-semibold w-32">
-                                            Status:
-                                        </span>
-
-                                        <span class="text-green-600 font-semibold">
-                                            ${product.status}
-                                        </span>
+                            <!-- Size & Color Selection -->
+                            <div class="space-y-8 mb-8 border-b border-outline-variant/30 pb-8">
+                                
+                                <div>
+                                    <div class="flex justify-between items-end mb-4">
+                                        <label class="block font-headline-md text-headline-md font-bold text-primary">Select Size</label>
+                                        <span class="text-label-sm font-label-sm uppercase tracking-widest text-secondary hover:text-primary cursor-pointer transition-colors">Size Guide</span>
                                     </div>
-
-                                </div>
-
-                                <!-- Description -->
-                                <div class="mb-8">
-
-                                    <h3 class="text-xl font-semibold mb-3">
-                                        Description
-                                    </h3>
-
-                                    <p class="text-gray-700 leading-relaxed">
-                                        ${product.description}
-                                    </p>
-
-                                </div>
-
-                                <!-- Price -->
-                                <div class="mb-6">
-
-                                    <span class="text-gray-500 block mb-2">
-                                        Price
-                                    </span>
-
-                                    <span class="text-5xl font-bold text-black">
-                                        <fmt:formatNumber value="${product.price}" pattern="#,##0"/> đ
-                                    </span>
-
-                                </div>
-
-                                <div class="mb-4">
-                                    <label class="block font-semibold mb-2">Size</label>
-                                    <div class="flex flex-wrap gap-3" id="sizeContainer">
+                                    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3" id="sizeContainer">
                                         <c:forEach var="size" items="${sizes}">
-                                            <button type="button" class="size-btn border-2 border-gray-200 rounded-lg px-5 py-2 font-medium text-gray-700 transition" data-size="${size}">
+                                            <button type="button" class="size-btn border border-outline-variant rounded-lg py-3 px-4 font-label-md text-label-md uppercase text-primary hover:border-primary transition-colors focus:ring-2 focus:ring-primary focus:outline-none" data-size="${size}">
                                                 ${size}
                                             </button>
                                         </c:forEach>
                                     </div>
                                 </div>
 
-                                <div class="mb-6">
-                                    <label class="block font-semibold mb-2">Color</label>
+                                <div>
+                                    <label class="block font-headline-md text-headline-md font-bold text-primary mb-4">Select Color</label>
                                     <div class="flex flex-wrap gap-3" id="colorContainer">
                                         <c:forEach var="color" items="${colors}">
-                                            <button type="button" class="color-btn border-2 border-gray-200 rounded-lg px-5 py-2 font-medium text-gray-700 transition" data-color="${color}">
+                                            <button type="button" class="color-btn border border-outline-variant rounded-lg px-6 py-3 font-label-md text-label-md uppercase text-primary hover:border-primary transition-colors focus:ring-2 focus:ring-primary focus:outline-none" data-color="${color}">
                                                 ${color}
                                             </button>
                                         </c:forEach>
                                     </div>
                                 </div>
-
-                                <div class="mb-6">
-                                    <span id="stockInfo" class="font-semibold text-lg"></span>
-                                </div>
-
-                                <c:choose>
-                                    <c:when test="${not empty sessionScope.currentUser && (sessionScope.currentUser.roleName eq 'Admin' || sessionScope.currentUser.roleName eq 'Staff')}">
-                                        <div class="flex flex-col gap-4 mt-4 w-full">
-                                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                                                <div class="flex">
-                                                    <div class="flex-shrink-0">
-                                                        <span class="material-symbols-outlined text-yellow-500">warning</span>
-                                                    </div>
-                                                    <div class="ml-3">
-                                                        <p class="text-sm text-yellow-700">
-                                                            Admin/Staff accounts are only permitted to view products, not to make purchases.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-6 w-full">
-                                                <button class="flex-1 bg-gray-300 text-gray-500 px-8 py-4 rounded-lg cursor-not-allowed font-bold" disabled>
-                                                    READ ONLY VIEW
-                                                </button>
-                                                <a href="${pageContext.request.contextPath}/home" class="flex-1 flex items-center justify-center border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition font-bold">
-                                                    BACK TO PRODUCTS
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div class="flex items-center gap-6 mt-4">
-                                            <form action="${pageContext.request.contextPath}/AddToCart" method="post" class="flex-1">
-                                                <input type="hidden" name="productId" value="${product.id}">
-                                                <input type="hidden" id="selectedVariantId" name="variantId">
-                                                <input type="hidden" name="returnUrl" value="${pageContext.request.requestURI}?id=${product.id}">
-                                                <button id="addToCartBtn" type="submit" class="w-full bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition disabled:opacity-50" disabled>
-                                                    ADD TO CART
-                                                </button>
-                                            </form>
-                                            <a href="${pageContext.request.contextPath}/home" class="flex-1 flex items-center justify-center border border-black px-8 py-4 rounded-lg hover:bg-gray-100 transition">
-                                                BACK TO PRODUCTS
-                                            </a>
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-
+                                
                             </div>
 
-                        </div>
+                            <div class="mb-8">
+                                <span id="stockInfo" class="font-label-md text-error tracking-wide"></span>
+                            </div>
 
-                        <!-- Reviews Section -->
-                        <div class="mt-16 border-t pt-8">
-                            <h2 class="text-2xl font-bold mb-6">Customer Reviews</h2>
+                            <!-- Add to Cart / Actions -->
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.currentUser && (sessionScope.currentUser.roleName eq 'Admin' || sessionScope.currentUser.roleName eq 'Staff')}">
+                                    <div class="bg-error-container text-on-error-container p-4 rounded-2xl mb-4 font-body-md text-body-md">
+                                        Admin/Staff accounts are only permitted to view products, not to make purchases.
+                                    </div>
+                                    <button class="w-full bg-surface-container-highest text-on-surface-variant py-5 rounded-full font-label-md text-label-md uppercase tracking-wider cursor-not-allowed opacity-50" disabled>
+                                        Read Only View
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <form action="${pageContext.request.contextPath}/AddToCart" method="post" class="w-full">
+                                        <input type="hidden" name="productId" value="${product.id}">
+                                        <input type="hidden" id="selectedVariantId" name="variantId">
+                                        <input type="hidden" name="returnUrl" value="${pageContext.request.requestURI}?id=${product.id}">
+                                        <button id="addToCartBtn" type="submit" class="w-full bg-primary text-on-primary py-5 rounded-full font-label-md text-label-md uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <!-- Description -->
+                            <div class="mt-12">
+                                <h3 class="text-headline-md font-headline-md font-bold text-primary mb-4">Description</h3>
+                                <p class="text-body-md text-secondary leading-relaxed">
+                                    ${product.description}
+                                </p>
+                            </div>
+
+                        </div> <!-- End Product Info -->
+                    </div> <!-- End Grid -->
+
+                    <!-- Reviews Section -->
+                        <div class="w-full mt-16 pt-16 border-t border-outline-variant/30">
+                            <h2 class="text-headline-md font-headline-md font-bold text-primary mb-8">Customer Reviews</h2>
 
                             <!-- Display messages -->
                             <c:if test="${not empty sessionScope.success}">
@@ -269,7 +212,7 @@
                                                             id="addCount">0/200</span></div>
                                                 </div>
                                                 <button type="submit"
-                                                    class="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition">Submit
+                                                    class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md text-label-md uppercase tracking-wider hover:opacity-90 transition-opacity">Submit
                                                     Review</button>
                                             </form>
                                         </c:when>
@@ -314,26 +257,26 @@
                                                         </div>
                                                         <div class="flex gap-4">
                                                             <button type="submit" name="action" value="update"
-                                                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Update</button>
+                                                                class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md uppercase tracking-wider hover:opacity-90 transition-opacity">Update</button>
                                                             <button type="submit" name="action" value="delete"
-                                                                class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
+                                                                class="bg-error text-on-error px-8 py-3 rounded-full font-label-md text-label-md uppercase tracking-wider hover:opacity-90 transition-opacity"
                                                                 onclick="return confirm('Are you sure you want to delete this review?');">Delete</button>
                                                         </div>
                                                     </form>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <div class="bg-white p-4 rounded-lg border border-gray-200 mb-4">
-                                                        <p class="text-gray-700 mb-2">
+                                                    <div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant mb-4">
+                                                        <p class="text-body-md text-secondary mb-2">
                                                             <c:out value="${myReview.comment}" />
                                                         </p>
-                                                        <p class="text-sm text-gray-500 italic mb-4">You have already
+                                                        <p class="text-label-sm font-label-sm text-outline-variant uppercase tracking-widest mb-6">You have already
                                                             updated this review once.</p>
                                                         <form action="${pageContext.request.contextPath}/review"
                                                             method="POST">
                                                             <input type="hidden" name="productId" value="${product.id}">
                                                             <input type="hidden" name="reviewId" value="${myReview.id}">
                                                             <button type="submit" name="action" value="delete"
-                                                                class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
+                                                                class="bg-error text-on-error px-8 py-3 rounded-full font-label-md text-label-md uppercase tracking-wider hover:opacity-90 transition-opacity"
                                                                 onclick="return confirm('Are you sure you want to delete this review?');">Delete
                                                                 Review</button>
                                                         </form>
@@ -347,87 +290,87 @@
 
                             <!-- Filter Reviews -->
                             <c:if test="${not empty reviews}">
-                                <div class="mb-8">
-                                    <h3 class="text-lg font-semibold mb-3">Filter Reviews</h3>
-                                    <div class="flex flex-wrap gap-2">
+                                <div class="mb-12">
+                                    <h3 class="text-headline-sm font-headline-sm font-bold text-primary mb-6">Filter by Rating</h3>
+                                    <div class="flex flex-wrap gap-3">
                                         <button
-                                            class="review-filter-btn px-4 py-2 bg-black text-white rounded-lg text-sm font-semibold transition"
-                                            data-rating="all">All</button>
+                                            class="review-filter-btn px-6 py-3 bg-primary text-on-primary border border-transparent rounded-full text-label-md font-label-md transition-all active:scale-95"
+                                            data-rating="all">All Reviews</button>
                                         <button
-                                            class="review-filter-btn px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1 transition"
+                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="5">
-                                            <span class="text-yellow-500">★★★★★</span> (5)
+                                            <span class="tracking-widest text-lg leading-none">★★★★★</span> (5)
                                         </button>
                                         <button
-                                            class="review-filter-btn px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1 transition"
+                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="4">
-                                            <span class="text-yellow-500">★★★★<span
-                                                    class="text-gray-300">★</span></span> (4)
+                                            <span class="tracking-widest text-lg leading-none">★★★★<span
+                                                    class="opacity-30">★</span></span> (4)
                                         </button>
                                         <button
-                                            class="review-filter-btn px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1 transition"
+                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="3">
-                                            <span class="text-yellow-500">★★★<span
-                                                    class="text-gray-300">★★</span></span> (3)
+                                            <span class="tracking-widest text-lg leading-none">★★★<span
+                                                    class="opacity-30">★★</span></span> (3)
                                         </button>
                                         <button
-                                            class="review-filter-btn px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1 transition"
+                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="2">
-                                            <span class="text-yellow-500">★★<span
-                                                    class="text-gray-300">★★★</span></span> (2)
+                                            <span class="tracking-widest text-lg leading-none">★★<span
+                                                    class="opacity-30">★★★</span></span> (2)
                                         </button>
                                         <button
-                                            class="review-filter-btn px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 flex items-center gap-1 transition"
+                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="1">
-                                            <span class="text-yellow-500">★<span
-                                                    class="text-gray-300">★★★★</span></span> (1)
+                                            <span class="tracking-widest text-lg leading-none">★<span
+                                                    class="opacity-30">★★★★</span></span> (1)
                                         </button>
                                     </div>
                                 </div>
                             </c:if>
 
                             <!-- List of Reviews -->
-                            <div class="space-y-6">
+                            <div class="space-y-8">
                                 <c:choose>
                                     <c:when test="${empty reviews}">
-                                        <p class="text-gray-500 italic">No reviews yet. Be the first to review!</p>
+                                        <p class="text-body-md text-secondary italic text-center py-8">No reviews yet. Be the first to review!</p>
                                     </c:when>
                                     <c:otherwise>
                                         <c:forEach var="r" items="${reviews}">
-                                            <div class="review-item bg-gray-50 p-6 rounded-lg border shadow-sm"
+                                            <div class="review-item bg-surface-container-low p-8 rounded-3xl"
                                                 data-rating="${r.rating}">
-                                                <div class="flex items-center justify-between mb-2">
-                                                    <span class="font-bold text-lg">
+                                                <div class="flex items-center justify-between mb-4">
+                                                    <span class="font-headline-sm text-headline-sm font-bold text-primary">
                                                         <c:out value="${r.userName}" />
                                                     </span>
-                                                    <span class="text-yellow-500 font-bold text-xl">
+                                                    <span class="text-primary tracking-widest text-xl leading-none">
                                                         <c:forEach begin="1" end="${r.rating}">★</c:forEach>
                                                         <c:forEach begin="${r.rating + 1}" end="5"><span
-                                                                class="text-gray-300">★</span></c:forEach>
+                                                                class="text-outline-variant">★</span></c:forEach>
                                                     </span>
                                                 </div>
-                                                <p class="text-gray-700 mt-2 text-lg">
+                                                <p class="text-body-lg text-secondary leading-relaxed">
                                                     <c:out value="${r.comment}" />
                                                 </p>
 
                                                 <c:if test="${r.updated}">
                                                     <div
-                                                        class="mt-3 p-3 bg-gray-100 rounded border-l-4 border-gray-300">
-                                                        <p class="text-xs text-gray-500 font-semibold mb-1">Previous
+                                                        class="mt-6 p-4 bg-surface-container rounded-2xl border-l-4 border-outline-variant">
+                                                        <p class="text-label-sm font-label-sm text-secondary mb-2 uppercase tracking-widest">Previous
                                                             Comment:</p>
-                                                        <p class="text-sm text-gray-400 italic">
+                                                        <p class="text-body-md text-on-surface-variant italic">
                                                             <c:out value="${r.previousComment}" />
                                                         </p>
                                                     </div>
                                                 </c:if>
 
-                                                <div class="flex justify-between items-center mt-4">
-                                                    <span class="text-xs text-gray-400">Created:
+                                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 gap-2">
+                                                    <span class="text-label-sm font-label-sm text-secondary">Created:
                                                         <fmt:formatDate value="${r.createdAt}"
                                                             pattern="dd MMM yyyy, HH:mm" />
                                                     </span>
                                                     <c:if test="${r.updated}">
-                                                        <span class="text-xs text-blue-400 italic">Updated:
+                                                        <span class="text-label-sm font-label-sm text-primary italic">Updated:
                                                             <fmt:formatDate value="${r.updatedAt}"
                                                                 pattern="dd MMM yyyy, HH:mm" />
                                                         </span>
@@ -438,18 +381,20 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
-                        </div>
+                        </div> <!-- End of Reviews Section -->
 
-                        <script>
+                    </div> <!-- End of max-w-container-max -->
+
+                    <script>
                             document.querySelectorAll('.review-filter-btn').forEach(btn => {
                                 btn.addEventListener('click', function () {
                                     // Update active button styling
                                     document.querySelectorAll('.review-filter-btn').forEach(b => {
-                                        b.classList.remove('bg-black', 'text-white', 'font-semibold');
-                                        b.classList.add('border');
+                                        b.classList.remove('bg-primary', 'text-on-primary', 'font-semibold', 'border-transparent');
+                                        b.classList.add('border-outline-variant', 'text-primary');
                                     });
-                                    this.classList.remove('border');
-                                    this.classList.add('bg-black', 'text-white', 'font-semibold');
+                                    this.classList.remove('border-outline-variant', 'text-primary');
+                                    this.classList.add('bg-primary', 'text-on-primary', 'font-semibold', 'border-transparent');
 
                                     const rating = this.getAttribute('data-rating');
                                     document.querySelectorAll('.review-item').forEach(item => {
@@ -490,25 +435,25 @@
                                     let isAvailable = false;
                                     
                                     if (selectedColor) {
-                                        const v = variants.find(x => x.color === selectedColor && x.size === size);
+                                        const v = variants.find(x => x.color.trim() === selectedColor.trim() && x.size.trim() === size.trim());
                                         isAvailable = v && v.stock > 0;
                                     } else {
-                                        isAvailable = variants.some(x => x.size === size && x.stock > 0);
+                                        isAvailable = variants.some(x => x.size.trim() === size.trim() && x.stock > 0);
                                     }
                                     
                                     if (!isAvailable) {
-                                        btn.classList.add('opacity-40', 'bg-gray-100', 'cursor-not-allowed', 'border-gray-200');
-                                        btn.classList.remove('hover:border-black', 'border-black', 'text-white', 'bg-black');
+                                        btn.classList.add('opacity-40', 'bg-surface-container', 'cursor-not-allowed', 'border-outline-variant');
+                                        btn.classList.remove('hover:border-primary', 'border-primary', 'text-on-primary', 'bg-primary', 'text-primary');
                                     } else {
-                                        btn.classList.remove('opacity-40', 'bg-gray-100', 'cursor-not-allowed');
-                                        btn.classList.add('hover:border-black');
+                                        btn.classList.remove('opacity-40', 'bg-surface-container', 'cursor-not-allowed');
+                                        btn.classList.add('hover:border-primary');
                                         
                                         if (selectedSize === size) {
-                                            btn.classList.add('border-black', 'text-white', 'bg-black');
-                                            btn.classList.remove('text-gray-700', 'border-gray-200');
+                                            btn.classList.add('border-primary', 'text-on-primary', 'bg-primary');
+                                            btn.classList.remove('text-primary', 'border-outline-variant');
                                         } else {
-                                            btn.classList.remove('border-black', 'text-white', 'bg-black');
-                                            btn.classList.add('text-gray-700', 'border-gray-200');
+                                            btn.classList.remove('border-primary', 'text-on-primary', 'bg-primary');
+                                            btn.classList.add('text-primary', 'border-outline-variant');
                                         }
                                     }
                                 });
@@ -519,32 +464,32 @@
                                     let isAvailable = false;
                                     
                                     if (selectedSize) {
-                                        const v = variants.find(x => x.size === selectedSize && x.color === color);
+                                        const v = variants.find(x => x.size.trim() === selectedSize.trim() && x.color.trim() === color.trim());
                                         isAvailable = v && v.stock > 0;
                                     } else {
-                                        isAvailable = variants.some(x => x.color === color && x.stock > 0);
+                                        isAvailable = variants.some(x => x.color.trim() === color.trim() && x.stock > 0);
                                     }
                                     
                                     if (!isAvailable) {
-                                        btn.classList.add('opacity-40', 'bg-gray-100', 'cursor-not-allowed', 'border-gray-200');
-                                        btn.classList.remove('hover:border-black', 'border-black', 'text-white', 'bg-black');
+                                        btn.classList.add('opacity-40', 'bg-surface-container', 'cursor-not-allowed', 'border-outline-variant');
+                                        btn.classList.remove('hover:border-primary', 'border-primary', 'text-on-primary', 'bg-primary', 'text-primary');
                                     } else {
-                                        btn.classList.remove('opacity-40', 'bg-gray-100', 'cursor-not-allowed');
-                                        btn.classList.add('hover:border-black');
+                                        btn.classList.remove('opacity-40', 'bg-surface-container', 'cursor-not-allowed');
+                                        btn.classList.add('hover:border-primary');
                                         
                                         if (selectedColor === color) {
-                                            btn.classList.add('border-black', 'text-white', 'bg-black');
-                                            btn.classList.remove('text-gray-700', 'border-gray-200');
+                                            btn.classList.add('border-primary', 'text-on-primary', 'bg-primary');
+                                            btn.classList.remove('text-primary', 'border-outline-variant');
                                         } else {
-                                            btn.classList.remove('border-black', 'text-white', 'bg-black');
-                                            btn.classList.add('text-gray-700', 'border-gray-200');
+                                            btn.classList.remove('border-primary', 'text-on-primary', 'bg-primary');
+                                            btn.classList.add('text-primary', 'border-outline-variant');
                                         }
                                     }
                                 });
 
                                 // Check valid variant to add to cart
                                 if (selectedSize && selectedColor) {
-                                    const v = variants.find(x => x.size === selectedSize && x.color === selectedColor);
+                                    const v = variants.find(x => x.size.trim() === selectedSize.trim() && x.color.trim() === selectedColor.trim());
                                     if (v && v.stock > 0) {
                                         stockInfo.innerHTML = `<span class="text-green-600">Available: ${v.stock} items</span>`;
                                         const variantIdField = document.getElementById("selectedVariantId");
@@ -564,7 +509,7 @@
                                 btn.addEventListener('click', () => {
                                     if (btn.classList.contains('cursor-not-allowed')) return;
                                     const size = btn.getAttribute('data-size');
-                                    if (selectedSize === size) {
+                                    if (selectedSize && selectedSize.trim() === size.trim()) {
                                         selectedSize = null;
                                     } else {
                                         selectedSize = size;
@@ -577,7 +522,7 @@
                                 btn.addEventListener('click', () => {
                                     if (btn.classList.contains('cursor-not-allowed')) return;
                                     const color = btn.getAttribute('data-color');
-                                    if (selectedColor === color) {
+                                    if (selectedColor && selectedColor.trim() === color.trim()) {
                                         selectedColor = null;
                                     } else {
                                         selectedColor = color;
@@ -589,6 +534,8 @@
                             // Initial call
                             updateUI();
                         </script>
+                </div>
             </main>
 
             <jsp:include page="/WEB-INF/include/footer.jsp" />
+

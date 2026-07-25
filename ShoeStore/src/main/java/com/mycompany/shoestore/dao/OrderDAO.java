@@ -270,7 +270,7 @@ public class OrderDAO {
                 + "c.name AS category_name, "
                 + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) AS image_url "
                 + "FROM order_items oi "
-                + "JOIN product_variants pv ON oi.product_variant_id = pv.variant_id "
+                + "JOIN product_variants pv ON oi.product_variant_id = pv.id "
                 + "JOIN products p ON pv.product_id = p.id "
                 + "LEFT JOIN brands b ON p.brand_id = b.id "
                 + "LEFT JOIN categories c ON p.category_id = c.id "
@@ -334,7 +334,7 @@ public class OrderDAO {
         String restoreStockSql = "UPDATE pv "
                 + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
                 + "FROM product_variants pv "
-                + "JOIN order_items oi ON pv.variant_id = oi.product_variant_id "
+                + "JOIN order_items oi ON pv.id = oi.product_variant_id "
                 + "WHERE oi.order_id = ?";
 
         Connection conn = null;
@@ -385,7 +385,7 @@ public class OrderDAO {
         String sql = "UPDATE pv "
                 + "SET pv.stock_quantity = pv.stock_quantity + oi.quantity "
                 + "FROM product_variants pv "
-                + "JOIN order_items oi ON pv.variant_id = oi.product_variant_id "
+                + "JOIN order_items oi ON pv.id = oi.product_variant_id "
                 + "WHERE oi.order_id = ?";
         try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, orderId);
@@ -451,10 +451,10 @@ public class OrderDAO {
     }
 
     public void clearCartAfterOrder(String userId, String variantId) {
-        String sql = "DELETE FROM carts "
-                + "WHERE user_id = ? "
-                + "AND product_variant_id = ?";
-        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "DELETE FROM carts " +
+                "WHERE user_id = ? " +
+                "AND product_variant_id = ?";
+        try (Connection conn = new DBContext().getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, userId);
             ps.setString(2, variantId);
@@ -502,7 +502,7 @@ public class OrderDAO {
     String sql =
             "UPDATE product_variants "
             + "SET stock_quantity = stock_quantity - ? "
-            + "WHERE variant_id = ? "
+            + "WHERE id = ? "
             + "AND stock_quantity >= ?";
 
     try (Connection conn = new DBContext().getConnection();

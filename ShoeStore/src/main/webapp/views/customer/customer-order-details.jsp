@@ -161,33 +161,33 @@
                             </div>
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
                                 <c:choose>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/dashboard">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Staff'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/staff/orders">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/orders">
                                             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                             Orders
                                         </a>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/addresses">
                                             <span class="material-symbols-outlined text-[20px]">location_on</span>
                                             Addresses
@@ -199,12 +199,12 @@
                             <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
 
                                 <div class="space-y-1">
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/home">
                                         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                                         Back to Shop
                                     </a>
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/Logout">
                                         <span class="material-symbols-outlined text-[18px]">logout</span>
                                         Logout
@@ -281,14 +281,14 @@
                                         <c:if test="${orderSummary.status == 'pending'}">
                                             <c:choose>
                                                 <c:when test="${cancellationCount >= 5}">
-                                                    <p class="text-[#ba1a1a] font-label-md uppercase tracking-widest border border-[#ba1a1a] px-6 py-3 bg-[#ba1a1a]/10 inline-block text-center w-full md:w-auto">
+                                                    <p class="text-[#ba1a1a] font-label-md uppercase tracking-widest border border-[#ba1a1a] px-6 py-3 bg-[#ba1a1a]/10 inline-block text-center w-full md:w-auto rounded-full">
                                                         Cancellation Limit Reached
                                                     </p>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <button type="button"
                                                         onclick="document.getElementById('cancel-modal').classList.remove('hidden')"
-                                                        class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all w-full md:w-auto">
+                                                        class="bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all w-full md:w-auto rounded-full">
                                                         Cancel Order
                                                     </button>
                                                 </c:otherwise>
@@ -312,10 +312,10 @@
                                             <c:forEach var="item" items="${orderItems}">
                                                 <!-- Item -->
                                                 <div
-                                                    class="flex gap-6 p-4 bg-surface-container-lowest border border-outline-variant hover:border-primary transition-colors group">
+                                                    class="flex gap-6 p-4 bg-surface-container-lowest border border-outline-variant hover:border-primary transition-colors group rounded-2xl">
                                                     <div
-                                                        class="w-32 h-32 bg-surface-container overflow-hidden flex-shrink-0">
-                                                        <img src="<c:choose><c:when test='${not empty item.imageUrl}'>${item.imageUrl}</c:when><c:otherwise>https://via.placeholder.com/300?text=No+Image</c:otherwise></c:choose>"
+                                                        class="w-32 h-32 bg-surface-container overflow-hidden flex-shrink-0 rounded-2xl">
+                                                        <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="<c:choose><c:when test='${not empty item.imageUrl}'>${item.imageUrl}</c:when><c:otherwise>https://via.placeholder.com/300?text=No+Image</c:otherwise></c:choose>"
                                                             alt="${item.productName}"
                                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                                     </div>
@@ -375,7 +375,7 @@
                                 <!-- Right Column: Shipping & Payment -->
                                 <div class="xl:col-span-4 space-y-6">
                                     <!-- Shipping Address -->
-                                    <section class="p-6 bg-surface-container border border-outline-variant">
+                                    <section class="p-6 bg-surface-container border border-outline-variant rounded-2xl">
                                         <h3
                                             class="text-label-md font-label-md uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <span class="material-symbols-outlined text-[20px]">location_on</span>
@@ -399,7 +399,7 @@
                                     </section>
 
                                     <!-- Payment Method -->
-                                    <section class="p-6 bg-surface-container border border-outline-variant">
+                                    <section class="p-6 bg-surface-container border border-outline-variant rounded-2xl">
                                         <h3
                                             class="text-label-md font-label-md uppercase tracking-widest mb-4 flex items-center gap-2">
                                             <span class="material-symbols-outlined text-[20px]">credit_card</span>
@@ -424,7 +424,7 @@
                                     </section>
 
                                     <!-- Pricing Summary Card -->
-                                    <section class="p-6 border-2 border-primary">
+                                    <section class="p-6 border-2 border-primary rounded-2xl">
                                         <h3 class="text-label-md font-label-md uppercase tracking-widest mb-6">Order
                                             Calculation</h3>
                                         <div class="space-y-3">
@@ -458,7 +458,7 @@
                             <!-- Cancel Order Modal -->
                             <div id="cancel-modal"
                                 class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-                                <div class="bg-surface-container-lowest w-full max-w-lg shadow-2xl relative">
+                                <div class="bg-surface-container-lowest w-full max-w-lg shadow-2xl relative rounded-2xl overflow-hidden">
                                     <!-- Header -->
                                     <div class="flex justify-between items-center p-6 border-b border-outline-variant">
                                         <h3 class="font-headline-sm text-headline-sm uppercase tracking-tighter">
@@ -488,19 +488,19 @@
                                                 REASON FOR CANCELLATION
                                             </label>
                                             <textarea name="reason" rows="4"
-                                                class="w-full border border-outline-variant bg-surface p-3 font-body-md text-body-md text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none"
+                                                class="w-full border border-outline-variant bg-surface p-3 font-body-md text-body-md text-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none rounded-2xl"
                                                 placeholder="Additional notes for your cancellation request (optional)..."></textarea>
                                         </div>
 
                                         <!-- Footer -->
                                         <div class="flex gap-4">
                                             <button type="submit"
-                                                class="flex-1 bg-[#ba1a1a] text-white py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-[#93000a] transition-colors">
+                                                class="flex-1 bg-[#ba1a1a] text-white py-4 font-label-md text-label-md uppercase tracking-widest font-bold hover:bg-[#93000a] transition-colors rounded-full">
                                                 YES, CANCEL ORDER
                                             </button>
                                             <button type="button"
                                                 onclick="document.getElementById('cancel-modal').classList.add('hidden')"
-                                                class="flex-1 border border-primary text-primary py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-surface-container-low transition-colors">
+                                                class="flex-1 border border-primary text-primary py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-surface-container-low transition-colors rounded-full">
                                                 GO BACK
                                             </button>
                                         </div>
@@ -511,3 +511,5 @@
                     </body>
 
                     </html>
+
+

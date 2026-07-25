@@ -565,7 +565,7 @@ public class ProductDAO {
 
                 ProductVariant v = new ProductVariant();
 
-                v.setId(rs.getString("variant_id"));
+                v.setId(rs.getString("id"));
                 v.setProductId(rs.getString("product_id"));
                 v.setSize(rs.getString("size"));
                 v.setColor(rs.getString("color"));
@@ -662,6 +662,5 @@ public class ProductDAO {
 
         return list;
     }
-
 
 }

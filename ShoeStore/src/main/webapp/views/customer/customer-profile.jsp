@@ -134,33 +134,33 @@
                         </div>
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
                                 <c:choose>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/dashboard">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Staff'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/staff/orders">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/orders">
                                             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                             Orders
                                         </a>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/addresses">
                                             <span class="material-symbols-outlined text-[20px]">location_on</span>
                                             Addresses
@@ -172,12 +172,12 @@
                             <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
 
                                 <div class="space-y-1">
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/home">
                                         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                                         Back to Shop
                                     </a>
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/Logout">
                                         <span class="material-symbols-outlined text-[18px]">logout</span>
                                         Logout
@@ -202,23 +202,23 @@
 
                         <section class="px-margin-desktop py-12 flex-1 max-w-5xl">
                             <!-- Flash Messages -->
-                            <c:if test="${not empty sessionScope.successMessage}">
-                                <div class="mb-8 p-4 bg-status-delivered-bg border border-status-delivered-text/20 text-status-delivered-text font-label-md flex items-center gap-3">
+                            <c:if test="${not empty sessionScope.profileSuccessMessage}">
+                                <div class="mb-8 p-4 bg-surface-container text-primary border border-outline-variant/50 font-label-md flex items-center gap-3 rounded-2xl">
                                     <span class="material-symbols-outlined">check_circle</span>
-                                    ${sessionScope.successMessage}
+                                    ${sessionScope.profileSuccessMessage}
                                 </div>
-                                <c:remove var="successMessage" scope="session"/>
+                                <c:remove var="profileSuccessMessage" scope="session"/>
                             </c:if>
-                            <c:if test="${not empty sessionScope.errorMessage}">
-                                <div class="mb-8 p-4 bg-status-cancelled-bg border border-status-cancelled-text/20 text-status-cancelled-text font-label-md flex items-center gap-3">
+                            <c:if test="${not empty sessionScope.profileErrorMessage}">
+                                <div class="mb-8 p-4 bg-error-container border border-error/20 text-on-error-container font-label-md flex items-center gap-3 rounded-2xl">
                                     <span class="material-symbols-outlined">error</span>
-                                    ${sessionScope.errorMessage}
+                                    ${sessionScope.profileErrorMessage}
                                 </div>
-                                <c:remove var="errorMessage" scope="session"/>
+                                <c:remove var="profileErrorMessage" scope="session"/>
                             </c:if>
 
                             <!-- User Information -->
-                            <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm">
+                            <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm rounded-2xl">
                                 <h3
                                     class="font-headline-md text-headline-md uppercase tracking-tight mb-6 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-[24px]">person</span>
@@ -241,7 +241,7 @@
                             </div>
 
                             <!-- Change Password -->
-                            <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm">
+                            <div class="border border-outline-variant bg-surface p-8 mb-12 shadow-sm rounded-2xl">
                                 <h3 class="font-headline-md text-headline-md uppercase tracking-tight mb-6 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-[24px]">lock</span>
                                     Security
@@ -250,24 +250,24 @@
                                     <div>
                                         <label for="oldPassword" class="block font-label-md text-label-md text-primary uppercase mb-2">Current Password</label>
                                         <input type="password" id="oldPassword" name="oldPassword" required
-                                            class="w-full bg-surface-container-lowest border border-outline-variant text-primary font-body-md text-body-md px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-secondary/50 rounded-none"
+                                            class="w-full bg-surface-container-lowest border border-outline-variant text-primary font-body-md text-body-md px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-secondary/50 rounded-full"
                                             placeholder="Enter current password">
                                     </div>
                                     <div>
                                         <label for="newPassword" class="block font-label-md text-label-md text-primary uppercase mb-2">New Password</label>
                                         <input type="password" id="newPassword" name="newPassword" required minlength="6" pattern="(?=.*\d)(?=.*[A-Z]).{6,}" title="Must contain at least one uppercase letter and one number"
-                                            class="w-full bg-surface-container-lowest border border-outline-variant text-primary font-body-md text-body-md px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-secondary/50 rounded-none"
+                                            class="w-full bg-surface-container-lowest border border-outline-variant text-primary font-body-md text-body-md px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-secondary/50 rounded-full"
                                             placeholder="Enter new password">
                                         <p class="font-label-sm text-label-sm text-secondary mt-1">Must be at least 6 characters, contain 1 uppercase letter and 1 number.</p>
                                     </div>
                                     <div>
                                         <label for="confirmPassword" class="block font-label-md text-label-md text-primary uppercase mb-2">Confirm New Password</label>
                                         <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6"
-                                            class="w-full bg-surface-container-lowest border border-outline-variant text-primary font-body-md text-body-md px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-secondary/50 rounded-none"
+                                            class="w-full bg-surface-container-lowest border border-outline-variant text-primary font-body-md text-body-md px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-shadow placeholder:text-secondary/50 rounded-full"
                                             placeholder="Confirm new password">
                                     </div>
                                     <button type="submit"
-                                        class="w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-4 hover:opacity-90 active:scale-[0.98] transition-all">
+                                        class="w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-4 hover:opacity-90 active:scale-[0.98] transition-all rounded-full">
                                         Update Password
                                     </button>
                                 </form>

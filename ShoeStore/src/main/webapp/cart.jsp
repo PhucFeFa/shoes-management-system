@@ -8,11 +8,11 @@
 
     <!-- Header -->
     <section class="max-w-7xl mx-auto px-6 lg:px-12 mb-12">
-        <div class="border-b border-gray-200 pb-6">
-            <h1 class="text-4xl font-bold tracking-wide uppercase text-black">
+        <div class="border-b border-outline-variant pb-6">
+            <h1 class="font-headline-lg text-headline-lg text-primary uppercase tracking-tight">
                 Shopping Cart
             </h1>
-            <p class="text-gray-500 mt-2">
+            <p class="text-secondary font-body-md text-body-md mt-2">
                 Review your selected products before checkout.
             </p>
         </div>
@@ -21,29 +21,20 @@
     <!-- Empty Cart -->
     <c:if test="${empty cart}">
         <section class="max-w-4xl mx-auto px-6">
-            <div class="bg-gray-50 rounded-xl p-12 text-center border">
+            <div class="bg-surface-container-low rounded-2xl p-12 text-center border border-outline-variant">
 
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="w-20 h-20 mx-auto text-gray-300 mb-6"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.2 6M17 13l1.2 6M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"/>
-                </svg>
+                <span class="material-symbols-outlined text-[80px] text-secondary mb-6 block">shopping_cart</span>
 
-                <h2 class="text-2xl font-bold mb-3">
+                <h2 class="font-headline-md text-headline-md text-primary mb-3">
                     Your cart is empty
                 </h2>
 
-                <p class="text-gray-500 mb-8">
+                <p class="text-secondary font-body-md text-body-md mb-8">
                     Looks like you haven't added any products yet.
                 </p>
 
                 <a href="${pageContext.request.contextPath}/products"
-                   class="inline-flex items-center px-8 py-4 bg-black text-white uppercase tracking-wider hover:bg-gray-800 transition">
+                   class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-wider rounded-full hover:bg-primary/90 transition-all active:scale-95">
                     Continue Shopping
                 </a>
             </div>
@@ -64,7 +55,7 @@
 
                     <c:forEach var="item" items="${cart}">
                         <c:if test="${item.quantity <= 0}">
-                            <span class="text-red-500 font-bold">
+                            <span class="text-error font-bold">
                                 Out Of Stock
                             </span>
                         </c:if>
@@ -87,9 +78,9 @@
 
 
                                 <!-- Image -->
-                                <div class="w-full md:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden">
+                                <div class="w-full md:w-36 h-36 bg-surface-container rounded-2xl overflow-hidden flex-shrink-0">
 
-                                    <img src="${item.imageUrl}"
+                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${item.imageUrl}"
                                          alt="${item.productName}"
                                          class="w-full h-full object-cover">
 
@@ -98,10 +89,10 @@
                                 <!-- Info -->
                                 <div class="flex-1">
 
-                                    <h3 class="text-xl font-bold uppercase">
+                                    <h3 class="font-headline-md text-headline-md uppercase text-primary">
                                         ${item.productName}
                                     </h3>
-                                    <div class="flex gap-4 mt-2 text-sm text-gray-600">
+                                    <div class="flex gap-4 mt-2 text-label-sm font-label-sm text-secondary">
 
                                         <span>
                                             Size:
@@ -115,14 +106,14 @@
 
                                     </div>
 
-                                    <p class="text-gray-500 mt-1">
+                                    <p class="text-secondary font-label-sm text-label-sm mt-1">
                                         Premium Sneaker Collection
                                     </p>
 
                                     <div class="mt-4 flex flex-wrap gap-8">
 
                                         <div>
-                                            <span class="text-gray-500 text-sm">
+                                            <span class="text-secondary text-sm">
                                                 Price
                                             </span>
 
@@ -132,11 +123,11 @@
                                         </div>
 
                                         <div>
-                                            <span class="text-gray-500 text-sm">
+                                            <span class="text-secondary text-sm">
                                                 Quantity
                                             </span>
 
-                                            <div class="flex items-center mt-2 border rounded-lg overflow-hidden w-fit">
+                                            <div class="flex items-center mt-2 border border-outline-variant rounded-full overflow-hidden w-fit">
 
                                                 <!-- Decrease button -->
                                                 <form action="UpdateCart" method="post">
@@ -149,7 +140,7 @@
                                                                value="decrease">
 
                                                             <button type="submit"
-                                                                    class="w-10 h-10 bg-white hover:bg-gray-100 text-lg font-bold transition">
+                                                                    class="w-10 h-10 bg-surface hover:bg-surface-container text-lg font-bold transition">
                                                                 -
                                                             </button>
                                                             </form>
@@ -170,7 +161,7 @@
                                                                            value="increase">
 
                                                                         <button type="submit"
-                                                                                class="w-10 h-10 bg-white hover:bg-gray-100 text-lg font-bold transition">
+                                                                                class="w-10 h-10 bg-white hover:bg-surface-container text-lg font-bold transition">
                                                                             +
                                                                         </button>
                                                                         </form>
@@ -179,7 +170,7 @@
                                                                         </div>
 
                                                                         <div>
-                                                                            <span class="text-gray-500 text-sm">
+                                                                            <span class="text-secondary text-sm">
                                                                                 Total
                                                                             </span>
 
@@ -203,7 +194,7 @@
                                                                                        value="${item.productVariantId}">
 
                                                                                     <button type="submit"
-                                                                                            class="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition rounded-lg">
+                                                                    class="px-5 py-2 border border-error text-error hover:bg-error hover:text-on-primary transition-all rounded-full font-label-sm text-label-sm">
                                                                                         Remove
                                                                                     </button>
 
@@ -259,16 +250,16 @@
                                                                                   method ="POST">
                                                                                 <div id="selectedProducts"></div>
                                                                                 <button type="submit"
-                                                                                        class="block w-full mt-8 text-center bg-black text-white py-4 uppercase tracking-wider hover:bg-gray-800 transition rounded-lg">
-                                                                                    Proceed To Checkout
-                                                                                </button>
+                                                                        class="block w-full mt-8 text-center bg-primary text-on-primary py-4 font-label-md text-label-md uppercase tracking-wider hover:bg-primary/90 transition-all rounded-full active:scale-[0.98]">
+                                                                    Proceed To Checkout
+                                                                </button>
 
                                                                             </form>
 
                                                                             <a href="${pageContext.request.contextPath}/products"
-                                                                               class="block w-full mt-3 text-center border py-4 uppercase tracking-wider hover:bg-gray-50 transition rounded-lg">
-                                                                                Continue Shopping
-                                                                            </a>
+                                                               class="block w-full mt-3 text-center border border-outline-variant py-4 font-label-md text-label-md uppercase tracking-wider hover:bg-surface-container-low transition-all rounded-full">
+                                                                Continue Shopping
+                                                            </a>
 
                                                                         </div>
 
@@ -376,3 +367,5 @@
                                                                 </main>
 
                                                                 <jsp:include page="/WEB-INF/include/footer.jsp"/>
+
+

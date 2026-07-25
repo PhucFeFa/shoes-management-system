@@ -178,33 +178,33 @@
                             </div>
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
                                 <c:choose>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/dashboard">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Staff'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/staff/orders">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/orders">
                                             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                             Orders
                                         </a>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/addresses">
                                             <span class="material-symbols-outlined text-[20px]">location_on</span>
                                             Addresses
@@ -216,12 +216,12 @@
                             <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
 
                                 <div class="space-y-1">
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/home">
                                         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                                         Back to Shop
                                     </a>
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/Logout">
                                         <span class="material-symbols-outlined text-[18px]">logout</span>
                                         Logout
@@ -255,7 +255,7 @@
                                     class="flex items-center gap-4 flex-1">
                                     <div class="flex gap-3">
                                         <select id="status-filter" name="status" onchange="this.form.submit()"
-                                            class="bg-surface border border-outline-variant text-primary font-label-md text-label-md uppercase py-3 pl-4 pr-10 rounded-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer hover:border-outline transition-colors">
+                                            class="bg-surface border border-outline-variant text-primary font-label-md text-label-md uppercase py-3 pl-4 pr-10 rounded-xl focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer hover:border-outline transition-colors">
                                             <option value="" ${empty statusFilter ? 'selected' : '' }>All Statuses
                                             </option>
                                             <option value="pending" ${statusFilter=='pending' ? 'selected' : '' }>
@@ -283,7 +283,7 @@
                             </section>
 
                             <section class="px-margin-desktop py-6 flex-1">
-                                <div class="border border-outline-variant bg-surface overflow-hidden shadow-sm">
+                                <div class="border border-outline-variant bg-surface overflow-hidden shadow-sm rounded-2xl">
                                     <table class="w-full text-left border-collapse">
                                         <thead class="bg-surface-container-low border-b border-outline-variant">
                                             <tr>
@@ -317,7 +317,7 @@
                                                                     class="font-label-md text-label-md uppercase tracking-wider">
                                                                     You have no orders yet</p>
                                                                 <a href="${pageContext.request.contextPath}/home"
-                                                                    class="mt-2 px-8 py-3 bg-primary text-on-primary font-label-md text-label-md uppercase hover:opacity-90 transition-opacity">
+                                                                    class="mt-2 px-8 py-3 bg-primary text-on-primary font-label-md text-label-md uppercase rounded-full hover:opacity-90 transition-opacity">
                                                                     Shop Now
                                                                 </a>
                                                             </div>
@@ -345,7 +345,7 @@
                                                             </td>
                                                             <td class="py-4 px-6">
                                                                 <span
-                                                                    class="inline-flex items-center px-2 py-1 font-label-sm text-label-sm uppercase tracking-widest rounded-none status-${order.status}">
+                                                                    class="inline-flex items-center px-2 py-1 font-label-sm text-label-sm uppercase tracking-widest rounded-xl status-${order.status}">
                                                                     <c:choose>
                                                                         <c:when test="${order.status == 'pending'}">
                                                                             Pending</c:when>
@@ -363,7 +363,7 @@
                                                             </td>
                                                             <td class="py-4 px-6 text-right">
                                                                 <a href="${pageContext.request.contextPath}/profile/order/details?id=${order.id}"
-                                                                    class="inline-block px-4 py-2 border border-outline-variant text-secondary hover:bg-surface-container-low transition-colors font-label-sm text-label-sm uppercase tracking-widest">
+                                                                    class="inline-block px-4 py-2 border border-outline-variant text-secondary hover:bg-surface-container-low transition-colors font-label-sm text-label-sm uppercase tracking-widest rounded-full">
                                                                     Details
                                                                 </a>
                                                             </td>
@@ -383,7 +383,7 @@
                                             </span>
                                             <div class="flex items-center gap-2">
                                                 <a href="?status=${statusFilter}&page=${currentPage - 1}"
-                                                    class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-none ${currentPage <= 1 ? 'opacity-30 pointer-events-none' : ''}">
+                                                    class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-xl ${currentPage <= 1 ? 'opacity-30 pointer-events-none' : ''}">
                                                     <span
                                                         class="material-symbols-outlined text-[18px]">chevron_left</span>
                                                 </a>
@@ -392,17 +392,17 @@
                                                     <c:choose>
                                                         <c:when test="${p == currentPage}">
                                                             <span
-                                                                class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-none">${p}</span>
+                                                                class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-xl">${p}</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <a href="?status=${statusFilter}&page=${p}"
-                                                                class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-none transition-colors">${p}</a>
+                                                                class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-xl transition-colors">${p}</a>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:forEach>
 
                                                 <a href="?status=${statusFilter}&page=${currentPage + 1}"
-                                                    class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-none ${currentPage >= totalPages ? 'opacity-30 pointer-events-none' : ''}">
+                                                    class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-xl ${currentPage >= totalPages ? 'opacity-30 pointer-events-none' : ''}">
                                                     <span
                                                         class="material-symbols-outlined text-[18px]">chevron_right</span>
                                                 </a>
@@ -416,3 +416,4 @@
                     </body>
 
                     </html>
+

@@ -134,33 +134,33 @@
                         </div>
 
                             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                                <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                     href="${pageContext.request.contextPath}/profile">
                                     <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                                     Profile
                                 </a>
                                 <c:choose>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/dashboard">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:when test="${sessionScope.currentUser.roleName eq 'Staff'}">
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/staff/orders">
                                             <span class="material-symbols-outlined text-[20px]">dashboard</span>
                                             Dashboard
                                         </a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase text-secondary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/orders">
                                             <span class="material-symbols-outlined text-[20px]">receipt_long</span>
                                             Orders
                                         </a>
-                                        <a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
+                                        <a class="flex items-center gap-3 px-4 py-3 rounded-xl font-label-md text-label-md uppercase bg-primary text-on-primary font-bold active:scale-95 transition-transform"
                                             href="${pageContext.request.contextPath}/profile/addresses">
                                             <span class="material-symbols-outlined text-[20px]">location_on</span>
                                             Addresses
@@ -172,12 +172,12 @@
                             <div class="px-4 py-6 border-t border-outline-variant/50 flex flex-col gap-4">
 
                                 <div class="space-y-1">
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/home">
                                         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                                         Back to Shop
                                     </a>
-                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-DEFAULT transition-colors"
+                                    <a class="flex items-center gap-3 px-4 py-2 font-label-sm text-label-sm uppercase text-secondary hover:bg-surface-container-low rounded-xl transition-colors"
                                         href="${pageContext.request.contextPath}/Logout">
                                         <span class="material-symbols-outlined text-[18px]">logout</span>
                                         Logout
@@ -202,7 +202,7 @@
 
                         <section class="px-margin-desktop py-12 flex-1 max-w-5xl">
                             <!-- Address List -->
-                            <div class="border border-outline-variant bg-surface p-8 shadow-sm">
+                            <div class="border border-outline-variant bg-surface p-8 shadow-sm rounded-2xl">
                                 <div
                                     class="flex justify-between items-center mb-8 border-b border-outline-variant/50 pb-4">
                                     <h3
@@ -211,7 +211,7 @@
                                         My Addresses
                                     </h3>
                                     <a href="${pageContext.request.contextPath}/AddAddress"
-                                        class="bg-primary text-on-primary px-6 py-3 font-label-md text-label-md uppercase hover:opacity-90 transition-opacity flex items-center gap-2">
+                                        class="bg-primary text-on-primary px-6 py-3 font-label-md text-label-md uppercase hover:opacity-90 transition-opacity flex items-center gap-2 rounded-full">
                                         <span class="material-symbols-outlined text-[18px]">add</span>
                                         Add Address
                                     </a>
@@ -231,7 +231,7 @@
                                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                             <c:forEach var="address" items="${addresses}">
                                                 <div
-                                                    class="border border-outline-variant p-6 hover:border-primary transition-colors flex flex-col justify-between group bg-surface-container-lowest">
+                                                    class="border border-outline-variant p-6 hover:border-primary transition-colors flex flex-col justify-between group bg-surface-container-lowest rounded-2xl">
                                                     <div class="mb-6">
                                                         <p class="font-body-lg text-body-lg font-bold uppercase mb-2">
                                                             ${address.addressLine}</p>
@@ -267,12 +267,12 @@
 
                     <!-- Delete Confirmation Modal -->
                     <div id="deleteModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
-                        <div class="bg-surface p-6 rounded-xl w-96 max-w-[90%] shadow-xl border border-outline-variant">
+                        <div class="bg-surface p-6 rounded-2xl w-96 max-w-[90%] shadow-xl border border-outline-variant">
                             <h3 class="font-headline-md text-xl mb-3 text-primary font-bold">Delete Address</h3>
                             <p class="font-body-md text-secondary mb-6">Are you sure you want to delete this address? This action cannot be undone.</p>
                             <div class="flex justify-end gap-3">
-                                <button onclick="closeDeleteModal()" class="px-5 py-2.5 border border-outline-variant rounded-lg text-secondary hover:bg-surface-container-low transition font-label-md">Cancel</button>
-                                <a id="confirmDeleteBtn" href="#" class="px-5 py-2.5 bg-[#ba1a1a] text-white rounded-lg hover:bg-[#93000a] transition font-label-md">Delete</a>
+                                <button onclick="closeDeleteModal()" class="px-5 py-2.5 border border-outline-variant rounded-full text-secondary hover:bg-surface-container-low transition font-label-md">Cancel</button>
+                                <a id="confirmDeleteBtn" href="#" class="px-5 py-2.5 bg-[#ba1a1a] text-white rounded-full hover:bg-[#93000a] transition font-label-md">Delete</a>
                             </div>
                         </div>
                     </div>
@@ -289,3 +289,4 @@
                 </body>
 
                 </html>
+
