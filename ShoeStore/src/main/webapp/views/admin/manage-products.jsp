@@ -81,7 +81,7 @@
                 margin-left: 256px;
                 padding: 32px 36px;
                 min-height: 100vh;
-                width: 100%;
+                width: calc(100% - 256px); box-sizing: border-box;
             }
             .page-header {
                 display: flex;
@@ -661,5 +661,6 @@
         </script>
     </body>
 </html>
+
 
 

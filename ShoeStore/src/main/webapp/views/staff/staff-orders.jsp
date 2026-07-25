@@ -21,10 +21,10 @@
                 overflow-y: scroll;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 256px;
                 padding: 32px 36px;
                 min-height: 100vh;
-                width: 100%;
+                width: calc(100% - 256px); box-sizing: border-box;
             }
             .page-header {
                 display: flex;
@@ -376,3 +376,4 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
+

@@ -26,7 +26,7 @@ public class ImportDAO {
 
             while (rs.next()) {
                 ImportDTO dto = mapImport(rs);
-                dto.setStaffName(rs.getNString("StaffName"));
+                dto.setStaffName(rs.getString("StaffName"));
                 list.add(dto);
             }
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class ImportDAO {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         dto = mapImport(rs);
-                        dto.setStaffName(rs.getNString("StaffName"));
+                        dto.setStaffName(rs.getString("StaffName"));
                     }
                 }
             }
@@ -70,9 +70,9 @@ public class ImportDAO {
                             detail.setImportQuantity(rs.getInt("ImportQuantity"));
                             detail.setReceivedQuantity(rs.getInt("ReceivedQuantity"));
                             detail.setUnitPrice(rs.getBigDecimal("UnitPrice"));
-                            detail.setProductName(rs.getNString("ProductName"));
-                            detail.setSize(rs.getNString("size"));
-                            detail.setColor(rs.getNString("color"));
+                            detail.setProductName(rs.getString("ProductName"));
+                            detail.setSize(rs.getString("size"));
+                            detail.setColor(rs.getString("color"));
                             details.add(detail);
                         }
                     }
@@ -97,7 +97,7 @@ public class ImportDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     ImportDTO dto = mapImport(rs);
-                    dto.setStaffName(rs.getNString("StaffName"));
+                    dto.setStaffName(rs.getString("StaffName"));
                     list.add(dto);
                 }
             }
@@ -111,10 +111,10 @@ public class ImportDAO {
         ImportDTO dto = new ImportDTO();
         dto.setImportID(rs.getInt("ImportID"));
         dto.setStaffID(rs.getString("StaffID"));
-        dto.setSupplier(rs.getNString("Supplier"));
+        dto.setSupplier(rs.getString("Supplier"));
         dto.setTotalAmount(rs.getBigDecimal("TotalAmount"));
-        dto.setStatus(rs.getNString("Status"));
-        dto.setNote(rs.getNString("Note"));
+        dto.setStatus(rs.getString("Status"));
+        dto.setNote(rs.getString("Note"));
         dto.setOrderDate(rs.getTimestamp("OrderDate"));
         return dto;
     }
@@ -191,9 +191,9 @@ public class ImportDAO {
             while (rs.next()) {
                 ImportDetailDTO d = new ImportDetailDTO();
                 d.setVariantID(rs.getString("id"));
-                d.setProductName(rs.getNString("ProductName"));
-                d.setSize(rs.getNString("size"));
-                d.setColor(rs.getNString("color"));
+                d.setProductName(rs.getString("ProductName"));
+                d.setSize(rs.getString("size"));
+                d.setColor(rs.getString("color"));
                 list.add(d);
             }
         } catch (Exception e) {

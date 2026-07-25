@@ -15,7 +15,7 @@
                 margin-left: 256px;
                 padding: 32px 36px;
                 min-height: 100vh;
-                width: 100%;
+                width: calc(100% - 256px); box-sizing: border-box;
             }
             .page-header { display: flex; align-items: center; margin-bottom: 24px; gap: 10px; }
             .page-title { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #1a1a1a; margin: 0; }
@@ -413,3 +413,4 @@
         </script>
     </body>
 </html>
+
