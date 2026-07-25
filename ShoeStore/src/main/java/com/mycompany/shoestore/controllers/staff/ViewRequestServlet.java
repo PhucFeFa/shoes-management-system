@@ -29,7 +29,44 @@ public class ViewRequestServlet extends HttpServlet {
         ImportDAO importDAO = new ImportDAO();
         List<ImportDTO> requests = importDAO.ViewRequset(user.getId());
 
-        request.setAttribute("importRequests", requests);
+        String search = request.getParameter("search");
+        if (search != null && !search.trim().isEmpty()) {
+            String q = search.trim().toLowerCase();
+            requests = requests.stream()
+                    .filter(r -> (r.getSupplier() != null && r.getSupplier().toLowerCase().contains(q)) ||
+                                 (r.getStatus() != null && r.getStatus().toLowerCase().contains(q)) ||
+                                 String.valueOf(r.getImportID()).contains(q))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        int pageSize = 10;
+        int totalImportRequests = requests.size();
+        int totalPages = (int) Math.ceil((double) totalImportRequests / pageSize);
+        if (totalPages < 1) totalPages = 1;
+
+        int currentPage = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                currentPage = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
+        }
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        int startIndex = (currentPage - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, totalImportRequests);
+        List<ImportDTO> paginatedRequests = requests.subList(startIndex, endIndex);
+
+        request.setAttribute("importRequests", paginatedRequests);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalImportRequests", totalImportRequests);
+        request.setAttribute("rangeStart", totalImportRequests == 0 ? 0 : startIndex + 1);
+        request.setAttribute("rangeEnd", endIndex);
+        request.setAttribute("searchQuery", search);
         request.getRequestDispatcher("/views/staff/view-request.jsp").forward(request, response);
     }
 }

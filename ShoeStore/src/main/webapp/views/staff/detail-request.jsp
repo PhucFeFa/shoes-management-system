@@ -13,17 +13,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .main-content { margin-left: 220px; }
-    </style>
+
 </head>
 <body class="bg-[#f9f9f9] text-[#1a1c1c] antialiased flex min-h-screen">
 
     <c:set var="activePage" value="import-requests" scope="request" />
     <jsp:include page="/views/staff/sidebar.jsp" />
 
-    <main class="main-content flex-1 flex flex-col min-h-screen">
+    <main class="ml-64 flex-1 flex flex-col min-h-screen">
         <header class="px-16 pt-16 pb-8 flex justify-between items-end border-b border-gray-200 bg-white">
             <div>
                 <div class="flex items-center gap-3 mb-2">
@@ -57,17 +54,17 @@
 
             <!-- Info Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Supplier</p>
                     <p class="font-bold text-lg text-gray-900"><c:out value="${importDetail.supplier}"/></p>
                 </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Request Date</p>
                     <p class="font-bold text-lg text-gray-900">
                         <fmt:formatDate value="${importDetail.orderDate}" pattern="dd MMM yyyy, HH:mm"/>
                     </p>
                 </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Requested By</p>
                     <p class="font-bold text-lg text-gray-900"><c:out value="${importDetail.staffName}"/></p>
                 </div>
@@ -75,14 +72,14 @@
 
             <!-- Admin Note -->
             <c:if test="${not empty importDetail.note}">
-                <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-900">
+                <div class="bg-gray-50 p-6 rounded-2xl border-l-4 border-gray-900">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Admin Note</p>
                     <p class="text-sm italic text-gray-700">"<c:out value="${importDetail.note}"/>"</p>
                 </div>
             </c:if>
 
             <!-- Items Table -->
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                 <div class="px-8 py-4 bg-gray-50 border-b border-gray-200">
                     <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Requested Items</h3>
                 </div>
@@ -161,7 +158,7 @@
                     <c:when test="${importDetail.status == 'APPROVED'}">
                         <div class="px-8 py-6 bg-gray-50 border-t border-gray-200 flex justify-end">
                             <button type="button" onclick="submitReportForm()"
-                                    class="px-10 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-gray-800 transition-all shadow-md active:scale-95">
+                                    class="px-10 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-gray-800 transition-all shadow-md active:scale-95">
                                 Submit Arrival Report
                             </button>
                         </div>
@@ -176,7 +173,7 @@
                             <form action="${pageContext.request.contextPath}/staff/stock-in" method="POST">
                                 <input type="hidden" name="importID" value="${importDetail.importID}">
                                 <button type="submit" 
-                                        class="px-10 py-3 bg-green-600 text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-green-700 transition-all shadow-md active:scale-95">
+                                        class="px-10 py-3 bg-green-600 text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-green-700 transition-all shadow-md active:scale-95">
                                     Stock-in 
                                 </button>
                             </form>

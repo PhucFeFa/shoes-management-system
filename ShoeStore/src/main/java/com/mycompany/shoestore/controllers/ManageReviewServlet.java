@@ -42,7 +42,45 @@ public class ManageReviewServlet extends HttpServlet {
             
             // Only fetch PENDING_HIDE if filter is PENDING_HIDE, etc.
             List<Review> reviews = reviewDAO.getAllReviews(filterStatus);
-            request.setAttribute("reviews", reviews);
+            
+            String search = request.getParameter("search");
+            if (search != null && !search.trim().isEmpty()) {
+                String q = search.trim().toLowerCase();
+                reviews = reviews.stream()
+                        .filter(r -> (r.getReviewText() != null && r.getReviewText().toLowerCase().contains(q)) || 
+                                     (r.getProductName() != null && r.getProductName().toLowerCase().contains(q)) ||
+                                     (r.getUserName() != null && r.getUserName().toLowerCase().contains(q)))
+                        .collect(java.util.stream.Collectors.toList());
+            }
+
+            int pageSize = 10;
+            int totalReviews = reviews.size();
+            int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
+            if (totalPages < 1) totalPages = 1;
+            
+            int currentPage = 1;
+            String pageParam = request.getParameter("page");
+            if (pageParam != null) {
+                try {
+                    currentPage = Integer.parseInt(pageParam);
+                } catch (NumberFormatException e) {
+                    currentPage = 1;
+                }
+            }
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            int startIndex = (currentPage - 1) * pageSize;
+            int endIndex = Math.min(startIndex + pageSize, totalReviews);
+            List<Review> paginatedReviews = reviews.subList(startIndex, endIndex);
+
+            request.setAttribute("reviews", paginatedReviews);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalReviews", totalReviews);
+            request.setAttribute("rangeStart", totalReviews == 0 ? 0 : startIndex + 1);
+            request.setAttribute("rangeEnd", endIndex);
+            request.setAttribute("searchQuery", search);
             request.setAttribute("currentFilter", filterStatus);
             request.getRequestDispatcher("/views/shared/manage-reviews.jsp").forward(request, response);
         } else {

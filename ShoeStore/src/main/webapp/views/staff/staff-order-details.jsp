@@ -112,241 +112,7 @@
                                 }
                             }
                         </script>
-                        <style>
-                            .material-symbols-outlined {
-                                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-                            }
 
-                            .material-symbols-outlined[style*="'FILL' 1"] {
-                                font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-                            }
-
-                            body,
-                            h1,
-                            h2,
-                            h3,
-                            h4,
-                            h5,
-                            h6,
-                            p,
-                            span:not(.material-symbols-outlined),
-                            div,
-                            table,
-                            tr,
-                            td,
-                            th,
-                            a,
-                            button,
-                            input,
-                            select,
-                            textarea {
-                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-                            }
-
-                            .adidis-sidebar {
-                                width: 220px;
-                                height: 100vh;
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                background: #ffffff;
-                                border-right: 1px solid #e5e7eb;
-                                display: flex;
-                                flex-direction: column;
-                                padding: 32px 16px 24px;
-                                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                                z-index: 1000;
-                            }
-
-                            .adidis-brand {
-                                padding: 0 12px 24px;
-                                border-bottom: 1px solid #e5e7eb;
-                                margin-bottom: 24px;
-                            }
-
-                            .adidis-brand-name {
-                                font-size: 20px;
-                                font-weight: 800;
-                                letter-spacing: -0.02em;
-                                color: #000000;
-                                text-transform: uppercase;
-                            }
-
-                            .adidis-brand-sub {
-                                font-size: 11px;
-                                font-weight: 600;
-                                letter-spacing: 0.05em;
-                                text-transform: uppercase;
-                                color: #9ca3af;
-                                margin-top: 4px;
-                            }
-
-                            .adidis-nav {
-                                list-style: none;
-                                margin: 0;
-                                padding: 0;
-                                flex: 1;
-                                display: flex;
-                                flex-direction: column;
-                                gap: 8px;
-                            }
-
-                            .adidis-nav-item a {
-                                display: flex;
-                                align-items: center;
-                                gap: 12px;
-                                padding: 12px 16px;
-                                font-size: 12px;
-                                font-weight: 700;
-                                letter-spacing: 0.05em;
-                                text-transform: uppercase;
-                                color: #4b5563;
-                                text-decoration: none;
-                                border-radius: 8px;
-                                transition: all 0.15s ease;
-                            }
-
-                            .adidis-nav-item a:hover {
-                                color: #111827;
-                                background: #f3f4f6;
-                            }
-
-                            .adidis-nav-item a.active {
-                                background: #000000;
-                                color: #ffffff;
-                            }
-
-                            .adidis-nav-item a i {
-                                font-size: 18px;
-                                flex-shrink: 0;
-                            }
-
-                            .adidis-footer {
-                                padding: 24px 12px 0;
-                                border-top: 1px solid #e5e7eb;
-                                display: flex;
-                                flex-direction: column;
-                                gap: 16px;
-                            }
-
-                            .adidis-footer a {
-                                display: flex;
-                                align-items: center;
-                                gap: 12px;
-                                font-size: 12px;
-                                font-weight: 700;
-                                letter-spacing: 0.05em;
-                                text-transform: uppercase;
-                                color: #6b7280;
-                                text-decoration: none;
-                                transition: color 0.15s ease;
-                            }
-
-                            .adidis-footer a:hover {
-                                color: #000000;
-                            }
-
-                            .adidis-footer a i {
-                                font-size: 18px;
-                            }
-
-                            .adidis-user-info {
-                                display: flex;
-                                align-items: center;
-                                gap: 12px;
-                                margin-top: 8px;
-                                padding-top: 16px;
-                                border-top: 1px solid #e5e7eb;
-                            }
-
-                            .adidis-avatar {
-                                width: 36px;
-                                height: 36px;
-                                border-radius: 50%;
-                                background: #f3f4f6;
-                                border: 1px solid #e5e7eb;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                flex-shrink: 0;
-                            }
-
-                            .adidis-avatar i {
-                                font-size: 18px;
-                                color: #4b5563;
-                            }
-
-                            .adidis-user-details {
-                                display: flex;
-                                flex-direction: column;
-                                min-width: 0;
-                            }
-
-                            .adidis-user-name {
-                                font-size: 13px;
-                                font-weight: 700;
-                                color: #111827;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                            }
-
-                            .adidis-user-role {
-                                font-size: 11px;
-                                font-weight: 500;
-                                color: #9ca3af;
-                            }
-
-                            .main-content {
-                                margin-left: 256px;
-                            }
-
-                            /* Custom scrollbar for minimal aesthetic */
-                            ::-webkit-scrollbar {
-                                width: 8px;
-                                height: 8px;
-                            }
-
-                            ::-webkit-scrollbar-track {
-                                background: #f9f9f9;
-                            }
-
-                            ::-webkit-scrollbar-thumb {
-                                background: #c4c7c7;
-                                border-radius: 0px;
-                            }
-
-                            ::-webkit-scrollbar-thumb:hover {
-                                background: #5d5f5f;
-                            }
-
-                            .status-pending {
-                                background-color: #e2e2e2;
-                                color: #1a1c1c;
-                            }
-
-                            .status-confirmed {
-                                background-color: #1a1c1c;
-                                color: #ffffff;
-                            }
-
-                            .status-shipping {
-                                background-color: #000000;
-                                color: #ffffff;
-                            }
-
-                            .status-completed {
-                                background-color: #d1fae5;
-                                color: #065f46;
-                                border-color: #065f46;
-                            }
-
-                            .status-cancelled {
-                                background-color: #ffdad6;
-                                color: #93000a;
-                                border-color: #93000a;
-                            }
-                        </style>
                     </head>
 
                     <body
@@ -356,7 +122,7 @@
                         <jsp:include page="/views/staff/sidebar.jsp" />
 
                         <!-- Main Content Canvas -->
-                        <main class="main-content flex-1 h-full overflow-y-auto bg-background">
+                        <main class="ml-64 flex-1 h-full overflow-y-auto bg-background">
                             <div class="max-w-container-max mx-auto px-margin-desktop py-margin-desktop">
 
                                 <c:if test="${not empty sessionScope.successMessage}">
@@ -396,8 +162,8 @@
                                                 test="${orderSummary.status == 'pending' || orderSummary.status == 'confirmed' || orderSummary.status == 'shipping'}">
                                                 <button type="button"
                                                     onclick="document.getElementById('cancel-modal').classList.remove('hidden')"
-                                                    class="border-[1.5px] border-primary text-primary bg-transparent hover:bg-primary hover:text-on-primary transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
-                                                    Cancel Order
+                                                    class="w-[180px] border-[1.5px] border-primary text-primary bg-transparent hover:bg-primary hover:text-on-primary transition-colors font-label-md text-label-md uppercase px-6 h-[46px] flex items-center justify-center gap-2 rounded-2xl">
+                                                    <span>Cancel Order</span>
                                                 </button>
                                             </c:if>
 
@@ -405,35 +171,43 @@
                                                 <c:when
                                                     test="${orderSummary.status == 'completed' || orderSummary.status == 'delivered'}">
                                                     <span
-                                                        class="px-6 py-3 font-label-md text-label-md uppercase text-065f46 bg-d1fae5 border border-065f46 cursor-not-allowed">
+                                                        class="px-6 py-3 font-label-md text-label-md uppercase text-065f46 bg-d1fae5 border border-065f46 cursor-not-allowed rounded-2xl">
                                                         Order Completed
                                                     </span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <form id="update-status-form"
                                                         action="${pageContext.request.contextPath}/staff/order/update-status"
-                                                        method="POST" class="flex items-center gap-2"
-                                                        onsubmit="return handleStatusUpdate(event)">
+                                                        method="POST" class="flex items-center gap-2">
                                                         <input type="hidden" name="orderId" value="${orderSummary.id}">
-                                                        <select name="status"
-                                                            class="border-[1.5px] border-primary bg-surface-container-lowest text-primary font-label-md text-label-md uppercase pl-4 pr-10 py-3 outline-none focus:ring-0 cursor-pointer">
-                                                            <c:if test="${orderSummary.status == 'pending'}">
-                                                                <option value="pending" selected>Pending</option>
-                                                                <option value="confirmed">Confirmed</option>
-                                                            </c:if>
-                                                            <c:if test="${orderSummary.status == 'confirmed'}">
-                                                                <option value="confirmed" selected>Confirmed</option>
-                                                                <option value="shipping">Shipped</option>
-                                                            </c:if>
-                                                            <c:if test="${orderSummary.status == 'shipping'}">
-                                                                <option value="shipping" selected>Shipped</option>
-                                                                <option value="completed">Delivered / Completed</option>
-                                                            </c:if>
-                                                        </select>
-                                                        <button type="submit"
-                                                            class="border-[1.5px] border-primary text-on-primary bg-primary hover:bg-opacity-90 transition-colors font-label-md text-label-md uppercase px-6 py-3 flex items-center gap-2 rounded-none">
-                                                            Save
-                                                        </button>
+                                                        
+                                                        <c:choose>
+                                                            <c:when test="${orderSummary.status == 'pending'}">
+                                                                <input type="hidden" name="status" value="confirmed">
+                                                                <button type="submit"
+                                                                    class="w-[180px] border-[1.5px] border-primary text-on-primary bg-primary hover:bg-opacity-90 transition-colors font-label-md text-label-md uppercase px-6 h-[46px] flex items-center justify-center gap-2 rounded-2xl">
+                                                                    <span>Confirm Order</span>
+                                                                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                                                </button>
+                                                            </c:when>
+                                                            <c:when test="${orderSummary.status == 'confirmed'}">
+                                                                <input type="hidden" name="status" value="shipping">
+                                                                <button type="submit"
+                                                                    class="w-[180px] border-[1.5px] border-primary text-on-primary bg-primary hover:bg-opacity-90 transition-colors font-label-md text-label-md uppercase px-6 h-[46px] flex items-center justify-center gap-2 rounded-2xl">
+                                                                    <span>Ship Order</span>
+                                                                    <span class="material-symbols-outlined text-[18px]">local_shipping</span>
+                                                                </button>
+                                                            </c:when>
+                                                            <c:when test="${orderSummary.status == 'shipping'}">
+                                                                <input type="hidden" name="status" value="completed">
+                                                                <button type="button"
+                                                                    onclick="document.getElementById('complete-modal').classList.remove('hidden')"
+                                                                    class="w-[180px] border-[1.5px] border-emerald-600 text-white bg-emerald-600 hover:bg-emerald-700 transition-colors font-label-md text-label-md uppercase px-6 h-[46px] flex items-center justify-center gap-2 rounded-2xl">
+                                                                    <span>Complete Order</span>
+                                                                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                                </button>
+                                                            </c:when>
+                                                        </c:choose>
                                                     </form>
                                                 </c:otherwise>
                                             </c:choose>
@@ -447,7 +221,7 @@
                                     <div class="lg:col-span-8 flex flex-col gap-gutter">
                                         <!-- Items Card -->
                                         <div
-                                            class="bg-surface-container-lowest border border-outline-variant p-8 rounded-none">
+                                            class="bg-surface-container-lowest border border-outline-variant p-8 rounded-2xl">
                                             <h3
                                                 class="font-label-md text-label-md uppercase text-primary border-b border-outline-variant pb-4 mb-6 tracking-widest">
                                                 Line Items</h3>
@@ -458,7 +232,7 @@
                                                         class="flex gap-6 items-center pb-6 border-b border-surface-container-high last:border-0 last:pb-0">
                                                         <div
                                                             class="w-32 h-32 bg-surface-container flex-shrink-0 border border-outline-variant p-2">
-                                                            <img alt="${item.productName}"
+                                                            <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="${item.productName}"
                                                                 class="w-full h-full object-cover mix-blend-multiply filter grayscale contrast-125"
                                                                 src="<c:choose><c:when test='${not empty item.imageUrl}'>${item.imageUrl}</c:when><c:otherwise>https://via.placeholder.com/300</c:otherwise></c:choose>">
                                                         </div>
@@ -501,7 +275,7 @@
                                     <div class="lg:col-span-4 flex flex-col gap-gutter">
                                         <!-- Customer Card -->
                                         <div
-                                            class="bg-surface-container-lowest border border-outline-variant p-6 rounded-none">
+                                            class="bg-surface-container-lowest border border-outline-variant p-6 rounded-2xl">
                                             <div
                                                 class="flex items-center justify-between mb-4 border-b border-outline-variant pb-4">
                                                 <h3
@@ -528,7 +302,7 @@
 
                                         <!-- Logistics Card -->
                                         <div
-                                            class="bg-surface-container-lowest border border-outline-variant p-6 rounded-none">
+                                            class="bg-surface-container-lowest border border-outline-variant p-6 rounded-2xl">
                                             <h3
                                                 class="font-label-md text-label-md uppercase tracking-widest text-primary border-b border-outline-variant pb-4 mb-4">
                                                 Logistics</h3>
@@ -558,7 +332,7 @@
 
                                         <!-- Financials Card -->
                                         <div
-                                            class="bg-surface-container-lowest border border-outline-variant p-6 rounded-none bg-surface-bright">
+                                            class="bg-surface-container-lowest border border-outline-variant p-6 rounded-2xl bg-surface-bright">
                                             <h3
                                                 class="font-label-md text-label-md uppercase tracking-widest text-primary border-b border-outline-variant pb-4 mb-4">
                                                 Financials</h3>
@@ -709,16 +483,6 @@
                         </main>
 
                         <script>
-                            function handleStatusUpdate(event) {
-                                const select = document.querySelector('select[name="status"]');
-                                if (select.value === 'completed') {
-                                    event.preventDefault();
-                                    document.getElementById('complete-modal').classList.remove('hidden');
-                                    return false;
-                                }
-                                return true;
-                            }
-
                             function confirmComplete() {
                                 document.getElementById('update-status-form').submit();
                             }
@@ -726,3 +490,4 @@
                     </body>
 
                     </html>
+

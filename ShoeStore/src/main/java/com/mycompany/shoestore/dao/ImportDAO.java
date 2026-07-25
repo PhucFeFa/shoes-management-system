@@ -19,11 +19,11 @@ public class ImportDAO {
                      "FROM imports i " +
                      "JOIN staffs s ON i.StaffID = s.id " +
                      "ORDER BY i.OrderDate DESC";
-        
+
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-            
+
             while (rs.next()) {
                 ImportDTO dto = mapImport(rs);
                 dto.setStaffName(rs.getNString("StaffName"));
@@ -39,10 +39,10 @@ public class ImportDAO {
         ImportDTO dto = null;
         String sqlHeader = "SELECT i.*, s.full_name as StaffName FROM imports i " +
                           "JOIN staffs s ON i.StaffID = s.id WHERE i.ImportID = ?";
-        
+
         String sqlDetails = "SELECT id.*, p.name as ProductName, pv.size, pv.color " +
                            "FROM import_details id " +
-                           "JOIN product_variants pv ON id.VariantID = pv.variant_id " +
+                           "JOIN product_variants pv ON id.VariantID = pv.id " +
                            "JOIN products p ON pv.product_id = p.id " +
                            "WHERE id.ImportID = ?";
 
@@ -119,16 +119,15 @@ public class ImportDAO {
         return dto;
     }
 
-    //Create Import
     public boolean createImport(ImportDTO importDTO) {
         String sqlImport = "INSERT INTO imports (Supplier, StaffID, TotalAmount, Status, Note, OrderDate) VALUES (?, ?, ?, ?, ?, SYSDATETIMEOFFSET())";
         String sqlDetail = "INSERT INTO import_details (ImportID, VariantID, ImportQuantity, ReceivedQuantity, UnitPrice) VALUES (?, ?, ?, ?, ?)";
-        
+
         Connection conn = null;
         try {
             conn = new DBContext().getConnection();
             conn.setAutoCommit(false);
-            
+
             int importID = -1;
             try (PreparedStatement ps = conn.prepareStatement(sqlImport, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 ps.setNString(1, importDTO.getSupplier());
@@ -136,23 +135,23 @@ public class ImportDAO {
                 ps.setBigDecimal(3, importDTO.getTotalAmount());
                 ps.setString(4, "REQUESTING");
                 ps.setNString(5, importDTO.getNote());
-                
+
                 ps.executeUpdate();
-                
+
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         importID = rs.getInt(1);
                     }
                 }
             }
-            
+
             if (importID != -1 && importDTO.getDetails() != null) {
                 try (PreparedStatement ps = conn.prepareStatement(sqlDetail)) {
                     for (ImportDetailDTO detail : importDTO.getDetails()) {
                         ps.setInt(1, importID);
                         ps.setString(2, detail.getVariantID());
                         ps.setInt(3, detail.getImportQuantity());
-                        ps.setInt(4, 0); // Ban đầu thực nhận là 0
+                        ps.setInt(4, 0);
                         ps.setBigDecimal(5, detail.getUnitPrice());
                         ps.addBatch();
                     }
@@ -168,11 +167,11 @@ public class ImportDAO {
             e.printStackTrace();
         } finally {
             if (conn != null) {
-                try { 
-                    conn.setAutoCommit(true); 
-                    conn.close(); 
-                } catch (SQLException e) { 
-                    e.printStackTrace(); 
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -181,7 +180,7 @@ public class ImportDAO {
 
     public List<ImportDetailDTO> getAllVariantsForImport() {
         List<ImportDetailDTO> list = new ArrayList<>();
-        String sql = "SELECT pv.variant_id, p.name as ProductName, pv.size, pv.color " +
+        String sql = "SELECT pv.id, p.name as ProductName, pv.size, pv.color " +
                      "FROM product_variants pv " +
                      "JOIN products p ON pv.product_id = p.id " +
                      "WHERE p.status = 'active' " +
@@ -191,7 +190,7 @@ public class ImportDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 ImportDetailDTO d = new ImportDetailDTO();
-                d.setVariantID(rs.getString("variant_id"));
+                d.setVariantID(rs.getString("id"));
                 d.setProductName(rs.getNString("ProductName"));
                 d.setSize(rs.getNString("size"));
                 d.setColor(rs.getNString("color"));
@@ -217,20 +216,17 @@ public class ImportDAO {
         return false;
     }
 
-    //Report
     public boolean reportReceivedQuantities(int importID, String[] detailIDs, String[] receivedQtys) {
         String sqlUpdateDetail = "UPDATE import_details SET ReceivedQuantity = ? WHERE ImportDetailID = ?";
-   
         String sqlUpdateImport = "UPDATE imports SET Status = 'REPORTED', " +
                                  "TotalAmount = (SELECT SUM(ReceivedQuantity * UnitPrice) FROM import_details WHERE ImportID = ?) " +
                                  "WHERE ImportID = ?";
-        
+
         Connection conn = null;
         try {
             conn = new DBContext().getConnection();
             conn.setAutoCommit(false);
-            
-           
+
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdateDetail)) {
                 for (int i = 0; i < detailIDs.length; i++) {
                     ps.setInt(1, Integer.parseInt(receivedQtys[i]));
@@ -239,13 +235,13 @@ public class ImportDAO {
                 }
                 ps.executeBatch();
             }
-            
+
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdateImport)) {
                 ps.setInt(1, importID);
                 ps.setInt(2, importID);
                 ps.executeUpdate();
             }
-            
+
             conn.commit();
             return true;
         } catch (Exception e) {
@@ -256,20 +252,19 @@ public class ImportDAO {
             return false;
         } finally {
             if (conn != null) {
-                try { 
-                    conn.setAutoCommit(true); 
-                    conn.close(); 
-                } catch (SQLException e) { 
-                    e.printStackTrace(); 
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
-    // StockIn
     public boolean completeStockIn(int importID) {
         String sqlGetDetails = "SELECT VariantID, ReceivedQuantity FROM import_details WHERE ImportID = ?";
-        String sqlUpdateStock = "UPDATE product_variants SET stock_quantity = stock_quantity + ? WHERE variant_id = ?";
+        String sqlUpdateStock = "UPDATE product_variants SET stock_quantity = stock_quantity + ? WHERE id = ?";
         String sqlUpdateStatus = "UPDATE imports SET Status = 'COMPLETE' WHERE ImportID = ?";
 
         Connection conn = null;
@@ -290,7 +285,6 @@ public class ImportDAO {
                 }
             }
 
-            // dua quality vo kho
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdateStock)) {
                 for (ImportDetailDTO item : items) {
                     ps.setInt(1, item.getReceivedQuantity());
@@ -300,7 +294,6 @@ public class ImportDAO {
                 ps.executeBatch();
             }
 
-            // Status COMPLETE
             try (PreparedStatement ps = conn.prepareStatement(sqlUpdateStatus)) {
                 ps.setInt(1, importID);
                 ps.executeUpdate();

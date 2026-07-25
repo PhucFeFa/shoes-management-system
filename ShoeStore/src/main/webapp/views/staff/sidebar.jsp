@@ -134,13 +134,6 @@
 
             <ul class="adidis-nav">
                 <li class="adidis-nav-item">
-                    <a href="${pageContext.request.contextPath}/staff/dashboard"
-                        class="${activePage eq 'dashboard' ? 'active' : ''}">
-                        <span class="material-symbols-outlined">dashboard</span>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="adidis-nav-item">
                     <a href="${pageContext.request.contextPath}/staff/orders"
                         class="${activePage eq 'orders' ? 'active' : ''}">
                         <span class="material-symbols-outlined">local_shipping</span>
