@@ -26,7 +26,7 @@
 
                         /* Main content: Đồng bộ cấu trúc căn giữa tuyệt đối theo mẫu voucher */
                         .adidis-main-content {
-                            margin-left: 220px;
+                            margin-left: 256px;
                             padding: 40px;
                             min-height: 100vh;
                             display: flex;

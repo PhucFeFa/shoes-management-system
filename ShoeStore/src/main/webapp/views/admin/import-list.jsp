@@ -16,7 +16,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; background: #f5f5f3; margin: 0; overflow-y: scroll; }
         .main-content { 
-            margin-left: 220px; 
+            margin-left: 256px; 
             padding: 32px 36px;
             min-height: 100vh;
             width: 100%;
@@ -39,12 +39,13 @@
             background: #fff;
             border-radius: 4px;
             border: 1px solid #e8e8e8;
-            overflow: hidden;
+            overflow-x: auto;
         }
         .user-table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
+            min-width: 900px;
         }
         .user-table thead tr {
             border-bottom: 2px solid #e8e8e8;

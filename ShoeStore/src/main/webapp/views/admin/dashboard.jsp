@@ -1,4 +1,4 @@
-ï»¿<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .main-content { margin-left: 220px; }
+        .main-content { margin-left: 256px; }
     </style>
 </head>
 <body class="bg-[#f9f9f9] text-[#1a1c1c] antialiased flex min-h-screen">
@@ -35,11 +35,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Monthly Revenue</p>
-                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyRevenue}" pattern="#,##0"/> Ä‘</p>
+                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyRevenue}" pattern="#,##0"/> ð</p>
                 </div>
                 <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Monthly Cost</p>
-                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyCost}" pattern="#,##0"/> Ä‘</p>
+                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyCost}" pattern="#,##0"/> ð</p>
                 </div>
                 <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Success Rate</p>

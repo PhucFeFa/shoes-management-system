@@ -1,4 +1,4 @@
-ï»¿<%-- 
+<%-- 
     Document   : voucher-form
     Created on : Jun 20, 2026, 9:24:06 PM
     Author     : default
@@ -60,11 +60,11 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Min Order Amount (Ä‘)</label>
+                                <label class="form-label">Min Order Amount (ð)</label>
                                 <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control" placeholder="0.0" value="${oldMin}" required>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Max Discount Amount (Ä‘)</label>
+                                <label class="form-label">Max Discount Amount (ð)</label>
                                 <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control" placeholder="50000.0" value="${oldMax}">
                             </div>
                         </div>

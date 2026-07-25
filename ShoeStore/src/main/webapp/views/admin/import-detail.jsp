@@ -18,7 +18,7 @@
                 margin: 0;
             }
             .main-content {
-                margin-left: 220px;
+                margin-left: 256px;
                 padding: 32px 36px;
                 min-height: 100vh;
                 width: 100%;
@@ -48,11 +48,13 @@
                 background: #fff;
                 border: 1px solid #e8e8e8;
                 border-radius: 4px;
+                overflow-x: auto;
             }
             .user-table {
                 width: 100%;
                 border-collapse: collapse;
                 table-layout: fixed;
+                min-width: 800px;
             }
             .user-table thead tr {
                 border-bottom: 2px solid #e8e8e8;

@@ -12,7 +12,7 @@
             * { box-sizing: border-box; }
             body { background: #f5f5f3; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow-y: scroll; }
             .main-content {
-                margin-left: 220px;
+                margin-left: 256px;
                 padding: 32px 36px;
                 min-height: 100vh;
                 width: 100%;
