@@ -47,7 +47,7 @@ public class ManageReviewServlet extends HttpServlet {
             if (search != null && !search.trim().isEmpty()) {
                 String q = search.trim().toLowerCase();
                 reviews = reviews.stream()
-                        .filter(r -> (r.getReviewText() != null && r.getReviewText().toLowerCase().contains(q)) || 
+                        .filter(r -> (r.getComment() != null && r.getComment().toLowerCase().contains(q)) || 
                                      (r.getProductName() != null && r.getProductName().toLowerCase().contains(q)) ||
                                      (r.getUserName() != null && r.getUserName().toLowerCase().contains(q)))
                         .collect(java.util.stream.Collectors.toList());
