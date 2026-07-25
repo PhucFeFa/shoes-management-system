@@ -169,7 +169,7 @@
 
         function resetSelect(id, placeholder) {
             const select = document.getElementById(id);
-            select.innerHTML = `<option value="">${placeholder}</option>`;
+            select.innerHTML = `<option value="">\${placeholder}</option>`;
             select.disabled = true;
         }
 
@@ -245,11 +245,11 @@
             row.className = 'item-row hover:bg-gray-50 transition-colors';
             row.innerHTML = `
                 <td class="py-4 px-8">
-                    <input type="hidden" name="variantId[]" value="${variant.id}">
-                    <div class="text-sm font-semibold">${variant.productName}</div>
+                    <input type="hidden" name="variantId[]" value="\${variant.id}">
+                    <div class="text-sm font-semibold">\${variant.productName}</div>
                 </td>
-                <td class="py-4 px-4 text-center text-sm">${variant.size}</td>
-                <td class="py-4 px-4 text-center text-sm">${variant.color}</td>
+                <td class="py-4 px-4 text-center text-sm">\${variant.size}</td>
+                <td class="py-4 px-4 text-center text-sm">\${variant.color}</td>
                 <td class="py-4 px-4">
                     <input type="number" name="quantity[]" min="1" value="1" required oninput="updateRow(this)"
                            class="w-full border-gray-100 rounded-2xl text-sm focus:ring-black focus:border-black py-2 text-center input-no-spinner">

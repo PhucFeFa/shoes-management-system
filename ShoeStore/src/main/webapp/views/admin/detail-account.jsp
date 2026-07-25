@@ -33,7 +33,8 @@
                             flex-direction: column;
                             align-items: center;
                             justify-content: center;
-                            width: calc(100% - 220px);
+                            margin-left: 256px;
+                            width: calc(100% - 256px);
                         }
 
                         /* Khung bọc giới hạn chiều rộng tổng thể */

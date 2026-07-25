@@ -38,10 +38,20 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 mb-16">
 
-                        <!-- Product Image -->
-                        <div class="flex items-center justify-center bg-surface-container-high rounded-3xl p-12 self-start">
-                            <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${product.firstImageUrl}" alt="${product.name}"
-                                class="w-full h-auto object-contain mix-blend-multiply">
+                        <!-- Product Image Column -->
+                        <div class="flex flex-col gap-6 self-start">
+                            <div class="flex items-center justify-center bg-surface-container-high rounded-3xl p-12">
+                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${product.firstImageUrl}" alt="${product.name}"
+                                    class="w-full h-auto object-contain mix-blend-multiply">
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mt-6 pt-6 border-t border-outline-variant/30">
+                                <h3 class="text-headline-md font-headline-md font-bold text-primary mb-4">Description</h3>
+                                <p class="text-body-md text-secondary leading-relaxed">
+                                    ${product.description}
+                                </p>
+                            </div>
                         </div>
 
                         <!-- Product Info -->
@@ -147,14 +157,6 @@
                                     </form>
                                 </c:otherwise>
                             </c:choose>
-
-                            <!-- Description -->
-                            <div class="mt-12">
-                                <h3 class="text-headline-md font-headline-md font-bold text-primary mb-4">Description</h3>
-                                <p class="text-body-md text-secondary leading-relaxed">
-                                    ${product.description}
-                                </p>
-                            </div>
 
                         </div> <!-- End Product Info -->
                     </div> <!-- End Grid -->

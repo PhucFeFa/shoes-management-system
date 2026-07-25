@@ -42,11 +42,13 @@
                 background: #fff;
                 border: 1px solid #e8e8e8;
                 border-radius: 4px;
+                overflow-x: auto;
             }
             .user-table {
                 width: 100%;
                 border-collapse: collapse;
                 table-layout: fixed;
+                min-width: 900px;
             }
             .user-table thead tr {
                 border-bottom: 2px solid #e8e8e8;

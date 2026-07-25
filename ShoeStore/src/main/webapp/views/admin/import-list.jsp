@@ -194,7 +194,7 @@
     <c:set var="activePage" value="import" scope="request" />
     <jsp:include page="/views/admin/sidebar.jsp" />
 
-    <main class="main-content flex-1 flex flex-col min-h-screen">
+    <main class="main-content flex-1 flex flex-col min-h-screen min-w-0">
         <div class="flex items-center mb-4">
             <div class="page-header mb-0">
                 <i class="bi bi-box-seam" style="font-size:16px; color:#1a1a1a;"></i>
