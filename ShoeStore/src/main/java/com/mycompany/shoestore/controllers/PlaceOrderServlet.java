@@ -132,18 +132,12 @@ public class PlaceOrderServlet extends HttpServlet {
                         voucherDAO.getVoucherById(voucherId);
 
                 if (voucher != null) {
-
-                    double discount = 0;
-
-                    if ("PERCENTAGE".equalsIgnoreCase(voucher.getDiscountType())) {
-                        discount = subTotal * voucher.getDiscountValue() / 100.0;
-                        if (voucher.getMaxDiscountAmount() != null && discount > voucher.getMaxDiscountAmount()) {
-                            discount = voucher.getMaxDiscountAmount();
-                        }
-                    } else if ("FIXED_AMOUNT".equalsIgnoreCase(voucher.getDiscountType())) {
-                        discount = voucher.getDiscountValue();
+                    // Schema only has discount_value as a fixed amount (no discount_type column)
+                    double discount = voucher.getDiscountValue();
+                    // Apply max_discount_amount cap if set
+                    if (voucher.getMaxDiscountAmount() != null && discount > voucher.getMaxDiscountAmount()) {
+                        discount = voucher.getMaxDiscountAmount();
                     }
-
                     totalAmount -= discount;
                 }
             }

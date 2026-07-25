@@ -635,28 +635,29 @@ public class ProductDAO {
 
     public List<String> getColorsByProductAndSize(
             String productId,
-            String sizeId) throws Exception {
+            String size) throws Exception {
 
         List<String> list = new ArrayList<>();
 
-        String sql = "SELECT DISTINCT c.name " +
-                "FROM product_variants pv " +
-                "JOIN colors c ON pv.color_id = c.id " +
-                "WHERE pv.product_id=? " +
-                "AND pv.size_id=? " +
-                "AND pv.stock_quantity > 0";
+        // product_variants stores size and color directly as strings
+        String sql = "SELECT DISTINCT color " +
+                "FROM product_variants " +
+                "WHERE product_id = ? " +
+                "AND size = ? " +
+                "AND stock_quantity > 0 " +
+                "ORDER BY color";
 
         try (
                 Connection con = new DBContext().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, productId);
-            ps.setString(2, sizeId);
+            ps.setString(2, size);
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(rs.getString("name"));
+                list.add(rs.getString("color"));
             }
         }
 
