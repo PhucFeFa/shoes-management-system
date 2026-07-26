@@ -41,7 +41,7 @@
     </div>
     <div
         class="mt-24 px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto border-t border-on-primary/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <span class="text-label-sm font-label-sm text-on-primary/50">Â© 2024 ADIDIS. ENGINEERED SPEED.</span>
+        <span class="text-label-sm font-label-sm text-on-primary/50">© 2024 ADIDIS. ENGINEERED SPEED.</span>
         <div class="flex gap-8">
             <span class="text-label-sm font-label-sm text-on-primary/50 uppercase tracking-widest">EST. 2024</span>
             <span class="text-label-sm font-label-sm text-on-primary/50 uppercase tracking-widest">GLOBAL

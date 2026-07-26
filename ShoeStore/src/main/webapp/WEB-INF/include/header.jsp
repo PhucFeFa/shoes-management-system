@@ -83,6 +83,7 @@
                                 "container-max": "1440px"
                             },
                             "fontFamily": {
+                                "sans": ["Inter", "sans-serif"],
                                 "label-md": ["Inter"],
                                 "display-lg": ["Inter"],
                                 "label-sm": ["Inter"],
@@ -130,44 +131,132 @@
         <body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary">
 
             <!-- TopNavBar -->
-            <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl">
+            <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
                 <nav
                     class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full max-w-container-max mx-auto">
                     <div class="flex items-center gap-8">
                         <a class="text-headline-md font-headline-md font-extrabold tracking-tighter text-primary dark:text-on-surface"
                             href="${pageContext.request.contextPath}/home">ADIDIS</a>
-                        <div class="hidden md:flex gap-6">
-                            <a class="text-label-md font-label-md uppercase text-primary dark:text-on-surface border-b-2 border-primary dark:border-on-surface pb-1"
-                                href="${pageContext.request.contextPath}/home">SHOP</a>
-                            <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                                href="#">NEW ARRIVALS</a>
-                            <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                                href="#">LABS</a>
-                            <a class="text-label-md font-label-md uppercase text-secondary dark:text-on-surface-variant hover:opacity-90 transition-opacity"
-                                href="#">COLLECTIONS</a>
-                        </div>
+
                     </div>
                     <div class="flex items-center gap-4">
-                        <div
-                            class="hidden lg:flex items-center bg-surface-container rounded-full px-4 py-2 gap-2 w-64 group focus-within:ring-1 ring-outline">
-                            <span class="material-symbols-outlined text-on-surface-variant">search</span>
-                            <input class="bg-transparent border-none focus:ring-0 text-label-sm w-full outline-none"
-                                placeholder="Search sneakers..." type="text" />
-                        </div>
-                        <button
-                            class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95">shopping_cart</button>
 
-                        <!-- TODO: Check if user is logged in to show avatar or login button -->
-                        <div
-                            class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover:opacity-90 cursor-pointer transition-opacity">
-                            <img alt="User Profile" class="w-full h-full object-cover"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuALOWqybA_K0QrooRZENjJPOsx-qKeoCj7ybcpG1rD0xsLXAfCm9PBx8jvE0jg_XPMjKHzX60rbDMJ7lpKOVVWCYAHsg3NEactDvM86ynfWofftF6aFyEsBaPBSPRRWAsrJblZu1qEFQTKCAk-Gg569F8gZde1763FK-o1PnvmxOEnPpStOtXbzWalsNHf1J4R49ZU2M_cLXrdVeI2GH4uD6JuYqMdles2_bQpT-I_imWamZFl95N_z3O1lnp6xd9nbDx1jGHifPdM" />
-                        </div>
+                        <c:if
+                            test="${not empty sessionScope.currentUser && sessionScope.currentUser.roleName eq 'Customer'}">
+                            <a href="${pageContext.request.contextPath}/Cart"
+                                class="relative text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                <c:set var="cartCount"
+                                    value="${sessionScope.cartCount != null ? sessionScope.cartCount : 0}" />
+                                <c:if test="${cartCount > 0}">
+                                    <span
+                                        class="absolute -top-1.5 -right-2 bg-error text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">${cartCount}</span>
+                                </c:if>
+                            </a>
+                        </c:if>
 
-                        <button
-                            class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center justify-center"
-                            title="Logout">logout</button>
+                        <c:if test="${empty sessionScope.currentUser}">
+                            <a href="${pageContext.request.contextPath}/login"
+                                class="text-label-md font-label-md uppercase text-primary hover:opacity-80">Login</a>
+                            <a href="${pageContext.request.contextPath}/register"
+                                class="bg-primary text-on-primary px-4 py-2 rounded-full text-label-md font-label-md uppercase hover:bg-primary/90 transition-colors">Signup</a>
+                        </c:if>
+
+                        <c:if test="${not empty sessionScope.currentUser}">
+                            <c:choose>
+                                <c:when test="${sessionScope.currentUser.roleName eq 'Admin'}">
+                                    <a href="${pageContext.request.contextPath}/dashboard"
+                                        class="relative group cursor-pointer block mt-1" title="Admin Dashboard">
+                                        <span
+                                            class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                                    </a>
+                                </c:when>
+                                <c:when test="${sessionScope.currentUser.roleName eq 'Staff'}">
+                                    <a href="${pageContext.request.contextPath}/staff/orders"
+                                        class="relative group cursor-pointer block mt-1" title="Staff Dashboard">
+                                        <span
+                                            class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageContext.request.contextPath}/profile"
+                                        class="relative group cursor-pointer block mt-1" title="My Profile">
+                                        <span
+                                            class="material-symbols-outlined text-[32px] text-primary">account_circle</span>
+                                    </a>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <form action="Logout" method="get">
+                                <button
+                                    class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity active:scale-95 flex items-center justify-center"
+                                    title="Logout">logout</button>
+                            </form>
+                        </c:if>
                         <button class="md:hidden material-symbols-outlined text-primary">menu</button>
+
                     </div>
                 </nav>
             </header>
+
+            <c:if test="${not empty sessionScope.cartMessage}">
+                <div id="cartModal"
+                    class="fixed inset-0 bg-primary/50 backdrop-blur-sm flex items-center justify-center z-[100]">
+                    <div
+                        class="bg-surface rounded-2xl border border-outline-variant shadow-2xl p-8 w-96 text-center transform transition-all">
+                        <span class="material-symbols-outlined text-[48px] text-primary mb-4">check_circle</span>
+                        <h2 class="text-headline-md font-headline-md text-primary uppercase tracking-wider mb-2">
+                            Success
+                        </h2>
+                        <p class="text-body-md text-secondary mb-8">
+                            ${sessionScope.cartMessage}
+                        </p>
+                        <button onclick="closeModal()"
+                            class="w-full bg-primary text-on-primary font-label-md text-label-md uppercase tracking-widest py-3 hover:bg-primary/90 transition-colors">
+                            CONTINUE SHOPPING
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    function closeModal() {
+                        document.getElementById("cartModal").style.display = "none";
+                    }
+                    setTimeout(function () {
+                        const modal = document.getElementById("cartModal");
+                        if (modal) {
+                            modal.style.display = "none";
+                        }
+                    }, 3000);
+                </script>
+
+                <c:remove var="cartMessage" scope="session" />
+            </c:if>
+
+            <c:if test="${not empty sessionScope.cartError}">
+                <div id="cartErrorModal"
+                    class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100]">
+                    <div
+                        class="bg-white rounded-2xl border shadow-2xl p-8 w-96 text-center transform transition-all">
+                        <span class="material-symbols-outlined text-[48px] text-red-500 mb-4">error</span>
+                        <h2 class="text-headline-md font-headline-md text-red-600 uppercase tracking-wider mb-2">
+                            Error
+                        </h2>
+                        <p class="text-body-md text-gray-600 mb-8">
+                            ${sessionScope.cartError}
+                        </p>
+                        <button onclick="closeErrorModal()"
+                            class="w-full bg-black text-white font-label-md text-label-md uppercase tracking-widest py-3 hover:bg-gray-800 transition-colors">
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    function closeErrorModal() {
+                        document.getElementById("cartErrorModal").style.display = "none";
+                    }
+                </script>
+
+                <c:remove var="cartError" scope="session" />
+            </c:if>
