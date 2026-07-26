@@ -1,4 +1,4 @@
-﻿<%-- Author: PhucLHCE191132 --%>
+<%-- Author: PhucLHCE191132 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
@@ -457,7 +457,7 @@
                           <input type="email" class="form-control form-control-sm" name="email" id="editEmail">
                       </div>
                       <div class="mb-3">
-                          <label for="editPassword" class="form-label" style="font-size: 12px; font-weight: 600;">New Password <span class="text-danger">*</span></label>
+                          <label for="editPassword" class="form-label" style="font-size: 12px; font-weight: 600;">New Password <span class="text-muted fw-normal" style="font-size: 10px;">(Leave blank to keep current)</span></label>
                           <input type="password" class="form-control form-control-sm" name="password" id="editPassword" placeholder="Enter new password">
                       </div>
                   </div>
@@ -516,30 +516,24 @@
             }
             
             function validateEditStaffForm() {
-                const fullName = document.getElementById('editFullName').value.trim();
-                const email = document.getElementById('editEmail').value.trim();
-                const passwordInput = document.getElementById('editPassword').value;
-                const errorDiv = document.getElementById('editStaffError');
-                
-                if (fullName === '') {
-                    errorDiv.textContent = 'Full Name cannot be empty or just spaces.';
-                    errorDiv.classList.remove('d-none');
-                    return false;
-                }
-                
-                if (email === '') {
-                    errorDiv.textContent = 'Email is a required field and cannot be empty.';
-                    errorDiv.classList.remove('d-none');
-                    return false;
-                }
-                
-                if (passwordInput.trim() === '') {
-                    errorDiv.textContent = 'Password is required and cannot be empty or just spaces.';
-                    errorDiv.classList.remove('d-none');
-                    return false;
-                }
-                return true;
-            }
+                  const fullName = document.getElementById('editFullName').value.trim();
+                  const email = document.getElementById('editEmail').value.trim();
+                  const errorDiv = document.getElementById('editStaffError');
+                  
+                  if (fullName === '') {
+                      errorDiv.textContent = 'Full Name is required.';
+                      errorDiv.classList.remove('d-none');
+                      return false;
+                  }
+                  
+                  if (email === '') {
+                      errorDiv.textContent = 'Email is required.';
+                      errorDiv.classList.remove('d-none');
+                      return false;
+                  }
+                  
+                  return true;
+              }
 
             function searchTable() {
                 var input = document.getElementById("searchInput");
