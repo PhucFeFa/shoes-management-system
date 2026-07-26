@@ -218,11 +218,6 @@
                             <header class="mb-12 border-b border-outline-variant pb-8">
                                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                                     <div>
-                                        <a href="${pageContext.request.contextPath}/profile/orders"
-                                            class="text-label-sm font-label-sm text-secondary uppercase hover:text-primary mb-6 inline-flex items-center gap-1 transition-colors">
-                                            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-                                            Back to Orders
-                                        </a>
                                         <span
                                             class="text-label-md font-label-md text-secondary tracking-widest uppercase mb-2 block">Order
                                             Confirmed</span>

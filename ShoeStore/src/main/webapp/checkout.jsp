@@ -256,12 +256,7 @@
                             <c:if test="${empty addresses}">
                                 <p class="text-red-500 text-sm text-center mt-3">Please add a shipping address in your profile to continue.</p>
                             </c:if>
-                            <a href="${pageContext.request.contextPath}/Cart"
-                               class="block w-full mt-3 text-center border border-black py-3 rounded-xl hover:bg-gray-100 transition">
 
-                                Back To Cart
-
-                            </a>
 
                     </div>
 

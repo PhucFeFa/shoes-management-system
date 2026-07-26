@@ -48,10 +48,6 @@
                             <span
                                 class="material-symbols-outlined ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[18px]">arrow_forward</span>
                         </button>
-                        <div class="pt-6 text-center">
-                            <a class="inline-block text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest font-medium"
-                                href="${pageContext.request.contextPath}/login">Back to Login</a>
-                        </div>
                     </form>
                 </div>
             </div>
