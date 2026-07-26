@@ -298,10 +298,25 @@
                     </div>
                 </div>
 
+                <c:if test="${not empty sessionScope.message or not empty param.message}">
+                    <div id="alertMsg" class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="font-size: 13px; font-weight: 500;">
+                        <i class="bi bi-check-circle-fill me-2"></i> ${not empty sessionScope.message ? sessionScope.message : param.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <c:remove var="message" scope="session" />
+                </c:if>
+                <c:if test="${not empty sessionScope.error or not empty param.error}">
+                    <div id="alertMsg" class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="font-size: 13px; font-weight: 500;">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> ${not empty sessionScope.error ? sessionScope.error : param.error}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <c:remove var="error" scope="session" />
+                </c:if>
+
                 <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
                     <form action="${pageContext.request.contextPath}/manage-account" method="GET" class="input-group" style="width: 300px;">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px;">
+                        <span class="input-group-text bg-white border-end-0" style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; padding-left: 14px;"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search by name or email..." style="font-size: 13px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; padding-right: 14px;">
                         <button type="submit" class="d-none"></button>
                     </form>
                 </div>
@@ -359,14 +374,14 @@
                                                     <a href="${pageContext.request.contextPath}/manage-account/view?id=${u.id}" class="btn-action btn-view">View</a>
                                                     <c:choose>
                                                         <c:when test="${u.status eq 'Active'}">
-                                                            <a href="${pageContext.request.contextPath}/status-account?id=${u.id}&currentStatus=Active" 
-                                                               class="btn-action btn-toggle-status" 
-                                                               onclick="return confirm('Are you sure you want to block this account?');">Block</a>
+                                                            <button type="button" 
+                                                                    class="btn-action btn-toggle-status" 
+                                                                    onclick="showConfirmModal('${pageContext.request.contextPath}/status-account?id=${u.id}&currentStatus=Active', 'Are you sure you want to block account ${u.email}?', 'btn-danger')">Block</button>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="${pageContext.request.contextPath}/status-account?id=${u.id}&currentStatus=Inactive" 
-                                                               class="btn-action btn-toggle-active" 
-                                                               onclick="return confirm('Are you sure you want to activate this account?');">Unblock</a>
+                                                            <button type="button" 
+                                                                    class="btn-action btn-toggle-active" 
+                                                                    onclick="showConfirmModal('${pageContext.request.contextPath}/status-account?id=${u.id}&currentStatus=Inactive', 'Are you sure you want to activate account ${u.email}?', 'btn-success')">Unblock</button>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
@@ -423,8 +438,48 @@
                 </div>
             </div>
         </div>
+        <!-- Confirm Status Modal -->
+        <div class="modal fade" id="confirmStatusModal" tabindex="-1" aria-labelledby="confirmStatusModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="confirmStatusModalLabel" style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Confirm Status Change</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body py-4" style="font-size: 13px; color: #444;">
+                <p id="confirmStatusText" class="mb-0 font-medium"></p>
+              </div>
+              <div class="modal-footer border-top">
+                <button type="button" class="btn btn-light btn-sm px-4" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmStatusBtn" href="#" class="btn btn-dark btn-sm px-4">Confirm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            let confirmModal = null;
+            document.addEventListener("DOMContentLoaded", function() {
+                confirmModal = new bootstrap.Modal(document.getElementById('confirmStatusModal'));
+                
+                setTimeout(function() {
+                    var alertMsg = document.getElementById('alertMsg');
+                    if (alertMsg) {
+                        var bsAlert = new bootstrap.Alert(alertMsg);
+                        bsAlert.close();
+                    }
+                }, 4000);
+            });
+
+            function showConfirmModal(targetUrl, text, btnClass) {
+                document.getElementById('confirmStatusText').innerText = text;
+                const confirmBtn = document.getElementById('confirmStatusBtn');
+                confirmBtn.href = targetUrl;
+                confirmBtn.className = 'btn btn-sm px-4 ' + (btnClass || 'btn-dark');
+                confirmModal.show();
+            }
+
             function searchTable() {
                 var input = document.getElementById("searchInput");
                 var filter = input.value.trim().toLowerCase();

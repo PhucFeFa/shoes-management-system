@@ -48,25 +48,13 @@
                             <p class="text-body-md font-body-md text-secondary">Enter the 6-digit code sent to your
                                 email.</p>
                         </div>
-                        <div class="flex justify-center items-center gap-2 sm:gap-2.5 w-full max-w-sm mx-auto">
-                            <input
-                                class="otp-box w-9 h-12 sm:w-11 sm:h-14 flex-1 max-w-[46px] bg-surface-container text-center text-headline-sm sm:text-headline-md font-headline-md text-primary border border-transparent rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                maxlength="1" type="text" autofocus />
-                            <input
-                                class="otp-box w-9 h-12 sm:w-11 sm:h-14 flex-1 max-w-[46px] bg-surface-container text-center text-headline-sm sm:text-headline-md font-headline-md text-primary border border-transparent rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                maxlength="1" type="text" />
-                            <input
-                                class="otp-box w-9 h-12 sm:w-11 sm:h-14 flex-1 max-w-[46px] bg-surface-container text-center text-headline-sm sm:text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                maxlength="1" type="text" />
-                            <input
-                                class="otp-box w-9 h-12 sm:w-11 sm:h-14 flex-1 max-w-[46px] bg-surface-container text-center text-headline-sm sm:text-headline-md font-headline-md text-primary border border-transparent rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                maxlength="1" type="text" />
-                            <input
-                                class="otp-box w-9 h-12 sm:w-11 sm:h-14 flex-1 max-w-[46px] bg-surface-container text-center text-headline-sm sm:text-headline-md font-headline-md text-primary border border-transparent rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                maxlength="1" type="text" />
-                            <input
-                                class="otp-box w-9 h-12 sm:w-11 sm:h-14 flex-1 max-w-[46px] bg-surface-container text-center text-headline-sm sm:text-headline-md font-headline-md text-primary border border-transparent rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                maxlength="1" type="text" />
+                        <div class="flex justify-between -m-8">
+                            <input class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md" maxlength="1" type="text" autofocus />
+                            <input class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md" maxlength="1" type="text" />
+                            <input class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md" maxlength="1" type="text" />
+                            <input class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md" maxlength="1" type="text" />
+                            <input class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md" maxlength="1" type="text" />
+                            <input class="otp-box w-12 h-14 sm:w-14 sm:h-16 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md" maxlength="1" type="text" />
                         </div>
                         <form action="${pageContext.request.contextPath}/verify-forgot-otp" method="POST"
                             id="verify-form">

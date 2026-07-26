@@ -22,22 +22,21 @@
             .table-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; overflow: hidden; }
             .user-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
             .user-table thead tr { border-bottom: 2px solid #e8e8e8; background: #fff; }
-            .user-table thead th { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #1a1a1a; padding: 14px 16px; text-align: left; }
+            .user-table thead th { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #1a1a1a; padding: 14px 12px; text-align: left; white-space: nowrap; }
             .user-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .12s; }
             .user-table tbody tr:hover { background: #fafafa; }
-            .user-table tbody td { padding: 16px; font-size: 13px; color: #1a1a1a; vertical-align: middle; }
+            .user-table tbody td { padding: 14px 12px; font-size: 13px; color: #1a1a1a; vertical-align: middle; }
             
-            .col-no { width: 50px; } .col-code { width: 140px; } .col-value { width: 90px; } .col-min { width: 110px; } .col-date { width: 120px; } .col-usage { width: 100px; } .col-status { width: 90px; } .col-action { width: 180px; }
             .cell-no { font-size: 12px; color: #ccc; font-weight: 600; }
             .cell-code { font-weight: 700; color: #1a1a1a; letter-spacing: 0.02em; }
-            .qty-badge { font-size: 11px; font-weight: 700; background: #f1f3f5; color: #495057; padding: 4px 10px; border-radius: 4px; display: inline-block; }
+            .qty-badge { font-size: 11px; font-weight: 700; background: #f1f3f5; color: #495057; padding: 4px 10px; border-radius: 4px; display: inline-block; white-space: nowrap; }
             
-            .status-badge { font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; display: inline-block; letter-spacing: .1em; }
+            .status-badge { font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; display: inline-block; letter-spacing: .1em; white-space: nowrap; }
             .status-active { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
             .status-inactive { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; }
             
-            .action-wrap { display: flex; gap: 6px; justify-content: center; align-items: center; }
-            .btn-action { font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 6px 12px; text-decoration: none !important; border-radius: 4px; transition: all 0.2s ease; border: 1px solid transparent; line-height: 1.2; }
+            .action-wrap { display: flex; gap: 6px; justify-content: center; align-items: center; white-space: nowrap; }
+            .btn-action { font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 6px 12px; text-decoration: none !important; border-radius: 4px; transition: all 0.2s ease; border: 1px solid transparent; line-height: 1.2; display: inline-block; }
             .btn-view { background: #f1f1f1; color: #333; }
             .btn-view:hover { background: #e2e2e2; color: #000; }
             .btn-edit { background: #e8f4fd; color: #1a6fa8; }
@@ -46,107 +45,6 @@
             .btn-delete:hover { background: #e53e3e; color: #fff; border-color: #e53e3e; }
             .empty-row td { text-align: center; padding: 60px; font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; }
             
-            .btn-create {
-                background: #1a1a1a;
-                color: #fff;
-                font-size: 11px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: .1em;
-                padding: 10px 20px;
-                border-radius: 4px;
-                border: none;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                transition: background 0.2s;
-                text-decoration: none !important;
-            }
-            .user-table {
-                width: 100%;
-                border-collapse: collapse;
-                table-layout: fixed;
-            }
-            .user-table thead tr {
-                border-bottom: 2px solid #e8e8e8;
-            }
-            .user-table thead th {
-                font-size: 11px;
-                font-weight: 700;
-                letter-spacing: .1em;
-                text-transform: uppercase;
-                color: #1a1a1a;
-                padding: 14px 16px;
-            }
-            .user-table tbody tr {
-                border-bottom: 1px solid #f0f0f0;
-                transition: background .12s;
-            }
-            .user-table tbody tr:hover {
-                background: #fafafa;
-            }
-            .user-table tbody td {
-                padding: 16px;
-                font-size: 13px;
-                color: #1a1a1a;
-                vertical-align: middle;
-            }
-            /* Cấu hình độ rộng các cột */
-            .col-no {
-                width: 6%;
-            }
-            .col-code {
-                width: 22%;
-            }
-            .col-date {
-                width: 22%;
-            }
-            .col-qty {
-                width: 15%;
-            }
-            .col-action {
-                width: 13%;
-            }
-
-            .cell-no {
-                font-size: 12px;
-                color: #bbb;
-                font-weight: 600;
-            }
-            .cell-code {
-                font-weight: 600;
-                color: #1a1a1a;
-            }
-            .cell-date {
-                font-size: 12px;
-                color: #888;
-            }
-
-            .qty-badge {
-                font-size: 10px;
-                font-weight: 700;
-                background: #f1f3f5;
-                color: #495057;
-                padding: 4px 10px;
-                border-radius: 4px;
-                text-transform: uppercase;
-            }
-
-            .action-wrap {
-                display: flex;
-                gap: 6px;
-                justify-content: center;
-            }
-            .btn-action {
-                font-size: 10px;
-                font-weight: 600;
-                letter-spacing: .05em;
-                text-transform: uppercase;
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 4px;
-                transition: all 0.2s ease;
-            }
             .btn-add {
                 background: #1a1a1a;
                 color: #fff;
@@ -159,7 +57,7 @@
                 height: 38px;
                 border-radius: 4px;
                 cursor: pointer;
-                text-decoration: none;
+                text-decoration: none !important;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -167,20 +65,6 @@
             .btn-add:hover {
                 background: #000;
                 color: #fff;
-            }
-            .btn-view {
-                background: #f1f1f1;
-                color: #333;
-            }
-            .btn-view:hover {
-                background: #e2e2e2;
-            }
-            .btn-edit {
-                background: #e8f4fd;
-                color: #1a6fa8;
-            }
-            .btn-edit:hover {
-                background: #d2e9fc;
             }
 
             .form-control:focus {
@@ -262,8 +146,8 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
                     <form action="${pageContext.request.contextPath}/manage-voucher" method="GET" class="input-group" style="width: 300px;">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search by voucher code..." style="font-size: 13px;">
+                        <span class="input-group-text bg-white border-end-0" style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; padding-left: 14px;"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search by voucher code..." style="font-size: 13px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; padding-right: 14px;">
                         <button type="submit" class="d-none"></button>
                     </form>
                     <a href="${pageContext.request.contextPath}/create-voucher" class="btn-add">
@@ -272,17 +156,28 @@
                 </div>
                 <div class="table-card">
                     <table class="user-table">
+                        <colgroup>
+                            <col style="width: 4%;">
+                            <col style="width: 15%;">
+                            <col style="width: 9%;">
+                            <col style="width: 10%;">
+                            <col style="width: 11%;">
+                            <col style="width: 11%;">
+                            <col style="width: 11%;">
+                            <col style="width: 10%;">
+                            <col style="width: 19%;">
+                        </colgroup>
                         <thead>
                             <tr>
-                                <th class="col-no">No.</th>
-                                <th class="col-code">Code</th>
-                                <th class="col-value">Value</th>
-                                <th class="col-min">Min Order</th>
-                                <th class="col-date">Start Date</th>
-                                <th class="col-date">End Date</th>
-                                <th class="col-usage">Usage</th>
-                                <th class="col-status" style="text-align:center">Status</th>
-                                <th class="col-action" style="text-align:center">Action</th>
+                                <th>No.</th>
+                                <th>Code</th>
+                                <th>Value</th>
+                                <th>Min Order</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Usage</th>
+                                <th style="text-align:center">Status</th>
+                                <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -379,9 +274,37 @@
                     </div>
                 </div>
             </div>
+        <!-- Confirm Delete Voucher Modal -->
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+              <div class="modal-header border-bottom">
+                <h5 class="modal-title" id="confirmDeleteModalLabel" style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Confirm Delete Voucher</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body py-4" style="font-size: 13px; color: #444;">
+                <p class="mb-0 font-medium">Are you sure you want to delete this voucher? This will change its status to <strong>INACTIVE</strong>.</p>
+              </div>
+              <div class="modal-footer border-top">
+                <button type="button" class="btn btn-light btn-sm px-4" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" href="#" class="btn btn-danger btn-sm px-4">Delete</a>
+              </div>
+            </div>
+          </div>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
+            let deleteModal = null;
+            document.addEventListener("DOMContentLoaded", function() {
+                deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            });
+
+            function confirmDelete(id) {
+                document.getElementById('confirmDeleteBtn').href = '${pageContext.request.contextPath}/manage-voucher/delete?id=' + id;
+                deleteModal.show();
+            }
+
             function searchTable() {
                 var input = document.getElementById("searchInput");
                 var filter = input.value.trim().toLowerCase();
@@ -402,12 +325,6 @@
                             tr[i].style.display = "none";
                         }
                     }
-                }
-            }
-
-            function confirmDelete(id) {
-                if (confirm('Are you sure you want to delete this voucher? This will change status to INACTIVE.')) {
-                    window.location.href = '${pageContext.request.contextPath}/manage-voucher/delete?id=' + id;
                 }
             }
         </script>
