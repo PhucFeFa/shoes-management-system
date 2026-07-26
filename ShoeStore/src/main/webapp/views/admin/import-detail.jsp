@@ -164,11 +164,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-start mb-3 gap-2">
-                    <a href="${pageContext.request.contextPath}/admin/import" class="btn-back">
-                        <i class="bi bi-arrow-left"></i> Back to List
-                    </a>
-                </div>
+
 
                 <c:if test="${not empty error}">
                     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">

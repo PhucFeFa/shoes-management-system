@@ -1,7 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <jsp:include page="/WEB-INF/include/header.jsp" />
-        <div class="min-h-screen py-12 px-4 flex items-center justify-center w-full">
+        <div class="min-h-screen pt-20 md:pt-24 pb-8 px-4 flex items-center justify-center w-full">
             <div
                 class="w-full max-w-5xl md:h-[750px] flex flex-col md:flex-row bg-surface-container-lowest rounded-[2rem] shadow-2xl overflow-hidden">
                 <div class="hidden md:flex md:w-7/12 lg:w-3/5 relative bg-surface-container-high"
@@ -48,10 +48,6 @@
                             <span
                                 class="material-symbols-outlined ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[18px]">arrow_forward</span>
                         </button>
-                        <div class="pt-6 text-center">
-                            <a class="inline-block text-label-sm font-label-sm text-secondary hover:text-primary transition-colors uppercase tracking-widest font-medium"
-                                href="${pageContext.request.contextPath}/login">Back to Login</a>
-                        </div>
                     </form>
                 </div>
             </div>

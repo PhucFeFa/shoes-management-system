@@ -154,13 +154,7 @@
                         <span>Manage Staff</span>
                     </a>
                 </li>
-                <li class="adidis-nav-item">
-                    <a href="${pageContext.request.contextPath}/admin/audit-log"
-                        class="${activePage eq 'audit-log' ? 'active' : ''}">
-                        <span class="material-symbols-outlined">history</span>
-                        <span>Audit Logs</span>
-                    </a>
-                </li>
+
                 <li class="adidis-nav-item">
                     <a href="${pageContext.request.contextPath}/admin/manage-products"
                         class="${activePage eq 'manage-products' ? 'active' : ''}">
@@ -205,6 +199,10 @@
                         <span>Back to Website</span>
                     </button>
                 </form>
+                <a href="${pageContext.request.contextPath}/Logout" style="color: #dc2626; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 12px; text-transform: uppercase; margin-top: 8px;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                    <span>Logout</span>
+                </a>
             </div>
         </div>
 

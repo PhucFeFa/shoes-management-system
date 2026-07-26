@@ -34,9 +34,9 @@
                                     SEARCH</h3>
                                 <div class="relative">
                                     <input type="text" name="search" value="${searchQuery}" placeholder="Search..."
-                                        class="w-full bg-surface-container text-label-sm text-primary border-none py-2 px-3 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
+                                        class="w-full bg-surface-container text-label-sm text-primary border-none py-2 px-4 rounded-full focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50">
                                     <span
-                                        class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
+                                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-secondary text-[18px]">search</span>
                                 </div>
                             </div>
 

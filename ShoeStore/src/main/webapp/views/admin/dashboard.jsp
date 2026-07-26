@@ -35,11 +35,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Monthly Revenue</p>
-                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyRevenue}" pattern="#,##0"/> ð</p>
+                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyRevenue}" pattern="#,##0"/> Ä‘</p>
                 </div>
                 <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Monthly Cost</p>
-                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyCost}" pattern="#,##0"/> ð</p>
+                    <p class="text-2xl font-extrabold"><fmt:formatNumber value="${monthlyCost}" pattern="#,##0"/> Ä‘</p>
                 </div>
                 <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Success Rate</p>

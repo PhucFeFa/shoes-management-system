@@ -205,8 +205,8 @@
                 <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
                     <form action="${pageContext.request.contextPath}/admin/product/details" method="GET" class="input-group" style="width: 300px;">
                         <input type="hidden" name="id" value="${product.id}">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" name="search" value="${param.search}" class="form-control border-start-0" placeholder="Search variants..." style="font-size: 13px;">
+                        <span class="input-group-text bg-white border-end-0" style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; padding-left: 14px;"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                        <input type="text" name="search" value="${param.search}" class="form-control border-start-0" placeholder="Search variants..." style="font-size: 13px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; padding-right: 14px;">
                         <button type="submit" class="d-none"></button>
                     </form>
                     <button type="button" class="btn-add" data-bs-toggle="modal" data-bs-target="#addVariantModal">

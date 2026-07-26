@@ -230,12 +230,7 @@
                                                 </span>
                                             </div>
 
-                                            <div class="pt-3">
-                                                <a href="${pageContext.request.contextPath}/manage-account"
-                                                    class="btn-back">
-                                                    <i class="bi bi-arrow-left"></i> Back to list
-                                                </a>
-                                            </div>
+
                                         </div>
                                     </c:when>
                                     <c:otherwise>
@@ -246,10 +241,7 @@
                                                 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">
                                                 Account information could not be found.
                                             </p>
-                                            <a href="${pageContext.request.contextPath}/manage-account"
-                                                class="btn-back">
-                                                <i class="bi bi-arrow-left"></i> Back to list
-                                            </a>
+
                                         </div>
                                     </c:otherwise>
                                 </c:choose>

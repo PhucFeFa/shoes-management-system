@@ -85,12 +85,12 @@ public class ReviewDAO {
         return null;
     }
 
-    // Kiểm tra xem user có được quyền review không (đã mua và đơn hàng hoàn thành)
+    // Kiểm tra xem user có được quyền review không (đã mua và đơn hàng ở trạng thái hoàn thành - completed)
     public boolean canUserReview(String userId, String productId) {
         String sql = "SELECT COUNT(*) FROM orders o " +
                      "JOIN order_items oi ON o.id = oi.order_id " +
                      "JOIN product_variants pv ON oi.product_variant_id = pv.id " +
-                     "WHERE o.user_id = ? AND pv.product_id = ? AND o.status = 'completed'";
+                     "WHERE o.user_id = ? AND pv.product_id = ? AND LOWER(o.status) = 'completed'";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);

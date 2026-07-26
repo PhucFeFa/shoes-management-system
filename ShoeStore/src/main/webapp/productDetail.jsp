@@ -493,7 +493,7 @@
                                 if (selectedSize && selectedColor) {
                                     const v = variants.find(x => x.size.trim() === selectedSize.trim() && x.color.trim() === selectedColor.trim());
                                     if (v && v.stock > 0) {
-                                        stockInfo.innerHTML = `<span class="text-green-600">Available: ${v.stock} items</span>`;
+                                        stockInfo.innerHTML = "";
                                         const variantIdField = document.getElementById("selectedVariantId");
                                         if (variantIdField) variantIdField.value = v.id;
                                         if (addBtn) addBtn.disabled = false;
