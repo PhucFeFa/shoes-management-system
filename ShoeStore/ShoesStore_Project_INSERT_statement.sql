@@ -1,4 +1,4 @@
-﻿-- BƯỚC 1: XÓA DỮ LIỆU CŨ (Thứ tự: Bảng con trước, bảng cha sau)
+-- BƯỚC 1: XÓA DỮ LIỆU CŨ (Thứ tự: Bảng con trước, bảng cha sau)
 -- ====================================================================
 DELETE FROM "order_items";
 DELETE FROM "order_staff_logs";
@@ -56,10 +56,10 @@ INSERT INTO "vouchers" ("id", "code", "discount_value", "min_order_amount", "max
 
 -- 6. Products
 INSERT INTO "products" ("id", "name", "description", "price", "category_id", "brand_id", "status") VALUES 
-('10000000-0000-0000-0000-000000000001', 'Air Max Pulse', 'Men's running shoes with Air Max cushioning.', 160, '22222222-2222-2222-2222-222222222222', 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'active'),
+('10000000-0000-0000-0000-000000000001', 'Air Max Pulse', 'Men''s running shoes with Air Max cushioning.', 160, '22222222-2222-2222-2222-222222222222', 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'active'),
 ('10000000-0000-0000-0000-000000000002', 'Ultraboost Light', 'Lightweight and comfortable running shoes.', 190, '33333333-3333-3333-3333-333333333333', 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC', 'active'),
 ('10000000-0000-0000-0000-000000000003', 'Puma MB.02', 'LaMelo Ball signature basketball shoes.', 130, '44444444-4444-4444-4444-444444444444', 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'active'),
-('10000000-0000-0000-0000-000000000004', 'Air Force 1 '07', 'Classic lifestyle fashion shoes.', 110, '11111111-1111-1111-1111-111111111111', 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'active'),
+('10000000-0000-0000-0000-000000000004', 'Air Force 1 ''07', 'Classic lifestyle fashion shoes.', 110, '11111111-1111-1111-1111-111111111111', 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 'active'),
 ('10000000-0000-0000-0000-000000000005', 'Dummy Product 5', 'High quality sports and lifestyle shoes model 5.', 105, '22222222-2222-2222-2222-222222222222', 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB', 'active'),
 ('10000000-0000-0000-0000-000000000006', 'Dummy Product 6', 'High quality sports and lifestyle shoes model 6.', 106, '33333333-3333-3333-3333-333333333333', 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC', 'active'),
 ('10000000-0000-0000-0000-000000000007', 'Dummy Product 7', 'High quality sports and lifestyle shoes model 7.', 107, '44444444-4444-4444-4444-444444444444', 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'active'),
