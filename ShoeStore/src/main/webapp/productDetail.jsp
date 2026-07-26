@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <jsp:include page="/WEB-INF/include/header.jsp" />
@@ -313,31 +313,27 @@
                                         <button
                                             class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="5">
-                                            <span class="tracking-widest text-lg leading-none">★★★★★</span> (5)
+                                            <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span></span> (5)
                                         </button>
                                         <button
                                             class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="4">
-                                            <span class="tracking-widest text-lg leading-none">★★★★<span
-                                                    class="opacity-30">★</span></span> (4)
+                                            <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (4)
                                         </button>
                                         <button
                                             class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="3">
-                                            <span class="tracking-widest text-lg leading-none">★★★<span
-                                                    class="opacity-30">★★</span></span> (3)
+                                            <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (3)
                                         </button>
                                         <button
                                             class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="2">
-                                            <span class="tracking-widest text-lg leading-none">★★<span
-                                                    class="opacity-30">★★★</span></span> (2)
+                                            <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (2)
                                         </button>
                                         <button
                                             class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
                                             data-rating="1">
-                                            <span class="tracking-widest text-lg leading-none">★<span
-                                                    class="opacity-30">★★★★</span></span> (1)
+                                            <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (1)
                                         </button>
                                     </div>
                                 </div>
@@ -357,10 +353,13 @@
                                                     <span class="font-headline-sm text-headline-sm font-bold text-primary">
                                                         <c:out value="${r.userName}" />
                                                     </span>
-                                                    <span class="text-primary tracking-widest text-xl leading-none">
-                                                        <c:forEach begin="1" end="${r.rating}">★</c:forEach>
-                                                        <c:forEach begin="${r.rating + 1}" end="5"><span
-                                                                class="text-outline-variant">★</span></c:forEach>
+                                                                                                        <span class="flex items-center gap-[2px]">
+                                                        <c:forEach begin="1" end="${r.rating}">
+                                                            <span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                                        </c:forEach>
+                                                        <c:forEach begin="${r.rating + 1}" end="5">
+                                                            <span class="material-symbols-outlined text-outline-variant text-[20px]">star</span>
+                                                        </c:forEach>
                                                     </span>
                                                 </div>
                                                 <p class="text-body-lg text-secondary leading-relaxed">
@@ -374,6 +373,18 @@
                                                             Comment:</p>
                                                         <p class="text-body-md text-on-surface-variant italic">
                                                             <c:out value="${r.previousComment}" />
+                                                        </p>
+                                                    </div>
+                                                </c:if>
+
+                                                <c:if test="${not empty r.replyComment}">
+                                                    <div class="mt-4 p-5 bg-primary/5 border-l-4 border-primary rounded-2xl">
+                                                        <p class="text-label-md font-label-md text-primary mb-1 uppercase tracking-widest flex items-center gap-2">
+                                                            <span class="material-symbols-outlined text-[18px]">support_agent</span> 
+                                                            Store Reply
+                                                        </p>
+                                                        <p class="text-body-md text-on-surface">
+                                                            <c:out value="${r.replyComment}" />
                                                         </p>
                                                     </div>
                                                 </c:if>
@@ -552,4 +563,5 @@
             </main>
 
             <jsp:include page="/WEB-INF/include/footer.jsp" />
+
 
