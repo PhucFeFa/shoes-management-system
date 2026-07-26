@@ -1,4 +1,4 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -199,12 +199,48 @@
                                             </button>
                                         </c:if>
 
-                                        <c:forEach begin="1" end="${totalPages}" var="i">
-                                            <button onclick="goToPage(${i})"
+                                        <c:set var="startPage" value="${currentPage - 2}" />
+<c:set var="endPage" value="${currentPage + 2}" />
+<c:if test="${startPage < 1}">
+    <c:set var="endPage" value="${endPage + (1 - startPage)}" />
+    <c:set var="startPage" value="1" />
+</c:if>
+<c:if test="${endPage > totalPages}">
+    <c:set var="startPage" value="${startPage - (endPage - totalPages)}" />
+    <c:set var="endPage" value="${totalPages}" />
+</c:if>
+<c:if test="${startPage < 1}">
+    <c:set var="startPage" value="1" />
+</c:if>
+
+<c:if test="${startPage > 1}">
+    <c:set var="i" value="1" />
+    <button onclick="goToPage(${i})"
                                                 class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors rounded-full ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
                                                 ${i}
                                             </button>
-                                        </c:forEach>
+    <c:if test="${startPage > 2}">
+        <span class="px-2">...</span>
+    </c:if>
+</c:if>
+
+<c:forEach begin="${startPage}" end="${endPage}" var="i">
+    <button onclick="goToPage(${i})"
+                                                class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors rounded-full ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
+                                                ${i}
+                                            </button>
+</c:forEach>
+
+<c:if test="${endPage < totalPages}">
+    <c:if test="${endPage < totalPages - 1}">
+        <span class="px-2">...</span>
+    </c:if>
+    <c:set var="i" value="${totalPages}" />
+    <button onclick="goToPage(${i})"
+                                                class="w-10 h-10 flex items-center justify-center text-label-sm font-label-sm transition-colors rounded-full ${i == currentPage ? 'bg-primary text-on-primary border border-primary' : 'border border-outline hover:border-primary hover:text-primary'}">
+                                                ${i}
+                                            </button>
+</c:if>
 
                                         <c:if test="${currentPage < totalPages}">
                                             <button onclick="goToPage(${currentPage + 1})"

@@ -1,142 +1,150 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+        <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-            <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+            <jsp:include page="/WEB-INF/include/header.jsp" />
 
-                <jsp:include page="/WEB-INF/include/header.jsp" />
-
-                <main class="pt-16">
-                    <!-- Hero Section -->
-                    <div class="px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto mt-4 mb-16">
-                        <section class="relative w-full overflow-hidden flex items-center min-h-[60vh] rounded-3xl group">
-                            <div class="absolute inset-0 z-0 overflow-hidden rounded-3xl">
-                                <!-- Background Image -->
-                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="Runners"
-                                     class="w-full h-full object-cover object-center scale-105 transform group-hover:scale-100 transition-transform duration-1000"
-                                     src="${pageContext.request.contextPath}/assets/hero_runner.avif" />
-                                <!-- Dark Overlay for Text Readability -->
-                                <div class="absolute inset-0 bg-black/40 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+            <main class="pt-16">
+                <!-- Hero Section -->
+                <div class="px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto mt-4 mb-16">
+                    <section class="relative w-full overflow-hidden flex items-center min-h-[60vh] rounded-3xl group">
+                        <div class="absolute inset-0 z-0 overflow-hidden rounded-3xl">
+                            <!-- Background Image -->
+                            <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';"
+                                alt="Runners"
+                                class="w-full h-full object-cover object-center scale-105 transform group-hover:scale-100 transition-transform duration-1000"
+                                src="${pageContext.request.contextPath}/assets/hero_runner.avif" />
+                            <!-- Dark Overlay for Text Readability -->
+                            <div
+                                class="absolute inset-0 bg-black/40 bg-gradient-to-r from-black/80 via-black/40 to-transparent">
                             </div>
-                            <div class="relative z-10 px-8 md:px-16 w-full max-w-container-max mx-auto">
-                                <div class="max-w-xl">
-                                    <p class="text-label-md font-label-md uppercase tracking-widest text-white/80 mb-4">ELEVATE YOUR PERFORMANCE</p>
-                                    <h1 class="text-display-lg-mobile md:text-display-lg font-display-lg text-white mb-8 leading-[1.05]">
-                                        DISCOVER<br />YOUR EDGE
-                                    </h1>
-                                    <a href="${pageContext.request.contextPath}/products" class="inline-block bg-transparent border-2 border-white text-white px-10 py-5 text-label-md font-label-md uppercase tracking-wider rounded-full hover:bg-white hover:text-black transition-all active:scale-95">
-                                        SHOP NOW
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="absolute bottom-12 right-margin-desktop hidden lg:block">
-                                <div class="flex flex-col items-end gap-2 text-white">
-                                    <span class="text-label-sm font-label-sm opacity-60">DESIGNED IN LAB_04</span>
-                                    <div class="h-px w-24 bg-white opacity-80"></div>
-                                    <span class="text-label-md font-label-md font-bold italic">ENGINEERED FOR SPEED</span>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!-- Product Grid Section -->
-                    <section class="py-24 px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto">
-                        <div class="flex justify-between items-end mb-16 border-b border-outline-variant pb-8">
-                            <div>
-                                <h2 class="text-headline-lg font-headline-lg text-primary">LATEST DROPS</h2>
-                                <p class="text-body-md text-secondary mt-2">Precision engineered for the urban athlete.
-                                </p>
-                            </div>
-                            <a class="text-label-md font-label-md text-primary border-b border-primary hover:pb-1 transition-all"
-                                href="${pageContext.request.contextPath}/products">VIEW ALL PRODUCTS</a>
                         </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                            <c:forEach var="product" items="${latestProducts}">
-                                <div
-                                    class="product-card group relative cursor-pointer transition-transform duration-500 hover:-translate-y-2">
-                                    <div
-                                        class="bg-surface-container aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 relative rounded-2xl">
-                                        <!-- Product Image -->
-                                        <c:choose>
-                                            <c:when test="${not empty product.firstImageUrl}">
-                                                <a
-                                                    href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}">
-                                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="${product.name}"
-                                                        class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
-                                                        src="${product.firstImageUrl}" />
-                                                </a>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="${product.name}"
-                                                    class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
-                                                    src="https://via.placeholder.com/300?text=No+Image" />
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                    </div>
-
-                                    <div>
-                                        <h3 class="text-label-md font-label-md font-bold uppercase mb-1">
-                                            <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}"
-                                                class="hover:text-primary">
-                                                ${product.name}
-                                            </a>
-                                        </h3>
-                                        <p class="text-label-sm text-secondary mb-2">${product.category.name}</p>
-                                        <div class="flex items-center gap-1 mb-2">
-                                            <c:choose>
-                                                <c:when test="${product.reviewCount > 0}">
-                                                    <div
-                                                        class="relative inline-block text-outline-variant text-sm mr-1 whitespace-nowrap">
-                                                        ★★★★★
-                                                        <div class="absolute top-0 left-0 overflow-hidden text-primary whitespace-nowrap"
-                                                            style="width: ${product.averageRating / 5 * 100}%;">
-                                                            ★★★★★
-                                                        </div>
-                                                    </div>
-                                                    <span
-                                                        class="text-label-sm text-secondary">(${product.reviewCount})</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <div class="text-outline-variant text-sm mr-1">★★★★★</div>
-                                                    <span class="text-label-sm text-secondary">No reviews</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-                                        <p class="text-label-md font-label-md text-primary"><fmt:formatNumber value="${product.price}" pattern="#,##0"/> đ</p>
-                                    </div>
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </section>
-
-                    <!-- About Us Section -->
-                    <section class="py-24 bg-surface-container-high px-margin-mobile md:px-margin-desktop">
-                        <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-                            <div>
-                                <h2 class="text-headline-lg font-headline-lg text-primary mb-6">ABOUT ADIDIS</h2>
-                                <p class="text-body-lg text-on-surface-variant mb-6 max-w-md">
-                                    At ADIDIS, we blend cutting-edge engineering with urban aesthetics to create
-                                    footwear that empowers your every step. Our mission is to push the boundaries of
-                                    performance and style.
-                                </p>
-                                <p class="text-body-lg text-on-surface-variant mb-8 max-w-md">
-                                    Experience the perfect synergy of comfort and speed. We don't just design shoes; we
-                                    engineer movement.
-                                </p>
+                        <div class="relative z-10 px-8 md:px-16 w-full max-w-container-max mx-auto">
+                            <div class="max-w-xl">
+                                <p class="text-label-md font-label-md uppercase tracking-widest text-white/80 mb-4">
+                                    ELEVATE YOUR PERFORMANCE</p>
+                                <h1
+                                    class="text-display-lg-mobile md:text-display-lg font-display-lg text-white mb-8 leading-[1.05]">
+                                    DISCOVER<br />YOUR EDGE
+                                </h1>
                                 <a href="${pageContext.request.contextPath}/products"
-                                    class="inline-block bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap rounded-full hover:opacity-90 transition-all active:scale-95">
-                                    DISCOVER MORE
+                                    class="inline-block bg-transparent border-2 border-white text-white px-10 py-5 text-label-md font-label-md uppercase tracking-wider rounded-full hover:bg-white hover:text-black transition-all active:scale-95">
+                                    SHOP NOW
                                 </a>
                             </div>
-                            <div class="relative aspect-video overflow-hidden rounded-2xl group">
-                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" alt="About ADIDIS"
-                                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    src="${pageContext.request.contextPath}/assets/banner.png" />
+                        </div>
+                        <div class="absolute bottom-12 right-margin-desktop hidden lg:block">
+                            <div class="flex flex-col items-end gap-2 text-white">
+                                <span class="text-label-sm font-label-sm opacity-60">DESIGNED IN ADIDIS</span>
+                                <div class="h-px w-24 bg-white opacity-80"></div>
+                                <span class="text-label-md font-label-md font-bold italic">ENGINEERED FOR SPEED</span>
                             </div>
                         </div>
                     </section>
-                </main>
+                </div>
 
-                <jsp:include page="/WEB-INF/include/footer.jsp" />
+                <!-- Product Grid Section -->
+                <section class="py-24 px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto">
+                    <div class="flex justify-between items-end mb-16 border-b border-outline-variant pb-8">
+                        <div>
+                            <h2 class="text-headline-lg font-headline-lg text-primary">LATEST DROPS</h2>
+                            <p class="text-body-md text-secondary mt-2">Precision engineered for the urban athlete.
+                            </p>
+                        </div>
+                        <a class="text-label-md font-label-md text-primary border-b border-primary hover:pb-1 transition-all"
+                            href="${pageContext.request.contextPath}/products">VIEW ALL PRODUCTS</a>
+                    </div>
 
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                        <c:forEach var="product" items="${latestProducts}">
+                            <div
+                                class="product-card group relative cursor-pointer transition-transform duration-500 hover:-translate-y-2">
+                                <div
+                                    class="bg-surface-container aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 relative rounded-2xl">
+                                    <!-- Product Image -->
+                                    <c:choose>
+                                        <c:when test="${not empty product.firstImageUrl}">
+                                            <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}">
+                                                <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';"
+                                                    alt="${product.name}"
+                                                    class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
+                                                    src="${product.firstImageUrl}" />
+                                            </a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';"
+                                                alt="${product.name}"
+                                                class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
+                                                src="https://via.placeholder.com/300?text=No+Image" />
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </div>
+
+                                <div>
+                                    <h3 class="text-label-md font-label-md font-bold uppercase mb-1">
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}"
+                                            class="hover:text-primary">
+                                            ${product.name}
+                                        </a>
+                                    </h3>
+                                    <p class="text-label-sm text-secondary mb-2">${product.category.name}</p>
+                                    <div class="flex items-center gap-1 mb-2">
+                                        <c:choose>
+                                            <c:when test="${product.reviewCount > 0}">
+                                                <div
+                                                    class="relative inline-block text-outline-variant text-sm mr-1 whitespace-nowrap">
+                                                    ★★★★★
+                                                    <div class="absolute top-0 left-0 overflow-hidden text-primary whitespace-nowrap"
+                                                        style="width: ${product.averageRating / 5 * 100}%;">
+                                                        ★★★★★
+                                                    </div>
+                                                </div>
+                                                <span
+                                                    class="text-label-sm text-secondary">(${product.reviewCount})</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="text-outline-variant text-sm mr-1">★★★★★</div>
+                                                <span class="text-label-sm text-secondary">No reviews</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <p class="text-label-md font-label-md text-primary">
+                                        <fmt:formatNumber value="${product.price}" pattern="#,##0" /> đ
+                                    </p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </section>
+
+                <!-- About Us Section -->
+                <section class="py-24 bg-surface-container-high px-margin-mobile md:px-margin-desktop">
+                    <div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+                        <div>
+                            <h2 class="text-headline-lg font-headline-lg text-primary mb-6">ABOUT ADIDIS</h2>
+                            <p class="text-body-lg text-on-surface-variant mb-6 max-w-md">
+                                At ADIDIS, we blend cutting-edge engineering with urban aesthetics to create
+                                footwear that empowers your every step. Our mission is to push the boundaries of
+                                performance and style.
+                            </p>
+                            <p class="text-body-lg text-on-surface-variant mb-8 max-w-md">
+                                Experience the perfect synergy of comfort and speed. We don't just design shoes; we
+                                engineer movement.
+                            </p>
+                            <a href="${pageContext.request.contextPath}/products"
+                                class="inline-block bg-primary text-on-primary px-8 py-4 text-label-md font-label-md uppercase whitespace-nowrap rounded-full hover:opacity-90 transition-all active:scale-95">
+                                DISCOVER MORE
+                            </a>
+                        </div>
+                        <div class="relative aspect-video overflow-hidden rounded-2xl group">
+                            <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';"
+                                alt="About ADIDIS"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                src="${pageContext.request.contextPath}/assets/banner.png" />
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <jsp:include page="/WEB-INF/include/footer.jsp" />

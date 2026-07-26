@@ -20,6 +20,31 @@ import java.util.Set;
 public class CheckoutServlet extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("currentUser") == null) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            List<CartItem> checkoutItems = (List<CartItem>) session.getAttribute("checkoutItems");
+            if (checkoutItems == null || checkoutItems.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/Cart");
+                return;
+            }
+
+            prepareCheckoutData(request, checkoutItems, (User) session.getAttribute("currentUser"));
+            request.getRequestDispatcher("/checkout.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException("Lỗi khi xử lý checkout", e);
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
@@ -47,14 +72,11 @@ public class CheckoutServlet extends HttpServlet {
             String[] selectedItems = selectedSet.toArray(new String[0]);
 
             CartDAO cartDAO = new CartDAO();
-
-            double subTotal = 0;
             List<CartItem> checkoutItems = new ArrayList<>();
             for (String variantId : selectedItems) {
-                CartItem item = cartDAO.getCartItemByVariant(currentUser.getId(), variantId);
+                CartItem item = cartDAO.getCartItemByVariant(currentUser.getId().toString(), variantId);
                 if (item != null) {
                     checkoutItems.add(item);
-                    subTotal += item.getPrice() * item.getQuantity();
                 }
             }
 
@@ -63,32 +85,40 @@ public class CheckoutServlet extends HttpServlet {
                 return;
             }
 
-            double finalTotal = subTotal;
-
-            // Set attributes cho JSP
-            request.setAttribute("checkoutItems", checkoutItems);
-            request.setAttribute("subTotal", subTotal);
-            request.setAttribute("finalTotal", finalTotal);
-
-            // Voucher
-            VoucherDAO voucherDAO = new VoucherDAO();
-            request.setAttribute("vouchers", voucherDAO.getAvailableVouchers());
-
-            // Address
-            AddressDAO addressDAO = new AddressDAO();
-            List<Address> addresses = addressDAO.getAddressesByUser(currentUser.getId());
-            Address defaultAddress = addressDAO.getDefaultAddress(currentUser.getId());
-            request.setAttribute("addresses", addresses);
-            request.setAttribute("defaultAddress", defaultAddress);
-
-            // Lưu vào session để PlaceOrderServlet sử dụng
+            // Lưu vào session để PlaceOrderServlet hoặc doGet sử dụng
             session.setAttribute("checkoutItems", checkoutItems);
 
+            prepareCheckoutData(request, checkoutItems, currentUser);
             request.getRequestDispatcher("/checkout.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException("Lỗi khi xử lý checkout", e);
         }
+    }
+
+    private void prepareCheckoutData(HttpServletRequest request, List<CartItem> checkoutItems, User currentUser) throws Exception {
+        double subTotal = 0;
+        for (CartItem item : checkoutItems) {
+            subTotal += item.getPrice() * item.getQuantity();
+        }
+
+        double finalTotal = subTotal;
+
+        // Set attributes cho JSP
+        request.setAttribute("checkoutItems", checkoutItems);
+        request.setAttribute("subTotal", subTotal);
+        request.setAttribute("finalTotal", finalTotal);
+
+        // Voucher
+        VoucherDAO voucherDAO = new VoucherDAO();
+        request.setAttribute("vouchers", voucherDAO.getAvailableVouchers());
+
+        // Address
+        AddressDAO addressDAO = new AddressDAO();
+        List<Address> addresses = addressDAO.getAddressesByUser(currentUser.getId());
+        Address defaultAddress = addressDAO.getDefaultAddress(currentUser.getId());
+        request.setAttribute("addresses", addresses);
+        request.setAttribute("defaultAddress", defaultAddress);
     }
 }

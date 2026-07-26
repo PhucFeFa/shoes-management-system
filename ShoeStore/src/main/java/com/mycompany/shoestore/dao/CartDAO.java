@@ -49,11 +49,11 @@ public class CartDAO {
     }
 
     public CartItem getCartItemByVariant(String userId, String variantId) throws Exception {
-        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, pi.image_url, c.quantity "
+        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, "
+                + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC, id ASC) as image_url, c.quantity "
                 + "FROM carts c "
                 + "JOIN product_variants pv ON c.product_variant_id = pv.id "
                 + "JOIN products p ON pv.product_id = p.id "
-                + "LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.sort_order = 1 "
                 + "WHERE c.user_id = ? AND pv.id = ?";
 
         try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -78,11 +78,11 @@ public class CartDAO {
     }
 
     public List<CartItem> getCart(String userId) throws Exception {
-        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, pi.image_url, c.quantity " +
+        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, " +
+                     "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC, id ASC) as image_url, c.quantity " +
                      "FROM carts c " +
                      "JOIN product_variants pv ON c.product_variant_id = pv.id " +
                      "JOIN products p ON pv.product_id = p.id " +
-                     "LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.sort_order = 1 " +
                      "WHERE c.user_id = ?";
 
         List<CartItem> list = new ArrayList<>();

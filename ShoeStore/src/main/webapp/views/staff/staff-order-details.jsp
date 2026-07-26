@@ -153,7 +153,7 @@
                                         </div>
                                         <p class="font-body-md text-body-md text-secondary mt-2">Placed on
                                             <fmt:formatDate value="${orderSummary.createdAt}"
-                                                pattern="MMM dd, yyyy 'at' HH:mm" />
+                                                            pattern="dd MMM yyyy, HH:mm" timeZone="Asia/Ho_Chi_Minh"/>
                                         </p>
                                     </div>
                                     <div class="flex items-center gap-3">

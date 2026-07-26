@@ -232,3 +232,31 @@
 
                 <c:remove var="cartMessage" scope="session" />
             </c:if>
+
+            <c:if test="${not empty sessionScope.cartError}">
+                <div id="cartErrorModal"
+                    class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100]">
+                    <div
+                        class="bg-white rounded-2xl border shadow-2xl p-8 w-96 text-center transform transition-all">
+                        <span class="material-symbols-outlined text-[48px] text-red-500 mb-4">error</span>
+                        <h2 class="text-headline-md font-headline-md text-red-600 uppercase tracking-wider mb-2">
+                            Error
+                        </h2>
+                        <p class="text-body-md text-gray-600 mb-8">
+                            ${sessionScope.cartError}
+                        </p>
+                        <button onclick="closeErrorModal()"
+                            class="w-full bg-black text-white font-label-md text-label-md uppercase tracking-widest py-3 hover:bg-gray-800 transition-colors">
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    function closeErrorModal() {
+                        document.getElementById("cartErrorModal").style.display = "none";
+                    }
+                </script>
+
+                <c:remove var="cartError" scope="session" />
+            </c:if>

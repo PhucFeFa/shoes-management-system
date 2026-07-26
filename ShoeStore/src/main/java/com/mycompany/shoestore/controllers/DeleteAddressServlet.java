@@ -62,7 +62,12 @@ public class DeleteAddressServlet extends HttpServlet {
         if (id != null && !id.trim().isEmpty()) {
 
             AddressDAO dao = new AddressDAO();
-            dao.deleteAddress(id);
+            boolean success = dao.deleteAddress(id);
+            if (!success) {
+                request.getSession().setAttribute("error", "Cannot delete this address because it is associated with existing orders.");
+            } else {
+                request.getSession().setAttribute("successMessage", "Address deleted successfully.");
+            }
         }
 
         response.sendRedirect(

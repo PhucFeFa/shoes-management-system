@@ -91,8 +91,9 @@ public class AddAddressServlet extends HttpServlet {
         boolean success = dao.addAddress(address);
 
         if (success) {
-            request.setAttribute("message",
-                    "Address added successfully");
+            session.setAttribute("successMessage", "Address added successfully");
+            response.sendRedirect(request.getContextPath() + "/profile/addresses");
+            return;
         } else {
             request.setAttribute("error",
                     "Failed to add address");

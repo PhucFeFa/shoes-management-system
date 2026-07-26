@@ -65,14 +65,8 @@ public class PlaceOrderServlet extends HttpServlet {
                     request.getParameter("addressId");
 
             if (addressId == null || addressId.trim().isEmpty()) {
-
-                request.setAttribute(
-                        "error",
-                        "Please select a shipping address.");
-
-                request.getRequestDispatcher("/checkout.jsp")
-                        .forward(request, response);
-
+                session.setAttribute("error", "Please select a shipping address.");
+                response.sendRedirect(request.getContextPath() + "/checkout");
                 return;
             }
 
@@ -97,16 +91,8 @@ public class PlaceOrderServlet extends HttpServlet {
 
                 if (currentStock < item.getQuantity()) {
 
-                    request.setAttribute(
-                            "error",
-                            item.getProductName()
-                            + " only has "
-                            + currentStock
-                            + " items left in stock.");
-
-                    request.getRequestDispatcher("/checkout.jsp")
-                            .forward(request, response);
-
+                    session.setAttribute("error", item.getProductName() + " only has " + currentStock + " items left in stock.");
+                    response.sendRedirect(request.getContextPath() + "/checkout");
                     return;
                 }
             }

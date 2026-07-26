@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="/WEB-INF/include/header.jsp"/>
 
@@ -13,8 +14,14 @@
             Checkout
         </h1>
 
-        <form action="${pageContext.request.contextPath}/place-order"
-              method="post">
+        <c:if test="${not empty sessionScope.error}">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">
+                ${sessionScope.error}
+            </div>
+            <c:remove var="error" scope="session"/>
+        </c:if>
+
+        <form action="${pageContext.request.contextPath}/place-order" method="post">
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -28,36 +35,37 @@
                             Shipping Address
                         </h2>
 
-                        <div class="relative" id="addressDropdown">
-                            <input type="hidden" name="addressId" id="addressIdInput" value="${defaultAddress.id}">
-                            <button type="button" class="dropdown-btn w-full border rounded-lg p-3 text-left flex justify-between items-center bg-white hover:border-gray-400 transition outline-none">
-                                <span class="dropdown-label truncate text-gray-700">
-                                    <c:choose>
-                                        <c:when test="${not empty defaultAddress}">
+                        <c:choose>
+                            <c:when test="${empty addresses}">
+                                <a href="${pageContext.request.contextPath}/profile/addresses" class="w-full border rounded-lg p-4 text-left flex justify-between items-center bg-red-50 hover:bg-red-100 transition outline-none block text-red-600 border-red-200">
+                                    <span class="truncate font-semibold text-sm">No addresses found. Click here to add a new address.</span>
+                                    <span class="material-symbols-outlined">add_location</span>
+                                </a>
+                                <input type="hidden" name="addressId" id="addressIdInput" value="">
+                            </c:when>
+                            <c:otherwise>
+                                <div class="relative" id="addressDropdown">
+                                    <input type="hidden" name="addressId" id="addressIdInput" value="${defaultAddress.id}">
+                                    <button type="button" class="dropdown-btn w-full border rounded-lg p-3 text-left flex justify-between items-center bg-white hover:border-gray-400 transition outline-none">
+                                        <span class="dropdown-label truncate text-gray-700">
                                             ${defaultAddress.addressLine}, ${defaultAddress.ward}, ${defaultAddress.district}, ${defaultAddress.city}
-                                        </c:when>
-                                        <c:otherwise>
-                                            Select an address
-                                        </c:otherwise>
-                                    </c:choose>
-                                </span>
-                                <span class="material-symbols-outlined text-gray-400 dropdown-icon transition-transform">expand_more</span>
-                            </button>
-                            
-                            <ul class="dropdown-menu absolute z-50 w-full mt-2 bg-white border rounded-xl shadow-lg max-h-64 overflow-y-auto hidden">
-                                <c:forEach items="${addresses}" var="a">
-                                    <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b last:border-b-0"
-                                        data-value="${a.id}"
-                                        data-label="${a.addressLine}, ${a.ward}, ${a.district}, ${a.city}">
-                                        <div class="font-semibold text-gray-800">${a.addressLine}</div>
-                                        <div class="text-sm text-gray-500 mt-1">${a.ward}, ${a.district}, ${a.city}</div>
-                                    </li>
-                                </c:forEach>
-                                <c:if test="${empty addresses}">
-                                    <li class="p-4 text-gray-500 text-center">No addresses found. Please add one in profile.</li>
-                                </c:if>
-                            </ul>
-                        </div>
+                                        </span>
+                                        <span class="material-symbols-outlined text-gray-400 dropdown-icon transition-transform">expand_more</span>
+                                    </button>
+                                    
+                                    <ul class="dropdown-menu absolute z-50 w-full mt-2 bg-white border rounded-xl shadow-lg max-h-64 overflow-y-auto hidden">
+                                        <c:forEach items="${addresses}" var="a">
+                                            <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b last:border-b-0"
+                                                data-value="${a.id}"
+                                                data-label="${a.addressLine}, ${a.ward}, ${a.district}, ${a.city}">
+                                                <div class="font-semibold text-gray-800">${a.addressLine}</div>
+                                                <div class="text-sm text-gray-500 mt-1">${a.ward}, ${a.district}, ${a.city}</div>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
 
                     </div>
 
@@ -74,7 +82,7 @@
 
                                 <div class="flex gap-4 border-b pb-5">
 
-                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${item.imageUrl}"
+                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${empty item.imageUrl ? pageContext.request.contextPath.concat('/assets/fallback.png') : item.imageUrl}"
                                          alt="${item.productName}"
                                          class="w-24 h-24 object-cover rounded-lg border">
 
@@ -105,16 +113,11 @@
                                     <div class="text-right">
 
                                         <div class="font-bold text-red-500">
-
-                                            ${item.price}₫
-
+                                            <fmt:formatNumber value="${item.price}" pattern="#,##0"/>₫
                                         </div>
-
                                         <div class="text-sm text-gray-500 mt-2">
-
                                             Total:
-                                            ${item.totalPrice}₫
-
+                                            <fmt:formatNumber value="${item.totalPrice}" pattern="#,##0"/>₫
                                         </div>
 
                                     </div>
@@ -232,9 +235,7 @@
                                     </span>
 
                                     <span id="totalDisplay">
-
-                                        ${subTotal}
-
+                                        <fmt:formatNumber value="${subTotal}" pattern="#,##0"/>
                                     </span>
 
                                 </div>

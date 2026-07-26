@@ -80,7 +80,7 @@
                                 <!-- Image -->
                                 <div class="w-full md:w-36 h-36 bg-surface-container rounded-2xl overflow-hidden flex-shrink-0">
 
-                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${item.imageUrl}"
+                                    <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="${empty item.imageUrl ? pageContext.request.contextPath.concat('/assets/fallback.png') : item.imageUrl}"
                                          alt="${item.productName}"
                                          class="w-full h-full object-cover">
 

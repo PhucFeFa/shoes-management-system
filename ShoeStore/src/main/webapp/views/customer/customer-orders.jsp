@@ -1,4 +1,4 @@
-<%-- Author: baolgce191178 --%>
+﻿<%-- Author: baolgce191178 --%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -309,7 +309,7 @@
                                             <c:choose>
                                                 <c:when test="${empty orders}">
                                                     <tr>
-                                                        <td colspan="4" class="py-20 px-6 text-center text-secondary">
+                                                        <td colspan="5" class="py-20 px-6 text-center text-secondary">
                                                             <div class="flex flex-col items-center gap-4">
                                                                 <span
                                                                     class="material-symbols-outlined text-[64px] text-outline-variant">receipt_long</span>
@@ -388,8 +388,23 @@
                                                         class="material-symbols-outlined text-[18px]">chevron_left</span>
                                                 </a>
 
-                                                <c:forEach var="p" begin="1" end="${totalPages}">
-                                                    <c:choose>
+                                                <c:set var="startPage" value="${currentPage - 2}" />
+<c:set var="endPage" value="${currentPage + 2}" />
+<c:if test="${startPage < 1}">
+    <c:set var="endPage" value="${endPage + (1 - startPage)}" />
+    <c:set var="startPage" value="1" />
+</c:if>
+<c:if test="${endPage > totalPages}">
+    <c:set var="startPage" value="${startPage - (endPage - totalPages)}" />
+    <c:set var="endPage" value="${totalPages}" />
+</c:if>
+<c:if test="${startPage < 1}">
+    <c:set var="startPage" value="1" />
+</c:if>
+
+<c:if test="${startPage > 1}">
+    <c:set var="p" value="1" />
+    <c:choose>
                                                         <c:when test="${p == currentPage}">
                                                             <span
                                                                 class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-xl">${p}</span>
@@ -399,7 +414,40 @@
                                                                 class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-xl transition-colors">${p}</a>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                </c:forEach>
+    <c:if test="${startPage > 2}">
+        <span class="px-2">...</span>
+    </c:if>
+</c:if>
+
+<c:forEach begin="${startPage}" end="${endPage}" var="p">
+    <c:choose>
+                                                        <c:when test="${p == currentPage}">
+                                                            <span
+                                                                class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-xl">${p}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="?status=${statusFilter}&page=${p}"
+                                                                class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-xl transition-colors">${p}</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+</c:forEach>
+
+<c:if test="${endPage < totalPages}">
+    <c:if test="${endPage < totalPages - 1}">
+        <span class="px-2">...</span>
+    </c:if>
+    <c:set var="p" value="${totalPages}" />
+    <c:choose>
+                                                        <c:when test="${p == currentPage}">
+                                                            <span
+                                                                class="w-8 h-8 flex items-center justify-center bg-primary text-on-primary font-label-sm text-label-sm rounded-xl">${p}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="?status=${statusFilter}&page=${p}"
+                                                                class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:bg-surface-container-low font-label-sm text-label-sm rounded-xl transition-colors">${p}</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+</c:if>
 
                                                 <a href="?status=${statusFilter}&page=${currentPage + 1}"
                                                     class="w-8 h-8 flex items-center justify-center border border-outline-variant text-secondary hover:text-primary hover:border-primary transition-colors rounded-xl ${currentPage >= totalPages ? 'opacity-30 pointer-events-none' : ''}">

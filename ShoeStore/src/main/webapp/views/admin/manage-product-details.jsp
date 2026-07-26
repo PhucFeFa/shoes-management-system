@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+﻿<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -49,9 +49,11 @@
                 background: #fff;
                 border: 1px solid #e8e8e8;
                 border-radius: 4px;
+                overflow-x: auto;
             }
             .user-table {
                 width: 100%;
+                min-width: 900px;
                 border-collapse: collapse;
                 table-layout: fixed;
             }
@@ -295,8 +297,23 @@
                             </c:choose>
 
                             <!-- Page numbers -->
-                            <c:forEach begin="1" end="${totalPages}" var="p">
-                                <c:choose>
+                            <c:set var="startPage" value="${currentPage - 2}" />
+<c:set var="endPage" value="${currentPage + 2}" />
+<c:if test="${startPage < 1}">
+    <c:set var="endPage" value="${endPage + (1 - startPage)}" />
+    <c:set var="startPage" value="1" />
+</c:if>
+<c:if test="${endPage > totalPages}">
+    <c:set var="startPage" value="${startPage - (endPage - totalPages)}" />
+    <c:set var="endPage" value="${totalPages}" />
+</c:if>
+<c:if test="${startPage < 1}">
+    <c:set var="startPage" value="1" />
+</c:if>
+
+<c:if test="${startPage > 1}">
+    <c:set var="p" value="1" />
+    <c:choose>
                                     <c:when test="${p == currentPage}">
                                         <span class="page-btn active"><c:out value="${p}" /></span>
                                     </c:when>
@@ -304,7 +321,36 @@
                                         <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}&page=${p}${not empty param.search ? '&search=' : ''}${not empty param.search ? param.search : ''}" class="page-btn"><c:out value="${p}" /></a>
                                     </c:otherwise>
                                 </c:choose>
-                            </c:forEach>
+    <c:if test="${startPage > 2}">
+        <span class="px-2">...</span>
+    </c:if>
+</c:if>
+
+<c:forEach begin="${startPage}" end="${endPage}" var="p">
+    <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}&page=${p}${not empty param.search ? '&search=' : ''}${not empty param.search ? param.search : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+</c:forEach>
+
+<c:if test="${endPage < totalPages}">
+    <c:if test="${endPage < totalPages - 1}">
+        <span class="px-2">...</span>
+    </c:if>
+    <c:set var="p" value="${totalPages}" />
+    <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/admin/product/details?id=${product.id}&page=${p}${not empty param.search ? '&search=' : ''}${not empty param.search ? param.search : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+</c:if>
 
                             <!-- Next button -->
                             <c:choose>

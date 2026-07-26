@@ -1,4 +1,4 @@
-<%-- Author: baolgce191178 --%>
+﻿<%-- Author: baolgce191178 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
@@ -237,8 +237,8 @@
                 <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
                     <form method="get" action="${pageContext.request.contextPath}/staff/orders" class="d-flex gap-3 w-100" style="max-width: 600px;">
                         <div class="input-group" style="width: 300px;">
-                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                            <input type="text" name="keyword" value="<c:out value='${keyword}'/>" class="form-control border-start-0" placeholder="Search by customer name, email..." style="font-size: 13px;">
+                            <span class="input-group-text bg-white border-end-0" style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; padding-left: 14px;"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
+                            <input type="text" name="keyword" value="<c:out value='${keyword}'/>" class="form-control border-start-0" placeholder="Search by customer name, email..." style="font-size: 13px; border-top-right-radius: 50px; border-bottom-right-radius: 50px;">
                         </div>
                         <select name="status" onchange="this.form.submit()" class="form-select" style="font-size: 13px; font-weight: 600; color: #555; width: 150px; cursor: pointer;">
                             <option value="" <c:if test="${empty statusFilter}">selected</c:if>>All Statuses</option>
@@ -296,8 +296,8 @@
                                             </td>
                                             <td>
                                                 <span class="cell-brand">
-                                                    <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy" /> 
-                                                    <span style="font-size:10px; margin-left:4px;"><fmt:formatDate value="${order.createdAt}" pattern="HH:mm" /></span>
+                                                    <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy" timeZone="Asia/Ho_Chi_Minh" /> 
+                                                    <span style="font-size:10px; margin-left:4px;"><fmt:formatDate value="${order.createdAt}" pattern="HH:mm" timeZone="Asia/Ho_Chi_Minh" /></span>
                                                 </span>
                                             </td>
                                             <td><span class="cell-price"><fmt:formatNumber value="${order.totalAmount}" pattern="#,##0" /> đ</span></td>
@@ -348,8 +348,23 @@
                             </c:choose>
 
                             <!-- Page numbers -->
-                            <c:forEach begin="1" end="${totalPages}" var="p">
-                                <c:choose>
+                            <c:set var="startPage" value="${currentPage - 2}" />
+<c:set var="endPage" value="${currentPage + 2}" />
+<c:if test="${startPage < 1}">
+    <c:set var="endPage" value="${endPage + (1 - startPage)}" />
+    <c:set var="startPage" value="1" />
+</c:if>
+<c:if test="${endPage > totalPages}">
+    <c:set var="startPage" value="${startPage - (endPage - totalPages)}" />
+    <c:set var="endPage" value="${totalPages}" />
+</c:if>
+<c:if test="${startPage < 1}">
+    <c:set var="startPage" value="1" />
+</c:if>
+
+<c:if test="${startPage > 1}">
+    <c:set var="p" value="1" />
+    <c:choose>
                                     <c:when test="${p == currentPage}">
                                         <span class="page-btn active"><c:out value="${p}" /></span>
                                     </c:when>
@@ -357,7 +372,36 @@
                                         <a href="${pageContext.request.contextPath}/staff/orders?page=${p}&status=${statusFilter}&keyword=${keyword}" class="page-btn"><c:out value="${p}" /></a>
                                     </c:otherwise>
                                 </c:choose>
-                            </c:forEach>
+    <c:if test="${startPage > 2}">
+        <span class="px-2">...</span>
+    </c:if>
+</c:if>
+
+<c:forEach begin="${startPage}" end="${endPage}" var="p">
+    <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/staff/orders?page=${p}&status=${statusFilter}&keyword=${keyword}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+</c:forEach>
+
+<c:if test="${endPage < totalPages}">
+    <c:if test="${endPage < totalPages - 1}">
+        <span class="px-2">...</span>
+    </c:if>
+    <c:set var="p" value="${totalPages}" />
+    <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/staff/orders?page=${p}&status=${statusFilter}&keyword=${keyword}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+</c:if>
 
                             <!-- Next button -->
                             <c:choose>

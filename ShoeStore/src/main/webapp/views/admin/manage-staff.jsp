@@ -1,4 +1,4 @@
-<%-- Author: PhucLHCE191132 --%>
+﻿<%-- Author: PhucLHCE191132 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
@@ -333,8 +333,23 @@
                             </c:choose>
 
                             <!-- Page numbers -->
-                            <c:forEach begin="1" end="${totalPages}" var="p">
-                                <c:choose>
+                            <c:set var="startPage" value="${currentPage - 2}" />
+<c:set var="endPage" value="${currentPage + 2}" />
+<c:if test="${startPage < 1}">
+    <c:set var="endPage" value="${endPage + (1 - startPage)}" />
+    <c:set var="startPage" value="1" />
+</c:if>
+<c:if test="${endPage > totalPages}">
+    <c:set var="startPage" value="${startPage - (endPage - totalPages)}" />
+    <c:set var="endPage" value="${totalPages}" />
+</c:if>
+<c:if test="${startPage < 1}">
+    <c:set var="startPage" value="1" />
+</c:if>
+
+<c:if test="${startPage > 1}">
+    <c:set var="p" value="1" />
+    <c:choose>
                                     <c:when test="${p == currentPage}">
                                         <span class="page-btn active"><c:out value="${p}" /></span>
                                     </c:when>
@@ -342,7 +357,36 @@
                                         <a href="${pageContext.request.contextPath}/admin/manage-staff?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
                                     </c:otherwise>
                                 </c:choose>
-                            </c:forEach>
+    <c:if test="${startPage > 2}">
+        <span class="px-2">...</span>
+    </c:if>
+</c:if>
+
+<c:forEach begin="${startPage}" end="${endPage}" var="p">
+    <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/admin/manage-staff?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+</c:forEach>
+
+<c:if test="${endPage < totalPages}">
+    <c:if test="${endPage < totalPages - 1}">
+        <span class="px-2">...</span>
+    </c:if>
+    <c:set var="p" value="${totalPages}" />
+    <c:choose>
+                                    <c:when test="${p == currentPage}">
+                                        <span class="page-btn active"><c:out value="${p}" /></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/admin/manage-staff?page=${p}${not empty searchQuery ? '&search=' : ''}${not empty searchQuery ? searchQuery : ''}" class="page-btn"><c:out value="${p}" /></a>
+                                    </c:otherwise>
+                                </c:choose>
+</c:if>
 
                             <!-- Next button -->
                             <c:choose>

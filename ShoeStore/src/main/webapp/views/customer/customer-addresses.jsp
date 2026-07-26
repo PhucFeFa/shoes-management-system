@@ -200,7 +200,27 @@
                             </div>
                         </header>
 
-                        <section class="px-margin-desktop py-12 flex-1 max-w-5xl">
+                        <section class="px-margin-desktop py-12 flex-1 w-full">
+                            <!-- Messages -->
+                            <c:if test="${not empty sessionScope.error}">
+                                <div class="bg-error-container text-on-error-container p-4 mb-6 flex items-center justify-between rounded-xl">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined">error</span>
+                                        <p class="font-label-md text-label-md">${sessionScope.error}</p>
+                                    </div>
+                                </div>
+                                <c:remove var="error" scope="session"/>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.successMessage}">
+                                <div class="bg-green-100 text-green-800 p-4 mb-6 flex items-center justify-between rounded-xl">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined">check_circle</span>
+                                        <p class="font-label-md text-label-md">${sessionScope.successMessage}</p>
+                                    </div>
+                                </div>
+                                <c:remove var="successMessage" scope="session"/>
+                            </c:if>
+
                             <!-- Address List -->
                             <div class="border border-outline-variant bg-surface p-8 shadow-sm rounded-2xl">
                                 <div
@@ -228,7 +248,7 @@
                                         </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                             <c:forEach var="address" items="${addresses}">
                                                 <div
                                                     class="border border-outline-variant p-6 hover:border-primary transition-colors flex flex-col justify-between group bg-surface-container-lowest rounded-2xl">

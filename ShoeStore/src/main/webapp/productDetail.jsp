@@ -289,6 +289,18 @@
                                     </c:choose>
                                 </div>
                             </c:if>
+                            <c:if test="${not canReview}">
+                                <div class="bg-gray-50 p-6 rounded-lg mb-8 border text-center text-gray-500">
+                                    <c:choose>
+                                        <c:when test="${not empty sessionScope.currentUser}">
+                                            <p class="text-sm"><i class="bi bi-info-circle me-2"></i>Only customers with completed/delivered orders for this product can leave a review.</p>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <p class="text-sm"><i class="bi bi-info-circle me-2"></i>Please <a href="${pageContext.request.contextPath}/login" class="underline font-semibold text-primary">log in</a> with an account that has a completed order to leave a review.</p>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </c:if>
 
                             <!-- Filter Reviews -->
                             <c:if test="${not empty reviews}">

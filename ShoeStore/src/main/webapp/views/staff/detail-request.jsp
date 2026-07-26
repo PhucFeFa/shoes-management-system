@@ -61,7 +61,7 @@
                 <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
                     <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">Request Date</p>
                     <p class="font-bold text-lg text-gray-900">
-                        <fmt:formatDate value="${importDetail.orderDate}" pattern="dd MMM yyyy, HH:mm"/>
+                        <fmt:formatDate value="${importDetail.orderDate}" pattern="dd MMM yyyy, HH:mm" timeZone="Asia/Ho_Chi_Minh"/>
                     </p>
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">

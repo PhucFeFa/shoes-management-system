@@ -57,11 +57,6 @@
                                         class="w-full bg-surface-container text-body-md font-body-md text-primary border border-transparent p-4 rounded-full focus:ring-2 focus:ring-primary focus:outline-none placeholder:text-secondary/50 transition-shadow shadow-sm hover:shadow-md"
                                         id="login-password" name="password" placeholder="ENTER PASSWORD" type="password"
                                         required />
-                                    <button
-                                        class="absolute right-6 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors"
-                                        type="button">
-                                        <span class="material-symbols-outlined text-[20px]">visibility_off</span>
-                                    </button>
                                 </div>
                             </div>
                             <button
@@ -87,23 +82,23 @@
                                     device.</p>
                             </div>
                             <div class="flex justify-center gap-2 sm:gap-3">
-                                <input autofocus
-                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 flex-shrink-0 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
+                                <input
+                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
+                                    maxlength="1" type="text" autofocus />
+                                <input
+                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
                                     maxlength="1" type="text" />
                                 <input
-                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 flex-shrink-0 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
+                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
                                     maxlength="1" type="text" />
                                 <input
-                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 flex-shrink-0 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
+                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
                                     maxlength="1" type="text" />
                                 <input
-                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 flex-shrink-0 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
+                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
                                     maxlength="1" type="text" />
                                 <input
-                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 flex-shrink-0 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
-                                    maxlength="1" type="text" />
-                                <input
-                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 flex-shrink-0 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
+                                    class="otp-box w-10 h-12 sm:w-12 sm:h-14 bg-surface-container text-center text-headline-md font-headline-md text-primary border border-transparent rounded-2xl focus:ring-2 focus:ring-primary focus:bg-surface-container-high transition-all shadow-sm hover:shadow-md"
                                     maxlength="1" type="text" />
                             </div>
                             <div class="flex flex-col space-y-4 pt-4">
