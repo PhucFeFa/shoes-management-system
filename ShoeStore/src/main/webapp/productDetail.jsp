@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <jsp:include page="/WEB-INF/include/header.jsp" />
@@ -379,11 +379,18 @@
 
                                                 <c:if test="${not empty r.replyComment}">
                                                     <div class="mt-4 p-5 bg-primary/5 border-l-4 border-primary rounded-2xl">
-                                                        <p class="text-label-md font-label-md text-primary mb-1 uppercase tracking-widest flex items-center gap-2">
-                                                            <span class="material-symbols-outlined text-[18px]">support_agent</span> 
-                                                            Store Reply
-                                                        </p>
-                                                        <p class="text-body-md text-on-surface">
+                                                        <div class="flex items-center justify-between mb-1">
+                                                            <p class="text-label-md font-label-md text-primary uppercase tracking-widest flex items-center gap-2">
+                                                                <span class="material-symbols-outlined text-[18px]">support_agent</span> 
+                                                                <c:out value="${not empty r.replierName ? r.replierName : 'Store'}" />
+                                                            </p>
+                                                            <c:if test="${not empty r.replyUpdatedAt}">
+                                                                <span class="text-label-sm font-label-sm text-secondary">
+                                                                    <fmt:formatDate value="${r.replyUpdatedAt}" pattern="dd MMM yyyy, HH:mm" />
+                                                                </span>
+                                                            </c:if>
+                                                        </div>
+                                                        <p class="text-body-md text-on-surface mt-2">
                                                             <c:out value="${r.replyComment}" />
                                                         </p>
                                                     </div>
