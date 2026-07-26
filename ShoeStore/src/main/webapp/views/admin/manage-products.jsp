@@ -1,4 +1,4 @@
-﻿<%-- Author: PhucLHCE191132 --%>
+<%-- Author: PhucLHCE191132 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
@@ -573,7 +573,8 @@
             <div class="modal-content">
               <form action="${pageContext.request.contextPath}/admin/product/edit" method="POST" enctype="multipart/form-data">
                   <input type="hidden" name="id" id="editProductId">
-                  <div class="modal-header">
+                  <input type="hidden" name="page" value="${currentPage}">
+                  <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title" style="font-size: 14px; font-weight: 700; text-transform: uppercase;">Edit Product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>

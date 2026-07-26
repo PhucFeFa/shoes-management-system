@@ -114,7 +114,12 @@ public class EditProductServlet extends HttpServlet {
             request.getSession().setAttribute("errorMsg", "System error: " + e.getMessage());
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/manage-products");
+        String redirectUrl = request.getContextPath() + "/admin/manage-products";
+        String page = request.getParameter("page");
+        if (page != null && !page.trim().isEmpty()) {
+            redirectUrl += "?page=" + page.trim();
+        }
+        response.sendRedirect(redirectUrl);
     }
     
     private String getFileName(Part part) {
