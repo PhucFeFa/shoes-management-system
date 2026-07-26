@@ -265,7 +265,7 @@ public class OrderDAO {
         List<OrderDetailDTO> items = new ArrayList<>();
         String sql = "SELECT oi.quantity, oi.price_at_purchase, "
                 + "pv.size, pv.color, "
-                + "p.name AS product_name, "
+                + "p.id AS product_id, p.name AS product_name, "
                 + "b.name AS brand_name, "
                 + "c.name AS category_name, "
                 + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) AS image_url "
@@ -286,6 +286,7 @@ public class OrderDAO {
                     item.setPriceAtPurchase(rs.getBigDecimal("price_at_purchase"));
                     item.setSize(rs.getString("size"));
                     item.setColor(rs.getString("color"));
+                    item.setProductId(rs.getString("product_id"));
                     item.setProductName(rs.getString("product_name"));
                     item.setBrandName(rs.getString("brand_name"));
                     item.setCategoryName(rs.getString("category_name"));
