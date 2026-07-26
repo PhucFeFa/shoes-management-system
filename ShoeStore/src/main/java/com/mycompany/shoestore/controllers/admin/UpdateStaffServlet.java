@@ -43,13 +43,9 @@ public class UpdateStaffServlet extends HttpServlet {
             staff.setFullName(fullName.trim());
             
             String password = request.getParameter("password");
-            if (password == null || password.trim().isEmpty()) {
-                request.getSession().setAttribute("errorMsg", "Password is required and cannot be just spaces.");
-                response.sendRedirect(request.getContextPath() + "/admin/manage-staff");
-                return;
+            if (password != null && !password.trim().isEmpty()) {
+                staff.setPasswordHash(org.mindrot.jbcrypt.BCrypt.hashpw(password.trim(), org.mindrot.jbcrypt.BCrypt.gensalt()));
             }
-            staff.setPasswordHash(org.mindrot.jbcrypt.BCrypt.hashpw(password.trim(), org.mindrot.jbcrypt.BCrypt.gensalt()));
-
             if (staffDAO.updateStaff(staff)) {
                 request.getSession().setAttribute("successMsg", "Staff updated successfully.");
             } else {
