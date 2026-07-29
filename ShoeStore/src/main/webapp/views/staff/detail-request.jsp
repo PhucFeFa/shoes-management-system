@@ -242,7 +242,7 @@
                 inputs.forEach(input => {
                     const row = input.closest('tr');
                     const subtotalText = row.querySelector('.item-subtotal-display').textContent;
-                    const subtotalValue = parseInt(subtotalText.replace(/[^0-9]/g, '')) || 0;
+                    const subtotalValue = parseInt(subtotalText.replace(/[^0-9-]/g, '')) || 0;
                     total += subtotalValue;
                 });
             }

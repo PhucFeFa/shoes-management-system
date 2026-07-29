@@ -99,27 +99,31 @@ public class DetailRequestServlet extends HttpServlet {
 
         for (int i = 0; i < detailIDs.length; i++) {
             try {
-                int detailID = Integer.parseInt(detailIDs[i]);
-                int received = Integer.parseInt(receivedQuantities[i]);
+                int detailID = Integer.parseInt(detailIDs[i].trim());
+                int received = Integer.parseInt(receivedQuantities[i].trim());
 
-                int originalQty = -1;
-                for (ImportDetailDTO d : importDTO.getDetails()) {
-                    if (d.getImportDetailID() == detailID) {
-                        originalQty = d.getImportQuantity();
-                        break;
-                    }
+                int originalQty = findOriginalQuantity(importDTO.getDetails(), detailID);
+
+             
+                if (originalQty == -1 || received < 0) {
+                    request.setAttribute("error", "Quantity cannot be negative.");
+                    renderDetailPage(request, response, importID, user);
+                    return;
                 }
 
-                if (originalQty == -1 || received < 0 || received > originalQty) {
-                    request.setAttribute("error", "Please enter valid quantities (0 to requested amount).");
+             
+                if (received > originalQty) {
+                    request.setAttribute("error", "Qty Received must be less than or equal to Qty Requested.");
                     renderDetailPage(request, response, importID, user);
                     return;
                 }
 
                 detailIdInts[i] = detailID;
                 receivedQtyInts[i] = received;
+
             } catch (NumberFormatException e) {
-                request.setAttribute("error", "Please enter valid quantities (0 to requested amount).");
+            
+                request.setAttribute("error", "Quantity must be a valid whole number.");
                 renderDetailPage(request, response, importID, user);
                 return;
             }
@@ -131,6 +135,15 @@ public class DetailRequestServlet extends HttpServlet {
             request.setAttribute("error", "System error: Could not submit report.");
             renderDetailPage(request, response, importID, user);
         }
+    }
+
+    private int findOriginalQuantity(java.util.List<ImportDetailDTO> details, int detailID) {
+        for (ImportDetailDTO d : details) {
+            if (d.getImportDetailID() == detailID) {
+                return d.getImportQuantity();
+            }
+        }
+        return -1;
     }
 
     private void renderDetailPage(HttpServletRequest request, HttpServletResponse response, int importID, User user)
