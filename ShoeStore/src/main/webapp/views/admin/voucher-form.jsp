@@ -46,43 +46,43 @@
                         </div>
                     </c:if>
 
-                    <form action="${pageContext.request.contextPath}/create-voucher" method="POST">
+                    <form action="${pageContext.request.contextPath}/create-voucher" method="POST" novalidate>
                         <div class="mb-4">
                             <label class="form-label">Voucher Code</label>
-                            <input type="text" name="code" class="form-control" placeholder="e.g. WELCOME20" value="${oldCode}" required autocomplete="off">
+                            <input type="text" name="code" class="form-control" value="${oldCode}" autocomplete="off">
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label">Discount Percentage (%)</label>
-                            <input type="number" step="0.1" min="0.1" max="100" name="discountValue" class="form-control" placeholder="20.0" value="${oldValue}" required>
+                            <input type="number" step="any" name="discountValue" class="form-control" value="${oldValue}">
                             <small class="text-muted" style="font-size: 11px;">Value must be between 0.1 and 100</small>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Min Order Amount (ð)</label>
-                                <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control" placeholder="0.0" value="${oldMin}" required>
+                                <label class="form-label">Min Order Amount (ï¿½)</label>
+                                <input type="number" step="any" name="minOrderAmount" class="form-control" value="${oldMin}">
                             </div>
                             <div class="col-md-6 mb-4">
-                                <label class="form-label">Max Discount Amount (ð)</label>
-                                <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control" placeholder="50000.0" value="${oldMax}">
+                                <label class="form-label">Max Discount Amount (ï¿½)</label>
+                                <input type="number" step="any" name="maxDiscountAmount" class="form-control" value="${oldMax}">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Start Date</label>
-                                <input type="datetime-local" name="startDate" class="form-control" value="${oldStart}" required>
+                                <input type="datetime-local" name="startDate" class="form-control" value="${oldStart}">
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">End Date</label>
-                                <input type="datetime-local" name="endDate" class="form-control" value="${oldEnd}" required>
+                                <input type="datetime-local" name="endDate" class="form-control" value="${oldEnd}">
                             </div>
                         </div>
 
                         <div class="mb-4" style="max-width: 50%;">
                             <label class="form-label">Quantity</label>
-                            <input type="number" min="1" name="quantity" class="form-control" placeholder="1000" value="${oldQty}" required>
+                            <input type="number" step="any" name="quantity" class="form-control" value="${oldQty}">
                         </div>
 
                         <div class="d-flex gap-2 mt-4">

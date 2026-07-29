@@ -220,7 +220,7 @@
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">View</a>
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/edit?id=${v.id}" class="btn-action btn-edit">Edit</a>
-                                                    <c:if test="${v.status == 'ACTIVE'}">
+                                                    <c:if test="${v.isDeleted == 0}">
                                                         <a href="javascript:void(0);" onclick="confirmDelete('${v.id}')" class="btn-action btn-delete">Delete</a>
                                                     </c:if>
                                                 </div>
@@ -327,7 +327,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body py-4" style="font-size: 13px; color: #444;">
-                <p class="mb-0 font-medium">Are you sure you want to delete this voucher? This will change its status to <strong>INACTIVE</strong>.</p>
+                <p class="mb-0 font-medium">Are you sure you want to delete this voucher? This action cannot be undone.</p>
               </div>
               <div class="modal-footer border-top">
                 <button type="button" class="btn btn-light btn-sm px-4" data-bs-dismiss="modal">Cancel</button>
@@ -374,4 +374,3 @@
         </script>
     </body>
 </html>
-
