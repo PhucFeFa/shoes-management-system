@@ -85,11 +85,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Min Order Amount (đ)</label>
-                                <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control w-100" value="${voucher.minOrderAmount}" required />
+                                <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control w-100" value="<fmt:formatNumber value='${voucher.minOrderAmount}' pattern='0.##' />" required />
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Max Discount Amount (đ)</label>
-                                <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control w-100" value="${voucher.maxDiscountAmount}" placeholder="Leave empty for no limit" />
+                                <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control w-100" value="<fmt:formatNumber value='${voucher.maxDiscountAmount}' pattern='0.##' />" placeholder="Leave empty for no limit" />
                             </div>
                         </div>
 

@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -84,11 +84,11 @@
                                     class="text-label-sm font-bold tracking-wider uppercase text-primary mb-4 border-b border-surface-variant pb-2">
                                     PRICE</h3>
                                 <div class="flex items-center space-x-4">
-                                    <input type="number" name="minPrice" value="${minPrice}" placeholder="Min" min="0"
+                                    <input type="number" name="minPrice" value="<fmt:formatNumber value='${minPrice}' pattern='0.##' />" placeholder="Min" min="0"
                                         step="0.01"
                                         class="w-full bg-surface-container text-body-md text-primary border-none p-2 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none">
                                     <span class="text-secondary">-</span>
-                                    <input type="number" name="maxPrice" value="${maxPrice}" placeholder="Max" min="0"
+                                    <input type="number" name="maxPrice" value="<fmt:formatNumber value='${maxPrice}' pattern='0.##' />" placeholder="Max" min="0"
                                         step="0.01"
                                         class="w-full bg-surface-container text-body-md text-primary border-none p-2 rounded-xl focus:ring-2 focus:ring-primary focus:outline-none">
                                 </div>

@@ -130,11 +130,34 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 } } },
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { display: false }, 
+                        ticks: { 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return new Intl.NumberFormat('vi-VN').format(value);
+                            }
+                        } 
+                    },
                     x: { grid: { display: false }, ticks: { font: { size: 10 } } }
                 },
                 plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10, weight: 'bold' } } }
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10, weight: 'bold' } } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('vi-VN').format(context.parsed.y) + ' đ';
+                                }
+                                return label;
+                            }
+                        }
+                    }
                 }
             }
         });

@@ -222,24 +222,28 @@
                                             class="text-label-md font-label-md text-secondary tracking-widest uppercase mb-2 block">Order
                                             Confirmed</span>
                                         <c:if test="${not empty sessionScope.errorMessage}">
-                                            <div class="mb-4 p-4 bg-[#ba1a1a]/10 border-l-4 border-[#ba1a1a] text-[#ba1a1a] font-label-md">
+                                            <div
+                                                class="mb-4 p-4 bg-[#ba1a1a]/10 border-l-4 border-[#ba1a1a] text-[#ba1a1a] font-label-md">
                                                 ${sessionScope.errorMessage}
                                             </div>
-                                            <c:remove var="errorMessage" scope="session"/>
+                                            <c:remove var="errorMessage" scope="session" />
                                         </c:if>
                                         <c:if test="${not empty sessionScope.warningMessage}">
-                                            <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-label-md">
+                                            <div
+                                                class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-label-md">
                                                 ${sessionScope.warningMessage}
                                             </div>
-                                            <c:remove var="warningMessage" scope="session"/>
+                                            <c:remove var="warningMessage" scope="session" />
                                         </c:if>
                                         <c:if test="${not empty sessionScope.successMessage}">
-                                            <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-600 text-green-800 font-label-md">
+                                            <div
+                                                class="mb-4 p-4 bg-green-100 border-l-4 border-green-600 text-green-800 font-label-md">
                                                 ${sessionScope.successMessage}
                                             </div>
-                                            <c:remove var="successMessage" scope="session"/>
+                                            <c:remove var="successMessage" scope="session" />
                                         </c:if>
-                                        <h1 class="text-display-lg-mobile md:text-headline-lg font-headline-lg uppercase mb-4">
+                                        <h1
+                                            class="text-display-lg-mobile md:text-headline-lg font-headline-lg uppercase mb-4">
                                             Order SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
                                         </h1>
                                         <div class="flex flex-wrap gap-x-8 gap-y-4">
@@ -267,7 +271,8 @@
                                                 <p class="text-label-sm font-label-sm text-secondary uppercase mb-1">
                                                     Total Amount</p>
                                                 <p class="text-body-md font-body-md font-semibold">
-                                                    <fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                    <fmt:formatNumber value="${orderSummary.totalAmount}"
+                                                        pattern="#,##0" /> đ
                                                 </p>
                                             </div>
                                         </div>
@@ -276,7 +281,8 @@
                                         <c:if test="${orderSummary.status == 'pending'}">
                                             <c:choose>
                                                 <c:when test="${cancellationCount >= 5}">
-                                                    <p class="text-[#ba1a1a] font-label-md uppercase tracking-widest border border-[#ba1a1a] px-6 py-3 bg-[#ba1a1a]/10 inline-block text-center w-full md:w-auto rounded-full">
+                                                    <p
+                                                        class="text-[#ba1a1a] font-label-md uppercase tracking-widest border border-[#ba1a1a] px-6 py-3 bg-[#ba1a1a]/10 inline-block text-center w-full md:w-auto rounded-full">
                                                         Cancellation Limit Reached
                                                     </p>
                                                 </c:when>
@@ -309,8 +315,9 @@
                                                 <div
                                                     class="flex gap-6 p-4 bg-surface-container-lowest border border-outline-variant hover:border-primary transition-colors group rounded-2xl">
                                                     <div
-                                                        class="w-32 h-32 bg-surface-container overflow-hidden flex-shrink-0 rounded-2xl">
-                                                        <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" src="<c:choose><c:when test='${not empty item.imageUrl}'>${item.imageUrl}</c:when><c:otherwise>https://via.placeholder.com/300?text=No+Image</c:otherwise></c:choose>"
+                                                        class="w-32 h-32 bg-white overflow-hidden flex-shrink-0 rounded-2xl">
+                                                        <img onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';"
+                                                            src="<c:choose><c:when test='${not empty item.imageUrl}'>${item.imageUrl}</c:when><c:otherwise>https://via.placeholder.com/300?text=No+Image</c:otherwise></c:choose>"
                                                             alt="${item.productName}"
                                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                                     </div>
@@ -325,7 +332,8 @@
                                                                     item.categoryName}</p>
                                                             </div>
                                                             <p class="text-body-md font-bold">
-                                                                <fmt:formatNumber value="${item.priceAtPurchase}" pattern="#,##0" /> đ
+                                                                <fmt:formatNumber value="${item.priceAtPurchase}"
+                                                                    pattern="#,##0" /> đ
                                                             </p>
                                                         </div>
                                                         <div class="flex justify-between items-end">
@@ -355,14 +363,18 @@
                                                             <p
                                                                 class="text-label-sm font-label-sm text-secondary font-bold">
                                                                 Total:
-                                                                <fmt:formatNumber value="${item.totalPrice}" pattern="#,##0" /> đ
+                                                                <fmt:formatNumber value="${item.totalPrice}"
+                                                                    pattern="#,##0" /> đ
                                                             </p>
                                                         </div>
                                                         <c:if test="${orderSummary.status == 'completed'}">
-                                                            <div class="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end">
+                                                            <div
+                                                                class="mt-3 pt-3 border-t border-outline-variant/30 flex justify-end">
                                                                 <a href="${pageContext.request.contextPath}/ProductDetail?id=${item.productId}"
                                                                     class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-on-primary rounded-full text-label-sm font-label-sm uppercase tracking-wider hover:opacity-90 transition-opacity font-bold">
-                                                                    <span class="material-symbols-outlined text-[16px]">rate_review</span> Write Review
+                                                                    <span
+                                                                        class="material-symbols-outlined text-[16px]">rate_review</span>
+                                                                    Write Review
                                                                 </a>
                                                             </div>
                                                         </c:if>
@@ -434,7 +446,8 @@
                                             <div class="flex justify-between text-body-md">
                                                 <span class="text-secondary">Subtotal</span>
                                                 <span>
-                                                    <fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                    <fmt:formatNumber value="${orderSummary.totalAmount}"
+                                                        pattern="#,##0" /> đ
                                                 </span>
                                             </div>
                                             <div class="flex justify-between text-body-md">
@@ -450,7 +463,8 @@
                                                 class="border-t border-outline-variant pt-4 mt-4 flex justify-between items-end">
                                                 <span class="text-label-md font-bold uppercase">Grand Total</span>
                                                 <span class="text-headline-md font-black text-primary">
-                                                    <fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                    <fmt:formatNumber value="${orderSummary.totalAmount}"
+                                                        pattern="#,##0" /> đ
                                                 </span>
                                             </div>
                                         </div>
@@ -461,7 +475,8 @@
                             <!-- Cancel Order Modal -->
                             <div id="cancel-modal"
                                 class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-                                <div class="bg-surface-container-lowest w-full max-w-lg shadow-2xl relative rounded-2xl overflow-hidden">
+                                <div
+                                    class="bg-surface-container-lowest w-full max-w-lg shadow-2xl relative rounded-2xl overflow-hidden">
                                     <!-- Header -->
                                     <div class="flex justify-between items-center p-6 border-b border-outline-variant">
                                         <h3 class="font-headline-sm text-headline-sm uppercase tracking-tighter">
@@ -476,8 +491,8 @@
                                     </div>
 
                                     <!-- Body -->
-                                    <form action="${pageContext.request.contextPath}/profile/order/cancel"
-                                        method="POST" class="p-6">
+                                    <form action="${pageContext.request.contextPath}/profile/order/cancel" method="POST"
+                                        class="p-6">
                                         <input type="hidden" name="orderId" value="${orderSummary.id}">
 
                                         <p class="font-body-md text-body-md text-secondary mb-6">
@@ -514,5 +529,3 @@
                     </body>
 
                     </html>
-
-

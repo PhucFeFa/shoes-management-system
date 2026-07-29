@@ -388,7 +388,7 @@
                                                             data-name="${product.name}" 
                                                             data-category="${product.category.name}" 
                                                             data-brand="${product.brand.name}" 
-                                                            data-price="${product.price}" 
+                                                            data-price="<fmt:formatNumber value='${product.price}' pattern='0' />" 
                                                             data-desc="${product.description}"
                                                             onclick="editProduct(this)">Edit</button>
                                                     <form action="${pageContext.request.contextPath}/admin/product/toggle-status" method="POST" style="margin: 0;">

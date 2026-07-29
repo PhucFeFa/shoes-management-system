@@ -40,7 +40,7 @@ public class CheckoutServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServletException("Lỗi khi xử lý checkout", e);
+            throw new ServletException("Error processing checkout", e);
         }
     }
 
@@ -97,7 +97,8 @@ public class CheckoutServlet extends HttpServlet {
         }
     }
 
-    private void prepareCheckoutData(HttpServletRequest request, List<CartItem> checkoutItems, User currentUser) throws Exception {
+    private void prepareCheckoutData(HttpServletRequest request, List<CartItem> checkoutItems, User currentUser)
+            throws Exception {
         double subTotal = 0;
         for (CartItem item : checkoutItems) {
             subTotal += item.getPrice() * item.getQuantity();
