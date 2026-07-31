@@ -124,8 +124,8 @@ public class VoucherDAO {
             ps.setBigDecimal(3, voucher.getDiscountValue());
             ps.setBigDecimal(4, voucher.getMinOrderAmount());
             ps.setBigDecimal(5, voucher.getMaxDiscountAmount());
-            ps.setTimestamp(6, voucher.getStartDate() != null ? java.sql.Timestamp.from(voucher.getStartDate().toInstant()) : null);
-            ps.setTimestamp(7, voucher.getEndDate() != null ? java.sql.Timestamp.from(voucher.getEndDate().toInstant()) : null);
+            ps.setObject(6, voucher.getStartDate());
+            ps.setObject(7, voucher.getEndDate());
             ps.setInt(8, voucher.getQuantity());
 
             int rows = ps.executeUpdate();
@@ -174,8 +174,8 @@ public class VoucherDAO {
             ps.setBigDecimal(2, voucher.getDiscountValue());
             ps.setBigDecimal(3, voucher.getMinOrderAmount());
             ps.setBigDecimal(4, voucher.getMaxDiscountAmount());
-            ps.setTimestamp(5, voucher.getStartDate() != null ? java.sql.Timestamp.from(voucher.getStartDate().toInstant()) : null);
-            ps.setTimestamp(6, voucher.getEndDate() != null ? java.sql.Timestamp.from(voucher.getEndDate().toInstant()) : null);
+            ps.setObject(5, voucher.getStartDate());
+            ps.setObject(6, voucher.getEndDate());
             ps.setInt(7, voucher.getQuantity());
             ps.setString(8, voucher.getId());
 
