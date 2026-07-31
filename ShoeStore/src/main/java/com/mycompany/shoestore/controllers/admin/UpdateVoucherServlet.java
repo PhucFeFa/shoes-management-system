@@ -111,11 +111,11 @@ public class UpdateVoucherServlet extends HttpServlet {
 
             // Parse dates
             if (error.isEmpty()) {
-                try { startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(ZoneOffset.UTC); }
+                try { startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(OffsetDateTime.now().getOffset()); }
                 catch (Exception e) { error = "Start date format is invalid!"; }
             }
             if (error.isEmpty()) {
-                try { endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(ZoneOffset.UTC); }
+                try { endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(OffsetDateTime.now().getOffset()); }
                 catch (Exception e) { error = "End date format is invalid!"; }
             }
 
@@ -136,7 +136,14 @@ public class UpdateVoucherServlet extends HttpServlet {
                     error = "Minimum order amount cannot be greater than maximum discount amount!";
                 } else if (quantity <= 0) {
                     error = "Quantity must be greater than 0!";
-                } else if (!endDate.isAfter(startDate)) {
+                } else {
+                    VoucherDTO existingVoucher = dao.getVoucherDTOById(id);
+                    if (existingVoucher != null && quantity < existingVoucher.getUsedQuantity()) {
+                        error = "Quantity cannot be less than already used quantity (" + existingVoucher.getUsedQuantity() + ")!";
+                    }
+                }
+                
+                if (error.isEmpty() && !endDate.isAfter(startDate)) {
                     error = "End date must be after start date!";
                 }
             }

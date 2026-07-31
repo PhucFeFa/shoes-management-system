@@ -15,13 +15,12 @@ public class VoucherDTO implements Serializable {
     private OffsetDateTime endDate;
     private int quantity;
     private int usedQuantity;
-    private String status;
     private int isDeleted;
 
     public VoucherDTO() {
     }
 
-    public VoucherDTO(String id, String code, BigDecimal discountValue, BigDecimal minOrderAmount, BigDecimal maxDiscountAmount, OffsetDateTime startDate, OffsetDateTime endDate, int quantity, int usedQuantity, String status, int isDeleted) {
+    public VoucherDTO(String id, String code, BigDecimal discountValue, BigDecimal minOrderAmount, BigDecimal maxDiscountAmount, OffsetDateTime startDate, OffsetDateTime endDate, int quantity, int usedQuantity, int isDeleted) {
         this.id = id;
         this.code = code;
         this.discountValue = discountValue;
@@ -31,7 +30,6 @@ public class VoucherDTO implements Serializable {
         this.endDate = endDate;
         this.quantity = quantity;
         this.usedQuantity = usedQuantity;
-        this.status = status;
         this.isDeleted = isDeleted;
     }
 
@@ -105,30 +103,6 @@ public class VoucherDTO implements Serializable {
 
     public void setUsedQuantity(int usedQuantity) {
         this.usedQuantity = usedQuantity;
-    }
-
-    public String getStatus() {
-        OffsetDateTime now = OffsetDateTime.now();
-
-        if ("INACTIVE".equalsIgnoreCase(this.status)) {
-            return "INACTIVE";
-        }
-
-        if (quantity <= usedQuantity) {
-            return "INACTIVE";
-        }
-        if (endDate != null && now.isAfter(endDate)) {
-            return "INACTIVE";
-        }
-        if (startDate != null && now.isBefore(startDate)) {
-            return "UPCOMING";
-        }
-
-        return "ACTIVE";
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public int getIsDeleted() {

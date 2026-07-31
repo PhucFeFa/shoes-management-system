@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -25,7 +25,7 @@
             .user-table thead th { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #1a1a1a; padding: 14px 12px; text-align: left; white-space: nowrap; }
             .user-table tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .12s; }
             .user-table tbody tr:hover { background: #fafafa; }
-            .user-table tbody td { padding: 14px 12px; font-size: 13px; color: #1a1a1a; vertical-align: middle; }
+            .user-table tbody td { padding: 14px 12px; font-size: 13px; color: #1a1a1a; vertical-align: middle; overflow: hidden; }
             
             .cell-no { font-size: 12px; color: #ccc; font-weight: 600; }
             .cell-code { font-weight: 700; color: #1a1a1a; letter-spacing: 0.02em; }
@@ -157,15 +157,14 @@
                 <div class="table-card">
                     <table class="user-table">
                         <colgroup>
-                            <col style="width: 4%;">
-                            <col style="width: 15%;">
-                            <col style="width: 9%;">
-                            <col style="width: 10%;">
+                            <col style="width: 5%;">
+                            <col style="width: 14%;">
                             <col style="width: 11%;">
                             <col style="width: 11%;">
-                            <col style="width: 11%;">
-                            <col style="width: 10%;">
-                            <col style="width: 19%;">
+                            <col style="width: 13%;">
+                            <col style="width: 13%;">
+                            <col style="width: 13%;">
+                            <col style="width: 20%;">
                         </colgroup>
                         <thead>
                             <tr>
@@ -176,7 +175,6 @@
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Usage</th>
-                                <th style="text-align:center">Status</th>
                                 <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
@@ -211,11 +209,6 @@
                                                 <fmt:formatDate value="${parsedE}" pattern="dd/MM/yyyy" />
                                             </td>
                                             <td class="col-usage"><span class="qty-badge">${v.usedQuantity} / ${v.quantity}</span></td>
-                                            <td class="col-status" style="text-align:center">
-                                                <span class="status-badge ${v.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}">
-                                                    ${v.status}
-                                                </span>
-                                            </td>
                                             <td class="col-action" style="text-align:center">
                                                 <div class="action-wrap">
                                                     <a href="${pageContext.request.contextPath}/manage-voucher/view?id=${v.id}" class="btn-action btn-view">View</a>
@@ -229,7 +222,7 @@
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
-                                    <tr class="empty-row"><td colspan="9">No vouchers found in the system.</td></tr>
+                                    <tr class="empty-row"><td colspan="8">No vouchers found in the system.</td></tr>
                                 </c:otherwise>
                             </c:choose>
                         </tbody>

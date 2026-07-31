@@ -113,14 +113,7 @@
                                 </span>
                             </div>
                             
-                            <div class="detail-row">
-                                <span class="detail-label">Status</span>
-                                <span class="detail-value">
-                                    <span class="status-badge ${item.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}">
-                                        ${item.status}
-                                    </span>
-                                </span>
-                            </div>
+
                         </div>
                     </c:when>
                     <c:otherwise>

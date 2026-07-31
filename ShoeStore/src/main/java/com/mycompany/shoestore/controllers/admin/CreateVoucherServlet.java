@@ -88,11 +88,11 @@ public class CreateVoucherServlet extends HttpServlet {
 
             // Parse dates
             if (error.isEmpty()) {
-                try { startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(ZoneOffset.UTC); }
+                try { startDate = LocalDateTime.parse(startDateStr, FORMATTER).atOffset(OffsetDateTime.now().getOffset()); }
                 catch (Exception e) { error = "Start date format is invalid!"; }
             }
             if (error.isEmpty()) {
-                try { endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(ZoneOffset.UTC); }
+                try { endDate = LocalDateTime.parse(endDateStr, FORMATTER).atOffset(OffsetDateTime.now().getOffset()); }
                 catch (Exception e) { error = "End date format is invalid!"; }
             }
 
