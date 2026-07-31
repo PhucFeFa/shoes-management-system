@@ -66,6 +66,63 @@ public class ProductDAO {
         return products;
     }
 
+    public boolean insertProduct(Product p, String imageUrl) {
+        String sqlProduct = "INSERT INTO products (id, name, description, price, category_id, brand_id, status) VALUES (NEWID(), ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sqlProduct, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getDescription());
+            ps.setDouble(3, p.getPrice());
+            ps.setString(4, p.getCategoryId());
+            ps.setString(5, p.getBrandId());
+            ps.setString(6, "active");
+            
+            if (ps.executeUpdate() > 0) {
+                // If using NEWID() it's hard to get the generated key back directly in SQL Server sometimes.
+                // We will get the last inserted product by this name (or we should use a generated UUID from Java).
+                String getNewIdSql = "SELECT TOP 1 id FROM products ORDER BY created_at DESC";
+                try (PreparedStatement psId = conn.prepareStatement(getNewIdSql);
+                     ResultSet rs = psId.executeQuery()) {
+                    if (rs.next()) {
+                        String newId = rs.getString("id");
+                        // Insert image
+                        if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+                            String sqlImg = "INSERT INTO product_images (id, product_id, image_url, sort_order) VALUES (NEWID(), ?, ?, 1)";
+                            try (PreparedStatement psImg = conn.prepareStatement(sqlImg)) {
+                                psImg.setString(1, newId);
+                                psImg.setString(2, imageUrl);
+                                psImg.executeUpdate();
+                            }
+                        }
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean updateProduct(Product p) {
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category_id = ?, brand_id = ?, status = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getDescription());
+            ps.setDouble(3, p.getPrice());
+            ps.setString(4, p.getCategoryId());
+            ps.setString(5, p.getBrandId());
+            ps.setString(6, p.getStatus());
+            ps.setString(7, p.getId());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public List<Product> getLatestProducts(int limit) {
         List<Product> products = new ArrayList<>();
         // Query to get latest active products with their first image
@@ -180,6 +237,32 @@ public class ProductDAO {
         return categories;
     }
 
+    public String getOrCreateCategory(String categoryName) {
+        String checkSql = "SELECT id FROM categories WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(checkSql)) {
+            ps.setString(1, categoryName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString("id");
+            }
+            String insertSql = "INSERT INTO categories (id, name) VALUES (NEWID(), ?)";
+            try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
+                psIns.setString(1, categoryName);
+                if (psIns.executeUpdate() > 0) {
+                    try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
+                        psSel.setString(1, categoryName);
+                        try (ResultSet rs2 = psSel.executeQuery()) {
+                            if (rs2.next()) return rs2.getString("id");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Brand> getAllBrands() {
         List<Brand> brands = new ArrayList<>();
         String sql = "SELECT id, name FROM brands ORDER BY name ASC";
@@ -195,6 +278,7 @@ public class ProductDAO {
         return brands;
     }
 
+<<<<<<< Updated upstream
     public String getOrCreateCategory(String categoryName) {
         String checkSql = "SELECT id FROM categories WHERE name = ?";
         try (Connection conn = new DBContext().getConnection();
@@ -231,6 +315,15 @@ public class ProductDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next())
                     return rs.getString("id");
+=======
+    public String getOrCreateBrand(String brandName) {
+        String checkSql = "SELECT id FROM brands WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(checkSql)) {
+            ps.setString(1, brandName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString("id");
+>>>>>>> Stashed changes
             }
             String insertSql = "INSERT INTO brands (id, name) VALUES (NEWID(), ?)";
             try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
@@ -239,8 +332,12 @@ public class ProductDAO {
                     try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
                         psSel.setString(1, brandName);
                         try (ResultSet rs2 = psSel.executeQuery()) {
+<<<<<<< Updated upstream
                             if (rs2.next())
                                 return rs2.getString("id");
+=======
+                            if (rs2.next()) return rs2.getString("id");
+>>>>>>> Stashed changes
                         }
                     }
                 }
@@ -251,6 +348,7 @@ public class ProductDAO {
         return null;
     }
 
+<<<<<<< Updated upstream
     public String insertProduct(Product p, String imageUrl) {
         String newId = java.util.UUID.randomUUID().toString();
         p.setId(newId);
@@ -414,6 +512,9 @@ public class ProductDAO {
 
     public int countSearchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice,
             Double maxPrice) {
+=======
+    public int countSearchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice, Double maxPrice) {
+>>>>>>> Stashed changes
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) "
                         + "FROM products p "

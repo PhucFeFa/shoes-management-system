@@ -46,6 +46,14 @@ public class ImportDTO {
     public Timestamp getOrderDate() { return orderDate; }
     public void setOrderDate(Timestamp orderDate) { this.orderDate = orderDate; }
 
+    public String getFormattedOrderDate() {
+        if (orderDate != null) {
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
+            return orderDate.format(formatter);
+        }
+        return "";
+    }
+
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
