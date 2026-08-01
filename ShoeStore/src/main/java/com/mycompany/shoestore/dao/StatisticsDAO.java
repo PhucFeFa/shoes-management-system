@@ -29,12 +29,11 @@ public class StatisticsDAO {
     }
 
     public double getMonthlyCost() {
-        String sql = "SELECT SUM(id.ImportQuantity * id.UnitPrice) " +
-                     "FROM import_details id " +
-                     "JOIN imports i ON id.ImportID = i.ImportID " +
-                     "WHERE i.Status IN ('REPORTED', 'ACCEPTED', 'COMPLETE') " +
-                     "AND MONTH(i.OrderDate) = MONTH(SYSDATETIMEOFFSET()) " +
-                     "AND YEAR(i.OrderDate) = YEAR(SYSDATETIMEOFFSET())";
+        String sql = "SELECT SUM(TotalAmount) " +
+                     "FROM imports " +
+                     "WHERE Status IN ('REPORTED', 'ACCEPTED', 'COMPLETE') " +
+                     "AND MONTH(OrderDate) = MONTH(SYSDATETIMEOFFSET()) " +
+                     "AND YEAR(OrderDate) = YEAR(SYSDATETIMEOFFSET())";
         try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -94,10 +93,10 @@ public class StatisticsDAO {
                      "FROM Months " +
                      "LEFT JOIN orders O ON MONTH(O.created_at) = Months.Month AND YEAR(O.created_at) = Months.Year AND O.status = 'completed' " +
                      "LEFT JOIN (" +
-                     "    SELECT MONTH(i.OrderDate) as Month, YEAR(i.OrderDate) as Year, SUM(id.ImportQuantity * id.UnitPrice) as Cost " +
-                     "    FROM import_details id JOIN imports i ON id.ImportID = i.ImportID " +
-                     "    WHERE i.Status IN ('REPORTED', 'ACCEPTED', 'COMPLETE') " +
-                     "    GROUP BY MONTH(i.OrderDate), YEAR(i.OrderDate)" +
+                     "    SELECT MONTH(OrderDate) as Month, YEAR(OrderDate) as Year, SUM(TotalAmount) as Cost " +
+                     "    FROM imports " +
+                     "    WHERE Status IN ('REPORTED', 'ACCEPTED', 'COMPLETE') " +
+                     "    GROUP BY MONTH(OrderDate), YEAR(OrderDate)" +
                      ") C ON Months.Month = C.Month AND Months.Year = C.Year " +
                      "GROUP BY Months.Month, Months.Year, C.Cost " +
                      "ORDER BY Months.Year ASC, Months.Month ASC";

@@ -67,17 +67,30 @@ public class RequestImportServlet extends HttpServlet {
         List<ImportDetailDTO> details = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
         BigDecimal minPrice = new BigDecimal("1000");
+        BigDecimal maxPrice = new BigDecimal("100000000");
 
         try {
             for (int i = 0; i < variantIDs.length; i++) {
                 if (variantIDs[i] == null || variantIDs[i].isEmpty()) continue;
                 
-                int qty = Integer.parseInt(quantities[i]);
-                BigDecimal unitPrice = new BigDecimal(prices[i]);
+                int qty;
+                BigDecimal unitPrice;
+                try {
+                    qty = Integer.parseInt(quantities[i]);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Quantity must be between 1 and 1,000.");
+                }
+                try {
+                    unitPrice = new BigDecimal(prices[i]);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Unit price must be between 1,000 đ and 100,000,000 đ.");
+                }
                 
-                if (qty <= 0) throw new IllegalArgumentException("Quantity must be greater than 0");
-                if (unitPrice.compareTo(minPrice) < 0) {
-                    throw new IllegalArgumentException("Unit price must be at least 1,000đ");
+                if (qty < 1 || qty > 1000) {
+                    throw new IllegalArgumentException("Quantity must be between 1 and 1,000.");
+                }
+                if (unitPrice.compareTo(minPrice) < 0 || unitPrice.compareTo(maxPrice) > 0) {
+                    throw new IllegalArgumentException("Unit price must be between 1,000 đ and 100,000,000 đ.");
                 }
 
                 ImportDetailDTO detail = new ImportDetailDTO();
@@ -88,14 +101,24 @@ public class RequestImportServlet extends HttpServlet {
 
                 totalAmount = totalAmount.add(unitPrice.multiply(new BigDecimal(qty)));
             }
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("error", e.getMessage());
+            doGet(request, response);
+            return;
         } catch (Exception e) {
-            request.setAttribute("error", "Invalid quantity or price: " + e.getMessage());
+            request.setAttribute("error", "System error. Please try again.");
+            doGet(request, response);
+            return;
+        }
+
+        if (details.isEmpty()) {
+            request.setAttribute("error", "Please add at least one valid item to import.");
             doGet(request, response);
             return;
         }
 
         ImportDTO importDTO = new ImportDTO();
-        importDTO.setSupplier(supplier);
+        importDTO.setSupplier(supplier.trim());
         importDTO.setStaffID(user.getId());
         importDTO.setTotalAmount(totalAmount);
         importDTO.setNote(null);

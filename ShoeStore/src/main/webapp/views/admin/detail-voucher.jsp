@@ -94,7 +94,7 @@
                                 <span class="detail-label">Start Date</span>
                                 <span class="detail-value">
                                     <fmt:parseDate value="${item.startDate.toString().substring(0,16)}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedStartDate" type="both" />
-                                    <fmt:formatDate value="${parsedStartDate}" pattern="dd/MM/yyyy" />
+                                    <fmt:formatDate value="${parsedStartDate}" pattern="dd/MM/yyyy hh:mm a" />
                                 </span>
                             </div>
 
@@ -102,7 +102,7 @@
                                 <span class="detail-label">End Date</span>
                                 <span class="detail-value">
                                     <fmt:parseDate value="${item.endDate.toString().substring(0,16)}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedEndDate" type="both" />
-                                    <fmt:formatDate value="${parsedEndDate}" pattern="dd/MM/yyyy" />
+                                    <fmt:formatDate value="${parsedEndDate}" pattern="dd/MM/yyyy hh:mm a" />
                                 </span>
                             </div>
 
@@ -113,14 +113,7 @@
                                 </span>
                             </div>
                             
-                            <div class="detail-row">
-                                <span class="detail-label">Status</span>
-                                <span class="detail-value">
-                                    <span class="status-badge ${item.status == 'ACTIVE' ? 'status-active' : 'status-inactive'}">
-                                        ${item.status}
-                                    </span>
-                                </span>
-                            </div>
+
                         </div>
                     </c:when>
                     <c:otherwise>
