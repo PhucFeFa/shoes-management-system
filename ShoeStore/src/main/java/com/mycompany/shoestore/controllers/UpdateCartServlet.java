@@ -96,20 +96,27 @@ public class UpdateCartServlet extends HttpServlet {
         try {
 
             if ("increase".equals(action)) {
-                int stock = dao.getVariantStock(variantId);
-                int currentQty = dao.getCartItemByVariant(user.getId().toString(), variantId).getQuantity();
-                
-                if (currentQty >= stock) {
-                    session.setAttribute("cartError", "Sorry, only " + stock + " items available in stock.");
-                } else {
-                    dao.increaseQuantity(user.getId().toString(), variantId);
-                }
+                dao.increaseQuantity(user.getId().toString(), variantId);
             }
 
             if ("decrease".equals(action)) {
                 dao.decreaseQuantity(
                         user.getId().toString(),
                         variantId);
+            }
+
+            if ("set".equals(action)) {
+                String quantityStr = request.getParameter("quantity");
+                if (quantityStr != null && !quantityStr.trim().isEmpty()) {
+                    int quantity = 1;
+                    try {
+                        quantity = Integer.parseInt(quantityStr);
+                        if (quantity > 9999) quantity = 9999;
+                    } catch (NumberFormatException e) {
+                        quantity = 9999;
+                    }
+                    dao.setQuantity(user.getId().toString(), variantId, quantity);
+                }
             }
 
         } catch (Exception e) {

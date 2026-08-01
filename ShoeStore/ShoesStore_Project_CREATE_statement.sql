@@ -30,7 +30,7 @@ CREATE TABLE "vouchers"(
     "end_date" DATETIMEOFFSET NOT NULL,
     "quantity" INT NOT NULL,
     "used_quantity" INT NOT NULL DEFAULT 0,
-    "status" NVARCHAR(50) NOT NULL DEFAULT 'ACTIVE',
+    "is_deleted" INT NOT NULL DEFAULT 0,
     PRIMARY KEY("id"),
     CONSTRAINT "vouchers_code_unique" UNIQUE("code")
 );
@@ -153,7 +153,7 @@ CREATE TABLE "carts"(
 CREATE TABLE "orders"(
     "id" UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), 
     "user_id" UNIQUEIDENTIFIER NOT NULL, 
-    "address_id" UNIQUEIDENTIFIER NOT NULL, 
+    "shipping_address" NVARCHAR(MAX) NOT NULL, 
     "total_amount" DECIMAL(18, 2) NOT NULL, 
     "status" NVARCHAR(50) NOT NULL DEFAULT 'pending' CHECK ("status" IN('pending', 'confirmed', 'shipping', 'completed', 'cancelled')),
     "voucher_id" UNIQUEIDENTIFIER NULL,
@@ -162,7 +162,6 @@ CREATE TABLE "orders"(
     "created_at" DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
     PRIMARY KEY("id"),
     CONSTRAINT "orders_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id"),
-    CONSTRAINT "orders_address_id_foreign" FOREIGN KEY("address_id") REFERENCES "addresses"("id"),
     CONSTRAINT "orders_voucher_id_foreign" FOREIGN KEY("voucher_id") REFERENCES "vouchers"("id")
 );
 

@@ -1,4 +1,4 @@
-﻿-- BƯỚC 1: XÓA DỮ LIỆU CŨ (Thứ tự: Bảng con trước, bảng cha sau)
+-- BƯỚC 1: XÓA DỮ LIỆU CŨ (Thứ tự: Bảng con trước, bảng cha sau)
 -- ====================================================================
 DELETE FROM "order_items";
 DELETE FROM "order_staff_logs";
@@ -50,9 +50,9 @@ INSERT INTO "brands" ("id", "name") VALUES
 ('DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD', 'New Balance');
 
 -- 5. Vouchers
-INSERT INTO "vouchers" ("id", "code", "discount_value", "min_order_amount", "max_discount_amount", "start_date", "end_date", "quantity", "status") VALUES
-('77777777-7777-7777-7777-777777777777', 'WELCOME20', 20.00, 0.00, 50000.00, '2023-01-01', '2030-12-31', 1000, 'ACTIVE'),
-('88888888-8888-8888-8888-888888888888', 'MINUS50K', 50000.00, 0.00, NULL, '2023-01-01', '2030-12-31', 1000, 'ACTIVE');
+INSERT INTO "vouchers" ("id", "code", "discount_value", "min_order_amount", "max_discount_amount", "start_date", "end_date", "quantity") VALUES
+('77777777-7777-7777-7777-777777777777', 'WELCOME20', 20.00, 0.00, 50000.00, '2023-01-01', '2030-12-31', 1000),
+('88888888-8888-8888-8888-888888888888', 'MINUS50K', 50000.00, 0.00, NULL, '2023-01-01', '2030-12-31', 1000);
 
 -- 6. Products
 INSERT INTO "products" ("id", "name", "description", "price", "category_id", "brand_id", "status") VALUES 
@@ -852,40 +852,40 @@ INSERT INTO "addresses" ("id", "user_id", "city", "district", "ward", "address_l
 -- 11. Orders & Order Items
 -- Đơn hàng hoàn thành cho Test User (Mua TẤT CẢ 4 sản phẩm để test Review)
 DECLARE @orderTestId UNIQUEIDENTIFIER = NEWID();
-INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
-(@orderTestId, '99999999-9999-9999-9999-999999999999', '1A1A1A1A-1A1A-1A1A-1A1A-1A1A1A1A1A1A', 590.00, 'completed', 'cod', 'paid', SYSDATETIMEOFFSET());
+INSERT INTO "orders" ("id", "user_id", "shipping_address", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
+(@orderTestId, '99999999-9999-9999-9999-999999999999', N'123 Dummy Street, Ward 1, District 1, Ho Chi Minh City', 590.00, 'completed', 'cod', 'paid', SYSDATETIMEOFFSET());
 
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT NEWID(), @orderTestId, id, 1, 150.00, SYSDATETIMEOFFSET() FROM "product_variants";
 
 -- Đơn hàng hoàn thành cho Virtual User 1
 DECLARE @orderVirtual1Id UNIQUEIDENTIFIER = NEWID();
-INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
-(@orderVirtual1Id, '88888888-8888-8888-8888-888888888888', '2A2A2A2A-2A2A-2A2A-2A2A-2A2A2A2A2A2A', 160.00, 'completed', 'cod', 'paid', SYSDATETIMEOFFSET());
+INSERT INTO "orders" ("id", "user_id", "shipping_address", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
+(@orderVirtual1Id, '88888888-8888-8888-8888-888888888888', N'456 Test Avenue, Ward 2, District 3, Ha Noi', 160.00, 'completed', 'cod', 'paid', SYSDATETIMEOFFSET());
 
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT TOP 1 NEWID(), @orderVirtual1Id, id, 1, 160.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001';
 
 -- Đơn hàng hoàn thành cho Virtual User 2
 DECLARE @orderVirtual2Id UNIQUEIDENTIFIER = NEWID();
-INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
-(@orderVirtual2Id, '77777777-7777-7777-7777-777777777777', '3A3A3A3A-3A3A-3A3A-3A3A-3A3A3A3A3A3A', 190.00, 'completed', 'cod', 'paid', SYSDATETIMEOFFSET());
+INSERT INTO "orders" ("id", "user_id", "shipping_address", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
+(@orderVirtual2Id, '77777777-7777-7777-7777-777777777777', N'789 Sample Road, Hai Chau 1, Hai Chau, Da Nang', 190.00, 'completed', 'cod', 'paid', SYSDATETIMEOFFSET());
 
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT TOP 1 NEWID(), @orderVirtual2Id, id, 1, 190.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000002';
 
 -- Đơn hàng Pending cho Test User
 DECLARE @orderPending1Id UNIQUEIDENTIFIER = NEWID();
-INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
-(@orderPending1Id, '99999999-9999-9999-9999-999999999999', '1A1A1A1A-1A1A-1A1A-1A1A-1A1A1A1A1A1A', 350.00, 'pending', 'cod', 'pending', SYSDATETIMEOFFSET());
+INSERT INTO "orders" ("id", "user_id", "shipping_address", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
+(@orderPending1Id, '99999999-9999-9999-9999-999999999999', N'123 Dummy Street, Ward 1, District 1, Ho Chi Minh City', 350.00, 'pending', 'cod', 'pending', SYSDATETIMEOFFSET());
 
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT TOP 1 NEWID(), @orderPending1Id, id, 2, 175.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000001';
 
 -- Đơn hàng Pending cho Virtual User 1
 DECLARE @orderPending2Id UNIQUEIDENTIFIER = NEWID();
-INSERT INTO "orders" ("id", "user_id", "address_id", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
-(@orderPending2Id, '88888888-8888-8888-8888-888888888888', '2A2A2A2A-2A2A-2A2A-2A2A-2A2A2A2A2A2A', 220.00, 'pending', 'cod', 'pending', SYSDATETIMEOFFSET());
+INSERT INTO "orders" ("id", "user_id", "shipping_address", "total_amount", "status", "payment_method", "payment_status", "created_at") VALUES
+(@orderPending2Id, '88888888-8888-8888-8888-888888888888', N'456 Test Avenue, Ward 2, District 3, Ha Noi', 220.00, 'pending', 'cod', 'pending', SYSDATETIMEOFFSET());
 
 INSERT INTO "order_items" ("id", "order_id", "product_variant_id", "quantity", "price_at_purchase", "created_at")
 SELECT TOP 1 NEWID(), @orderPending2Id, id, 2, 110.00, SYSDATETIMEOFFSET() FROM "product_variants" WHERE product_id = '10000000-0000-0000-0000-000000000004';

@@ -317,13 +317,11 @@
                                                     </div>
                                                     <p class="font-body-md text-body-md text-primary leading-relaxed">
                                                         <c:choose>
-                                                            <c:when test="${not empty orderSummary.addressLine}">
+                                                            <c:when test="${not empty orderSummary.shippingAddress}">
                                                                 ${orderSummary.customerFullName}<br>
-                                                                ${orderSummary.addressLine}<br>
-                                                                ${orderSummary.ward}, ${orderSummary.district}<br>
-                                                                ${orderSummary.city}
+                                                                ${orderSummary.shippingAddress}
                                                             </c:when>
-                                                            <c:otherwise>No address provided.</c:otherwise>
+                                                            <c:otherwise>No address specified.</c:otherwise>
                                                         </c:choose>
                                                     </p>
                                                 </div>
@@ -347,13 +345,25 @@
                                                     <span class="uppercase">${empty orderSummary.paymentStatus ? 'N/A' :
                                                         orderSummary.paymentStatus}</span>
                                                 </div>
+                                                <c:set var="subTotal" value="0" />
+                                                <c:forEach var="item" items="${orderItems}">
+                                                    <c:set var="subTotal" value="${subTotal + (item.priceAtPurchase * item.quantity)}" />
+                                                </c:forEach>
                                                 <div class="flex justify-between items-center text-secondary pt-2">
                                                     <span>Subtotal</span>
                                                     <span>
-                                                        <fmt:formatNumber value="${orderSummary.totalAmount}"
+                                                        <fmt:formatNumber value="${subTotal}"
                                                             pattern="#,##0" /> đ
                                                     </span>
                                                 </div>
+                                                <c:if test="${not empty appliedVoucher}">
+                                                    <div class="flex justify-between items-center text-secondary mt-2">
+                                                        <span>Voucher (${appliedVoucher.code}) <span class="text-xs font-semibold px-2 py-0.5 rounded ml-1 border border-outline-variant">-${appliedVoucher.discountValue}%</span></span>
+                                                        <span>
+                                                            - <fmt:formatNumber value="${subTotal - orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                        </span>
+                                                    </div>
+                                                </c:if>
                                                 <div
                                                     class="flex justify-between items-center text-primary font-bold pt-4 border-t border-outline-variant mt-2">
                                                     <span class="font-label-md uppercase tracking-widest">Total

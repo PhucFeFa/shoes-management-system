@@ -46,6 +46,16 @@ public class StaffOrderDetailServlet extends HttpServlet {
 
         List<OrderDetailDTO> orderItems = dao.getOrderItemsByOrderId(orderId);
 
+        if (orderSummary.getVoucherId() != null && !orderSummary.getVoucherId().isEmpty()) {
+            try {
+                com.mycompany.shoestore.dao.VoucherDAO voucherDAO = new com.mycompany.shoestore.dao.VoucherDAO();
+                com.mycompany.shoestore.dto.VoucherDTO appliedVoucher = voucherDAO.getVoucherDTOById(orderSummary.getVoucherId());
+                request.setAttribute("appliedVoucher", appliedVoucher);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         request.setAttribute("orderSummary", orderSummary);
         request.setAttribute("orderItems", orderItems);
 

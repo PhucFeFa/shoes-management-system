@@ -7,6 +7,8 @@ import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.models.CartItem;
 import com.mycompany.shoestore.models.User;
 import com.mycompany.shoestore.models.Voucher;
+import com.mycompany.shoestore.dao.AddressDAO;
+import com.mycompany.shoestore.models.Address;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -81,22 +83,6 @@ public class PlaceOrderServlet extends HttpServlet {
                 voucherId = null;
             }
 
-            // ===================== CHECK STOCK =====================
-
-            for (CartItem item : checkoutItems) {
-
-                int currentStock =
-                        variantDAO.getStockByVariant(
-                                item.getProductVariantId());
-
-                if (currentStock < item.getQuantity()) {
-
-                    session.setAttribute("error", item.getProductName() + " only has " + currentStock + " items left in stock.");
-                    response.sendRedirect(request.getContextPath() + "/checkout");
-                    return;
-                }
-            }
-
             // ===================== CALCULATE TOTAL =====================
 
             double subTotal = 0;
@@ -113,13 +99,18 @@ public class PlaceOrderServlet extends HttpServlet {
 
             // Áp dụng voucher nếu có
             if (voucherId != null) {
+                if (orderDAO.hasUserUsedVoucher(currentUser.getId(), voucherId)) {
+                    session.setAttribute("error", "You have already used this voucher. Each voucher can only be used once!");
+                    response.sendRedirect(request.getContextPath() + "/checkout");
+                    return;
+                }
 
                 Voucher voucher =
                         voucherDAO.getVoucherById(voucherId);
 
                 if (voucher != null) {
-                    // Schema only has discount_value as a fixed amount (no discount_type column)
-                    double discount = voucher.getDiscountValue();
+                    // Discount is treated as a percentage in this system
+                    double discount = (totalAmount * voucher.getDiscountValue()) / 100.0;
                     // Apply max_discount_amount cap if set
                     if (voucher.getMaxDiscountAmount() != null && discount > voucher.getMaxDiscountAmount()) {
                         discount = voucher.getMaxDiscountAmount();
@@ -134,10 +125,21 @@ public class PlaceOrderServlet extends HttpServlet {
 
             // ===================== CREATE ORDER =====================
 
+            AddressDAO addressDAO = new AddressDAO();
+            Address address = addressDAO.getAddressById(addressId);
+            
+            if (address == null) {
+                session.setAttribute("error", "Shipping address not found.");
+                response.sendRedirect(request.getContextPath() + "/checkout");
+                return;
+            }
+            
+            String shippingAddress = String.format("%s, %s, %s, %s", address.getAddressLine(), address.getWard(), address.getDistrict(), address.getCity());
+
             String orderId =
                     orderDAO.createOrder(
                             currentUser.getId(),
-                            addressId,
+                            shippingAddress,
                             totalAmount,
                             voucherId,
                             "cod");
@@ -165,10 +167,6 @@ public class PlaceOrderServlet extends HttpServlet {
                         item.getProductVariantId(),
                         item.getQuantity(),
                         item.getPrice());
-
-                variantDAO.updateProductStock(
-                        item.getProductVariantId(),
-                        item.getQuantity());
 
                 cartDAO.removeCartItem(
                         currentUser.getId(),

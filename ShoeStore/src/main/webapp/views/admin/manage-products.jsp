@@ -307,18 +307,10 @@
                         <i class="bi bi-box-seam" style="font-size:16px; color:#1a1a1a;"></i>
                         <h3 class="page-title">Manage Products</h3>
                     </div>
-<<<<<<< Updated upstream
                 </div>
 
 
 
-=======
-                    <button type="button" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                        + Add New Product
-                    </button>
-                </div>
-
->>>>>>> Stashed changes
                 <c:if test="${not empty sessionScope.successMsg}">
                     <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" id="alertMsg">
                         ${sessionScope.successMsg}
@@ -335,18 +327,11 @@
                     </div>
                 </c:if>
 
-<<<<<<< Updated upstream
                 <div class="d-flex justify-content-between align-items-center mb-3" style="min-height: 38px;">
                     <form action="${pageContext.request.contextPath}/admin/manage-products" method="GET" class="input-group" style="width: 300px;">
                         <span class="input-group-text bg-white border-end-0" style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; padding-left: 14px;"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
                         <input type="text" name="search" value="${searchQuery}" class="form-control border-start-0" placeholder="Search product name..." style="font-size: 13px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; padding-right: 14px;">
                         <button type="submit" class="d-none"></button>
-=======
-                <div class="d-flex justify-content-end mb-3">
-                    <form onsubmit="event.preventDefault(); searchTable();" class="input-group" style="width: 300px;">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search" style="font-size: 14px; color: #888;"></i></span>
-                        <input type="text" id="searchInput" onkeyup="searchTable()" class="form-control border-start-0" placeholder="Search product name..." style="font-size: 13px;">
->>>>>>> Stashed changes
                     </form>
                     <button type="button" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal">
                         + Add New Product
@@ -403,7 +388,7 @@
                                                             data-name="${product.name}" 
                                                             data-category="${product.category.name}" 
                                                             data-brand="${product.brand.name}" 
-                                                            data-price="<fmt:formatNumber value='${product.price}' pattern='0' />" 
+                                                            data-price="<fmt:formatNumber value='${product.price}' pattern='0.##'/>" 
                                                             data-desc="${product.description}"
                                                             onclick="editProduct(this)">Edit</button>
                                                     <form action="${pageContext.request.contextPath}/admin/product/toggle-status" method="POST" style="margin: 0;">
@@ -520,36 +505,22 @@
         <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
-<<<<<<< Updated upstream
               <form action="${pageContext.request.contextPath}/admin/product/create" method="POST" enctype="multipart/form-data">
-=======
-              <form action="${pageContext.request.contextPath}/admin/product/create" method="POST" onsubmit="return validateProductForm()">
->>>>>>> Stashed changes
                   <div class="modal-header">
                     <h5 class="modal-title" id="addProductModalLabel" style="font-size: 14px; font-weight: 700; text-transform: uppercase;">Add New Product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-<<<<<<< Updated upstream
                       <div class="row">
                           <div class="col-md-12 mb-3">
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Product Name <span class="text-danger">*</span></label>
                               <input type="text" class="form-control form-control-sm" name="name" required>
-=======
-                      <div id="addProductError" class="alert alert-danger d-none" style="font-size: 13px; padding: 10px;"></div>
-                      
-                      <div class="row">
-                          <div class="col-md-12 mb-3">
-                              <label class="form-label" style="font-size: 12px; font-weight: 600;">Product Name <span class="text-danger">*</span></label>
-                              <input type="text" class="form-control form-control-sm" name="name" id="addName" required>
->>>>>>> Stashed changes
                           </div>
                       </div>
                       
                       <div class="row">
                           <div class="col-md-4 mb-3">
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Category <span class="text-danger">*</span></label>
-<<<<<<< Updated upstream
                               <select class="form-select form-select-sm select2-dropdown" name="categoryName" required style="width: 100%;">
                                   <option value="">Select Category...</option>
                                   <c:forEach var="c" items="${categories}">
@@ -577,27 +548,6 @@
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Product Image</label>
                               <input type="file" class="form-control form-control-sm" name="productImages" accept=".jpg, .jpeg, .png, .webp">
                               <div class="form-text" style="font-size: 10px;">Select an image for the product. Supported formats: JPG, PNG, WEBP. Max size: 2MB.</div>
-=======
-                              <input type="text" list="categoryList" class="form-control form-control-sm" name="categoryName" id="addCategory" required placeholder="Select or type new...">
-                              <datalist id="categoryList">
-                                  <c:forEach var="c" items="${categories}">
-                                      <option value="${c.name}"></option>
-                                  </c:forEach>
-                              </datalist>
-                          </div>
-                          <div class="col-md-4 mb-3">
-                              <label class="form-label" style="font-size: 12px; font-weight: 600;">Brand <span class="text-danger">*</span></label>
-                              <input type="text" list="brandList" class="form-control form-control-sm" name="brandName" id="addBrand" required placeholder="Select or type new...">
-                              <datalist id="brandList">
-                                  <c:forEach var="b" items="${brands}">
-                                      <option value="${b.name}"></option>
-                                  </c:forEach>
-                              </datalist>
-                          </div>
-                          <div class="col-md-4 mb-3">
-                              <label class="form-label" style="font-size: 12px; font-weight: 600;">Base Price <span class="text-danger">*</span></label>
-                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" id="addPrice" required>
->>>>>>> Stashed changes
                           </div>
                       </div>
                       
@@ -616,7 +566,6 @@
             </div>
           </div>
         </div>
-<<<<<<< Updated upstream
 
         <!-- Edit Product Modal -->
         <div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
@@ -685,8 +634,6 @@
             </div>
           </div>
         </div>
-=======
->>>>>>> Stashed changes
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- jQuery and Select2 JS -->

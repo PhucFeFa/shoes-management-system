@@ -56,7 +56,34 @@ public class UpdateOrderStatusServlet extends HttpServlet {
                 }
 
                 if (validTransition) {
-                    if ("cancelled".equalsIgnoreCase(status)) {
+                    if ("confirmed".equalsIgnoreCase(status) && "pending".equalsIgnoreCase(curStatus)) {
+                        com.mycompany.shoestore.dao.ProductVariantDAO variantDAO = new com.mycompany.shoestore.dao.ProductVariantDAO();
+                        var items = dao.getOrderItemsByOrderId(orderId);
+                        boolean hasStock = true;
+                        try {
+                            for (var item : items) {
+                                var variant = variantDAO.getVariantById(item.getProductVariantId());
+                                if (variant == null || variant.getStockQuantity() < item.getQuantity()) {
+                                    hasStock = false;
+                                    break;
+                                }
+                            }
+                            if (hasStock) {
+                                success = dao.updateOrderStatus(orderId, status);
+                                if (success) {
+                                    for (var item : items) {
+                                        variantDAO.updateProductStock(item.getProductVariantId(), item.getQuantity());
+                                    }
+                                }
+                            } else {
+                                session.setAttribute("errorMessage", "Not enough stock to confirm this order.");
+                                success = false;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            success = false;
+                        }
+                    } else if ("cancelled".equalsIgnoreCase(status)) {
                         success = dao.cancelOrderWithStockRestore(orderId);
                         if (success) {
                             System.out.println("Order " + orderId + " cancelled by Admin/Staff " + currentUser.getId()

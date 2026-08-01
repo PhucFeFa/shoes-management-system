@@ -169,12 +169,13 @@
                                         <div class="font-semibold text-gray-800">No Voucher</div>
                                     </li>
                                     <c:forEach items="${vouchers}" var="v">
-                                        <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b last:border-b-0 flex justify-between items-center"
-                                            data-value="${v.id}"
-                                            data-label="${v.code} (-${v.discountValue}%)"
-                                            data-percent="${v.discountValue}">
-                                            <div>
-                                                <div class="font-bold text-gray-900">${v.code}</div>
+                                          <li class="dropdown-item p-4 hover:bg-gray-50 cursor-pointer transition border-b last:border-b-0 flex justify-between items-center"
+                                              data-value="${v.id}"
+                                              data-label="${v.code} (-${v.discountValue}%)"
+                                              data-percent="${v.discountValue}"
+                                              data-max="${v.maxDiscountAmount}">
+                                              <div>
+                                                  <div class="font-bold text-gray-900">${v.code}</div>
                                                 <div class="text-xs text-gray-500 mt-1">Limited quantity</div>
                                             </div>
                                             <div class="text-sm font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">-${v.discountValue}%</div>
@@ -199,9 +200,7 @@
                                     </span>
 
                                     <span id="subtotalDisplay">
-
-                                        ${subTotal}
-
+                                        <fmt:formatNumber value="${subTotal}" pattern="#,##0"/> đ
                                     </span>
 
                                 </div>
@@ -333,7 +332,16 @@
                     // Trigger voucher change if it's the voucher dropdown
                     if(dropdown.id === 'voucherDropdown') {
                         const percent = Number(item.getAttribute('data-percent') || 0);
-                        const discount = subtotal * percent / 100;
+                        const maxStr = item.getAttribute('data-max');
+                        let discount = subtotal * percent / 100;
+                        
+                        if (maxStr && maxStr !== 'null') {
+                            const max = Number(maxStr);
+                            if (max > 0 && discount > max) {
+                                discount = max;
+                            }
+                        }
+
                         let total = subtotal - discount;
                         if (total < 0) total = 0;
 

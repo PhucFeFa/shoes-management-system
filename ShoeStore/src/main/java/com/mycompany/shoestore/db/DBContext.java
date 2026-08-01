@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DBContext {
 
     // TODO: Update these credentials to match your local SQL Server setup
-    private final String serverName = "localhost";
+    private final String serverName = "127.0.0.1";
     //private final String serverName = "SANG111203\\SQLEXPRESS";
     private final String dbName = "ShoesStore";
     //private final String dbName = "Shoes_Shop1";
