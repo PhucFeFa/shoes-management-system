@@ -68,45 +68,45 @@
                         </div>
                     </c:if>
 
-                    <form action="${pageContext.request.contextPath}/manage-voucher/edit" method="POST">
+                    <form action="${pageContext.request.contextPath}/manage-voucher/edit" method="POST" novalidate>
                         <input type="hidden" name="id" value="${voucher.id}" />
 
                         <div class="mb-4">
                             <label class="form-label">Voucher Code</label>
-                            <input type="text" name="code" class="form-control w-100" value="${voucher.code}" required />
+                            <input type="text" name="code" class="form-control w-100" value="${voucher.code}" />
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label">Discount Percentage (%)</label>
-                            <input type="number" step="0.1" min="0.1" max="100" name="discountValue" class="form-control w-100" value="${voucher.discountValue}" required />
+                            <input type="number" step="any" name="discountValue" class="form-control w-100" value="${voucher.discountValue}" />
                             <small class="text-muted" style="font-size: 11px;">Value must be between 0.1 and 100</small>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Min Order Amount (đ)</label>
-                                <input type="number" step="0.01" min="0" name="minOrderAmount" class="form-control w-100" value="<fmt:formatNumber value='${voucher.minOrderAmount}' pattern='0.##' />" required />
+                                <input type="number" step="any" name="minOrderAmount" class="form-control w-100" value="${voucher.minOrderAmount}" />
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Max Discount Amount (đ)</label>
-                                <input type="number" step="0.01" min="0" name="maxDiscountAmount" class="form-control w-100" value="<fmt:formatNumber value='${voucher.maxDiscountAmount}' pattern='0.##' />" placeholder="Leave empty for no limit" />
+                                <input type="number" step="any" name="maxDiscountAmount" class="form-control w-100" value="${voucher.maxDiscountAmount}" placeholder="Leave empty for no limit" />
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">Start Date & Time</label>
-                                <input type="datetime-local" name="startDate" class="form-control w-100" value="${formattedStart}" required />
+                                <input type="datetime-local" name="startDate" class="form-control w-100" value="${formattedStart}" />
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label">End Date & Time</label>
-                                <input type="datetime-local" name="endDate" class="form-control w-100" value="${formattedEnd}" required />
+                                <input type="datetime-local" name="endDate" class="form-control w-100" value="${formattedEnd}" />
                             </div>
                         </div>
 
                         <div class="mb-4" style="max-width: 50%;">
                             <label class="form-label">Total Quantity</label>
-                            <input type="number" name="quantity" min="1" class="form-control w-100" value="${voucher.quantity}" required />
+                            <input type="number" step="any" name="quantity" class="form-control w-100" value="${voucher.quantity}" />
                         </div>
 
                         <div class="d-flex gap-3 mt-2">

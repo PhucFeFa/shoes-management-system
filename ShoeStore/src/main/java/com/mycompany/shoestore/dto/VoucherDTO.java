@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public class VoucherDTO implements Serializable {
+
     private String id;
     private String code;
     private BigDecimal discountValue;
@@ -14,12 +15,12 @@ public class VoucherDTO implements Serializable {
     private OffsetDateTime endDate;
     private int quantity;
     private int usedQuantity;
-    private String status;
+    private int isDeleted;
 
     public VoucherDTO() {
     }
 
-    public VoucherDTO(String id, String code, BigDecimal discountValue, BigDecimal minOrderAmount, BigDecimal maxDiscountAmount, OffsetDateTime startDate, OffsetDateTime endDate, int quantity, int usedQuantity, String status) {
+    public VoucherDTO(String id, String code, BigDecimal discountValue, BigDecimal minOrderAmount, BigDecimal maxDiscountAmount, OffsetDateTime startDate, OffsetDateTime endDate, int quantity, int usedQuantity, int isDeleted) {
         this.id = id;
         this.code = code;
         this.discountValue = discountValue;
@@ -29,36 +30,86 @@ public class VoucherDTO implements Serializable {
         this.endDate = endDate;
         this.quantity = quantity;
         this.usedQuantity = usedQuantity;
-        this.status = status;
+        this.isDeleted = isDeleted;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getCode() { return code; }
-    public void setCode(String code) { this.code = code; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public BigDecimal getDiscountValue() { return discountValue; }
-    public void setDiscountValue(BigDecimal discountValue) { this.discountValue = discountValue; }
+    public String getCode() {
+        return code;
+    }
 
-    public BigDecimal getMinOrderAmount() { return minOrderAmount; }
-    public void setMinOrderAmount(BigDecimal minOrderAmount) { this.minOrderAmount = minOrderAmount; }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-    public BigDecimal getMaxDiscountAmount() { return maxDiscountAmount; }
-    public void setMaxDiscountAmount(BigDecimal maxDiscountAmount) { this.maxDiscountAmount = maxDiscountAmount; }
+    public BigDecimal getDiscountValue() {
+        return discountValue;
+    }
 
-    public OffsetDateTime getStartDate() { return startDate; }
-    public void setStartDate(OffsetDateTime startDate) { this.startDate = startDate; }
+    public void setDiscountValue(BigDecimal discountValue) {
+        this.discountValue = discountValue;
+    }
 
-    public OffsetDateTime getEndDate() { return endDate; }
-    public void setEndDate(OffsetDateTime endDate) { this.endDate = endDate; }
+    public BigDecimal getMinOrderAmount() {
+        return minOrderAmount;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setMinOrderAmount(BigDecimal minOrderAmount) {
+        this.minOrderAmount = minOrderAmount;
+    }
 
-    public int getUsedQuantity() { return usedQuantity; }
-    public void setUsedQuantity(int usedQuantity) { this.usedQuantity = usedQuantity; }
+    public BigDecimal getMaxDiscountAmount() {
+        return maxDiscountAmount;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setMaxDiscountAmount(BigDecimal maxDiscountAmount) {
+        this.maxDiscountAmount = maxDiscountAmount;
+    }
+
+    public OffsetDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(OffsetDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public OffsetDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(OffsetDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getUsedQuantity() {
+        return usedQuantity;
+    }
+
+    public void setUsedQuantity(int usedQuantity) {
+        this.usedQuantity = usedQuantity;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }
