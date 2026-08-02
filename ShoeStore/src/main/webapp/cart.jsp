@@ -224,10 +224,8 @@
 
                                                                                 <div class="flex justify-between">
                                                                                     <span>Products</span>
-                                                                                    <span>${cart.size()}</span>
+                                                                                    <span id="selectedCount">${cart.size()}</span>
                                                                                 </div>
-
-
 
                                                                                 <hr>
 
@@ -275,12 +273,13 @@
 
                                                                     document.addEventListener("DOMContentLoaded", function () {
 
-                                                                        const totalElement =
-                                                                                document.getElementById("grandTotal");
+                                                                        const totalElement = document.getElementById("grandTotal");
+                                                                        const selectedCountElement = document.getElementById("selectedCount");
 
                                                                         function calculateTotal() {
 
                                                                             let total = 0;
+                                                                            let count = 0;
 
                                                                             document.querySelectorAll(".cart-checkbox")
                                                                                     .forEach(cb => {
@@ -290,11 +289,15 @@
                                                                                             total +=
                                                                                                     Number(cb.dataset.price)
                                                                                                     * Number(cb.dataset.qty);
+                                                                                            count++;
                                                                                         }
                                                                                     });
 
                                                                             totalElement.innerHTML =
                                                                                     total.toLocaleString('en-US') + " đ";
+                                                                            if(selectedCountElement) {
+                                                                                selectedCountElement.innerHTML = count;
+                                                                            }
                                                                         }
 
                                                                         document.querySelectorAll(".cart-checkbox")
@@ -304,9 +307,8 @@
                                                                                 });
 
                                                                         calculateTotal();
-
-                                                                    });
-                                                                    document.getElementById("checkoutForm")
+                                                                        
+                                                                        document.getElementById("checkoutForm")
                                                                             .addEventListener("submit", function (e) {
 
                                                                                 const container =
@@ -341,28 +343,8 @@
                                                                                     alert("Please select at least one product.");
                                                                                 }
                                                                             });
-                                                                    function calculateTotal() {
 
-                                                                        let total = 0;
-                                                                        let count = 0;
-
-                                                                        document.querySelectorAll(".cart-checkbox").forEach(cb => {
-
-                                                                            if (cb.checked) {
-
-                                                                                total += Number(cb.dataset.price)
-                                                                                        * Number(cb.dataset.qty);
-
-                                                                                count++;
-                                                                            }
-                                                                        });
-
-                                                                        document.getElementById("grandTotal").innerHTML =
-                                                                                total.toLocaleString('en-US') + " đ";
-
-                                                                        document.getElementById("selectedCount").innerHTML =
-                                                                                count;
-                                                                    }
+                                                                    });
                                                                 </script>
 
                                                                 </main>

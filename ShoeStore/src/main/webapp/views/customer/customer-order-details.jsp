@@ -239,6 +239,12 @@
                                             </div>
                                             <c:remove var="successMessage" scope="session"/>
                                         </c:if>
+                                        <c:if test="${hasBackorderItems}">
+                                            <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-label-md">
+                                                <i class="bi bi-info-circle-fill mr-2"></i>
+                                                This order contains items that are currently out of stock. Delivery might take longer than usual.
+                                            </div>
+                                        </c:if>
                                         <h1 class="text-display-lg-mobile md:text-headline-lg font-headline-lg uppercase mb-4">
                                             Order SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
                                         </h1>

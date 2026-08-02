@@ -4,6 +4,8 @@ import com.mycompany.shoestore.dao.OrderDAO;
 import com.mycompany.shoestore.dto.OrderDetailDTO;
 import com.mycompany.shoestore.dto.OrderSummaryDTO;
 import com.mycompany.shoestore.models.User;
+import com.mycompany.shoestore.dao.ProductVariantDAO;
+import com.mycompany.shoestore.models.ProductVariant;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -58,9 +60,26 @@ public class CustomerOrderDetailServlet extends HttpServlet {
             }
         }
 
+        boolean hasBackorderItems = false;
+        if ("PENDING".equalsIgnoreCase(orderSummary.getStatus())) {
+            ProductVariantDAO variantDAO = new ProductVariantDAO();
+            for (OrderDetailDTO item : orderItems) {
+                try {
+                    ProductVariant variant = variantDAO.getVariantById(item.getProductVariantId());
+                    if (variant != null && item.getQuantity() > variant.getStockQuantity()) {
+                        hasBackorderItems = true;
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
         request.setAttribute("orderSummary", orderSummary);
         request.setAttribute("orderItems", orderItems);
         request.setAttribute("cancellationCount", cancellationCount);
+        request.setAttribute("hasBackorderItems", hasBackorderItems);
 
         request.getRequestDispatcher("/views/customer/customer-order-details.jsp").forward(request, response);
     }

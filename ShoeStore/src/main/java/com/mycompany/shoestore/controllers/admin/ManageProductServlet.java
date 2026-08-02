@@ -34,7 +34,6 @@ public class ManageProductServlet extends HttpServlet {
                         .collect(Collectors.toList());
             }
             
-<<<<<<< Updated upstream
             int pageSize = 10;
             int totalProducts = allProducts.size();
             int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
@@ -62,10 +61,6 @@ public class ManageProductServlet extends HttpServlet {
             request.setAttribute("totalProducts", totalProducts);
             request.setAttribute("rangeStart", totalProducts == 0 ? 0 : startIndex + 1);
             request.setAttribute("rangeEnd", endIndex);
-=======
-            
-            request.setAttribute("products", allProducts);
->>>>>>> Stashed changes
             request.setAttribute("categories", productDAO.getAllCategories());
             request.setAttribute("brands", productDAO.getAllBrands());
             request.setAttribute("searchQuery", searchQuery);

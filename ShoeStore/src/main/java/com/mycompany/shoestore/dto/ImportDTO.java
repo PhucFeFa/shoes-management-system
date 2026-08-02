@@ -48,8 +48,7 @@ public class ImportDTO {
 
     public String getFormattedOrderDate() {
         if (orderDate != null) {
-            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
-            return orderDate.format(formatter);
+            return new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm").format(orderDate);
         }
         return "";
     }

@@ -21,6 +21,10 @@ public class UpdateOrderStatusServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.removeAttribute("errorMessage");
+            session.removeAttribute("successMessage");
+        }
         User currentUser = (session != null) ? (User) session.getAttribute("currentUser") : null;
 
         if (currentUser == null || (!"Admin".equalsIgnoreCase(currentUser.getRoleName())
@@ -101,7 +105,9 @@ public class UpdateOrderStatusServlet extends HttpServlet {
                         }
                         session.setAttribute("successMessage", "Order status updated successfully.");
                     } else {
-                        session.setAttribute("errorMessage", "Failed to update order status.");
+                        if (session.getAttribute("errorMessage") == null) {
+                            session.setAttribute("errorMessage", "Failed to update order status.");
+                        }
                     }
                 } else {
                     session.setAttribute("errorMessage", "Invalid status transition.");

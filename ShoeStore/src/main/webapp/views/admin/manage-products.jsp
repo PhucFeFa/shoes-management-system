@@ -539,7 +539,7 @@
                           </div>
                           <div class="col-md-4 mb-3">
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Base Price <span class="text-danger">*</span></label>
-                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" required>
+                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" min="1000" required>
                           </div>
                       </div>
                       
@@ -607,7 +607,7 @@
                           </div>
                           <div class="col-md-4 mb-3">
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Base Price <span class="text-danger">*</span></label>
-                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" id="editProductPrice" required>
+                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" id="editProductPrice" min="1000" required>
                           </div>
                       </div>
                       

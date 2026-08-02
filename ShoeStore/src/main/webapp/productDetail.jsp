@@ -227,6 +227,13 @@
                                                         <input type="hidden" name="productId" value="${product.id}">
                                                         <input type="hidden" name="reviewId" value="${myReview.id}">
 
+                                                        <c:if test="${myReview.moderationStatus == 'PENDING_HIDE' || myReview.moderationStatus == 'HIDDEN'}">
+                                                            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                                                                <p class="text-sm text-red-700 font-semibold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Your review has been hidden</p>
+                                                                <p class="text-sm text-red-600">Reason: <c:out value="${myReview.hideReason}" /></p>
+                                                            </div>
+                                                        </c:if>
+
                                                         <div class="mb-4">
                                                             <label class="block font-semibold mb-2">Rating</label>
                                                             <div class="star-rating">
@@ -268,6 +275,12 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant mb-4">
+                                                        <c:if test="${myReview.moderationStatus == 'PENDING_HIDE' || myReview.moderationStatus == 'HIDDEN'}">
+                                                            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                                                                <p class="text-sm text-red-700 font-semibold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Your review has been hidden</p>
+                                                                <p class="text-sm text-red-600">Reason: <c:out value="${myReview.hideReason}" /></p>
+                                                            </div>
+                                                        </c:if>
                                                         <p class="text-body-md text-secondary mb-2">
                                                             <c:out value="${myReview.comment}" />
                                                         </p>

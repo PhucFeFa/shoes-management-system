@@ -76,6 +76,21 @@
                             Order Items
                         </h2>
 
+                        <c:if test="${hasBackorderItems}">
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <span class="material-symbols-outlined text-yellow-400">warning</span>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-yellow-700">
+                                            This order contains items that exceed our current stock. Delivery may take longer than usual.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
+
                         <div class="space-y-6">
 
                             <c:forEach items="${checkoutItems}" var="item">

@@ -1,4 +1,4 @@
-﻿<%-- Author: baolgce191178 --%>
+<%-- Author: baolgce191178 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
@@ -296,8 +296,8 @@
                                             </td>
                                             <td>
                                                 <span class="cell-brand">
-                                                    <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy" timeZone="Asia/Ho_Chi_Minh" /> 
-                                                    <span style="font-size:10px; margin-left:4px;"><fmt:formatDate value="${order.createdAt}" pattern="HH:mm" timeZone="Asia/Ho_Chi_Minh" /></span>
+                                                    <fmt:formatDate value="${order.createdAt}" pattern="dd/MM/yyyy" /> 
+                                                    <span style="font-size:10px; margin-left:4px;"><fmt:formatDate value="${order.createdAt}" pattern="HH:mm" /></span>
                                                 </span>
                                             </td>
                                             <td><span class="cell-price"><fmt:formatNumber value="${order.totalAmount}" pattern="#,##0" /> đ</span></td>
@@ -420,4 +420,3 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
-

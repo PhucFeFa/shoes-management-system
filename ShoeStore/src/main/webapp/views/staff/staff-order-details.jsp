@@ -140,6 +140,16 @@
                                     <c:remove var="errorMessage" scope="session" />
                                 </c:if>
 
+                                <c:if test="${hasBackorderItems}">
+                                    <div class="bg-amber-50 text-amber-800 p-4 mb-6 border-l-4 border-amber-500 flex items-start gap-3">
+                                        <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+                                        <div>
+                                            <strong class="font-bold text-sm block mb-1">Backorder Notice</strong>
+                                            <span class="text-sm">This order contains items that exceed current stock. Fulfilling this order will result in negative stock or delayed delivery.</span>
+                                        </div>
+                                    </div>
+                                </c:if>
+
                                 <!-- Page Header & Action Bar -->
                                 <div
                                     class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-outline-variant pb-6">
@@ -153,7 +163,7 @@
                                         </div>
                                         <p class="font-body-md text-body-md text-secondary mt-2">Placed on
                                             <fmt:formatDate value="${orderSummary.createdAt}"
-                                                            pattern="dd MMM yyyy, HH:mm" timeZone="Asia/Ho_Chi_Minh"/>
+                                                            pattern="dd MMM yyyy, HH:mm" />
                                         </p>
                                     </div>
                                     <div class="flex items-center gap-3">

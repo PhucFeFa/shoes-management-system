@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -295,8 +295,8 @@
                                             <td><span class="cell-name"><c:out value="${req.supplier}" /></span></td>
                                             <td>
                                                 <span class="cell-brand">
-                                                    <fmt:formatDate value="${req.orderDate}" pattern="dd/MM/yyyy" timeZone="Asia/Ho_Chi_Minh" /> 
-                                                    <span style="font-size:10px; margin-left:4px;"><fmt:formatDate value="${req.orderDate}" pattern="HH:mm" timeZone="Asia/Ho_Chi_Minh" /></span>
+                                                    <fmt:formatDate value="${req.orderDate}" pattern="dd/MM/yyyy" /> 
+                                                    <span style="font-size:10px; margin-left:4px;"><fmt:formatDate value="${req.orderDate}" pattern="HH:mm" /></span>
                                                 </span>
                                             </td>
                                             <td><span class="cell-price"><fmt:formatNumber value="${req.totalAmount}" pattern="#,##0" /> đ</span></td>
