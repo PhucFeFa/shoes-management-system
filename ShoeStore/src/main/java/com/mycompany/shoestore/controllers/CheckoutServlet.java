@@ -37,6 +37,16 @@ public class CheckoutServlet extends HttpServlet {
                 return;
             }
 
+            ProductVariantDAO variantDAO = new ProductVariantDAO();
+            for (CartItem item : checkoutItems) {
+                ProductVariant variant = variantDAO.getVariantById(item.getProductVariantId());
+                if (variant == null || item.getQuantity() > variant.getStockQuantity()) {
+                    session.setAttribute("cartError", "Product '" + item.getProductName() + "' (Size: " + item.getSize() + ", Color: " + item.getColor() + ") does not have enough stock. Please adjust your cart.");
+                    response.sendRedirect(request.getContextPath() + "/Cart");
+                    return;
+                }
+            }
+
             prepareCheckoutData(request, checkoutItems, (User) session.getAttribute("currentUser"));
             request.getRequestDispatcher("/checkout.jsp").forward(request, response);
 
@@ -74,10 +84,17 @@ public class CheckoutServlet extends HttpServlet {
             String[] selectedItems = selectedSet.toArray(new String[0]);
 
             CartDAO cartDAO = new CartDAO();
+            ProductVariantDAO variantDAO = new ProductVariantDAO();
             List<CartItem> checkoutItems = new ArrayList<>();
             for (String variantId : selectedItems) {
                 CartItem item = cartDAO.getCartItemByVariant(currentUser.getId().toString(), variantId);
                 if (item != null) {
+                    ProductVariant variant = variantDAO.getVariantById(variantId);
+                    if (variant == null || item.getQuantity() > variant.getStockQuantity()) {
+                        session.setAttribute("cartError", "Product '" + item.getProductName() + "' (Size: " + item.getSize() + ", Color: " + item.getColor() + ") does not have enough stock. Please adjust your cart.");
+                        response.sendRedirect(request.getContextPath() + "/Cart");
+                        return;
+                    }
                     checkoutItems.add(item);
                 }
             }

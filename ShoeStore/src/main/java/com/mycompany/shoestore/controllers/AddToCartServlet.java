@@ -2,6 +2,7 @@ package com.mycompany.shoestore.controllers;
 
 import com.mycompany.shoestore.dao.CartDAO;
 import com.mycompany.shoestore.dao.ProductVariantDAO;
+import com.mycompany.shoestore.models.CartItem;
 import com.mycompany.shoestore.models.ProductVariant;
 import com.mycompany.shoestore.models.User;
 import jakarta.servlet.ServletException;
@@ -29,7 +30,7 @@ public class AddToCartServlet extends HttpServlet {
         String variantId = request.getParameter("variantId");
 
         if (variantId == null || variantId.trim().isEmpty()) {
-            session.setAttribute("cartMessage", "Please select Size and Color!");
+            session.setAttribute("cartError", "Please select Size and Color!");
             response.sendRedirect(request.getHeader("Referer"));
             return;
         }
@@ -39,21 +40,28 @@ public class AddToCartServlet extends HttpServlet {
             ProductVariant variant = variantDAO.getVariantById(variantId);
 
             if (variant == null || variant.getStockQuantity() <= 0) {
-                session.setAttribute("cartMessage", "Product is out of stock!");
+                session.setAttribute("cartError", "Product is out of stock!");
                 response.sendRedirect(request.getHeader("Referer"));
                 return;
             }
 
             CartDAO cartDAO = new CartDAO();
+            CartItem currentItem = cartDAO.getCartItemByVariant(user.getId().toString(), variantId);
+            int currentQty = (currentItem != null) ? currentItem.getQuantity() : 0;
+            
+            if (currentQty + 1 > variant.getStockQuantity()) {
+                session.setAttribute("cartError", "Cannot add more! Exceeds available stock.");
+                response.sendRedirect(request.getHeader("Referer"));
+                return;
+            }
+
             cartDAO.addToCart(user.getId().toString(), variantId, 1);
-
-
 
             session.setAttribute("cartMessage", "Product added to cart successfully!");
 
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("cartMessage", "An error occurred!");
+            session.setAttribute("cartError", "An error occurred!");
         }
 
         response.sendRedirect(request.getHeader("Referer"));

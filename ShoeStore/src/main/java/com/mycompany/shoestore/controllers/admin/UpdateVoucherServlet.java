@@ -77,9 +77,14 @@ public class UpdateVoucherServlet extends HttpServlet {
             OffsetDateTime endDate      = null;
             int quantity                = 0;
 
-            // Parse discount
-            try { discountValue = new BigDecimal(discountStr.trim()); }
-            catch (Exception e) { error = "Discount percentage is not a valid number!"; }
+            try { 
+                discountValue = new BigDecimal(discountStr.trim()); 
+                if (discountValue.scale() > 0 && discountValue.stripTrailingZeros().scale() > 0) {
+                    error = "Discount percentage must be an integer number (no decimals)!";
+                }
+            } catch (Exception e) { 
+                error = "Discount percentage is not a valid number!"; 
+            }
 
             // Parse minOrder
             if (error.isEmpty()) {
@@ -126,8 +131,8 @@ public class UpdateVoucherServlet extends HttpServlet {
                     error = "Voucher code must be at least 6 characters long!";
                 } else if (dao.isCodeExistForUpdate(code, id)) {
                     error = "Voucher code already exists!";
-                } else if (discountValue.compareTo(BigDecimal.ZERO) <= 0 || discountValue.compareTo(new BigDecimal("100")) > 0) {
-                    error = "Discount percentage must be between 0.1% and 100%!";
+                } else if (discountValue.compareTo(BigDecimal.ONE) < 0 || discountValue.compareTo(new BigDecimal("100")) > 0) {
+                    error = "Discount percentage must be between 1% and 100%!";
                 } else if (minOrderAmount.compareTo(BigDecimal.ZERO) < 0) {
                     error = "Minimum order amount cannot be negative!";
                 } else if (maxDiscountAmount != null && maxDiscountAmount.compareTo(BigDecimal.ZERO) < 0) {

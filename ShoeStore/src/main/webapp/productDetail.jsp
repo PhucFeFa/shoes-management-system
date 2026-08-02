@@ -165,6 +165,13 @@
                         <div class="w-full mt-16 pt-16 border-t border-outline-variant/30">
                             <h2 class="text-headline-md font-headline-md font-bold text-primary mb-8">Customer Reviews</h2>
 
+                            <c:if test="${not empty sessionScope.cartMessage}">
+                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                                    ${sessionScope.cartMessage}
+                                </div>
+                                <c:remove var="cartMessage" scope="session" />
+                            </c:if>
+
                             <!-- Display messages -->
                             <c:if test="${not empty sessionScope.success}">
                                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -510,12 +517,12 @@
                                 if (selectedSize && selectedColor) {
                                     const v = variants.find(x => x.size.trim() === selectedSize.trim() && x.color.trim() === selectedColor.trim());
                                     if (v && v.stock > 0) {
-                                        stockInfo.innerHTML = "";
+                                        stockInfo.innerHTML = `<span class="text-green-600 font-semibold">\${v.stock} in stock</span>`;
                                         const variantIdField = document.getElementById("selectedVariantId");
                                         if (variantIdField) variantIdField.value = v.id;
                                         if (addBtn) addBtn.disabled = false;
                                     } else {
-                                        stockInfo.innerHTML = `<span class="text-red-500">Out Of Stock</span>`;
+                                        stockInfo.innerHTML = `<span class="text-red-500 font-semibold">Out Of Stock</span>`;
                                         if (addBtn) addBtn.disabled = true;
                                     }
                                 } else {

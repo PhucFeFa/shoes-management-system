@@ -10,6 +10,7 @@ public class CartItem {
 
     private String size;
     private String color;
+    private int stockQuantity;
 
     public CartItem() {
     }
@@ -20,7 +21,8 @@ public class CartItem {
             int quantity,
             String productVariantId,
             String size,
-            String color) {
+            String color,
+            int stockQuantity) {
 
         this.productName = productName;
         this.imageUrl = imageUrl;
@@ -29,6 +31,7 @@ public class CartItem {
         this.productVariantId = productVariantId;
         this.size = size;
         this.color = color;
+        this.stockQuantity = stockQuantity;
     }
 
     public CartItem(String productName, String imageUrl, double price, int quantity, String productVariantId) {
@@ -97,5 +100,13 @@ public class CartItem {
 
     public double getTotalPrice() {
         return price * quantity;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 }
