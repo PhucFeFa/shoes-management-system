@@ -4,7 +4,7 @@
 
 <jsp:include page="/WEB-INF/include/header.jsp"/>
 
-<main class="pt-24 min-h-screen bg-surface">
+<main class="pt-24 pb-24 min-h-screen bg-surface">
 
     <!-- Header -->
     <section class="max-w-7xl mx-auto px-6 lg:px-12 mb-12">
@@ -45,6 +45,12 @@
     <c:if test="${not empty cart}">
 
         <section class="max-w-7xl mx-auto px-6 lg:px-12">
+            <c:if test="${not empty sessionScope.cartMessage}">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    ${sessionScope.cartMessage}
+                </div>
+                <c:remove var="cartMessage" scope="session"/>
+            </c:if>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
@@ -107,12 +113,12 @@
                                     </div>
 
 
-                                    <div class="mt-4 flex flex-wrap gap-8">
-
-                                        <div>
-                                            <span class="text-secondary text-sm">
-                                                Price
-                                            </span>
+                                    <div class="mt-4 flex flex-col gap-4">
+                                        <div class="flex flex-wrap gap-8">
+                                            <div>
+                                                <span class="text-secondary text-sm">
+                                                    Price
+                                                </span>
 
                                             <p class="font-semibold">
                                                 <fmt:formatNumber value="${item.price}" pattern="#,##0"/> đ
@@ -121,66 +127,56 @@
 
                                         <div>
                                             <span class="text-secondary text-sm">
-                                                Quantity
+                                                Quantity (Stock: ${item.stockQuantity})
                                             </span>
 
-                                            <div class="flex items-center mt-2 border border-outline-variant rounded-full overflow-hidden w-fit">
+                                            <div class="flex items-center mt-2 border border-outline-variant rounded-full w-fit bg-white">
 
                                                 <!-- Decrease button -->
-                                                <form action="UpdateCart" method="post">
-                                                    <input type="hidden"
-                                                           name="variantId"
-                                                           value="${item.productVariantId}">
+                                                <form action="UpdateCart" method="post" class="m-0 flex">
+                                                    <input type="hidden" name="variantId" value="${item.productVariantId}">
+                                                    <input type="hidden" name="action" value="decrease">
+                                                    <button type="submit" class="w-10 h-10 flex items-center justify-center hover:bg-surface-container text-lg font-bold transition rounded-l-full">
+                                                        -
+                                                    </button>
+                                                </form>
 
-                                                        <input type="hidden"
-                                                               name="action"
-                                                               value="decrease">
+                                                <!-- Quantity -->
+                                                <form action="UpdateCart" method="post" class="flex items-center m-0">
+                                                    <input type="hidden" name="variantId" value="${item.productVariantId}">
+                                                    <input type="hidden" name="action" value="set">
+                                                    <input type="number" name="quantity" value="${item.quantity}" min="1" max="${item.stockQuantity}" 
+                                                           class="w-12 h-10 text-center font-semibold border-x border-outline-variant border-y-transparent bg-white focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                                                           onchange="if(this.value > ${item.stockQuantity}) { this.value = ${item.stockQuantity}; } this.form.submit()">
+                                                </form>
 
-                                                            <button type="submit"
-                                                                    class="w-10 h-10 bg-white hover:bg-surface-container text-lg font-bold transition">
-                                                                -
-                                                            </button>
-                                                            </form>
+                                                <!-- Increase button -->
+                                                <form action="UpdateCart" method="post" class="m-0 flex">
+                                                    <input type="hidden" name="variantId" value="${item.productVariantId}">
+                                                    <input type="hidden" name="action" value="increase">
+                                                    <button type="submit"
+                                                            class="w-10 h-10 flex items-center justify-center hover:bg-surface-container text-lg font-bold transition rounded-r-full disabled:opacity-50 disabled:cursor-not-allowed"
+                                                            ${item.quantity >= item.stockQuantity ? 'disabled' : ''}>
+                                                        +
+                                                    </button>
+                                                </form>
 
-                                                            <!-- Quantity -->
-                                                            <form action="UpdateCart" method="post" class="flex items-center m-0">
-                                                                <input type="hidden" name="variantId" value="${item.productVariantId}">
-                                                                <input type="hidden" name="action" value="set">
-                                                                <input type="number" name="quantity" value="${item.quantity}" min="1" max="9999" 
-                                                                       class="w-14 h-10 text-center font-semibold border-x border-outline-variant border-y-transparent bg-white focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
-                                                                       onchange="this.form.submit()">
-                                                            </form>
+                                            </div>
+                                        </div>
+                                        
+                                        </div>
 
-                                                            <!-- Increase button -->
-                                                            <form action="UpdateCart" method="post">
-                                                                <input type="hidden"
-                                                                       name="variantId"
-                                                                       value="${item.productVariantId}">
+                                        <div>
+                                            <span class="text-secondary text-sm">
+                                                Total
+                                            </span>
 
-                                                                    <input type="hidden"
-                                                                           name="action"
-                                                                           value="increase">
+                                            <p class="font-bold text-lg">
+                                                <fmt:formatNumber value="${item.price * item.quantity}" pattern="#,##0"/> đ
+                                            </p>
+                                        </div>
 
-                                                                        <button type="submit"
-                                                                                class="w-10 h-10 bg-white hover:bg-surface-container text-lg font-bold transition">
-                                                                            +
-                                                                        </button>
-                                                                        </form>
-
-                                                                        </div>
-                                                                        </div>
-
-                                                                        <div>
-                                                                            <span class="text-secondary text-sm">
-                                                                                Total
-                                                                            </span>
-
-                                                                            <p class="font-bold text-lg">
-                                                                                <fmt:formatNumber value="${item.price * item.quantity}" pattern="#,##0"/> đ
-                                                                            </p>
-                                                                        </div>
-
-                                                                        </div>
+                                    </div>
 
                                                                         </div>
 

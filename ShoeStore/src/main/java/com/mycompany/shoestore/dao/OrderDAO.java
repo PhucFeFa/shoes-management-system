@@ -505,9 +505,10 @@ public class OrderDAO {
     public String createOrder(String userId, String shippingAddress, double totalAmount, String voucherId, String paymentMethod) {
         String orderId = java.util.UUID.randomUUID().toString();
 
-        // Giữ nguyên GETDATE() của bạn và thêm cột voucher_id
+        // Sử dụng GETUTCDATE() để lưu giờ UTC vào Database. 
+        // Khi JDBC đọc lên và JSP (chạy ở múi giờ VN UTC+7) format lại, nó sẽ tự động +7 tiếng thành giờ Việt Nam chính xác.
         String sql = "INSERT INTO orders (id, user_id, shipping_address, total_amount, voucher_id, status, payment_method, payment_status, created_at) "
-                + "VALUES (?, ?, ?, ?, ?, 'pending', ?, 'pending', GETDATE())";
+                + "VALUES (?, ?, ?, ?, ?, 'pending', ?, 'pending', GETUTCDATE())";
 
         // Khởi tạo kết nối bằng new DBContext().getConnection() giống hàm mẫu
         try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {

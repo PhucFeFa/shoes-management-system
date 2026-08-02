@@ -53,7 +53,7 @@ public class CartDAO {
     }
 
     public CartItem getCartItemByVariant(String userId, String variantId) throws Exception {
-        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, "
+        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, pv.stock_quantity, "
                 + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC, id ASC) as image_url, c.quantity "
                 + "FROM carts c "
                 + "JOIN product_variants pv ON c.product_variant_id = pv.id "
@@ -73,7 +73,8 @@ public class CartDAO {
                             rs.getInt("quantity"),
                             rs.getString("variant_id"),
                             rs.getString("size"),
-                            rs.getString("color")
+                            rs.getString("color"),
+                            rs.getInt("stock_quantity")
                     );
                 }
             }
@@ -82,7 +83,7 @@ public class CartDAO {
     }
 
     public List<CartItem> getCart(String userId) throws Exception {
-        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, " +
+        String sql = "SELECT p.name, p.price, pv.id as variant_id, pv.size, pv.color, pv.stock_quantity, " +
                      "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC, id ASC) as image_url, c.quantity " +
                      "FROM carts c " +
                      "JOIN product_variants pv ON c.product_variant_id = pv.id " +
@@ -101,7 +102,8 @@ public class CartDAO {
                     rs.getInt("quantity"),
                     rs.getString("variant_id"),
                     rs.getString("size"),
-                    rs.getString("color")
+                    rs.getString("color"),
+                    rs.getInt("stock_quantity")
                 );
                 list.add(item);
             }

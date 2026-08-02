@@ -9,6 +9,7 @@ import com.mycompany.shoestore.models.User;
 import com.mycompany.shoestore.models.Voucher;
 import com.mycompany.shoestore.dao.AddressDAO;
 import com.mycompany.shoestore.models.Address;
+import com.mycompany.shoestore.models.ProductVariant;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -59,6 +60,15 @@ public class PlaceOrderServlet extends HttpServlet {
                         request.getContextPath() + "/Cart");
 
                 return;
+            }
+
+            for (CartItem item : checkoutItems) {
+                ProductVariant variant = variantDAO.getVariantById(item.getProductVariantId());
+                if (variant == null || item.getQuantity() > variant.getStockQuantity()) {
+                    session.setAttribute("cartError", "Product '" + item.getProductName() + "' (Size: " + item.getSize() + ", Color: " + item.getColor() + ") does not have enough stock. The transaction has been cancelled.");
+                    response.sendRedirect(request.getContextPath() + "/Cart");
+                    return;
+                }
             }
 
             // ===================== ADDRESS =====================

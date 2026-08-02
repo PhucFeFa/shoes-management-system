@@ -5,6 +5,7 @@
 package com.mycompany.shoestore.controllers;
 
 import com.mycompany.shoestore.dao.CartDAO;
+import com.mycompany.shoestore.models.CartItem;
 import com.mycompany.shoestore.models.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -94,9 +95,18 @@ public class UpdateCartServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
+            CartItem currentItem = dao.getCartItemByVariant(user.getId().toString(), variantId);
+            if (currentItem == null) {
+                response.sendRedirect("Cart");
+                return;
+            }
 
             if ("increase".equals(action)) {
-                dao.increaseQuantity(user.getId().toString(), variantId);
+                if (currentItem.getQuantity() + 1 <= currentItem.getStockQuantity()) {
+                    dao.increaseQuantity(user.getId().toString(), variantId);
+                } else {
+                    session.setAttribute("cartError", "Cannot increase, exceeds stock limits!");
+                }
             }
 
             if ("decrease".equals(action)) {
@@ -111,9 +121,12 @@ public class UpdateCartServlet extends HttpServlet {
                     int quantity = 1;
                     try {
                         quantity = Integer.parseInt(quantityStr);
-                        if (quantity > 9999) quantity = 9999;
+                        if (quantity > currentItem.getStockQuantity()) {
+                            quantity = currentItem.getStockQuantity();
+                            session.setAttribute("cartError", "Quantity adjusted to max available stock!");
+                        }
                     } catch (NumberFormatException e) {
-                        quantity = 9999;
+                        quantity = currentItem.getStockQuantity();
                     }
                     dao.setQuantity(user.getId().toString(), variantId, quantity);
                 }

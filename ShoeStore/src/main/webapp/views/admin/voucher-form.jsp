@@ -54,8 +54,8 @@
 
                         <div class="mb-4">
                             <label class="form-label">Discount Percentage (%)</label>
-                            <input type="number" step="any" name="discountValue" class="form-control" value="${oldValue}">
-                            <small class="text-muted" style="font-size: 11px;">Value must be between 0.1 and 100</small>
+                            <input type="number" step="1" min="1" max="100" name="discountValue" class="form-control" value="${oldValue}">
+                            <small class="text-muted" style="font-size: 11px;">Value must be between 1 and 100</small>
                         </div>
 
                         <div class="row">
@@ -82,7 +82,7 @@
 
                         <div class="mb-4" style="max-width: 50%;">
                             <label class="form-label">Quantity</label>
-                            <input type="number" step="any" name="quantity" class="form-control" value="${oldQty}">
+                            <input type="number" step="1" min="1" name="quantity" class="form-control" value="${oldQty}">
                         </div>
 
                         <div class="d-flex gap-2 mt-4">

@@ -583,7 +583,7 @@
                     
                     <span class="section-label">Product Context</span>
                     <div class="product-context">
-                        <img id="d-p-img" src="" onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/fallback.png';" />
+                        <img id="d-p-img" src="" alt="Product Image" />
                         <div>
                             <div class="cell-name" id="d-p-name"></div>
                         </div>
@@ -761,7 +761,24 @@
 
             function openDrawer(id, pImg, pName, cName, rating, comment, reply, modStatus, hideReason) {
                 document.getElementById('d-id').innerText = 'ID: ' + id;
-                document.getElementById('d-p-img').src = pImg ? pImg : 'https://via.placeholder.com/50';
+                
+                const contextPath = '${pageContext.request.contextPath}';
+                let finalImg = pImg;
+                if (pImg) {
+                    if (!pImg.startsWith('http')) {
+                        finalImg = pImg.startsWith('/') ? contextPath + pImg : contextPath + '/' + pImg;
+                    }
+                } else {
+                    finalImg = contextPath + '/assets/fallback.png';
+                }
+                
+                const imgEl = document.getElementById('d-p-img');
+                imgEl.onerror = function() {
+                    this.onerror = null;
+                    this.src = contextPath + '/assets/fallback.png';
+                };
+                imgEl.src = finalImg;
+                
                 document.getElementById('d-p-name').innerText = pName;
                 document.getElementById('d-c-name').innerText = '- ' + cName;
 
