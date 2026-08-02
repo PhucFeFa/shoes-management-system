@@ -120,7 +120,8 @@
                                             <td class="py-4 px-4 bg-yellow-50/30">
                                                 <input type="number" name="receivedQuantities" 
                                                        value="${item.importQuantity}" 
-                                                       oninput="updateSubtotal(this, ${item.unitPrice})"
+                                                       onkeydown="return blockDecimal(event)"
+                                                       oninput="stripDecimal(this); updateSubtotal(this, ${item.unitPrice})"
                                                        class="w-full border-gray-200 rounded text-center text-sm focus:ring-black focus:border-black py-1">
                                             </td>
 
@@ -225,6 +226,19 @@
     </main>
 
     <script>
+        function blockDecimal(event) {
+            if (event.key === '.' || event.key === ',' || event.key === 'e' || event.key === 'E') {
+                return false;
+            }
+            return true;
+        }
+
+        function stripDecimal(input) {
+            if (input.value.includes('.')) {
+                input.value = Math.trunc(parseFloat(input.value));
+            }
+        }
+
         function updateSubtotal(input, unitPrice) {
             const row = input.closest('tr');
             const subtotalDisplay = row.querySelector('.item-subtotal-display');
