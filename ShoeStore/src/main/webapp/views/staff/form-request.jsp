@@ -303,11 +303,15 @@
                 <td class="py-4 px-4 text-center text-sm">\${variant.size}</td>
                 <td class="py-4 px-4 text-center text-sm">\${variant.color}</td>
                 <td class="py-4 px-4">
-                    <input type="number" name="quantity[]" value="\${initialQty}" placeholder="0" oninput="updateRow(this)"
+                    <input type="number" name="quantity[]" value="\${initialQty}" placeholder="0"
+                           onkeydown="return blockDecimal(event)"
+                           oninput="stripDecimal(this); updateRow(this)"
                            class="w-full border-gray-100 rounded-2xl text-sm focus:ring-black focus:border-black py-2 text-center input-no-spinner">
                 </td>
                 <td class="py-4 px-4">
-                    <input type="number" name="unitPrice[]" value="\${initialPrice}" placeholder="0" oninput="updateRow(this)"
+                    <input type="number" name="unitPrice[]" value="\${initialPrice}" placeholder="0"
+                           onkeydown="return blockDecimal(event)"
+                           oninput="stripDecimal(this); updateRow(this)"
                            class="w-full border-gray-100 rounded-2xl text-sm focus:ring-black focus:border-black py-2 text-right input-no-spinner">
                 </td>
                 <td class="py-4 px-8 text-right font-bold text-sm subtotal">0 đ</td>
@@ -329,13 +333,26 @@
                     updateTotal();
                 }
 
+                function blockDecimal(event) {
+                    if (event.key === '.' || event.key === ',' || event.key === 'e' || event.key === 'E') {
+                        return false;
+                    }
+                    return true;
+                }
+
+                function stripDecimal(input) {
+                    if (input.value.includes('.')) {
+                        input.value = Math.trunc(parseFloat(input.value));
+                    }
+                }
+
                 function updateRow(input) {
                     const row = input.closest('tr');
                     const qtyInput = row.querySelector('input[name="quantity[]"]');
                     const priceInput = row.querySelector('input[name="unitPrice[]"]');
 
                     const qty = parseInt(qtyInput.value) || 0;
-                    const price = parseFloat(priceInput.value) || 0;
+                    const price = parseInt(priceInput.value) || 0;
 
                     const subtotal = qty * price;
                     row.querySelector('.subtotal').textContent = new Intl.NumberFormat('vi-VN').format(subtotal) + ' đ';
