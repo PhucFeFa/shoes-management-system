@@ -15,18 +15,14 @@ import java.util.Collection;
 import java.util.UUID;
 import java.io.IOException;
 
-@WebServlet(name = "EditProductServlet", urlPatterns = {"/admin/product/edit"})
-@MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,
-    maxFileSize = 1024 * 1024 * 10,
-    maxRequestSize = 1024 * 1024 * 50
-)
+@WebServlet(name = "EditProductServlet", urlPatterns = { "/admin/product/edit" })
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
 public class EditProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         try {
             String id = request.getParameter("id");
             String name = request.getParameter("name");
@@ -48,7 +44,7 @@ public class EditProductServlet extends HttpServlet {
             }
 
             ProductDAO productDAO = new ProductDAO();
-            
+
             String finalName = name;
             String finalId = id;
             boolean exists = productDAO.getAllProducts().stream()
@@ -62,11 +58,12 @@ public class EditProductServlet extends HttpServlet {
             double price;
             try {
                 price = Double.parseDouble(priceStr);
-                if (price <= 0) {
-                    throw new Exception("Price must be > 0");
+                if (price < 1000) {
+                    throw new Exception("Price must be >= 1000");
                 }
             } catch (Exception ex) {
-                request.getSession().setAttribute("errorMsg", "Product price must be a valid number and greater than 0.");
+                request.getSession().setAttribute("errorMsg",
+                        "Product price must be a valid number and at least 1000.");
                 response.sendRedirect(request.getContextPath() + "/admin/manage-products");
                 return;
             }
@@ -88,16 +85,17 @@ public class EditProductServlet extends HttpServlet {
                 // Process File Upload if a new image was provided
                 String uploadPath = "D:\\Upload_ShoesStore";
                 File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) uploadDir.mkdirs();
+                if (!uploadDir.exists())
+                    uploadDir.mkdirs();
 
                 Collection<Part> parts = request.getParts();
                 for (Part part : parts) {
                     if ("productImages".equals(part.getName()) && part.getSize() > 0) {
                         String fileName = UUID.randomUUID().toString() + "_" + getFileName(part);
                         part.write(uploadPath + File.separator + fileName);
-                        
+
                         String dbUrl = request.getContextPath() + "/uploads/" + fileName;
-                        
+
                         // Replace existing images since we only allow 1 image per product
                         productDAO.deleteProductImagesByProductId(id);
                         productDAO.insertProductImage(id, dbUrl, 1);
@@ -121,7 +119,7 @@ public class EditProductServlet extends HttpServlet {
         }
         response.sendRedirect(redirectUrl);
     }
-    
+
     private String getFileName(Part part) {
         for (String content : part.getHeader("content-disposition").split(";")) {
             if (content.trim().startsWith("filename")) {

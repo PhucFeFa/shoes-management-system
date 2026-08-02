@@ -227,6 +227,13 @@
                                                         <input type="hidden" name="productId" value="${product.id}">
                                                         <input type="hidden" name="reviewId" value="${myReview.id}">
 
+                                                        <c:if test="${myReview.moderationStatus == 'PENDING_HIDE' || myReview.moderationStatus == 'HIDDEN'}">
+                                                            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                                                                <p class="text-sm text-red-700 font-semibold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Your review has been hidden</p>
+                                                                <p class="text-sm text-red-600">Reason: <c:out value="${myReview.hideReason}" /></p>
+                                                            </div>
+                                                        </c:if>
+
                                                         <div class="mb-4">
                                                             <label class="block font-semibold mb-2">Rating</label>
                                                             <div class="star-rating">
@@ -268,6 +275,12 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant mb-4">
+                                                        <c:if test="${myReview.moderationStatus == 'PENDING_HIDE' || myReview.moderationStatus == 'HIDDEN'}">
+                                                            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                                                                <p class="text-sm text-red-700 font-semibold mb-1"><i class="bi bi-exclamation-triangle-fill me-2"></i>Your review has been hidden</p>
+                                                                <p class="text-sm text-red-600">Reason: <c:out value="${myReview.hideReason}" /></p>
+                                                            </div>
+                                                        </c:if>
                                                         <p class="text-body-md text-secondary mb-2">
                                                             <c:out value="${myReview.comment}" />
                                                         </p>
@@ -304,37 +317,31 @@
 
                             <!-- Filter Reviews -->
                             <c:if test="${not empty reviews}">
-                                <div class="mb-12">
+                                <div class="mb-12" id="reviews">
                                     <h3 class="text-headline-sm font-headline-sm font-bold text-primary mb-6">Filter by Rating</h3>
                                     <div class="flex flex-wrap gap-3">
-                                        <button
-                                            class="review-filter-btn px-6 py-3 bg-primary text-on-primary border border-transparent rounded-full text-label-md font-label-md transition-all active:scale-95"
-                                            data-rating="all">All Reviews</button>
-                                        <button
-                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
-                                            data-rating="5">
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}&rating=all#reviews"
+                                            class="px-6 py-3 ${empty param.rating or param.rating eq 'all' ? 'bg-primary text-on-primary font-semibold border-transparent' : 'border border-outline-variant text-primary hover:border-primary'} rounded-full text-label-md font-label-md transition-all active:scale-95">All Reviews</a>
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}&rating=5#reviews"
+                                            class="px-6 py-3 ${param.rating eq '5' ? 'bg-primary text-on-primary font-semibold border-transparent' : 'border border-outline-variant text-primary hover:border-primary'} rounded-full text-label-md font-label-md transition-colors flex items-center gap-2 active:scale-95">
                                             <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span></span> (5)
-                                        </button>
-                                        <button
-                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
-                                            data-rating="4">
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}&rating=4#reviews"
+                                            class="px-6 py-3 ${param.rating eq '4' ? 'bg-primary text-on-primary font-semibold border-transparent' : 'border border-outline-variant text-primary hover:border-primary'} rounded-full text-label-md font-label-md transition-colors flex items-center gap-2 active:scale-95">
                                             <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (4)
-                                        </button>
-                                        <button
-                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
-                                            data-rating="3">
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}&rating=3#reviews"
+                                            class="px-6 py-3 ${param.rating eq '3' ? 'bg-primary text-on-primary font-semibold border-transparent' : 'border border-outline-variant text-primary hover:border-primary'} rounded-full text-label-md font-label-md transition-colors flex items-center gap-2 active:scale-95">
                                             <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (3)
-                                        </button>
-                                        <button
-                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
-                                            data-rating="2">
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}&rating=2#reviews"
+                                            class="px-6 py-3 ${param.rating eq '2' ? 'bg-primary text-on-primary font-semibold border-transparent' : 'border border-outline-variant text-primary hover:border-primary'} rounded-full text-label-md font-label-md transition-colors flex items-center gap-2 active:scale-95">
                                             <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (2)
-                                        </button>
-                                        <button
-                                            class="review-filter-btn px-6 py-3 border border-outline-variant rounded-full text-label-md font-label-md text-primary hover:border-primary transition-colors flex items-center gap-2 active:scale-95"
-                                            data-rating="1">
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/ProductDetail?id=${product.id}&rating=1#reviews"
+                                            class="px-6 py-3 ${param.rating eq '1' ? 'bg-primary text-on-primary font-semibold border-transparent' : 'border border-outline-variant text-primary hover:border-primary'} rounded-full text-label-md font-label-md transition-colors flex items-center gap-2 active:scale-95">
                                             <span class="flex items-center gap-[2px]"><span class="material-symbols-outlined text-[#eab308] text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span><span class="material-symbols-outlined text-outline-variant text-[20px]">star</span></span> (1)
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </c:if>
@@ -347,9 +354,11 @@
                                     </c:when>
                                     <c:otherwise>
                                         <c:forEach var="r" items="${reviews}">
-                                            <div class="review-item bg-surface-container-low p-8 rounded-3xl"
-                                                data-rating="${r.rating}">
-                                                <div class="flex items-center justify-between mb-4">
+                                            <c:set var="rRatingStr">${r.rating}</c:set>
+                                            <c:if test="${empty param.rating or param.rating eq 'all' or param.rating eq rRatingStr}">
+                                                <div class="review-item bg-surface-container-low p-8 rounded-3xl"
+                                                    data-rating="${r.rating}">
+                                                    <div class="flex items-center justify-between mb-4">
                                                     <span class="font-headline-sm text-headline-sm font-bold text-primary">
                                                         <c:out value="${r.userName}" />
                                                     </span>
@@ -409,6 +418,7 @@
                                                     </c:if>
                                                 </div>
                                             </div>
+                                            </c:if>
                                         </c:forEach>
                                     </c:otherwise>
                                 </c:choose>
@@ -416,29 +426,6 @@
                         </div> <!-- End of Reviews Section -->
 
                     </div> <!-- End of max-w-container-max -->
-
-                    <script>
-                            document.querySelectorAll('.review-filter-btn').forEach(btn => {
-                                btn.addEventListener('click', function () {
-                                    // Update active button styling
-                                    document.querySelectorAll('.review-filter-btn').forEach(b => {
-                                        b.classList.remove('bg-primary', 'text-on-primary', 'font-semibold', 'border-transparent');
-                                        b.classList.add('border-outline-variant', 'text-primary');
-                                    });
-                                    this.classList.remove('border-outline-variant', 'text-primary');
-                                    this.classList.add('bg-primary', 'text-on-primary', 'font-semibold', 'border-transparent');
-
-                                    const rating = this.getAttribute('data-rating');
-                                    document.querySelectorAll('.review-item').forEach(item => {
-                                        if (rating === 'all' || item.getAttribute('data-rating') === rating) {
-                                            item.style.display = 'block';
-                                        } else {
-                                            item.style.display = 'none';
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
 
                         <script>
                             const variants = [

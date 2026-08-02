@@ -106,9 +106,6 @@
 
                                     </div>
 
-                                    <p class="text-secondary font-label-sm text-label-sm mt-1">
-                                        Premium Sneaker Collection
-                                    </p>
 
                                     <div class="mt-4 flex flex-wrap gap-8">
 
@@ -140,15 +137,19 @@
                                                                value="decrease">
 
                                                             <button type="submit"
-                                                                    class="w-10 h-10 bg-surface hover:bg-surface-container text-lg font-bold transition">
+                                                                    class="w-10 h-10 bg-white hover:bg-surface-container text-lg font-bold transition">
                                                                 -
                                                             </button>
                                                             </form>
 
                                                             <!-- Quantity -->
-                                                            <div class="w-14 h-10 flex items-center justify-center font-semibold border-x">
-                                                                ${item.quantity}
-                                                            </div>
+                                                            <form action="UpdateCart" method="post" class="flex items-center m-0">
+                                                                <input type="hidden" name="variantId" value="${item.productVariantId}">
+                                                                <input type="hidden" name="action" value="set">
+                                                                <input type="number" name="quantity" value="${item.quantity}" min="1" max="9999" 
+                                                                       class="w-14 h-10 text-center font-semibold border-x border-outline-variant border-y-transparent bg-white focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                                                                       onchange="this.form.submit()">
+                                                            </form>
 
                                                             <!-- Increase button -->
                                                             <form action="UpdateCart" method="post">
@@ -223,10 +224,8 @@
 
                                                                                 <div class="flex justify-between">
                                                                                     <span>Products</span>
-                                                                                    <span>${cart.size()}</span>
+                                                                                    <span id="selectedCount">${cart.size()}</span>
                                                                                 </div>
-
-
 
                                                                                 <hr>
 
@@ -274,12 +273,13 @@
 
                                                                     document.addEventListener("DOMContentLoaded", function () {
 
-                                                                        const totalElement =
-                                                                                document.getElementById("grandTotal");
+                                                                        const totalElement = document.getElementById("grandTotal");
+                                                                        const selectedCountElement = document.getElementById("selectedCount");
 
                                                                         function calculateTotal() {
 
                                                                             let total = 0;
+                                                                            let count = 0;
 
                                                                             document.querySelectorAll(".cart-checkbox")
                                                                                     .forEach(cb => {
@@ -289,11 +289,15 @@
                                                                                             total +=
                                                                                                     Number(cb.dataset.price)
                                                                                                     * Number(cb.dataset.qty);
+                                                                                            count++;
                                                                                         }
                                                                                     });
 
                                                                             totalElement.innerHTML =
                                                                                     total.toLocaleString('en-US') + " đ";
+                                                                            if(selectedCountElement) {
+                                                                                selectedCountElement.innerHTML = count;
+                                                                            }
                                                                         }
 
                                                                         document.querySelectorAll(".cart-checkbox")
@@ -303,9 +307,8 @@
                                                                                 });
 
                                                                         calculateTotal();
-
-                                                                    });
-                                                                    document.getElementById("checkoutForm")
+                                                                        
+                                                                        document.getElementById("checkoutForm")
                                                                             .addEventListener("submit", function (e) {
 
                                                                                 const container =
@@ -340,28 +343,8 @@
                                                                                     alert("Please select at least one product.");
                                                                                 }
                                                                             });
-                                                                    function calculateTotal() {
 
-                                                                        let total = 0;
-                                                                        let count = 0;
-
-                                                                        document.querySelectorAll(".cart-checkbox").forEach(cb => {
-
-                                                                            if (cb.checked) {
-
-                                                                                total += Number(cb.dataset.price)
-                                                                                        * Number(cb.dataset.qty);
-
-                                                                                count++;
-                                                                            }
-                                                                        });
-
-                                                                        document.getElementById("grandTotal").innerHTML =
-                                                                                total.toLocaleString('en-US') + " đ";
-
-                                                                        document.getElementById("selectedCount").innerHTML =
-                                                                                count;
-                                                                    }
+                                                                    });
                                                                 </script>
 
                                                                 </main>

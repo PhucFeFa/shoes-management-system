@@ -1,3 +1,4 @@
+// Author: PhucLHCE191132
 package com.mycompany.shoestore.controllers.admin;
 
 import com.mycompany.shoestore.dao.ProductDAO;
@@ -58,11 +59,11 @@ public class AddProductServlet extends HttpServlet {
             double price;
             try {
                 price = Double.parseDouble(priceStr);
-                if (price <= 0) {
-                    throw new Exception("Price must be > 0");
+                if (price < 1000) {
+                    throw new Exception("Price must be >= 1000");
                 }
             } catch (Exception ex) {
-                request.getSession().setAttribute("errorMsg", "Product price must be a valid number and greater than 0.");
+                request.getSession().setAttribute("errorMsg", "Product price must be a valid number and at least 1000.");
                 response.sendRedirect(request.getContextPath() + "/admin/manage-products");
                 return;
             }

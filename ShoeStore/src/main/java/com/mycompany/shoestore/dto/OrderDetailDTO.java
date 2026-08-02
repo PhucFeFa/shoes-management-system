@@ -3,6 +3,7 @@ package com.mycompany.shoestore.dto;
 import java.math.BigDecimal;
 
 public class OrderDetailDTO {
+    private String productVariantId;
     private String productId;
     private String productName;
     private String brandName;
@@ -12,6 +13,9 @@ public class OrderDetailDTO {
     private int quantity;
     private BigDecimal priceAtPurchase;
     private String imageUrl;
+
+    public String getProductVariantId() { return productVariantId; }
+    public void setProductVariantId(String productVariantId) { this.productVariantId = productVariantId; }
 
     public String getProductId() { return productId; }
     public void setProductId(String productId) { this.productId = productId; }

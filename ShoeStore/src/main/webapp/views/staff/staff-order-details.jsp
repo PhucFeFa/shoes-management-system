@@ -140,6 +140,16 @@
                                     <c:remove var="errorMessage" scope="session" />
                                 </c:if>
 
+                                <c:if test="${hasBackorderItems}">
+                                    <div class="bg-amber-50 text-amber-800 p-4 mb-6 border-l-4 border-amber-500 flex items-start gap-3">
+                                        <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+                                        <div>
+                                            <strong class="font-bold text-sm block mb-1">Backorder Notice</strong>
+                                            <span class="text-sm">This order contains items that exceed current stock. Fulfilling this order will result in negative stock or delayed delivery.</span>
+                                        </div>
+                                    </div>
+                                </c:if>
+
                                 <!-- Page Header & Action Bar -->
                                 <div
                                     class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-outline-variant pb-6">
@@ -153,7 +163,7 @@
                                         </div>
                                         <p class="font-body-md text-body-md text-secondary mt-2">Placed on
                                             <fmt:formatDate value="${orderSummary.createdAt}"
-                                                            pattern="dd MMM yyyy, HH:mm" timeZone="Asia/Ho_Chi_Minh"/>
+                                                            pattern="dd MMM yyyy, HH:mm" />
                                         </p>
                                     </div>
                                     <div class="flex items-center gap-3">
@@ -317,13 +327,11 @@
                                                     </div>
                                                     <p class="font-body-md text-body-md text-primary leading-relaxed">
                                                         <c:choose>
-                                                            <c:when test="${not empty orderSummary.addressLine}">
+                                                            <c:when test="${not empty orderSummary.shippingAddress}">
                                                                 ${orderSummary.customerFullName}<br>
-                                                                ${orderSummary.addressLine}<br>
-                                                                ${orderSummary.ward}, ${orderSummary.district}<br>
-                                                                ${orderSummary.city}
+                                                                ${orderSummary.shippingAddress}
                                                             </c:when>
-                                                            <c:otherwise>No address provided.</c:otherwise>
+                                                            <c:otherwise>No address specified.</c:otherwise>
                                                         </c:choose>
                                                     </p>
                                                 </div>
@@ -347,13 +355,25 @@
                                                     <span class="uppercase">${empty orderSummary.paymentStatus ? 'N/A' :
                                                         orderSummary.paymentStatus}</span>
                                                 </div>
+                                                <c:set var="subTotal" value="0" />
+                                                <c:forEach var="item" items="${orderItems}">
+                                                    <c:set var="subTotal" value="${subTotal + (item.priceAtPurchase * item.quantity)}" />
+                                                </c:forEach>
                                                 <div class="flex justify-between items-center text-secondary pt-2">
                                                     <span>Subtotal</span>
                                                     <span>
-                                                        <fmt:formatNumber value="${orderSummary.totalAmount}"
+                                                        <fmt:formatNumber value="${subTotal}"
                                                             pattern="#,##0" /> đ
                                                     </span>
                                                 </div>
+                                                <c:if test="${not empty appliedVoucher}">
+                                                    <div class="flex justify-between items-center text-secondary mt-2">
+                                                        <span>Voucher (${appliedVoucher.code}) <span class="text-xs font-semibold px-2 py-0.5 rounded ml-1 border border-outline-variant">-${appliedVoucher.discountValue}%</span></span>
+                                                        <span>
+                                                            - <fmt:formatNumber value="${subTotal - orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                        </span>
+                                                    </div>
+                                                </c:if>
                                                 <div
                                                     class="flex justify-between items-center text-primary font-bold pt-4 border-t border-outline-variant mt-2">
                                                     <span class="font-label-md uppercase tracking-widest">Total

@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -617,11 +617,21 @@
                             <p id="hide-error" class="text-danger mt-1 mb-0 d-none" style="font-size: 11px; font-weight: 600;"></p>
                         </form>
                     </div>
+                    
+                    <div id="unhide-action-section" class="mt-4" style="display: none;">
+                        <span class="section-label" style="color: #1e7e34;">Approve Content</span>
+                        <form action="${pageContext.request.contextPath}/staff/manage-reviews/unhide" method="post" id="unhideForm">
+                            <input type="hidden" name="reviewId" id="unhide-review-id" />
+                            <input type="hidden" name="filter" value="${currentFilter}" />
+                            <p class="text-body-md text-secondary" style="font-size: 13px;">Click "Approve" to make this review visible to customers again.</p>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="drawer-footer">
                     <button form="hideForm" type="submit" class="btn-flag-review" id="btn-flag">Flag Review</button>
-                    <button form="replyForm" type="submit" class="btn-save-reply">Save Reply</button>
+                    <button form="unhideForm" type="submit" class="btn-save-reply" id="btn-unhide" style="background: #e6f4ea; color: #1e7e34; border: 1px solid #1e7e34; display: none;">Approve Review</button>
+                    <button form="replyForm" type="submit" class="btn-save-reply" id="btn-reply">Save Reply</button>
                 </div>
             </div>
         </div>
@@ -645,6 +655,11 @@
             document.getElementById('hideForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 submitAjaxForm(this, 'hide');
+            });
+
+            document.getElementById('unhideForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitAjaxForm(this, 'unhide');
             });
 
             function submitAjaxForm(form, actionType) {
@@ -683,6 +698,47 @@
                             document.getElementById('d-hide-reason').innerText = data.reason;
                             document.getElementById('flag-action-section').style.display = 'none';
                             document.getElementById('btn-flag').style.display = 'none';
+                            document.getElementById('unhide-action-section').style.display = 'block';
+                            document.getElementById('btn-unhide').style.display = 'block';
+                            
+                            // Hide reply form
+                            document.getElementById('replyForm').style.display = 'none';
+                            document.getElementById('btn-reply').style.display = 'none';
+
+                            // Update the row status in the table directly
+                            const reviewId = document.getElementById('hide-review-id').value;
+                            const btn = document.querySelector('button[data-review-id="' + reviewId + '"]');
+                            if (btn) {
+                                const row = btn.closest('tr');
+                                if (row) {
+                                    const statusTd = row.querySelectorAll('td')[5];
+                                    if (statusTd) {
+                                        statusTd.innerHTML = '<span class="status-badge badge-flagged">Flagged</span>';
+                                    }
+                                }
+                            }
+                        } else if (actionType === 'unhide') {
+                            document.getElementById('flag-reason-section').style.display = 'none';
+                            document.getElementById('flag-action-section').style.display = 'block';
+                            document.getElementById('btn-flag').style.display = 'block';
+                            document.getElementById('unhide-action-section').style.display = 'none';
+                            document.getElementById('btn-unhide').style.display = 'none';
+                            
+                            // Show reply form
+                            document.getElementById('replyForm').style.display = 'block';
+                            document.getElementById('btn-reply').style.display = 'block';
+                            
+                            const reviewId = document.getElementById('unhide-review-id').value;
+                            const btn = document.querySelector('button[data-review-id="' + reviewId + '"]');
+                            if (btn) {
+                                const row = btn.closest('tr');
+                                if (row) {
+                                    const statusTd = row.querySelectorAll('td')[5];
+                                    if (statusTd) {
+                                        statusTd.innerHTML = '<span class="status-badge badge-approved">Approved</span>';
+                                    }
+                                }
+                            }
                         }
                     } else {
                         if (actionType === 'reply') {
@@ -728,16 +784,31 @@
                 document.getElementById('d-reply').value = reply;
                 document.getElementById('reply-review-id').value = id;
                 document.getElementById('hide-review-id').value = id;
+                document.getElementById('unhide-review-id').value = id;
 
                 if (modStatus === 'PENDING_HIDE') {
                     document.getElementById('flag-reason-section').style.display = 'block';
                     document.getElementById('d-hide-reason').innerText = hideReason;
                     document.getElementById('flag-action-section').style.display = 'none';
                     document.getElementById('btn-flag').style.display = 'none';
+                    
+                    document.getElementById('unhide-action-section').style.display = 'block';
+                    document.getElementById('btn-unhide').style.display = 'block';
+                    
+                    // Hide reply section
+                    document.getElementById('replyForm').style.display = 'none';
+                    document.getElementById('btn-reply').style.display = 'none';
                 } else {
                     document.getElementById('flag-reason-section').style.display = 'none';
                     document.getElementById('flag-action-section').style.display = 'block';
                     document.getElementById('btn-flag').style.display = 'block';
+                    
+                    document.getElementById('unhide-action-section').style.display = 'none';
+                    document.getElementById('btn-unhide').style.display = 'none';
+                    
+                    // Show reply section
+                    document.getElementById('replyForm').style.display = 'block';
+                    document.getElementById('btn-reply').style.display = 'block';
                 }
 
                 const drawer = document.getElementById('reviewDrawer');

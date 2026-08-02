@@ -18,7 +18,8 @@ import java.util.List;
         "/staff/manage-reviews/reply",
         "/staff/manage-reviews/hide",
         "/staff/manage-reviews/approve-hide",
-        "/staff/manage-reviews/reject-hide"
+        "/staff/manage-reviews/reject-hide",
+        "/staff/manage-reviews/unhide"
 })
 public class ManageReviewServlet extends HttpServlet {
 
@@ -107,25 +108,37 @@ public class ManageReviewServlet extends HttpServlet {
         boolean isAjax = "true".equals(request.getParameter("ajax"));
 
         if ("/staff/manage-reviews/reply".equals(path)) {
-            String replyComment = request.getParameter("replyComment");
-            if (replyComment != null && !replyComment.trim().isEmpty()) {
-                reviewDAO.updateStoreReply(reviewId, replyComment, currentUser.getId());
+            // Pre-check if the review is hidden
+            Review currentReview = reviewDAO.getAllReviews("ALL").stream().filter(r -> r.getId().equals(reviewId)).findFirst().orElse(null);
+            if (currentReview != null && "PENDING_HIDE".equals(currentReview.getModerationStatus())) {
                 if (isAjax) {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    String safeReply = replyComment.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "");
-                    response.getWriter().write("{\"success\":true, \"message\":\"Reply added successfully.\", \"reply\":\"" + safeReply + "\"}");
+                    response.getWriter().write("{\"success\":false, \"message\":\"Cannot reply to a hidden review.\"}");
                     return;
                 }
-                session.setAttribute("successMessage", "Reply added successfully.");
+                session.setAttribute("errorMessage", "Cannot reply to a hidden review.");
             } else {
-                if (isAjax) {
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write("{\"success\":false, \"message\":\"Reply cannot be empty.\"}");
-                    return;
+                String replyComment = request.getParameter("replyComment");
+                if (replyComment != null && !replyComment.trim().isEmpty()) {
+                    reviewDAO.updateStoreReply(reviewId, replyComment, currentUser.getId());
+                    if (isAjax) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        String safeReply = replyComment.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "");
+                        response.getWriter().write("{\"success\":true, \"message\":\"Reply added successfully.\", \"reply\":\"" + safeReply + "\"}");
+                        return;
+                    }
+                    session.setAttribute("successMessage", "Reply added successfully.");
+                } else {
+                    if (isAjax) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.getWriter().write("{\"success\":false, \"message\":\"Reply cannot be empty.\"}");
+                        return;
+                    }
+                    session.setAttribute("errorMessage", "Reply cannot be empty.");
                 }
-                session.setAttribute("errorMessage", "Reply cannot be empty.");
             }
         } else if ("/staff/manage-reviews/hide".equals(path)) {
             String reason = request.getParameter("hideReason");
@@ -148,6 +161,15 @@ public class ManageReviewServlet extends HttpServlet {
                 }
                 session.setAttribute("errorMessage", "Hide reason is required.");
             }
+        } else if ("/staff/manage-reviews/unhide".equals(path) || "/staff/manage-reviews/approve-hide".equals(path)) {
+            reviewDAO.updateReviewModeration(reviewId, "VISIBLE", null);
+            if (isAjax) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"success\":true, \"message\":\"Review unhidden successfully.\"}");
+                return;
+            }
+            session.setAttribute("successMessage", "Review unhidden successfully.");
         }
 
         if (isAjax) return;

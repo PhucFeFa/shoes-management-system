@@ -239,6 +239,12 @@
                                             </div>
                                             <c:remove var="successMessage" scope="session"/>
                                         </c:if>
+                                        <c:if test="${hasBackorderItems}">
+                                            <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-label-md">
+                                                <i class="bi bi-info-circle-fill mr-2"></i>
+                                                This order contains items that are currently out of stock. Delivery might take longer than usual.
+                                            </div>
+                                        </c:if>
                                         <h1 class="text-display-lg-mobile md:text-headline-lg font-headline-lg uppercase mb-4">
                                             Order SL-${fn:toUpperCase(fn:substring(orderSummary.id, 0, 8))}
                                         </h1>
@@ -387,15 +393,11 @@
                                         <div class="space-y-1">
                                             <p class="text-body-md font-bold uppercase">${orderSummary.customerFullName}
                                             </p>
-                                            <c:if test="${not empty orderSummary.addressLine}">
+                                            <c:if test="${not empty orderSummary.shippingAddress}">
                                                 <p class="text-body-md text-secondary uppercase">
-                                                    ${orderSummary.addressLine}</p>
-                                                <p class="text-body-md text-secondary uppercase">${orderSummary.ward},
-                                                    ${orderSummary.district}</p>
-                                                <p class="text-body-md text-secondary uppercase">${orderSummary.city}
-                                                </p>
+                                                    ${orderSummary.shippingAddress}</p>
                                             </c:if>
-                                            <c:if test="${empty orderSummary.addressLine}">
+                                            <c:if test="${empty orderSummary.shippingAddress}">
                                                 <p class="text-body-md text-secondary">Address not available.</p>
                                             </c:if>
                                         </div>
@@ -431,21 +433,25 @@
                                         <h3 class="text-label-md font-label-md uppercase tracking-widest mb-6">Order
                                             Calculation</h3>
                                         <div class="space-y-3">
+                                            <c:set var="subTotal" value="0" />
+                                            <c:forEach var="item" items="${orderItems}">
+                                                <c:set var="subTotal" value="${subTotal + (item.priceAtPurchase * item.quantity)}" />
+                                            </c:forEach>
                                             <div class="flex justify-between text-body-md">
                                                 <span class="text-secondary">Subtotal</span>
                                                 <span>
-                                                    <fmt:formatNumber value="${orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                    <fmt:formatNumber value="${subTotal}" pattern="#,##0" /> đ
                                                 </span>
                                             </div>
-                                            <div class="flex justify-between text-body-md">
-                                                <span class="text-secondary">Shipping</span>
-                                                <span class="uppercase">Included</span>
-                                            </div>
-                                            <div class="flex justify-between text-body-md">
-                                                <span class="text-secondary">Voucher</span>
-                                                <span class="uppercase">${not empty orderSummary.voucherId ? 'Applied' :
-                                                    'None'}</span>
-                                            </div>
+                                            <c:if test="${not empty appliedVoucher}">
+                                                <div class="flex justify-between text-body-md text-secondary mt-2">
+                                                    <span>Voucher (${appliedVoucher.code}) <span class="text-xs font-semibold px-2 py-0.5 rounded ml-1 border border-outline-variant">-${appliedVoucher.discountValue}%</span></span>
+                                                    <span>
+                                                        - <fmt:formatNumber value="${subTotal - orderSummary.totalAmount}" pattern="#,##0" /> đ
+                                                    </span>
+                                                </div>
+                                            </c:if>
+
                                             <div
                                                 class="border-t border-outline-variant pt-4 mt-4 flex justify-between items-end">
                                                 <span class="text-label-md font-bold uppercase">Grand Total</span>

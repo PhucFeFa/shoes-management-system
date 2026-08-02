@@ -388,7 +388,7 @@
                                                             data-name="${product.name}" 
                                                             data-category="${product.category.name}" 
                                                             data-brand="${product.brand.name}" 
-                                                            data-price="${product.price}" 
+                                                            data-price="<fmt:formatNumber value='${product.price}' pattern='0.##'/>" 
                                                             data-desc="${product.description}"
                                                             onclick="editProduct(this)">Edit</button>
                                                     <form action="${pageContext.request.contextPath}/admin/product/toggle-status" method="POST" style="margin: 0;">
@@ -539,7 +539,7 @@
                           </div>
                           <div class="col-md-4 mb-3">
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Base Price <span class="text-danger">*</span></label>
-                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" required>
+                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" min="1000" required>
                           </div>
                       </div>
                       
@@ -607,7 +607,7 @@
                           </div>
                           <div class="col-md-4 mb-3">
                               <label class="form-label" style="font-size: 12px; font-weight: 600;">Base Price <span class="text-danger">*</span></label>
-                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" id="editProductPrice" required>
+                              <input type="number" step="0.01" class="form-control form-control-sm" name="price" id="editProductPrice" min="1000" required>
                           </div>
                       </div>
                       

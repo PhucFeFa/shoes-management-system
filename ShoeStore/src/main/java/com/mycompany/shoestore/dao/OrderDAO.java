@@ -21,7 +21,7 @@ public class OrderDAO {
         int offset = (page - 1) * PAGE_SIZE;
 
         StringBuilder sql = new StringBuilder(
-                "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.payment_method, o.payment_status, o.voucher_id, o.created_at, "
+                "SELECT o.id, o.user_id, o.shipping_address, o.total_amount, o.status, o.payment_method, o.payment_status, o.voucher_id, o.created_at, "
                 + "u.full_name AS customer_full_name, u.email AS customer_email "
                 + "FROM orders o "
                 + "JOIN users u ON o.user_id = u.id "
@@ -52,7 +52,7 @@ public class OrderDAO {
                 Order order = new Order();
                 order.setId(rs.getString("id"));
                 order.setUserId(rs.getString("user_id"));
-                order.setAddressId(rs.getString("address_id"));
+                order.setShippingAddress(rs.getString("shipping_address"));
                 order.setTotalAmount(rs.getBigDecimal("total_amount"));
                 order.setStatus(rs.getString("status"));
                 order.setPaymentMethod(rs.getString("payment_method"));
@@ -106,7 +106,7 @@ public class OrderDAO {
         int offset = (page - 1) * PAGE_SIZE;
 
         StringBuilder sql = new StringBuilder(
-                "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.payment_method, o.payment_status, o.voucher_id, o.created_at, "
+                "SELECT o.id, o.user_id, o.shipping_address, o.total_amount, o.status, o.payment_method, o.payment_status, o.voucher_id, o.created_at, "
                 + "u.full_name AS customer_full_name, u.email AS customer_email "
                 + "FROM orders o "
                 + "JOIN users u ON o.user_id = u.id "
@@ -155,7 +155,7 @@ public class OrderDAO {
                     Order o = new Order();
                     o.setId(rs.getString("id"));
                     o.setUserId(rs.getString("user_id"));
-                    o.setAddressId(rs.getString("address_id"));
+                    o.setShippingAddress(rs.getString("shipping_address"));
                     o.setTotalAmount(rs.getBigDecimal("total_amount"));
                     o.setStatus(rs.getString("status"));
                     o.setPaymentMethod(rs.getString("payment_method"));
@@ -220,13 +220,11 @@ public class OrderDAO {
     }
 
     public OrderSummaryDTO getOrderSummaryById(String orderId) {
-        String sql = "SELECT o.id, o.user_id, o.address_id, o.total_amount, o.status, o.voucher_id, o.created_at, "
+        String sql = "SELECT o.id, o.user_id, o.shipping_address, o.total_amount, o.status, o.voucher_id, o.created_at, "
                 + "u.full_name AS customer_full_name, u.email AS customer_email, "
-                + "a.address_line, a.ward, a.district, a.city, "
                 + "o.payment_method, o.payment_status "
                 + "FROM orders o "
                 + "JOIN users u ON o.user_id = u.id "
-                + "LEFT JOIN addresses a ON o.address_id = a.id "
                 + "WHERE o.id = ?";
 
         try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -237,18 +235,13 @@ public class OrderDAO {
                     OrderSummaryDTO summary = new OrderSummaryDTO();
                     summary.setId(rs.getString("id"));
                     summary.setUserId(rs.getString("user_id"));
-                    summary.setAddressId(rs.getString("address_id"));
+                    summary.setShippingAddress(rs.getString("shipping_address"));
                     summary.setTotalAmount(rs.getBigDecimal("total_amount"));
                     summary.setStatus(rs.getString("status"));
                     summary.setVoucherId(rs.getString("voucher_id"));
                     summary.setCreatedAt(rs.getTimestamp("created_at"));
                     summary.setCustomerFullName(rs.getString("customer_full_name"));
                     summary.setCustomerEmail(rs.getString("customer_email"));
-
-                    summary.setAddressLine(rs.getString("address_line"));
-                    summary.setWard(rs.getString("ward"));
-                    summary.setDistrict(rs.getString("district"));
-                    summary.setCity(rs.getString("city"));
                     summary.setPaymentMethod(rs.getString("payment_method"));
                     summary.setPaymentStatus(rs.getString("payment_status"));
                     return summary;
@@ -263,7 +256,7 @@ public class OrderDAO {
 
     public List<OrderDetailDTO> getOrderItemsByOrderId(String orderId) {
         List<OrderDetailDTO> items = new ArrayList<>();
-        String sql = "SELECT oi.quantity, oi.price_at_purchase, "
+        String sql = "SELECT oi.quantity, oi.price_at_purchase, oi.product_variant_id, "
                 + "pv.size, pv.color, "
                 + "p.id AS product_id, p.name AS product_name, "
                 + "b.name AS brand_name, "
@@ -284,6 +277,7 @@ public class OrderDAO {
                     OrderDetailDTO item = new OrderDetailDTO();
                     item.setQuantity(rs.getInt("quantity"));
                     item.setPriceAtPurchase(rs.getBigDecimal("price_at_purchase"));
+                    item.setProductVariantId(rs.getString("product_variant_id"));
                     item.setSize(rs.getString("size"));
                     item.setColor(rs.getString("color"));
                     item.setProductId(rs.getString("product_id"));
@@ -337,6 +331,10 @@ public class OrderDAO {
                 + "FROM product_variants pv "
                 + "JOIN order_items oi ON pv.id = oi.product_variant_id "
                 + "WHERE oi.order_id = ?";
+        String restoreVoucherSql = "UPDATE vouchers "
+                + "SET used_quantity = used_quantity - 1 "
+                + "WHERE id = (SELECT voucher_id FROM orders WHERE id = ? AND voucher_id IS NOT NULL) "
+                + "AND used_quantity > 0";
 
         Connection conn = null;
         try {
@@ -355,6 +353,11 @@ public class OrderDAO {
             try ( PreparedStatement psRestore = conn.prepareStatement(restoreStockSql)) {
                 psRestore.setString(1, orderId);
                 psRestore.executeUpdate();
+            }
+
+            try ( PreparedStatement psVoucher = conn.prepareStatement(restoreVoucherSql)) {
+                psVoucher.setString(1, orderId);
+                psVoucher.executeUpdate();
             }
 
             conn.commit();
@@ -398,6 +401,21 @@ public class OrderDAO {
         return false;
     }
 
+    public boolean restoreVoucherForOrder(String orderId) {
+        String sql = "UPDATE vouchers "
+                + "SET used_quantity = used_quantity - 1 "
+                + "WHERE id = (SELECT voucher_id FROM orders WHERE id = ? AND voucher_id IS NOT NULL) "
+                + "AND used_quantity > 0";
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("Error restoreVoucherForOrder: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean cancelOrderWithStockRestore(String orderId) {
         OrderSummaryDTO summary = getOrderSummaryById(orderId);
         if (summary == null) {
@@ -410,22 +428,25 @@ public class OrderDAO {
 
         boolean statusUpdated = updateOrderStatus(orderId, "cancelled");
         if (statusUpdated) {
-            restoreStockForOrder(orderId);
+            restoreVoucherForOrder(orderId);
+            if (!status.equals("pending")) {
+                restoreStockForOrder(orderId);
+            }
             return true;
         }
         return false;
     }
 
-    public String createOrder(String userId, String addressId, double totalAmount) {
+    public String createOrder(String userId, String shippingAddress, double totalAmount) {
         String orderId = UUID.randomUUID().toString();
-        String sql = "INSERT INTO orders (id, user_id, address_id, total_amount, status, payment_method, payment_status) "
+        String sql = "INSERT INTO orders (id, user_id, shipping_address, total_amount, status, payment_method, payment_status) "
                 + "VALUES (?, ?, ?, ?, 'pending', 'cod', 'pending')";
 
         try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, orderId);
             ps.setString(2, userId);
-            ps.setString(3, addressId);
+            ps.setString(3, shippingAddress);
             ps.setDouble(4, totalAmount);
 
             ps.executeUpdate();
@@ -451,6 +472,22 @@ public class OrderDAO {
         }
     }
 
+    public boolean hasUserUsedVoucher(String userId, String voucherId) {
+        String sql = "SELECT COUNT(*) FROM orders WHERE user_id = ? AND voucher_id = ? AND status != 'cancelled'";
+        try ( Connection conn = new DBContext().getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ps.setString(2, voucherId);
+            try ( java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void clearCartAfterOrder(String userId, String variantId) {
         String sql = "DELETE FROM carts " +
                 "WHERE user_id = ? " +
@@ -465,11 +502,11 @@ public class OrderDAO {
         }
     }
 
-    public String createOrder(String userId, String addressId, double totalAmount, String voucherId, String paymentMethod) {
+    public String createOrder(String userId, String shippingAddress, double totalAmount, String voucherId, String paymentMethod) {
         String orderId = java.util.UUID.randomUUID().toString();
 
         // Giữ nguyên GETDATE() của bạn và thêm cột voucher_id
-        String sql = "INSERT INTO orders (id, user_id, address_id, total_amount, voucher_id, status, payment_method, payment_status, created_at) "
+        String sql = "INSERT INTO orders (id, user_id, shipping_address, total_amount, voucher_id, status, payment_method, payment_status, created_at) "
                 + "VALUES (?, ?, ?, ?, ?, 'pending', ?, 'pending', GETDATE())";
 
         // Khởi tạo kết nối bằng new DBContext().getConnection() giống hàm mẫu
@@ -477,7 +514,7 @@ public class OrderDAO {
 
             ps.setString(1, orderId);
             ps.setString(2, userId);
-            ps.setString(3, addressId);
+            ps.setString(3, shippingAddress);
             ps.setDouble(4, totalAmount);
 
             // Xử lý voucherId nếu bị null hoặc rỗng
@@ -489,11 +526,11 @@ public class OrderDAO {
             ps.setString(6, paymentMethod != null ? paymentMethod : "cod");
 
             ps.executeUpdate();
-            return orderId; // Trả về orderId khi thành công
+            return orderId; // Return orderId on success
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Trả về null nếu xảy ra lỗi giống hàm mẫu
+            return null; // Return null on error
         }
     }
     public boolean updateProductStock(

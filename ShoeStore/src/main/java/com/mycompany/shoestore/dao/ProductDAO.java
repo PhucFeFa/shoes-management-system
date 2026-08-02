@@ -66,13 +66,34 @@ public class ProductDAO {
         return products;
     }
 
+
+    
+    public boolean updateProduct(Product p) {
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category_id = ?, brand_id = ? WHERE id = ?";
+        try (Connection conn = new DBContext().getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getDescription());
+            ps.setDouble(3, p.getPrice());
+            ps.setString(4, p.getCategoryId());
+            ps.setString(5, p.getBrandId());
+            ps.setString(6, p.getId());
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<Product> getLatestProducts(int limit) {
         List<Product> products = new ArrayList<>();
         // Query to get latest active products with their first image
         String sql = "SELECT TOP (?) p.*, "
                 + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id) as first_image, "
-                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id), 0) as avg_rating, "
-                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id) as review_count, "
+                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id AND r.moderation_status = 'VISIBLE'), 0) as avg_rating, "
+                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id AND r.moderation_status = 'VISIBLE') as review_count, "
                 + "c.name as category_name, b.name as brand_name "
                 + "FROM products p "
                 + "LEFT JOIN categories c ON p.category_id = c.id "
@@ -122,8 +143,8 @@ public class ProductDAO {
                 + " FROM product_images pi "
                 + " WHERE pi.product_id = p.id "
                 + " ORDER BY pi.sort_order) AS first_image, "
-                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id), 0) as avg_rating, "
-                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id) as review_count, "
+                + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id AND r.moderation_status = 'VISIBLE'), 0) as avg_rating, "
+                + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id AND r.moderation_status = 'VISIBLE') as review_count, "
                 + "c.name AS category_name, "
                 + "b.name AS brand_name "
                 + "FROM products p "
@@ -180,6 +201,32 @@ public class ProductDAO {
         return categories;
     }
 
+    public String getOrCreateCategory(String categoryName) {
+        String checkSql = "SELECT id FROM categories WHERE name = ?";
+        try (Connection conn = new DBContext().getConnection();
+             PreparedStatement ps = conn.prepareStatement(checkSql)) {
+            ps.setString(1, categoryName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getString("id");
+            }
+            String insertSql = "INSERT INTO categories (id, name) VALUES (NEWID(), ?)";
+            try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
+                psIns.setString(1, categoryName);
+                if (psIns.executeUpdate() > 0) {
+                    try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
+                        psSel.setString(1, categoryName);
+                        try (ResultSet rs2 = psSel.executeQuery()) {
+                            if (rs2.next()) return rs2.getString("id");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Brand> getAllBrands() {
         List<Brand> brands = new ArrayList<>();
         String sql = "SELECT id, name FROM brands ORDER BY name ASC";
@@ -195,42 +242,13 @@ public class ProductDAO {
         return brands;
     }
 
-    public String getOrCreateCategory(String categoryName) {
-        String checkSql = "SELECT id FROM categories WHERE name = ?";
-        try (Connection conn = new DBContext().getConnection();
-                PreparedStatement ps = conn.prepareStatement(checkSql)) {
-            ps.setString(1, categoryName);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next())
-                    return rs.getString("id");
-            }
-            String insertSql = "INSERT INTO categories (id, name) VALUES (NEWID(), ?)";
-            try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
-                psIns.setString(1, categoryName);
-                if (psIns.executeUpdate() > 0) {
-                    try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
-                        psSel.setString(1, categoryName);
-                        try (ResultSet rs2 = psSel.executeQuery()) {
-                            if (rs2.next())
-                                return rs2.getString("id");
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public String getOrCreateBrand(String brandName) {
         String checkSql = "SELECT id FROM brands WHERE name = ?";
         try (Connection conn = new DBContext().getConnection();
-                PreparedStatement ps = conn.prepareStatement(checkSql)) {
+             PreparedStatement ps = conn.prepareStatement(checkSql)) {
             ps.setString(1, brandName);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next())
-                    return rs.getString("id");
+                if (rs.next()) return rs.getString("id");
             }
             String insertSql = "INSERT INTO brands (id, name) VALUES (NEWID(), ?)";
             try (PreparedStatement psIns = conn.prepareStatement(insertSql)) {
@@ -239,8 +257,7 @@ public class ProductDAO {
                     try (PreparedStatement psSel = conn.prepareStatement(checkSql)) {
                         psSel.setString(1, brandName);
                         try (ResultSet rs2 = psSel.executeQuery()) {
-                            if (rs2.next())
-                                return rs2.getString("id");
+                            if (rs2.next()) return rs2.getString("id");
                         }
                     }
                 }
@@ -311,24 +328,6 @@ public class ProductDAO {
         }
     }
 
-    public boolean updateProduct(Product p) {
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category_id = ?, brand_id = ? WHERE id = ?";
-        try (Connection conn = new DBContext().getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, p.getName());
-            ps.setString(2, p.getDescription());
-            ps.setDouble(3, p.getPrice());
-            ps.setString(4, p.getCategoryId());
-            ps.setString(5, p.getBrandId());
-            ps.setString(6, p.getId());
-
-            return ps.executeUpdate() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 
     public boolean toggleProductStatus(String productId) {
         String sql = "UPDATE products SET status = CASE WHEN status = 'active' THEN 'inactive' ELSE 'active' END WHERE id = ?";
@@ -412,8 +411,7 @@ public class ProductDAO {
         }
     }
 
-    public int countSearchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice,
-            Double maxPrice) {
+    public int countSearchAndFilterProducts(String query, String[] categoryIds, String[] brandIds, Double minPrice, Double maxPrice) {
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) "
                         + "FROM products p "
@@ -470,8 +468,8 @@ public class ProductDAO {
         StringBuilder sql = new StringBuilder(
                 "SELECT p.*, "
                         + "(SELECT TOP 1 image_url FROM product_images pi WHERE pi.product_id = p.id ORDER BY sort_order ASC) as first_image, "
-                        + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id), 0) as avg_rating, "
-                        + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id) as review_count, "
+                        + "ISNULL((SELECT AVG(CAST(rating AS FLOAT)) FROM reviews r WHERE r.product_id = p.id AND r.moderation_status = 'VISIBLE'), 0) as avg_rating, "
+                        + "(SELECT COUNT(*) FROM reviews r WHERE r.product_id = p.id AND r.moderation_status = 'VISIBLE') as review_count, "
                         + "c.name as category_name, b.name as brand_name "
                         + "FROM products p "
                         + "LEFT JOIN categories c ON p.category_id = c.id "
@@ -665,3 +663,4 @@ public class ProductDAO {
     }
 
 }
+

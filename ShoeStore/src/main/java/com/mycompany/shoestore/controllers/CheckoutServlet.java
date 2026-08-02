@@ -6,6 +6,8 @@ import com.mycompany.shoestore.dao.VoucherDAO;
 import com.mycompany.shoestore.models.Address;
 import com.mycompany.shoestore.models.CartItem;
 import com.mycompany.shoestore.models.User;
+import com.mycompany.shoestore.dao.ProductVariantDAO;
+import com.mycompany.shoestore.models.ProductVariant;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -40,7 +42,7 @@ public class CheckoutServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServletException("Lỗi khi xử lý checkout", e);
+            throw new ServletException("Error processing checkout", e);
         }
     }
 
@@ -97,10 +99,22 @@ public class CheckoutServlet extends HttpServlet {
         }
     }
 
-    private void prepareCheckoutData(HttpServletRequest request, List<CartItem> checkoutItems, User currentUser) throws Exception {
+    private void prepareCheckoutData(HttpServletRequest request, List<CartItem> checkoutItems, User currentUser)
+            throws Exception {
         double subTotal = 0;
+        boolean hasBackorderItems = false;
+        ProductVariantDAO variantDAO = new ProductVariantDAO();
+
         for (CartItem item : checkoutItems) {
             subTotal += item.getPrice() * item.getQuantity();
+            try {
+                ProductVariant variant = variantDAO.getVariantById(item.getProductVariantId());
+                if (variant != null && item.getQuantity() > variant.getStockQuantity()) {
+                    hasBackorderItems = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         double finalTotal = subTotal;
@@ -109,6 +123,7 @@ public class CheckoutServlet extends HttpServlet {
         request.setAttribute("checkoutItems", checkoutItems);
         request.setAttribute("subTotal", subTotal);
         request.setAttribute("finalTotal", finalTotal);
+        request.setAttribute("hasBackorderItems", hasBackorderItems);
 
         // Voucher
         VoucherDAO voucherDAO = new VoucherDAO();

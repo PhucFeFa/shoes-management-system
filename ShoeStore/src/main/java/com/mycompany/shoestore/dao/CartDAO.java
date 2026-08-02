@@ -31,9 +31,13 @@ public class CartDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                String update = "UPDATE carts SET quantity = quantity + ? WHERE user_id = ? AND product_variant_id = ?";
+                int currentQty = rs.getInt("quantity");
+                int newQty = currentQty + qty;
+                if (newQty > 9999) newQty = 9999;
+                
+                String update = "UPDATE carts SET quantity = ? WHERE user_id = ? AND product_variant_id = ?";
                 PreparedStatement up = conn.prepareStatement(update);
-                up.setInt(1, qty);
+                up.setInt(1, newQty);
                 up.setString(2, userId);
                 up.setString(3, variantId);
                 up.executeUpdate();
@@ -115,7 +119,7 @@ public class CartDAO {
     }
 
     public void increaseQuantity(String userId, String variantId) throws Exception {
-        String sql = "UPDATE carts SET quantity = quantity + 1 WHERE user_id = ? AND product_variant_id = ?";
+        String sql = "UPDATE carts SET quantity = quantity + 1 WHERE user_id = ? AND product_variant_id = ? AND quantity < 9999";
         try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, userId);
             ps.setString(2, variantId);
@@ -136,6 +140,20 @@ public class CartDAO {
                 del.setString(2, variantId);
                 del.executeUpdate();
             }
+        }
+    }
+
+    public void setQuantity(String userId, String variantId, int quantity) throws Exception {
+        if (quantity <= 0) {
+            removeCartItem(userId, variantId);
+            return;
+        }
+        String sql = "UPDATE carts SET quantity = ? WHERE user_id = ? AND product_variant_id = ?";
+        try (Connection conn = db.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setString(2, userId);
+            ps.setString(3, variantId);
+            ps.executeUpdate();
         }
     }
 

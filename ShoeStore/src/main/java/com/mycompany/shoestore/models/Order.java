@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class Order {
     private String id;
     private String userId;
-    private String addressId;
+    private String shippingAddress;
     private BigDecimal totalAmount;
     private String status;
     private String paymentMethod;
@@ -25,8 +25,8 @@ public class Order {
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
 
-    public String getAddressId() { return addressId; }
-    public void setAddressId(String addressId) { this.addressId = addressId; }
+    public String getShippingAddress() { return shippingAddress; }
+    public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
 
     public BigDecimal getTotalAmount() { return totalAmount; }
     public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
